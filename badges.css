@@ -1,0 +1,31 @@
+/* PRICING BADGES v3 */
+#world .cell{ position:relative !important; }
+
+#world .cell.badge-premium::before,
+#world .cell.badge-na::before{
+  content:"" !important;
+  position:absolute !important;
+  top:2px !important;
+  left:2px !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:.4px !important;
+  padding:2px 6px !important;
+  border-radius:4px !important;
+  z-index:99999 !important;
+  pointer-events:none !important;
+  line-height:1.1 !important;
+  white-space:nowrap !important;
+}
+
+#world .cell.badge-premium::before{
+  content:"PREMIUM" !important;
+  background:rgba(255,215,0,.92) !important;
+  color:#111 !important;
+}
+
+#world .cell.badge-na::before{
+  content:"NOT AVAILABLE" !important;
+  background:rgba(220,20,60,.92) !important;
+  color:#fff !important;
+}

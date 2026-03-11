@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+  <title>MONOLITH LAWS</title>
+  <style>
+    :root{
+      --bg:#07090b;
+      --panel:#0e1116;
+      --text:#e9eef7;
+      --muted:#a6b0c2;
+      --line:rgba(255,255,255,.10);
+      --line2:rgba(255,255,255,.16);
+      --good:#8bf28b;
+      --bad:#ff6b6b;
+      --warn:#ffd166;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      line-height:1.45;
+      letter-spacing:.2px;
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:28px 18px 48px}
+    .header{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:14px;
+      padding:16px;border:1px solid var(--line);border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    }
+    h1{margin:0;font-size:20px;letter-spacing:.6px;text-transform:uppercase}
+    .meta{margin:0;color:var(--muted);font-size:13px;text-align:right;white-space:nowrap}
+    .card{
+      margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--panel);
+    }
+    h2{margin:0 0 10px 0;font-size:16px;text-transform:uppercase;letter-spacing:.5px}
+    .law{
+      padding:12px;border:1px solid var(--line);border-radius:14px;
+      background:rgba(255,255,255,.02);margin-top:12px;
+    }
+    .law h3{margin:0 0 8px 0;font-size:14px;letter-spacing:.4px;text-transform:uppercase}
+    .law p{margin:8px 0;color:var(--text);font-size:14px}
+    ul{margin:8px 0 0 18px;padding:0;color:var(--text);font-size:14px}
+    li{margin:6px 0}
+    .tag{
+      display:inline-block;padding:2px 8px;border:1px solid var(--line2);
+      border-radius:999px;font-size:12px;color:var(--muted);margin-right:8px;
+    }
+    .ok{color:var(--good)}
+    .bad{color:var(--bad)}
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12.5px;color:var(--text);background:rgba(0,0,0,.35);
+      border:1px solid var(--line);padding:2px 6px;border-radius:8px;
+    }
+    .footer{
+      margin-top:16px;color:var(--muted);font-size:12.5px;padding:12px 16px;
+      border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.02);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div>
+        <h1>MONOLITH LAWS</h1>
+        <p class="meta">Version v1.0.0</p>
+      </div>
+      <p class="meta">
+        Effective 2026-02-07<br />
+        House of Cauliman
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Scope</h2>
+      <p style="margin:0;color:var(--muted);font-size:14px">
+        These laws govern MONOLITH frontend behavior and user-facing cleanliness.
+        Violations are regressions and must be corrected immediately.
+      </p>
+
+      <div class="law">
+        <h3><span class="tag">LAW</span>Claim Panel Clean Default</h3>
+        <p>
+          The claim panel stays clean by default.
+          No raw JSON, no debug blocks, no validation spam, no error noise on initial load.
+        </p>
+        <ul>
+          <li>On first load, show only instructions and inputs</li>
+          <li>No error content renders until tile select or claim submit</li>
+          <li>If no tile is selected, the UI shows no tile-invalid output</li>
+        </ul>
+      </div>
+
+      <div class="law">
+        <h3><span class="tag">LAW</span>Feedback Trigger Rule</h3>
+        <p>Claim feedback becomes eligible to show only after one trigger event.</p>
+        <ul>
+          <li>Tile selected in the wall UI</li>
+          <li>Submit pressed in the claim UI</li>
+        </ul>
+        <p style="margin-top:10px;color:var(--muted)">
+          Internal validation may run anytime, output may not render until triggered.
+        </p>
+      </div>
+
+      <div class="law">
+        <h3><span class="tag">LAW</span>Debug Gate</h3>
+        <p>Debug output is forbidden in the default experience.</p>
+        <ul>
+          <li>Debug output requires <code>?debug=1</code></li>
+          <li>Even with <code>?debug=1</code>, debug output shows only after a trigger</li>
+          <li>Without <code>?debug=1</code>, debug output stays hidden and empty</li>
+        </ul>
+      </div>
+
+      <div class="law">
+        <h3><span class="tag">LAW</span>User Facing Errors Must Be Human</h3>
+        <p>User facing errors stay short and readable. Raw objects are debug-only.</p>
+        <ul>
+          <li>Show a single sentence, not JSON</li>
+          <li>Raw response bodies go to debug only</li>
+          <li>No stack traces or internal exception dumps in default UI</li>
+        </ul>
+      </div>
+
+      <div class="law">
+        <h3><span class="tag">LOCK</span>Non Negotiables</h3>
+        <ul>
+          <li><span class="ok">PASS</span> Default view stays clean</li>
+          <li><span class="ok">PASS</span> Errors appear only after select or submit</li>
+          <li><span class="ok">PASS</span> Debug only with <code>?debug=1</code></li>
+          <li><span class="bad">FAIL</span> Any raw JSON visible on load</li>
+          <li><span class="bad">FAIL</span> Any debug output visible without <code>?debug=1</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      Enforcement: if a future change reintroduces claim noise, revert it or patch it immediately.
+      Clean default is product behavior.
+    </div>
+  </div>
+</body>
+</html>
