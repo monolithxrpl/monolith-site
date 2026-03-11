@@ -2,13 +2,13 @@
   "name": "MONOLITH",
   "short_name": "MONOLITH",
   "description": "The Wall of Record. Leave your mark. History keeps it.",
-  "start_url": "/monolith/?source=pwa",
-  "scope": "/monolith/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
   "orientation": "portrait",
   "icons": [
-    { "src": "/assets/monolith/monolith_logo.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/assets/monolith_logo.png", "sizes": "512x512", "type": "image/png" }
   ]
 }

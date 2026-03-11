@@ -7,8 +7,8 @@
   <meta name="description" content="MONOLITH is a permanent on-chain wall. One tile. One mark. No edits. No deletes." />
   <meta property="og:title" content="MONOLITH — The Wall of Record" />
   <meta property="og:description" content="A permanent on-chain wall. One tile. One mark. No edits. No deletes." />
-  <meta property="og:image" content="https://houseofcauliman.com/monolith/assets/monolith_logo.webp" />
-  <meta property="og:url" content="https://houseofcauliman.com/monolith/" />
+  <meta property="og:image" content="https://monolithxrpl.com/assets/monolith_logo.webp" />
+  <meta property="og:url" content="https://monolithxrpl.com/" />
   <meta property="og:type" content="website" />
 
   <style>
@@ -327,7 +327,7 @@
     /* EMPTY_TILE_XRP_BG_FINAL */
     #wall .cell:not(.taken){
       background-color:#020703 !important;
-      background-image:url("/monolith/assets/xrp_logo.webp"), url("/monolith/assets/xrp_logo.png") !important;
+      background-image:url("/assets/xrp_logo.webp"), url("/assets/xrp_logo.png") !important;
       background-repeat:no-repeat !important;
       background-position:center !important;
       background-size:cover !important;
@@ -385,13 +385,13 @@ body.view-brand .cell .spray,
 body.view-imageonly .cell .spray{ filter:none; }
 
 </style>
-  <script src="/monolith/coords.js"></script>
+  <script src="/coords.js"></script>
 </head>
 
 <body>
   <header class="top">
     <div class="brand">
-      <img src="/monolith/assets/monolith_logo.webp" alt="MONOLITH" />
+      <img src="/assets/monolith_logo.webp" alt="MONOLITH" />
       <div>
         <div class="t">MONOLITH</div>
         <div class="s">Leave your mark. Live forever.</div>
@@ -407,7 +407,7 @@ body.view-imageonly .cell .spray{ filter:none; }
 
     <div class="kpi">
       <div class="pill"><span class="dot"></span><span id="kTaken">0</span> taken</div>
-      <a class="btn primary" href="/monolith/claim/" aria-label="claim a tile"><span>Claim a Tile</span></a>
+      <a class="btn primary" href="/claim/" aria-label="claim a tile"><span>Claim a Tile</span></a>
       <button class="btn" id="btnCenter" type="button" aria-label="return to center"><span>Return to Center</span></button>
       <button class="btn" id="btnNav" type="button" aria-label="navigation view"><span>Navigation View</span></button>
       <button class="btn" id="btnBrand" type="button" aria-label="brand view"><span>Brand View</span></button>
@@ -466,14 +466,14 @@ body.view-imageonly .cell .spray{ filter:none; }
 
   <script>
   (() => {
-const FEED_URL = "/assets/monolith/feed.json?cb=" + Date.now();
+const FEED_URL = "/assets/feed.json?cb=" + Date.now();
 
     const MONOLITH_TILE = "ORIGIN";
     const MONOLITH_TAG  = "MONOLITH";
-    const MONOLITH_LOGO = "/monolith/assets/monolith_logo.webp";
+    const MONOLITH_LOGO = "/assets/monolith_logo.webp";
 
     
-      const PLACEHOLDER_IMG = "/monolith/assets/xrp_logo.webp";
+      const PLACEHOLDER_IMG = "/assets/xrp_logo.webp";
 const MONOLITH_WALLET = "r9iKXkMGF2HxAEsCLqdrghWpJmfFZN1Gw8";
 
 const CREATOR_TILE = "";

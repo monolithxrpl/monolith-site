@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="/monolith/claim/pricing_preview.css?v=3">
-  <script defer src="/monolith/claim/pricing.js?v=3"></script>
-  <script defer src="/monolith/claim/pricing_preview.js?v=3"></script>
+  <link rel="stylesheet" href="/claim/pricing_preview.css?v=3">
+  <script defer src="/claim/pricing.js?v=3"></script>
+  <script defer src="/claim/pricing_preview.js?v=3"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>MONOLITH Claim</title>
@@ -232,7 +232,7 @@
   <div class="wrap">
     <div class="top">
       <div class="brand">
-        <img src="/monolith/assets/monolith_logo.webp" alt="MONOLITH" />
+        <img src="/assets/monolith_logo.webp" alt="MONOLITH" />
         <div>
           <div class="title">MONOLITH</div>
           <div class="sub">Claim a permanent coordinate on MONOLITH.</div>
@@ -240,9 +240,9 @@
       </div>
 
       <div class="btns">
-        <a class="pill primary" href="/monolith/">Back to Wall</a>
-        <a class="pill" href="/monolith/rules.html">Rules</a>
-        <a class="pill" href="/monolith/monolith_laws.html">Laws</a>
+        <a class="pill primary" href="/">Back to Wall</a>
+        <a class="pill" href="/rules.html">Rules</a>
+        <a class="pill" href="/monolith_laws.html">Laws</a>
       </div>
     </div>
 
@@ -351,7 +351,7 @@
   </div>
 
   <script>
-    const FEED_URL = "/assets/monolith/feed.json?cb=" + Date.now();
+    const FEED_URL = "/assets/feed.json?cb=" + Date.now();
     const DEBUG = new URLSearchParams(location.search).get("debug") === "1";
 
     const el = {

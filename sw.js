@@ -1,12 +1,11 @@
 const CACHE_NAME="monolith-cache-999999";
 const CACHE="monolith-v3-1770683485";
 const ASSETS = [
-  "/monolith/",
-  "/monolith/index.html",
-  "/monolith/rules.html",
-  "/assets/monolith/monolith_logo.webp",
-  "/assets/monolith/monolith_logo.png",
-  "/assets/monolith/monolith_concept.jpg"
+  "/",
+  "/index.html",
+  "/rules.html",
+  "/assets/monolith_logo.webp",
+  "/assets/monolith_logo.png",
 ];
 
 self.addEventListener("install", (e) => {
@@ -30,6 +29,6 @@ self.addEventListener("fetch", (e) => {
       const copy = res.clone();
       caches.open(CACHE).then((c) => c.put(req, copy));
       return res;
-    }).catch(() => caches.match("/monolith/")))
+    }).catch(() => caches.match("/")))
   );
 });
