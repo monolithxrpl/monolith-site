@@ -59,57 +59,28 @@
   }
 
   // Human input to gx/gy
-  function parseCoords(input) {
-    var s = String(input || "").trim().toUpperCase();
-    if (!s) return null;
+function parseCoords(input) {
+  var raw = String(input || "").trim();
+  if (!raw) return null;
 
-    if (s === "ORIGIN" || s === "0,0" || s === "0 0") return { gx: 0, gy: 0 };
+  var s = raw.toUpperCase().replace(/-/g, "");
 
-    // "x,y"
-    var m = s.match(/^\s*(-?\d+)\s*,\s*(-?\d+)\s*$/);
-    if (m) return { gx: parseInt(m[1], 10), gy: parseInt(m[2], 10) };
-
-    // Normalize separators
-    s = s.replace(/[\/|]+/g, " ").replace(/[\s]+/g, " ").trim();
-
-    // Tokenize N/S/E/W chunks like "N-11", "E23", "W 7"
-    var gx = null, gy = null;
-
-    // Allow combos like "E23 N11", "W-1 S-2", "N11/E23", "W1-N1"
-    var tokens = s.split(" ");
-    for (var i = 0; i < tokens.length; i++) {
-      var t = tokens[i].trim();
-      if (!t) continue;
-
-      // Handle "W1-N1" with dash between axes
-      if (t.indexOf("-") > 0 && /[NSEW]/.test(t)) {
-        var parts = t.split("-");
-        if (parts.length === 2 && /^[NSEW]/.test(parts[0]) && /^[NSEW]/.test(parts[1])) {
-          tokens.push(parts[0]);
-          tokens.push(parts[1]);
-          continue;
-        }
-      }
-
-      var mm = t.match(/^([NSEW])\s*(-?\d+)$/);
-      if (!mm) continue;
-
-      var dir = mm[1];
-      var num = parseInt(mm[2], 10);
-
-      if (dir === "E") gx = Math.abs(num);
-      if (dir === "W") gx = -Math.abs(num);
-      if (dir === "N") gy = Math.abs(num);
-      if (dir === "S") gy = -Math.abs(num);
-    }
-
-    // If user only gives one axis, default the other to 0
-    if (gx === null && gy === null) return null;
-    if (gx === null) gx = 0;
-    if (gy === null) gy = 0;
-
-    return { gx: gx, gy: gy };
+  var coord = raw.match(/^(-?\d+)\s*,\s*(-?\d+)$/);
+  if (coord) {
+    return {
+      gx: parseInt(coord[1], 10),
+      gy: parseInt(coord[2], 10)
+    };
   }
+
+  var m = s.match(/^([EW])(\d+)([NS])(\d+)$/);
+  if (!m) return null;
+
+  var gx = m[1] === "E" ? parseInt(m[2], 10) : -parseInt(m[2], 10);
+  var gy = m[3] === "N" ? parseInt(m[4], 10) : -parseInt(m[4], 10);
+
+  return { gx: gx, gy: gy };
+}
 
   function formatPreview(tier) {
     if (tier === "na") return { badge: "NOT AVAILABLE", price: null, note: "This coordinate is locked." };
@@ -128,8 +99,6 @@
       "input[name='tile']",
       "input[name='coord']",
       "input[name='coords']",
-      "input[placeholder*='N-']",
-      "input[placeholder*='E-']"
     ];
     for (var i = 0; i < selectors.length; i++) {
       var el = document.querySelector(selectors[i]);

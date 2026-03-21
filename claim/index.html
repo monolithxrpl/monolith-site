@@ -259,7 +259,7 @@
           <div>
             <div class="field">
               <label>Coordinate</label>
-              <input id="tile" type="text" placeholder="Enter a coordinate like E23N11" autocomplete="off" />
+              <input id="tile" type="text" placeholder="E23N11" autocomplete="off" />
               <div id="pricePreview">
                 <div class="row">
                   <span id="priceBadge" class="badge"></span>
@@ -267,7 +267,7 @@
                 </div>
                 <div id="priceNote">Enter a coordinate to preview pricing.</div>
               </div>
-              <div class="hint">Accepted: E23-N11, E23N11, dash variants, and coords 23,-11. Input canonicalizes after action.</div>
+<div class="hint">Accepted: E23N11, E23n11, e23n11, E23-N11, E23-n11, e23-n11. Input canonicalizes after action.</div>
             </div>
 
             <div class="field">
@@ -385,36 +385,37 @@
     function tileFromCoords(gx, gy){
       const ew = gx >= 0 ? "E" : "W";
       const ns = gy >= 0 ? "N" : "S";
-      return ew + Math.abs(gx) + "-" + ns + Math.abs(gy);
+      return ew + Math.abs(gx) + ns + Math.abs(gy);
     }
 
     function parseTileOrCoords(input){
-      const raw = normalizeDash(input);
-      if(!raw) return null;
+const raw = normalizeDash(input).trim();
+      const cleaned = raw.toUpperCase().replace(/-/g, "");
+if(!raw || raw.length < 3) return null;
 
-      const coord = raw.match(/^(-?\d+),(-?\d+)$/);
-      if(coord){
-        const gx = parseInt(coord[1], 10);
-        const gy = parseInt(coord[2], 10);
-        if(!Number.isFinite(gx) || !Number.isFinite(gy)) return null;
-        return { gx, gy, tile: tileFromCoords(gx, gy) };
-      }
+const coord = raw.match(/^(-?\d+),(-?\d+)$/);
+if(coord){
+  const gx = parseInt(coord[1], 10);
+  const gy = parseInt(coord[2], 10);
+  const t = tileFromCoords(gx, gy);
+  return { gx, gy, tile: t.toUpperCase().replace(/-/g, "") };
+}
 
-      const t1 = raw.match(/^([EW])(\d+)-([NS])(\d+)$/i);
-      if(t1){
-        const gx = (t1[1].toUpperCase() === "E" ? 1 : -1) * parseInt(t1[2], 10);
-        const gy = (t1[3].toUpperCase() === "N" ? 1 : -1) * parseInt(t1[4], 10);
-        return { gx, gy, tile: tileFromCoords(gx, gy) };
-      }
+const m = cleaned.match(/^([EW])(\d+)([NS])(\d+)$/);
+if(m){
+  const eastWest = m[1];
+  const x = parseInt(m[2], 10);
+  const northSouth = m[3];
+  const y = parseInt(m[4], 10);
 
-      const t2 = raw.match(/^([EW])(\d+)([NS])(\d+)$/i);
-      if(t2){
-        const gx = (t2[1].toUpperCase() === "E" ? 1 : -1) * parseInt(t2[2], 10);
-        const gy = (t2[3].toUpperCase() === "N" ? 1 : -1) * parseInt(t2[4], 10);
-        return { gx, gy, tile: tileFromCoords(gx, gy) };
-      }
+  const gx = eastWest === "E" ? x : -x;
+  const gy = northSouth === "N" ? y : -y;
 
-      return null;
+  const t = tileFromCoords(gx, gy);
+  return { gx, gy, tile: t.toUpperCase().replace(/-/g, "") };
+}
+
+return null;
     }
 
     function validWallet(w){
@@ -602,6 +603,19 @@
       el.out.textContent = "";
       setStatus("Cleared", false);
     }
+
+    el.tile.addEventListener("input", () => {
+      el.tile.value = (el.tile.value || "")
+        .replace(/[–—−_]/g, "-")
+        .replace(/\s+/g, "")
+        .replace(/[^0-9A-Za-z,-]/g, "")
+        .toUpperCase();
+    });
+
+    el.tile.addEventListener("blur", () => {
+      const p = parseTileOrCoords(el.tile.value);
+      if(p) el.tile.value = p.tile;
+    });
 
     el.gen.addEventListener("click", () => { generatePayload(); });
     el.copy.addEventListener("click", () => { copyPayload(); });

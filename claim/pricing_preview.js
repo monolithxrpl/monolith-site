@@ -29,7 +29,7 @@ function render(raw){
   var s=String(raw||"").trim();
   if(!s){ b.style.display="none"; p.textContent=""; n.textContent="Enter a coordinate to preview pricing."; return; }
   var c=parseCoords(a,s);
-  if(!c){ b.style.display="none"; p.textContent=""; n.textContent="Invalid coordinate format."; return; }
+  if(!c){ b.style.display="none"; p.textContent=""; n.textContent="Enter a coordinate to preview pricing."; return; }
   var t=tierFor(a,c.gx,c.gy);
   var out=format(a,t);
   if(out.badge){ b.style.display="inline-block"; b.textContent=out.badge; b.className="badge "+(t==="na"?"na":"premium"); }
@@ -40,16 +40,16 @@ function render(raw){
 function hook(){
   var tile=el("tile");
   if(!tile) return;
-  tile.addEventListener("input", function(){ render(tile.value); });
-  tile.addEventListener("change", function(){ render(tile.value); });
-  setTimeout(function(){ render(tile.value); }, 250);
+  tile.addEventListener("input", function(){ render(String(tile.value || "").toUpperCase().replace(/-/g,"")); });
+  tile.addEventListener("change", function(){ render(String(tile.value || "").toUpperCase().replace(/-/g,"")); });
+  setTimeout(function(){ render(String(tile.value || "").toUpperCase().replace(/-/g,"")); }, 250);
   var _n=el("priceNote"); if(_n) _n.textContent="Pricing preview loaded. Type a coordinate to see tier + price."; 
   var last = tile.value;
   setInterval(function(){
-    if(tile.value !== last){ last = tile.value; render(tile.value); }
+    if(tile.value !== last){ last = tile.value; render(String(tile.value || "").toUpperCase().replace(/-/g,"")); }
   }, 300);
   var gen=el("gen");
-  if(gen) gen.addEventListener("click", function(){ setTimeout(function(){ render(tile.value); }, 0); });
+  if(gen) gen.addEventListener("click", function(){ setTimeout(function(){ render(String(tile.value || "").toUpperCase().replace(/-/g,"")); }, 0); });
 }
 document.addEventListener("DOMContentLoaded", hook);
 })();
