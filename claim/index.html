@@ -385,7 +385,7 @@
     function tileFromCoords(gx, gy){
       const ew = gx >= 0 ? "E" : "W";
       const ns = gy >= 0 ? "N" : "S";
-      return ew + Math.abs(gx) + ns + Math.abs(gy);
+      return ns + Math.abs(gy) + ew + Math.abs(gx);
     }
 
     function parseTileOrCoords(input){
@@ -401,7 +401,21 @@ if(coord){
   return { gx, gy, tile: t.toUpperCase().replace(/-/g, "") };
 }
 
-const m = cleaned.match(/^([EW])(\d+)([NS])(\d+)$/);
+let m = cleaned.match(/^([NS])(\d+)([EW])(\d+)$/);
+if(m){
+  const northSouth = m[1];
+  const y = parseInt(m[2], 10);
+  const eastWest = m[3];
+  const x = parseInt(m[4], 10);
+
+  const gy = northSouth === "N" ? y : -y;
+  const gx = eastWest === "E" ? x : -x;
+
+  const t = tileFromCoords(gx, gy);
+  return { gx, gy, tile: t.toUpperCase().replace(/-/g, "") };
+}
+
+m = cleaned.match(/^([EW])(\d+)([NS])(\d+)$/);
 if(m){
   const eastWest = m[1];
   const x = parseInt(m[2], 10);

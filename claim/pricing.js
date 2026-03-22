@@ -73,7 +73,14 @@ function parseCoords(input) {
     };
   }
 
-  var m = s.match(/^([EW])(\d+)([NS])(\d+)$/);
+  var m = s.match(/^([NS])(\d+)([EW])(\d+)$/);
+  if (m) {
+    var gy = m[1] === "N" ? parseInt(m[2], 10) : -parseInt(m[2], 10);
+    var gx = m[3] === "E" ? parseInt(m[4], 10) : -parseInt(m[4], 10);
+    return { gx: gx, gy: gy };
+  }
+
+  m = s.match(/^([EW])(\d+)([NS])(\d+)$/);
   if (!m) return null;
 
   var gx = m[1] === "E" ? parseInt(m[2], 10) : -parseInt(m[2], 10);
