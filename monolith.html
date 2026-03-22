@@ -644,7 +644,29 @@ function coordLabelFromG(gx, gy){
         }
       }
 
-      let m = raw.match(/^([EW])(\d+)-([NS])(\d+)$/);
+      let m = raw.match(/^([NS])(\d+)-([EW])(\d+)$/);
+      if(m){
+        const gyN = parseInt(m[2], 10);
+        const gy = (m[1] === "N" ? gyN : -gyN);
+        const gxE = parseInt(m[4], 10);
+        const gx = (m[3] === "E" ? gxE : -gxE);
+        if(Number.isFinite(gx) && Number.isFinite(gy)){
+          return { gx, gy, tile: tileIdFromCoords(gx, gy), raw };
+        }
+      }
+
+      m = raw.match(/^([NS])(\d+)([EW])(\d+)$/);
+      if(m){
+        const gyN = parseInt(m[2], 10);
+        const gy = (m[1] === "N" ? gyN : -gyN);
+        const gxE = parseInt(m[4], 10);
+        const gx = (m[3] === "E" ? gxE : -gxE);
+        if(Number.isFinite(gx) && Number.isFinite(gy)){
+          return { gx, gy, tile: tileIdFromCoords(gx, gy), raw };
+        }
+      }
+
+      m = raw.match(/^([EW])(\d+)-([NS])(\d+)$/);
       if(m){
         const gx = parseInt(m[2], 10) * (m[1] === "W" ? -1 : 1);
         const gyN = parseInt(m[4], 10);
