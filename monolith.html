@@ -586,7 +586,7 @@ zoom: 0.65,
   if(window.coordDisplayFromG) return window.coordDisplayFromG(gx, gy);
   const ax=Math.abs(gx), ay=Math.abs(gy);
   const sx=gx<0?"W":"E";
-  const sy=gy<=0?"N":"S";
+  const sy=gy<0?"S":"N";
   return sx+ax+"-"+sy+ay;
 }
 
