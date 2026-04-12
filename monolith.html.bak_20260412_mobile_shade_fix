@@ -429,31 +429,6 @@ body.view-imageonly .cell .spray{ filter:none; }
 </style>
   <script src="/coords.js"></script>
 </head>
-<style>
-@media (max-width: 900px){
-  body::before,
-  body::after,
-  .app::before,
-  .app::after,
-  .viewport::before,
-  .viewport::after,
-  .wall::before,
-  .wall::after,
-  .wall-wrap::before,
-  .wall-wrap::after,
-  .grid::before,
-  .grid::after,
-  .board::before,
-  .board::after{
-    background:none !important;
-    background-image:none !important;
-    box-shadow:none !important;
-    filter:none !important;
-    opacity:0 !important;
-    content:none !important;
-  }
-}
-</style>
 
 <body>
   <header class="top">
