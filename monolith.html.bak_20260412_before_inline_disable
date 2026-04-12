@@ -508,7 +508,6 @@ body.view-imageonly .cell .spray{ filter:none; }
   <div class="toast" id="toast" aria-label="toast"></div>
 
   <script>
-if (false) {
   (() => {
 const FEED_URL = "/assets/feed.json?cb=" + Date.now();
 
@@ -1858,7 +1857,6 @@ el.close.addEventListener("click", function(e){
     loadFeed().then(() => { centerOriginOnce(); });
     setInterval(loadFeed, 15000);
   })();
-}
   </script>
 <!-- monolith-build: wheel-zoom-v2 2026-02-07 -->
 <!-- monolith-lock: TRUE -->
