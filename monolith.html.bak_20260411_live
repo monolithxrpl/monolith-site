@@ -1861,8 +1861,6 @@ el.close.addEventListener("click", function(e){
 <!-- monolith-build: wheel-zoom-v2 2026-02-07 -->
 <!-- monolith-lock: TRUE -->
 <!-- monolith-lock-ts: 2026-02-07T00:00:00Z -->
-
-  <script src="/wall/engine.js"></script>
 </body>
 </html>
 
