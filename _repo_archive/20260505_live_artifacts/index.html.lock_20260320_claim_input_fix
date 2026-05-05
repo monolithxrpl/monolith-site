@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="/claim/pricing_preview.css?v=3">
+  <script defer src="/claim/pricing.js?v=3"></script>
+  <script defer src="/claim/pricing_preview.js?v=3"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>MONOLITH Claim</title>
+  <meta name="description" content="Claim a tile. Leave your mark. Clean by default. Single feed source of truth." />
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    :root{
+      --bg:#070b10;
+      --fg:#e9eef7;
+      --muted:rgba(233,238,247,.72);
+      --line:rgba(122,211,255,.22);
+      --line2:rgba(255,255,255,.10);
+      --glass:rgba(10,16,24,.72);
+      --glass2:rgba(16,24,36,.55);
+      --shadow:rgba(0,0,0,.45);
+      --green:#62ffa8;
+      --bad:#ff5a6a;
+      --accent:#7ad3ff;
+      --pill:#0c151f;
+      --pill2:#0a121a;
+      --r:18px;
+      --pad:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--fg);
+      background:
+        radial-gradient(1200px 700px at 10% 0%, rgba(122,211,255,.16), transparent 55%),
+        radial-gradient(900px 600px at 90% 12%, rgba(98,255,168,.12), transparent 52%),
+        radial-gradient(800px 600px at 50% 110%, rgba(122,211,255,.10), transparent 60%),
+        var(--bg);
+    }
+
+    .wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+    .top{
+      display:flex;gap:14px;align-items:center;justify-content:space-between;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:14px 14px;
+      background:linear-gradient(180deg, rgba(20,35,50,.66), rgba(10,16,24,.60));
+      box-shadow:0 12px 34px var(--shadow);
+      backdrop-filter: blur(12px);
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:220px}
+    .brand img{width:38px;height:38px;border-radius:12px}
+    .brand .title{font-weight:900;letter-spacing:.4px}
+    .brand .sub{color:var(--muted);font-size:13px;margin-top:2px}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:12px 16px;
+      border-radius:999px;
+      border:1px solid rgba(122,211,255,.22);
+      background:linear-gradient(180deg, rgba(16,28,40,.70), rgba(10,18,26,.70));
+      color:var(--fg);
+      font-weight:900;
+      text-decoration:none;
+      box-shadow:0 10px 22px rgba(0,0,0,.26);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pill:active{transform:translateY(1px)}
+    .pill:hover{border-color:rgba(122,211,255,.34)}
+    .pill.primary{
+      border-color:rgba(98,255,168,.30);
+      box-shadow:0 10px 22px rgba(0,0,0,.30);
+    }
+
+    .card{
+      margin-top:14px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(10,16,24,.78), rgba(10,16,24,.58));
+      box-shadow:0 12px 34px var(--shadow);
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .card .hd .h{font-weight:900;letter-spacing:.6px}
+    .card .hd .d{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.35}
+    .card .bd{padding:16px}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+
+    .field{margin-top:14px}
+    label{display:block;color:var(--muted);font-weight:900;font-size:12px;letter-spacing:.4px;margin:0 0 8px}
+    input[type="text"], textarea{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.22);
+      color:var(--fg);
+      padding:14px 14px;
+      outline:none;
+      font-size:15px;
+      box-sizing:border-box;
+    }
+    input[type="text"]{font-family:var(--mono)}
+    #tile{font-size:22px;font-weight:900;letter-spacing:1px;padding:18px 18px;border-color:rgba(122,211,255,.26);background:linear-gradient(180deg, rgba(8,12,18,.96), rgba(8,12,18,.90));box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 18px 32px rgba(0,0,0,.30)}
+    textarea{min-height:92px;resize:none}
+
+    input::placeholder, textarea::placeholder{color:rgba(233,238,247,.40)}
+    .hint{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.35}
+    #pricePreview{margin-top:14px;padding:18px 18px 16px;border-radius:18px;border:1px solid rgba(122,211,255,.18);background:linear-gradient(180deg, rgba(11,17,26,.94), rgba(8,12,18,.94));box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 16px 36px rgba(0,0,0,.28)}
+    #priceValue{font-size:32px;font-weight:1000;line-height:1;letter-spacing:.2px;margin-top:8px;color:#fff}
+    #priceNote{margin-top:8px;color:rgba(233,238,247,.76);font-size:13px;line-height:1.35}
+
+    .row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:16px;
+      align-items:center;
+    }
+
+    .btn{
+      border-radius:999px;
+      border:1px solid rgba(98,255,168,.26);
+      background:linear-gradient(180deg, rgba(16,34,24,.84), rgba(10,18,14,.84));
+      color:var(--fg);
+      font-weight:900;
+      padding:12px 16px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{border-color:rgba(98,255,168,.36)}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{
+      border-color:rgba(122,211,255,.24);
+      background:linear-gradient(180deg, rgba(16,28,40,.76), rgba(10,18,26,.76));
+    }
+
+    .status{
+      margin-top:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.20);
+      padding:12px 14px;
+      font-size:13px;
+      line-height:1.4;
+      color:var(--muted);
+    }
+    .status .ok{color:var(--green);font-weight:900}
+    .status .bad{color:var(--bad);font-weight:900}
+    .status .mono{font-family:var(--mono)}
+
+    .sectionTitle{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-weight:900;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.20);
+      color:var(--muted);
+      font-weight:900;
+      font-size:12px;
+    }
+
+    ul{margin:10px 0 0 18px;color:var(--muted)}
+    li{margin:7px 0}
+
+    pre{
+      margin:14px 0 0;
+      display:none;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.34);
+      padding:12px;
+      overflow:auto;
+      font-family:var(--mono);
+      font-size:12px;
+      color:rgba(233,238,247,.84);
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    pre.show{display:block}
+
+    .fileRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    input[type="file"]{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.18);
+      color:var(--muted);
+      padding:10px 12px;
+      box-sizing:border-box;
+    }
+
+    @media (max-width: 700px){
+      .top{position:static}
+      .btns{width:100%;justify-content:flex-start}
+      .brand{min-width:0}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <img src="/assets/monolith_logo.webp" alt="MONOLITH" />
+        <div>
+          <div class="title">MONOLITH</div>
+          <div class="sub">Claim a permanent coordinate on MONOLITH.</div>
+        </div>
+      </div>
+
+      <div class="btns">
+        <a class="pill primary" href="/">Back to Wall</a>
+        <a class="pill" href="/rules.html">Rules</a>
+        <a class="pill" href="/monolith_laws.html">Laws</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <div class="h">CLAIM YOUR MARK</div>
+        <div class="d">
+          Claim a wallet-linked coordinate on MONOLITH. Your mark is public, verifiable, and built to last. Errors stay quiet until action. Debug output requires <span class="mono">?debug=1</span>.
+        </div>
+      </div>
+
+      <div class="bd">
+        <div class="grid">
+          <div>
+            <div class="field">
+              <label>Coordinate</label>
+              <input id="tile" type="text" placeholder="E23N11" autocomplete="off" />
+              <div id="pricePreview">
+                <div class="row">
+                  <span id="priceBadge" class="badge"></span>
+                  <div id="priceValue"></div>
+                </div>
+                <div id="priceNote">Enter a coordinate to preview pricing.</div>
+              </div>
+<div class="hint">Accepted: E23N11, E23n11, e23n11, E23-N11, E23-n11, e23-n11. Input canonicalizes after action.</div>
+            </div>
+
+            <div class="field">
+              <label>Wallet</label>
+              <input id="wallet" type="text" placeholder="r..." autocomplete="off" />
+              <div class="hint">XRPL classic address starting with r. This is the author wallet.</div>
+            </div>
+
+            <div class="field">
+              <label>Tag</label>
+              <input id="tag" type="text" placeholder="TAG" autocomplete="off" />
+              <div class="hint">Optional. 1 to 18 chars. Letters numbers underscore only.</div>
+            </div>
+
+            <div class="field">
+              <label for="handle">Handle</label>
+              <input id="handle" type="text" placeholder="@handle" autocomplete="off" spellcheck="false" />
+              <label for="link">Link</label>
+              <input id="link" type="text" placeholder="https://..." autocomplete="off" />
+              <div class="hint">Optional. Either @handle or https URL.</div>
+            </div>
+
+            <div class="field">
+              <label>Note</label>
+              <textarea id="note" placeholder="Short message, keep it clean"></textarea>
+              <div class="hint">Optional. Max 160 chars. No angle brackets.</div>
+            </div>
+
+            <div class="field">
+              <label>Image upload</label>
+              <div class="fileRow">
+                <input id="file" type="file" accept="image/png,image/jpeg,image/webp" />
+              </div>
+              <div class="hint">Optional. PNG JPG WEBP. Max 2 MB. Base64 included only if 200 KB or smaller.</div>
+            </div>
+
+            <div class="row">
+              <button class="btn" id="gen">Generate claim payload</button>
+              <button class="btn secondary" id="copy">Copy payload</button>
+              <button class="btn secondary" id="clear">Clear</button>
+            </div>
+
+            <div class="status" id="status">
+              <div id="statusLine">Ready</div>
+              <div id="feedLine" style="margin-top:6px"></div>
+            </div>
+
+            <pre id="out"></pre>
+
+            <div class="card" style="margin-top:16px">
+              <div class="bd">
+                <div class="sectionTitle">
+                  <span class="chip">Rules</span>
+                  <span>Claim requirements</span>
+                </div>
+                <ul>
+                  <li>Tile must be E or W then number, then N or S then number. Coords like 23,-11 also work</li>
+                  <li>Wallet must be a valid XRPL classic address starting with r</li>
+                  <li>Tag is optional, 1 to 18 chars, letters numbers underscore only</li>
+                  <li>Link is optional, either @handle or https URL</li>
+                  <li>Note is optional, max 160, no angle brackets</li>
+                  <li>Image is optional, PNG JPG WEBP only, max 2 MB</li>
+                  <li>Payload includes image metadata. Base64 image data is included only if 200 KB or smaller</li>
+                </ul>
+
+                <div class="sectionTitle" style="margin-top:16px">
+                  <span class="chip">Operator</span>
+                  <span>What happens next</span>
+                </div>
+                <div style="margin-top:10px;color:var(--muted);line-height:1.45">
+                  Operator verifies payment and wallet control, then writes to the feed and pushes the update.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FEED_URL = "/assets/feed.json?cb=" + Date.now();
+    const DEBUG = new URLSearchParams(location.search).get("debug") === "1";
+
+    const el = {
+      tile: document.getElementById("tile"),
+      wallet: document.getElementById("wallet"),
+      tag: document.getElementById("tag"),
+      link: document.getElementById("link"),
+      note: document.getElementById("note"),
+      file: document.getElementById("file"),
+      gen: document.getElementById("gen"),
+      copy: document.getElementById("copy"),
+      clear: document.getElementById("clear"),
+      statusLine: document.getElementById("statusLine"),
+      feedLine: document.getElementById("feedLine"),
+      out: document.getElementById("out"),
+    };
+
+    const state = {
+      taken: new Set(),
+      feedLoaded: false,
+      lastPayload: null,
+      showErrors: false,
+    };
+
+    function normalizeDash(s){
+      return (s || "").trim()
+        .replace(/[–—−]/g, "-")
+        .replace(/\s+/g, "");
+    }
+
+    function tileFromCoords(gx, gy){
+      const ew = gx >= 0 ? "E" : "W";
+      const ns = gy >= 0 ? "N" : "S";
+      return ew + Math.abs(gx) + ns + Math.abs(gy);
+    }
+
+    function parseTileOrCoords(input){
+const raw = normalizeDash(input).trim();
+      const cleaned = raw.toUpperCase().replace(/-/g, "");
+if(!raw || raw.length < 3) return null;
+
+const coord = raw.match(/^(-?\d+),(-?\d+)$/);
+if(coord){
+  const gx = parseInt(coord[1], 10);
+  const gy = parseInt(coord[2], 10);
+  const t = tileFromCoords(gx, gy);
+  return { gx, gy, tile: t.toUpperCase().replace(/-/g, "") };
+}
+
+const m = cleaned.match(/^([EW])(\d+)([NS])(\d+)$/);
+if(m){
+  const eastWest = m[1];
+  const x = parseInt(m[2], 10);
+  const northSouth = m[3];
+  const y = parseInt(m[4], 10);
+
+  const gx = eastWest === "E" ? x : -x;
+  const gy = northSouth === "N" ? y : -y;
+
+  const t = tileFromCoords(gx, gy);
+  return { gx, gy, tile: t.toUpperCase().replace(/-/g, "") };
+}
+
+return null;
+    }
+
+    function validWallet(w){
+      const s = (w || "").trim();
+      if(!s) return false;
+      return /^r[1-9A-HJ-NP-Za-km-z]{24,34}$/.test(s);
+    }
+
+    function validTag(t){
+      const s = (t || "").trim();
+      if(!s) return true;
+      if(s.length < 1 || s.length > 18) return false;
+      return /^[A-Za-z0-9_]+$/.test(s);
+    }
+
+    function validLink(x){
+      const s = (x || "").trim();
+      if(!s) return true;
+      if(s.startsWith("@")){
+        if(s.length < 2 || s.length > 32) return false;
+        return /^@[A-Za-z0-9_\.]+$/.test(s);
+      }
+      return /^https?:\/\/[^\s<>]{1,200}$/.test(s);
+    }
+
+    function validNote(n){
+      const s = (n || "").trim();
+      if(!s) return true;
+      if(s.length > 160) return false;
+      if(/[<>]/.test(s)) return false;
+      return true;
+    }
+
+    function setStatus(msg, isBad){
+      const cls = isBad ? "bad" : "ok";
+      el.statusLine.innerHTML = "<span class='" + cls + "'>" + msg + "</span>";
+    }
+
+    function setFeedLine(msg){
+      el.feedLine.innerHTML = msg || "";
+    }
+
+    function showOutput(obj){
+      state.lastPayload = obj;
+      if(!state.showErrors && !DEBUG){
+        el.out.classList.remove("show");
+        el.out.textContent = "";
+        return;
+      }
+      el.out.classList.add("show");
+      el.out.textContent = JSON.stringify(obj, null, 2);
+    }
+
+    async function loadFeedTaken(){
+      const t0 = performance.now();
+      try{
+        const r = await fetch(FEED_URL, { cache: "no-store" });
+        if(!r.ok) throw new Error("feed http " + r.status);
+        const arr = await r.json();
+        const taken = new Set();
+        for(const m of (Array.isArray(arr) ? arr : [])){
+          if(m && typeof m.tile === "string" && m.tile) taken.add(m.tile);
+        }
+        state.taken = taken;
+        state.feedLoaded = true;
+        const ms = Math.round(performance.now() - t0);
+        setFeedLine("<span class='mono'>Feed</span> loaded. Taken tiles: <span class='ok'>" + taken.size + "</span>. " + ms + "ms");
+        if(DEBUG) showOutput({ feed: "ok", taken: taken.size, ms });
+      }catch(e){
+        state.taken = new Set();
+        state.feedLoaded = false;
+        setFeedLine("<span class='mono'>Feed</span> failed. Taken tile enforcement is not authoritative.");
+        if(DEBUG) showOutput({ feed: "fail", error: String(e) });
+      }
+    }
+
+    async function sha256Hex(buf){
+      const hash = await crypto.subtle.digest("SHA-256", buf);
+      const bytes = new Uint8Array(hash);
+      let out = "";
+      for(const b of bytes) out += b.toString(16).padStart(2, "0");
+      return out;
+    }
+
+    async function buildImagePayload(file){
+      if(!file) return null;
+
+      const okType = ["image/png","image/jpeg","image/webp"].includes(file.type);
+      if(!okType) return { error: "Image must be PNG JPG WEBP" };
+      if(file.size > 2 * 1024 * 1024) return { error: "Image too large. Max 2 MB" };
+
+      const buf = await file.arrayBuffer();
+      const hash = await sha256Hex(buf);
+
+      const meta = {
+        name: file.name || "image",
+        type: file.type,
+        size: file.size,
+        sha256: hash
+      };
+
+      if(file.size <= 200 * 1024){
+        const dataUrl = await new Promise((res, rej) => {
+          const fr = new FileReader();
+          fr.onload = () => res(String(fr.result || ""));
+          fr.onerror = () => rej(new Error("file read failed"));
+          fr.readAsDataURL(file);
+        });
+        return { meta, dataUrl };
+      }
+
+      return { meta };
+    }
+
+    async function generatePayload(){
+      state.showErrors = true;
+
+      const p = parseTileOrCoords(el.tile.value);
+      if(!p){ setStatus("Tile invalid", true); showOutput({ error:"tile invalid", input: el.tile.value }); return null; }
+
+      el.tile.value = p.tile;
+
+      const wallet = (el.wallet.value || "").trim();
+      if(!validWallet(wallet)){ setStatus("Wallet invalid", true); showOutput({ error:"wallet invalid", input: wallet }); return null; }
+
+      const tag = (el.tag.value || "").trim();
+      if(!validTag(tag)){ setStatus("Tag invalid", true); showOutput({ error:"tag invalid", input: tag }); return null; }
+
+      const link = (el.link.value || "").trim();
+      if(!validLink(link)){ setStatus("Link invalid", true); showOutput({ error:"link invalid", input: link }); return null; }
+
+      const note = (el.note.value || "").trim();
+      if(!validNote(note)){ setStatus("Note invalid", true); showOutput({ error:"note invalid" }); return null; }
+
+      if(state.feedLoaded && state.taken.has(p.tile)){
+        setStatus("Tile is taken", true);
+        showOutput({ error:"tile taken", tile:p.tile });
+        return null;
+      }
+
+      const file = el.file.files && el.file.files[0] ? el.file.files[0] : null;
+      const img = file ? await buildImagePayload(file) : null;
+      if(img && img.error){ setStatus(img.error, true); showOutput({ error: img.error }); return null; }
+
+      const payload = {
+        v: 1,
+        tile: p.tile,
+        gx: p.gx,
+        gy: p.gy,
+        wallet,
+        tag: tag || null,
+        link: link || null,
+        note: note || null,
+        image: img || null,
+        ts: Date.now()
+      };
+
+      setStatus("Payload ready", false);
+      showOutput(payload);
+      return payload;
+    }
+
+    async function copyPayload(){
+      const p = await generatePayload();
+      if(!p) return;
+      try{
+        await navigator.clipboard.writeText(JSON.stringify(p));
+        setStatus("Copied payload", false);
+      }catch(e){
+        setStatus("Copy failed", true);
+        showOutput({ error:"copy failed" });
+      }
+    }
+
+    function clearAll(){
+      el.tile.value = "";
+      el.wallet.value = "";
+      el.tag.value = "";
+      el.link.value = "";
+      el.note.value = "";
+      el.file.value = "";
+      state.lastPayload = null;
+      state.showErrors = false;
+      el.out.classList.remove("show");
+      el.out.textContent = "";
+      setStatus("Cleared", false);
+    }
+
+    el.tile.addEventListener("input", () => {
+      el.tile.value = (el.tile.value || "")
+        .replace(/[–—−_]/g, "-")
+        .replace(/\s+/g, "")
+        .replace(/[^0-9A-Za-z,-]/g, "")
+        .toUpperCase();
+    });
+
+    el.tile.addEventListener("blur", () => {
+      const p = parseTileOrCoords(el.tile.value);
+      if(p) el.tile.value = p.tile;
+    });
+
+    el.gen.addEventListener("click", () => { generatePayload(); });
+    el.copy.addEventListener("click", () => { copyPayload(); });
+    el.clear.addEventListener("click", () => { clearAll(); });
+
+    if(DEBUG){
+      state.showErrors = true;
+      el.out.classList.add("show");
+      el.out.textContent = "Debug enabled";
+    }
+
+    loadFeedTaken();
+    setStatus("Ready", false);
+  </script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>MONOLITH Entrance</title>
+
+  <meta name="description" content="Enter MONOLITH. Digital land on the XRPL. Claim a tile. Leave your mark." />
+  <meta property="og:title" content="MONOLITH Entrance" />
+  <meta property="og:description" content="Digital land on the XRPL. Claim a tile. Leave your mark." />
+  <meta property="og:image" content="https://monolithxrpl.com/assets/monolith_logo.webp" />
+  <meta property="og:url" content="https://monolithxrpl.com/" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root{
+      --bg:#07090b;
+      --fg:#f5f7f4;
+      --muted:rgba(245,247,244,.75);
+      --muted2:rgba(174,183,175,.80);
+      --line:rgba(23,53,36,.95);
+      --green:#2fbf6b;
+      --warn:#ffe175;
+      --shadow:rgba(0,0,0,.45);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:var(--bg);
+      color:var(--fg);
+      overflow-x:hidden;
+        overflow-y:auto;
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    .hero{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      background:
+        radial-gradient(900px 650px at 70% 20%, rgba(47,191,107,.10), transparent 55%),
+        radial-gradient(900px 650px at 20% 0%, rgba(255,225,117,.08), transparent 55%),
+        linear-gradient(to bottom, rgba(7,9,11,.08) 0%, rgba(7,9,11,.42) 55%, rgba(7,9,11,.92) 100%),
+        url("/assets/monolith_xrpl.webp") center center / cover no-repeat;
+      filter:saturate(1.05) contrast(1.05);
+    }
+
+    .wrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+    }
+
+    .card{
+      width:min(720px, 100%);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:rgba(7,9,11,.66);
+      box-shadow:0 18px 44px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      padding:18px 18px 16px;
+    }
+
+    .row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+
+    .logo{
+      width:46px;
+      height:46px;
+      object-fit:contain;
+      flex:0 0 auto;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,.35));
+    }
+
+    .t{
+      font-weight:1000;
+      letter-spacing:.8px;
+      font-size:16px;
+      text-transform:uppercase;
+      line-height:1.05;
+    }
+
+    .s{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.25;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+
+    .explain{
+      margin-top:14px;
+      padding:14px 14px 12px;
+      border:1px solid rgba(23,53,36,.75);
+      border-radius:18px;
+      background:rgba(11,27,19,.22);
+      color:rgba(245,247,244,.86);
+      font-size:13px;
+      line-height:1.45;
+      font-weight:800;
+      letter-spacing:.15px;
+    }
+
+    .explain .muted{
+      color:var(--muted2);
+      font-weight:800;
+    }
+
+    .bul{
+      margin:10px 0 0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:8px;
+    }
+    .bul li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background:var(--green);
+      box-shadow:0 0 0 4px rgba(47,191,107,.14);
+      margin-top:5px;
+      flex:0 0 auto;
+    }
+
+    .ctaRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      background:rgba(11,27,19,.78);
+      color:var(--fg);
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:1000;
+      letter-spacing:.3px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:hover{border-color:rgba(47,191,107,.55)}
+    .btn.primary{
+      background:linear-gradient(180deg, rgba(47,191,107,.22), rgba(11,27,19,.86));
+      border-color:rgba(47,191,107,.65);
+    }
+    .btn.warn{
+      border-color:rgba(255,225,117,.55);
+      background:rgba(255,225,117,.10);
+      color:var(--warn);
+    }
+
+    .fine{
+      margin-top:12px;
+      color:rgba(174,183,175,.70);
+      font-size:12px;
+      line-height:1.25;
+      font-weight:800;
+      letter-spacing:.1px;
+    }
+    .hoc-footer{margin:28px 0 0;padding:18px 0;border-top:1px solid rgba(255,255,255,.10);opacity:.95}
+    .hoc-footer-inner{max-width:1100px;margin:0 auto;padding:0 16px;text-align:center}
+    .hoc-footer-top{font-weight:700;letter-spacing:.2px}
+    .hoc-footer-links{margin-top:8px;font-size:13px;opacity:.9}
+    .hoc-footer-links a{color:inherit;text-decoration:none}
+    .hoc-footer-links a:hover{text-decoration:underline}
+    .hoc-footer-links span{margin:0 6px;opacity:.8}
+    .hoc-footer-copy{margin-top:8px;font-size:12px;opacity:.75}
+  </style>
+</head>
+
+<body>
+  <div class="hero" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <main class="card" aria-label="MONOLITH Entrance">
+      <div class="row">
+        <img class="logo" src="/assets/monolith_logo.webp" alt="MONOLITH" />
+        <div>
+          <div class="t">MONOLITH</div>
+          <div class="s">Digital land on the XRPL. One tile. One mark. Forever.</div>
+        </div>
+      </div>
+
+      <section class="explain" aria-label="What MONOLITH is">
+        <div>
+          MONOLITH is a permanent on-chain grid, like land you can own on the XRP Ledger.
+          <span class="muted">Pick a coordinate and claim it.</span>
+        </div>
+
+        <ul class="bul" aria-label="How it works">
+          <li><span class="dot"></span><span>Each tile is a plot of digital land.</span></li>
+          <li><span class="dot"></span><span>Your wallet claim is written to the XRPL and timestamped.</span></li>
+          <li><span class="dot"></span><span>Your mark is public, verifiable, and can’t be erased.</span></li>
+          <li><span class="dot"></span><span>Years from now, people can prove who showed up early.</span></li>
+        </ul>
+      </section>
+
+      <div class="ctaRow" aria-label="Actions">
+        <a class="btn primary" href="/monolith.html" aria-label="enter the wall">Enter the Wall</a>
+        <a class="btn" href="/claim/" aria-label="claim a tile">Claim a Tile</a>
+        <a class="btn warn" href="/rules.html" aria-label="read rules">Rules</a>
+      </div>
+
+      <div class="fine">
+        
+      </div>
+    </main>
+  </div>
+  <footer class="hoc-footer">
+    <div class="hoc-footer-inner">
+      <div class="hoc-footer-top">A House of Cauliman Project</div>
+      <div class="hoc-footer-links">
+        <a href="/terms.html">Terms</a><span>•</span>
+        <a href="/privacy.html">Privacy</a><span>•</span>
+        <a href="/disclaimer.html">Disclaimer</a><span>•</span>
+        <a href="https://houseofcauliman.com/" target="_blank" rel="noopener">houseofcauliman.com</a>
+      </div>
+      <div class="hoc-footer-copy">© 2026 House of Cauliman. All rights reserved.</div>
+    </div>
+  </footer>
+</body>
+</html>
