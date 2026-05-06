@@ -426,6 +426,39 @@ body.view-imageonly .cell .tag{ display:none !important; }
 body.view-brand .cell .spray,
 body.view-imageonly .cell .spray{ filter:none; }
 
+
+/* mobile green-bar bleed kill */
+@media (max-width: 900px){
+  html,
+  body{
+    background:#020604 !important;
+    background-image:none !important;
+  }
+
+  body::before,
+  body::after,
+  .app::before,
+  .app::after,
+  .viewport::before,
+  .viewport::after,
+  .wall::before,
+  .wall::after,
+  .wall-wrap::before,
+  .wall-wrap::after,
+  .grid::before,
+  .grid::after,
+  .board::before,
+  .board::after{
+    display:none !important;
+    content:none !important;
+    background:none !important;
+    background-image:none !important;
+    box-shadow:none !important;
+    filter:none !important;
+    opacity:0 !important;
+  }
+}
+
 </style>
   <script src="/coords.js"></script>
 
