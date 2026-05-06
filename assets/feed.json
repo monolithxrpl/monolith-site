@@ -147,13 +147,14 @@
     "tag": "LAV",
     "link": "https://lavxrpl.com/",
     "img": "/assets/lav_icon.webp",
-    "handle": "@mrcauliman",
+    "handle": "@lavxrpl",
     "ts": "2026-05-06",
     "note": "LAV is Legacy Access Vault. XRP-native, built for all chains, designed to help families find critical crypto access instructions when they need them.",
     "claimable": false,
     "locked": true,
     "tier": "standard",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "wallet": "rNWj7ckrULcRX5Ny6jv3greTvfBZxtYaBF"
   },
   {
     "tile": "N-2",
