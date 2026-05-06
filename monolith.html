@@ -417,6 +417,21 @@ body.debug #dbg{display:block;}
 #world{background:var(--bg);}
 
 
+/* Entry Default View: MONOLITH middle view */
+body.view-default .cell{
+  background:rgba(2,10,8,.82) !important;
+  border-color:rgba(120,255,190,.28) !important;
+}
+body.view-default .cell .id{display:none !important;}
+body.view-default .cell .tag{
+  display:block !important;
+  color:#dfffea !important;
+  letter-spacing:.08em;
+  text-shadow:0 0 10px rgba(120,255,190,.35);
+}
+body.view-default .cell .spray{
+  filter:saturate(1.08) contrast(1.08);
+}
 
 /* Brand View and Satellite View: images only */
 body.view-brand .cell .id,

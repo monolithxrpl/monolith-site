@@ -680,8 +680,8 @@ function applyView(mode){
 
   // Presets, tune here only
   const PRESET = {
-    brand: { zoom: 0.55, camX: (STEP * 0.5), camY: (STEP * 0.5) },
-    sat:   { zoom: 0.275, camX: (STEP * 0.5), camY: (STEP * 0.5) }
+    brand:   { zoom: 0.55, camX: (STEP * 0.5), camY: (STEP * 0.5) },
+    sat:   { zoom: 0.18, camX: (STEP * 0.5), camY: (STEP * 0.5) }
   };
 
   const key = (mode === "sat") ? "sat" : "brand";
@@ -692,6 +692,7 @@ function applyView(mode){
   }
 
   state._viewMode = key;
+  try{ document.body.classList.toggle("view-default", false); }catch(_){}
   try{ document.body.classList.toggle("view-brand", key === "brand"); }catch(_){}
   try{ document.body.classList.toggle("view-imageonly", key === "brand" || key === "sat"); }catch(_){}
 
@@ -710,7 +711,7 @@ function restoreView(){
   state.camY = state._viewLast.camY;
   state.zoom = clamp(state._viewLast.zoom, state.ZMIN, state.ZMAX);
   state._viewMode = "free";
-  try{ document.body.classList.remove("view-brand"); document.body.classList.remove("view-imageonly"); }catch(_){ }
+  try{ document.body.classList.remove("view-default"); document.body.classList.remove("view-brand"); document.body.classList.remove("view-imageonly"); }catch(_){ }
   updateWorldTransform();
   renderPool();
 }
@@ -718,7 +719,7 @@ function restoreView(){
 function centerOriginNow(){
   if(state.down || state.pinch || state.dragging) return;
   state._viewMode = "free";
-  try{ document.body.classList.remove("view-brand"); document.body.classList.remove("view-imageonly"); }catch(_){}
+  try{ document.body.classList.remove("view-default"); document.body.classList.remove("view-brand"); document.body.classList.remove("view-imageonly"); }catch(_){}
   state.zoom = clamp(0.55, state.ZMIN, state.ZMAX);
   state.camX = (STEP * 0.5);
   state.camY = (STEP * 0.5);
