@@ -107,7 +107,8 @@
     "claimable": false,
     "locked": true,
     "tier": "standard",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "wallet": "rfgFM8z2abu2uahXFaRre8aWw9PEv48QbS"
   },
   {
     "tile": "S-1",
@@ -138,7 +139,8 @@
     "claimable": false,
     "locked": true,
     "tier": "standard",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "wallet": "rfgFM8z2abu2uahXFaRre8aWw9PEv48QbS"
   },
   {
     "tile": "N2W1",
