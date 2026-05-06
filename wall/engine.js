@@ -1348,7 +1348,14 @@ el.close.addEventListener("click", function(e){
       state.lastKey = "";
     });
 
-    loadFeed().then(() => { centerOriginOnce(); });
+    loadFeed().then(() => {
+    centerOriginOnce();
+
+    // Entry default view only. Navigation View remains original.
+    try{ document.body.classList.add("view-default"); }catch(_){}
+    state.zoom = clamp(0.38, state.ZMIN, state.ZMAX);
+    draw();
+  });
     setInterval(loadFeed, 15000);
   })();
 }
