@@ -474,6 +474,40 @@ body.view-imageonly .cell .spray{ filter:none; }
   }
 }
 
+
+/* Mobile wall button collapse */
+.mobile-wall-toggle{display:none;}
+
+@media (max-width:900px){
+  .mobile-wall-toggle{
+    position:fixed;
+    top:12px;
+    right:12px;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    border:1px solid rgba(120,255,190,.38);
+    border-radius:999px;
+    background:rgba(2,8,6,.88);
+    color:#dfffea;
+    font-size:20px;
+    line-height:1;
+    box-shadow:0 0 18px rgba(0,0,0,.45);
+  }
+
+  body.wall-buttons-collapsed .top .search,
+  body.wall-buttons-collapsed .top .kpi{
+    display:none !important;
+  }
+
+  body.wall-buttons-collapsed .mobile-wall-toggle{
+    transform:rotate(180deg);
+  }
+}
+
 </style>
   <script src="/coords.js"></script>
 
@@ -513,6 +547,8 @@ body.view-imageonly .cell .spray{ filter:none; }
 </style>
 
 <body>
+  <button id="mobileWallToggle" class="mobile-wall-toggle" type="button" aria-label="Toggle wall buttons">⌃</button>
+
   <header class="top">
     <div class="brand">
       <img src="/assets/monolith_logo.webp" alt="MONOLITH" />
@@ -1947,6 +1983,19 @@ el.close.addEventListener("click", function(e){
 <!-- monolith-lock-ts: 2026-02-07T00:00:00Z -->
 
   <script src="/wall/engine.js"></script>
+
+<script>
+(() => {
+  const btn = document.getElementById("mobileWallToggle");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const collapsed = document.body.classList.toggle("wall-buttons-collapsed");
+    btn.textContent = collapsed ? "⌄" : "⌃";
+  });
+})();
+</script>
+
 </body>
 </html>
 
