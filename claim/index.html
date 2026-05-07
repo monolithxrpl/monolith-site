@@ -407,6 +407,9 @@ if(coord){
   return { gx, gy, tile: t.toUpperCase().replace(/-/g, "") };
 }
 
+let axis = cleaned.match(/^([NSEW])(\d+)$/);
+if(axis){ const v=parseInt(axis[2],10); const gx=axis[1]==="E"?v:axis[1]==="W"?-v:0; const gy=axis[1]==="N"?v:axis[1]==="S"?-v:0; const t=tileFromCoords(gx,gy); return { gx, gy, tile:t.toUpperCase().replace(/-/g,"") }; }
+
 let m = cleaned.match(/^([NS])(\d+)([EW])(\d+)$/);
 if(m){
   const northSouth = m[1];

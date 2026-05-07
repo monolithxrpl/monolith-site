@@ -56,6 +56,7 @@
 
   function tierFor(gx, gy) {
     if (isNA(gx, gy)) return "na";
+    if ((parseInt(gx || "0", 10) === 0) !== (parseInt(gy || "0", 10) === 0)) return "signature";
     if (isSignature(gx, gy)) return "signature";
     if (isPremium(gx, gy)) return "premium";
     return "standard";
@@ -75,6 +76,9 @@
     }
 
     if (s === "ORIGIN") return { gx: 0, gy: 0, tile: "ORIGIN" };
+
+    var axis = s.match(/^([NSEW])(\d+)$/);
+    if (axis) { var agx=0, agy=0; if(axis[1]==="N") agy=+axis[2]; if(axis[1]==="S") agy=-axis[2]; if(axis[1]==="E") agx=+axis[2]; if(axis[1]==="W") agx=-axis[2]; return { gx:agx, gy:agy, tile:tileFromCoords(agx, agy) }; }
 
     var m = s.match(/^([NS])(\d+)([EW])(\d+)$/);
     if (m) {
