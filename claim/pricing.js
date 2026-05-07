@@ -95,8 +95,8 @@
   function formatPreview(tier) {
     if (tier === "reserved") return {
       badge: "RESERVED",
-      price: "Manual",
-      note: "Reserved coordinate. Manual approval only."
+      price: "$99 USD",
+      note: "Reserved coordinate. $99 USD approval only."
     };
 
     if (tier === "taken") return {

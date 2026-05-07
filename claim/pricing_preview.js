@@ -26,7 +26,7 @@ function tierFor(a, gx, gy){
 
 function format(a, tier){
   if(a && typeof a.formatPreview === "function") return a.formatPreview(tier);
-  if(tier === "reserved") return { badge:"RESERVED", price:"Manual", note:"Reserved coordinate. Manual approval only." };
+  if(tier === "reserved") return { badge:"RESERVED", price:"$99 USD", note:"Reserved coordinate. $99 USD approval only." };
   if(tier === "taken") return { badge:"TAKEN", price:null, note:"This coordinate is already occupied." };
   if(tier === "signature") return { badge:"SIGNATURE", price:"$499 USD", note:"Signature tile. Paid in $XRP through Xaman. Live quote expires in 5 minutes." };
   if(tier === "premium") return { badge:"PREMIUM", price:"$249 USD", note:"Premium tile. Paid in $XRP through Xaman. Live quote expires in 5 minutes." };
