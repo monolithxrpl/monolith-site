@@ -8357,5 +8357,31 @@
     "tier": "advertisement",
     "price_xrp": 0,
     "ad_slot": 500
+  },
+  {
+    "tile": "N-2",
+    "gx": 0,
+    "gy": 2,
+    "tag": "RESERVED",
+    "img": "/assets/RESERVED.webp?v=20260506",
+    "handle": "@monolith_xrpl",
+    "ts": "2026-05-06",
+    "claimable": false,
+    "locked": true,
+    "tier": "reserved",
+    "price_xrp": 0
+  },
+  {
+    "tile": "N-2",
+    "gx": 0,
+    "gy": 2,
+    "tag": "RESERVED",
+    "img": "/assets/RESERVED.webp?v=20260506",
+    "handle": "@monolith_xrpl",
+    "ts": "2026-05-06",
+    "claimable": false,
+    "locked": true,
+    "tier": "reserved",
+    "price_xrp": 0
   }
 ]
