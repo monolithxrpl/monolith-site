@@ -201,6 +201,16 @@ function coordLabelFromG(gx, gy){
         }
       }
 
+      m = raw.match(/^([NSEW])(\d+)$/);
+      if(m){
+        const n = parseInt(m[2], 10);
+        const gx = (m[1] === "E" ? n : m[1] === "W" ? -n : 0);
+        const gy = (m[1] === "N" ? n : m[1] === "S" ? -n : 0);
+        if(Number.isFinite(gx) && Number.isFinite(gy)){
+          return { gx, gy, tile: tileIdFromCoords(gx, gy), raw };
+        }
+      }
+
       m = raw.match(/^([EW])(\d+)-([NS])(\d+)$/);
       if(m){
         const gx = parseInt(m[2], 10) * (m[1] === "W" ? -1 : 1);
