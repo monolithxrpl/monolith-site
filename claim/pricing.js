@@ -1,18 +1,52 @@
-/* MONOLITH CLAIM PRICING v2 - USD anchor, XRP payment rail */
+/* MONOLITH CLAIM PRICING v3 - locked number policy */
 (function () {
   "use strict";
 
-  var PRICE_STANDARD_USD = 99;
+  var PRICE_REGULAR_USD = 99;
   var PRICE_PREMIUM_USD = 249;
   var PRICE_SIGNATURE_USD = 499;
+
+  var UNAVAILABLE_NUMBERS = [666];
+
+  var MANUAL_REVIEW_NUMBERS = [
+    14, 18, 88, 1488, 311, 109, 110, 1312, 1352, 1390
+  ];
+
+  var SIGNATURE_NUMBERS = [
+    42, 67, 69, 86, 143, 314, 404, 420, 589,
+    777, 808, 888, 911, 999, 1337, 1776,
+    1978, 2012, 2026
+  ];
+
+  var SIGNATURE_REPEATS = [
+    111, 222, 333, 444, 555, 777, 888, 999,
+    1111, 2222, 3333, 4444, 5555, 7777, 8888, 9999
+  ];
+
+  var PREMIUM_NUMBERS = [
+    10, 11, 22, 25, 33, 44, 50, 55, 66,
+    75, 77, 99, 100, 200, 300, 400, 500
+  ];
 
   function absInt(v) {
     return Math.abs(parseInt(v || "0", 10));
   }
 
+  function hasNumber(gx, gy, nums) {
+    gx = absInt(gx);
+    gy = absInt(gy);
+
+    for (var i = 0; i < nums.length; i++) {
+      if (gx === nums[i] || gy === nums[i]) return true;
+    }
+
+    return false;
+  }
+
   function tileFromCoords(gx, gy) {
     gx = parseInt(gx || "0", 10);
     gy = parseInt(gy || "0", 10);
+
     if (gx === 0 && gy === 0) return "ORIGIN";
 
     var ns = gy > 0 ? "N" + gy : gy < 0 ? "S" + Math.abs(gy) : "";
@@ -21,45 +55,37 @@
     return (ns + ew).toUpperCase();
   }
 
-  function isNA(gx, gy) {
-    gx = absInt(gx);
-    gy = absInt(gy);
-    return gx === 666 || gy === 666;
+  function isUnavailable(gx, gy) {
+    return hasNumber(gx, gy, UNAVAILABLE_NUMBERS);
+  }
+
+  function isManualReview(gx, gy) {
+    return hasNumber(gx, gy, MANUAL_REVIEW_NUMBERS);
+  }
+
+  function isAxisOnly(gx, gy) {
+    gx = parseInt(gx || "0", 10);
+    gy = parseInt(gy || "0", 10);
+
+    return (gx === 0) !== (gy === 0);
   }
 
   function isSignature(gx, gy) {
-    gx = absInt(gx);
-    gy = absInt(gy);
-
-    var signature = [589, 143, 69, 67, 420, 777, 888];
-    for (var i = 0; i < signature.length; i++) {
-      if (gx === signature[i] || gy === signature[i]) return true;
-    }
-
-    return false;
+    return hasNumber(gx, gy, SIGNATURE_NUMBERS) || hasNumber(gx, gy, SIGNATURE_REPEATS);
   }
 
   function isPremium(gx, gy) {
-    gx = absInt(gx);
-    gy = absInt(gy);
-
-    if (gx !== 0 && gx <= 99 && gx % 11 === 0) return true;
-    if (gy !== 0 && gy <= 99 && gy % 11 === 0) return true;
-
-    var hundreds = [100, 200, 300, 400, 500];
-    for (var i = 0; i < hundreds.length; i++) {
-      if (gx === hundreds[i] || gy === hundreds[i]) return true;
-    }
-
-    return false;
+    return hasNumber(gx, gy, PREMIUM_NUMBERS);
   }
 
   function tierFor(gx, gy) {
-    if (isNA(gx, gy)) return "na";
-    if ((parseInt(gx || "0", 10) === 0) !== (parseInt(gy || "0", 10) === 0)) return "signature";
+    if (isUnavailable(gx, gy)) return "na";
+    if (isManualReview(gx, gy)) return "manual";
+    if (isAxisOnly(gx, gy)) return "signature";
     if (isSignature(gx, gy)) return "signature";
     if (isPremium(gx, gy)) return "premium";
-    return "standard";
+
+    return "regular";
   }
 
   function parseCoords(input) {
@@ -70,66 +96,121 @@
 
     var coord = raw.match(/^(-?\d+)\s*,\s*(-?\d+)$/);
     if (coord) {
-      var cgx = parseInt(coord[1], 10);
-      var cgy = parseInt(coord[2], 10);
-      return { gx: cgx, gy: cgy, tile: tileFromCoords(cgx, cgy) };
+      var rawX = parseInt(coord[1], 10);
+      var rawY = parseInt(coord[2], 10);
+
+      return {
+        gx: rawX,
+        gy: rawY,
+        tile: tileFromCoords(rawX, rawY)
+      };
     }
 
-    if (s === "ORIGIN") return { gx: 0, gy: 0, tile: "ORIGIN" };
+    if (s === "ORIGIN") {
+      return {
+        gx: 0,
+        gy: 0,
+        tile: "ORIGIN"
+      };
+    }
 
     var axis = s.match(/^([NSEW])(\d+)$/);
-    if (axis) { var agx=0, agy=0; if(axis[1]==="N") agy=+axis[2]; if(axis[1]==="S") agy=-axis[2]; if(axis[1]==="E") agx=+axis[2]; if(axis[1]==="W") agx=-axis[2]; return { gx:agx, gy:agy, tile:tileFromCoords(agx, agy) }; }
+    if (axis) {
+      var axisX = 0;
+      var axisY = 0;
+      var value = parseInt(axis[2], 10);
 
-    var m = s.match(/^([NS])(\d+)([EW])(\d+)$/);
-    if (m) {
-      var gy = m[1] === "N" ? parseInt(m[2], 10) : -parseInt(m[2], 10);
-      var gx = m[3] === "E" ? parseInt(m[4], 10) : -parseInt(m[4], 10);
-      return { gx: gx, gy: gy, tile: tileFromCoords(gx, gy) };
+      if (axis[1] === "N") axisY = value;
+      if (axis[1] === "S") axisY = -value;
+      if (axis[1] === "E") axisX = value;
+      if (axis[1] === "W") axisX = -value;
+
+      return {
+        gx: axisX,
+        gy: axisY,
+        tile: tileFromCoords(axisX, axisY)
+      };
     }
 
-    m = s.match(/^([EW])(\d+)([NS])(\d+)$/);
-    if (!m) return null;
+    var nsFirst = s.match(/^([NS])(\d+)([EW])(\d+)$/);
+    if (nsFirst) {
+      var nsY = nsFirst[1] === "N" ? parseInt(nsFirst[2], 10) : -parseInt(nsFirst[2], 10);
+      var ewX = nsFirst[3] === "E" ? parseInt(nsFirst[4], 10) : -parseInt(nsFirst[4], 10);
 
-    gx = m[1] === "E" ? parseInt(m[2], 10) : -parseInt(m[2], 10);
-    gy = m[3] === "N" ? parseInt(m[4], 10) : -parseInt(m[4], 10);
+      return {
+        gx: ewX,
+        gy: nsY,
+        tile: tileFromCoords(ewX, nsY)
+      };
+    }
 
-    return { gx: gx, gy: gy, tile: tileFromCoords(gx, gy) };
+    var ewFirst = s.match(/^([EW])(\d+)([NS])(\d+)$/);
+    if (ewFirst) {
+      var ewFirstX = ewFirst[1] === "E" ? parseInt(ewFirst[2], 10) : -parseInt(ewFirst[2], 10);
+      var nsFirstY = ewFirst[3] === "N" ? parseInt(ewFirst[4], 10) : -parseInt(ewFirst[4], 10);
+
+      return {
+        gx: ewFirstX,
+        gy: nsFirstY,
+        tile: tileFromCoords(ewFirstX, nsFirstY)
+      };
+    }
+
+    return null;
   }
 
   function formatPreview(tier) {
-    if (tier === "reserved") return {
-      badge: "RESERVED",
-      price: "$99 USD",
-      note: "Reserved coordinate. $99 USD approval only."
-    };
+    if (tier === "reserved") {
+      return {
+        badge: "RESERVED",
+        price: "$" + PRICE_REGULAR_USD + " USD",
+        note: "Reserved coordinate. The real tier price still applies."
+      };
+    }
 
-    if (tier === "taken") return {
-      badge: "TAKEN",
-      price: null,
-      note: "This coordinate is already occupied."
-    };
+    if (tier === "taken") {
+      return {
+        badge: "TAKEN",
+        price: null,
+        note: "This coordinate is already occupied."
+      };
+    }
 
-    if (tier === "na") return {
-      badge: "NOT AVAILABLE",
-      price: null,
-      note: "This coordinate is locked."
-    };
+    if (tier === "na") {
+      return {
+        badge: "NOT AVAILABLE",
+        price: null,
+        note: "This coordinate is locked and cannot be purchased."
+      };
+    }
 
-    if (tier === "signature") return {
-      badge: "SIGNATURE",
-      price: "$" + PRICE_SIGNATURE_USD + " USD",
-      note: "Signature tile. Paid in $XRP through Xaman. Live quote expires in 5 minutes."
-    };
+    if (tier === "manual") {
+      return {
+        badge: "MANUAL REVIEW",
+        price: null,
+        note: "This coordinate requires approval before purchase."
+      };
+    }
 
-    if (tier === "premium") return {
-      badge: "PREMIUM",
-      price: "$" + PRICE_PREMIUM_USD + " USD",
-      note: "Premium tile. Paid in $XRP through Xaman. Live quote expires in 5 minutes."
-    };
+    if (tier === "signature") {
+      return {
+        badge: "SIGNATURE",
+        price: "$" + PRICE_SIGNATURE_USD + " USD",
+        note: "Signature tile. Paid in $XRP through Xaman. Live quote expires in 5 minutes."
+      };
+    }
+
+    if (tier === "premium") {
+      return {
+        badge: "PREMIUM",
+        price: "$" + PRICE_PREMIUM_USD + " USD",
+        note: "Premium tile. Paid in $XRP through Xaman. Live quote expires in 5 minutes."
+      };
+    }
 
     return {
       badge: "REGULAR",
-      price: "$" + PRICE_STANDARD_USD + " USD",
+      price: "$" + PRICE_REGULAR_USD + " USD",
       note: "Regular tile. Paid in $XRP through Xaman. Live quote expires in 5 minutes."
     };
   }
@@ -139,11 +220,22 @@
     tileFromCoords: tileFromCoords,
     tierFor: tierFor,
     formatPreview: formatPreview,
+    isUnavailable: isUnavailable,
+    isManualReview: isManualReview,
+    isAxisOnly: isAxisOnly,
+    isSignature: isSignature,
+    isPremium: isPremium,
+    policy: {
+      unavailable: UNAVAILABLE_NUMBERS,
+      manualReview: MANUAL_REVIEW_NUMBERS,
+      signature: SIGNATURE_NUMBERS,
+      signatureRepeats: SIGNATURE_REPEATS,
+      premium: PREMIUM_NUMBERS
+    },
     usdPrices: {
-      standard: PRICE_STANDARD_USD,
+      regular: PRICE_REGULAR_USD,
       premium: PRICE_PREMIUM_USD,
-      signature: PRICE_SIGNATURE_USD,
-      reserved: "manual"
+      signature: PRICE_SIGNATURE_USD
     }
   };
 })();
