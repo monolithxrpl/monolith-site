@@ -396,9 +396,12 @@
     }
 
     function tileFromCoords(gx, gy){
-      const ew = gx >= 0 ? "E" : "W";
-      const ns = gy >= 0 ? "N" : "S";
-      return ns + Math.abs(gy) + ew + Math.abs(gx);
+      gx = parseInt(gx || "0", 10);
+      gy = parseInt(gy || "0", 10);
+      if(gx === 0 && gy === 0) return "ORIGIN";
+      const ns = gy > 0 ? "N" + gy : gy < 0 ? "S" + Math.abs(gy) : "";
+      const ew = gx > 0 ? "E" + gx : gx < 0 ? "W" + Math.abs(gx) : "";
+      return (ns + ew).toUpperCase();
     }
 
     function parseTileOrCoords(input){
