@@ -82,7 +82,8 @@ function render(raw){
   }
 
   var override = recordTierOverride(c);
-  var tier = override || tierFor(a, c.gx, c.gy);
+  var axisOnly = /^[NSEW][0-9]+$/.test(s);
+  var tier = axisOnly ? "signature" : (override || tierFor(a, c.gx, c.gy));
   var out = format(a, tier);
 
   if(out.badge){

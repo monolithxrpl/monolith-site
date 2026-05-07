@@ -397,7 +397,7 @@
     function parseTileOrCoords(input){
 const raw = normalizeDash(input).trim();
       const cleaned = raw.toUpperCase().replace(/-/g, "");
-if(!raw || raw.length < 3) return null;
+if(!raw || raw.length < 2) return null;
 
 const coord = raw.match(/^(-?\d+),(-?\d+)$/);
 if(coord){
