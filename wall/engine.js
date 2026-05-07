@@ -1175,6 +1175,7 @@ function onWheel(e){
       if(!p) return;
       if(el.q) el.q.value = p.tile;
       centerOn(p.gx, p.gy);
+      openPanel(p.tile, p.gx, p.gy);
       toastShow("tile " + p.tile, "good");
     }
 
