@@ -584,6 +584,12 @@ return null;
       const note = (el.note.value || "").trim();
       if(!validNote(note)){ setStatus("Note invalid", true); showOutput({ error:"note invalid" }); return null; }
 
+      if(Math.abs(p.gx) === 666 || Math.abs(p.gy) === 666){
+        setStatus("Tile not available", true);
+        showOutput({ error:"tile not available", tile:p.tile });
+        return null;
+      }
+
       if(state.feedLoaded && state.taken.has(p.tile)){
         setStatus("Tile is taken", true);
         showOutput({ error:"tile taken", tile:p.tile });
