@@ -1167,6 +1167,19 @@ function onWheel(e){
       toastShow("jump " + p.tile, "good");
     }
 
+    function handleDirectTileLink(){
+      const params = new URLSearchParams(window.location.search);
+      const directTile = params.get("tile");
+      if(!directTile) return;
+      const p = parseQueryToCoords(directTile);
+      if(!p) return;
+      if(el.q) el.q.value = p.tile;
+      centerOn(p.gx, p.gy);
+      toastShow("tile " + p.tile, "good");
+    }
+
+    setTimeout(handleDirectTileLink, 250);
+
     async function loadFeed(){
       try{
         const res = await fetch(FEED_URL, { cache: "no-store" });
