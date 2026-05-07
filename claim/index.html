@@ -337,21 +337,22 @@
                   <span>Claim requirements</span>
                 </div>
                 <ul>
-                  <li>Tile must be E or W then number, then N or S then number. Coords like 23,-11 also work</li>
+                  <li>Coordinate must be valid. Accepted examples: N23E11, E11N23, N589, S4, E10, W24, or raw coords like -24,8</li>
+                  <li>Axis-only coordinates like N1, S2, E10, and W24 are Signature tier</li>
                   <li>Wallet must be a valid XRPL classic address starting with r</li>
-                  <li>Tag is optional, 1 to 18 chars, letters numbers underscore only</li>
-                  <li>Link is optional, either @handle or https URL</li>
-                  <li>Note is optional, max 160, no angle brackets</li>
-                  <li>Image is optional, PNG JPG WEBP only, max 2 MB</li>
-                  <li>Payload includes image metadata. Base64 image data is included only if 200 KB or smaller</li>
+                  <li>Tag is optional: 1 to 18 characters, letters, numbers, and underscores only</li>
+                  <li>Link is optional: use an @handle or full https URL</li>
+                  <li>Note is optional: max 160 characters, no angle brackets</li>
+                  <li>Image is optional: PNG, JPG, or WEBP only, max 2 MB</li>
+                  <li>Reserved tiles stay held, but still show their real launch price</li>
                 </ul>
 
                 <div class="sectionTitle" style="margin-top:16px">
-                  <span class="chip">Operator</span>
+                  <span class="chip">Launch Flow</span>
                   <span>What happens next</span>
                 </div>
                 <div style="margin-top:10px;color:var(--muted);line-height:1.45">
-                  Operator verifies payment and wallet control, then writes to the feed and pushes the update.
+                  During preview, this page prepares claim data only. At launch, checkout will run through Xaman, payment will be made in $XRP, and ownership will update only after backend verification.
                 </div>
               </div>
             </div>
