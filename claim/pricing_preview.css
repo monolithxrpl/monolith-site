@@ -23,4 +23,9 @@
 #pricePreview .badge.premium{ background:rgba(255,215,0,.92); color:#111; }
 #pricePreview .badge.na{ background:rgba(220,20,60,.92); color:#fff; }
 #priceValue{ font-weight:800; }
-#priceNote{ opacity:.85; margin-top:6px; font-size:12px; }
+#priceNote{ opacity:.85; margin-top:6px; font-size:12px; }\n
+#priceBadge.regular{border-color:rgba(122,211,255,.42)}
+#priceBadge.premium{border-color:rgba(255,209,102,.55)}
+#priceBadge.signature{border-color:rgba(154,247,196,.55)}
+#priceBadge.reserved{border-color:rgba(255,139,139,.55)}
+#priceBadge.taken{border-color:rgba(255,139,139,.55)}
