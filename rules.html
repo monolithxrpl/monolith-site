@@ -1,225 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>MONOLITH — Rules | The Wall of Record</title>
-  <meta name="description" content="MONOLITH Rules. Immutable law governing the on-chain wall of record. No edits. No deletions. Proof of presence." />
-  <meta name="theme-color" content="#07080a" />
-
+<html lang="en:contentReference[oaicite:0]{index=0}set="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MONOLITH Rules</title>
+  <meta name="description" content="MONOLITH rules, tile pricing, coordinate formats, reserved tiles, and launch claim flow." />
   <style>
     :root{
-      --bg:#07080a;
-      --bg2:#0b0d10;
-      --fg:#f2f4f7;
-      --muted:rgba(242,244,247,.72);
-      --line:rgba(255,255,255,.12);
-      --line2:rgba(255,255,255,.06);
-      --accent:#ffffff;
-      --radius:16px;
-      --shadow:0 18px 60px rgba(0,0,0,.55);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --bg:#070b10;
+      --panel:#101722;
+      --panel2:#0d131c;
+      --line:#243447;
+      --text:#e9f2ff;
+      --muted:#9fb2c8;
+      --accent:#7ad3ff;
+      --accent2:#9af7c4;
+      --warn:#ffd166;
+      --bad:#ff8b8b;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html,body{margin:0;padding:0}
     body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--fg);
-      background:
-        radial-gradient(800px 600px at 15% 10%, rgba(255,255,255,.06), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
+      background:linear-gradient(180deg,#070b10,#0b1119 38%,#070b10);
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+      line-height:1.55;
     }
-    .wrap{max-width:900px; margin:0 auto; padding:24px}
-    h1,h2,h3{margin:0; font-weight:900; text-transform:uppercase; letter-spacing:1px}
-    h1{font-size:40px}
-    h2{font-size:16px; margin-top:28px}
-    p{margin:10px 0 0; line-height:1.6; color:var(--muted); font-size:15px}
-    .panel{
-      margin-top:18px;
-      padding:22px;
+    .wrap{max-width:1060px;margin:0 auto;padding:30px 18px 80px}
+    .hero,.section{
       border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:rgba(255,255,255,.03);
-      box-shadow:var(--shadow);
+      background:linear-gradient(180deg,rgba(16,23,34,.98),rgba(12,18,27,.98));
+      border-radius:18px;
+      padding:24px;
+      margin-bottom:18px;
+      box-shadow:0 14px 42px rgba(0,0,0,.32);
     }
-    .law{
-      margin-top:14px;
-      padding-left:0;
-      list-style:none;
-      display:grid;
-      gap:14px;
+    .hero{
+      background:radial-gradient(circle at top left,rgba(122,211,255,.14),transparent 28%),linear-gradient(180deg,rgba(16,23,34,.98),rgba(9,14,22,.98));
     }
-    .law li{
-      padding:14px;
-      border:1px solid var(--line2);
-      border-radius:12px;
-      background:rgba(0,0,0,.18);
+    h1,h2,h3{margin:0 0 12px}
+    h1{font-size:36px}
+    h2{font-size:24px;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:8px}
+    h3{font-size:17px;color:var(--accent2);margin-top:18px}
+    p{margin:0 0 12px;color:var(--muted)}
+    ul{margin:8px 0 0 22px;padding:0}
+    li{margin:7px 0;color:var(--muted)}
+    code{
+      background:#08101a;
+      border:1px solid var(--line);
+      border-radius:7px;
+      padding:1px 5px;
+      color:#e8f7ff;
     }
-    .law b{
-      display:block;
-      color:var(--accent);
+    table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+    th,td{border:1px solid var(--line);padding:10px;vertical-align:top;text-align:left}
+    th{background:#0a1320;color:var(--accent)}
+    td{color:var(--muted)}
+    .pill{
+      display:inline-block;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      margin:4px 6px 0 0;
+      background:#09121c;
+      color:var(--muted);
       font-size:13px;
-      letter-spacing:1px;
-      margin-bottom:4px;
-      text-transform:uppercase;
     }
-    .mono{
-      font-family:var(--mono);
-      font-size:13px;
-      color:rgba(242,244,247,.85);
-    }
-    .footer{
-      margin-top:32px;
-      padding:18px;
-      border-top:1px solid var(--line2);
-      font-size:12px;
-      color:rgba(242,244,247,.6);
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+    .good{color:var(--accent2)}
+    .warn{color:var(--warn)}
+    .bad{color:var(--bad)}
+    .footer{text-align:center;color:var(--muted);font-size:13px;margin-top:24px}
   </style>
-
-  <!-- favicon: MONOLITH -->
-  <link rel="icon" href="/assets/favicons/monolith/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/monolith/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/monolith/favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/monolith/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="MONOLITH" />
-  <meta name="application-name" content="MONOLITH" />
 </head>
-
 <body>
-  <div class="wrap">
+<div class="wrap">
 
-    <h1>MONOLITH</h1>
-    <p class="mono">The Wall of Record · The On-Chain Monument</p>
-
-    <div class="panel">
-      <h2>Preamble</h2>
-      <p>
-        MONOLITH is a permanent public record.
-        It exists to document proof of presence, not popularity.
-        These rules are immutable by intent and enforced by design.
-      </p>
-      <p>
-        Participation in MONOLITH constitutes acceptance of all rules below.
-      </p>
+  <section class="hero">
+    <h1>MONOLITH Rules</h1>
+    <p>MONOLITH is a public wall of record. A tile is a permanent coordinate tied to a public XRPL wallet, a tag, and optional public details.</p>
+    <div>
+      <span class="pill">Paid in $XRP</span>
+      <span class="pill">Xaman checkout</span>
+      <span class="pill">USD price anchor</span>
+      <span class="pill">Public wallet identity</span>
+      <span class="pill">No custody</span>
     </div>
+  </section>
 
-    <div class="panel">
-      <h2>Foundational Law</h2>
-      <ul class="law">
-        <li>
-          <b>Immutability</b>
-          <p>All posts on MONOLITH are permanent. No edits. No removals. No reversals.</p>
-        </li>
-        <li>
-          <b>Constraint</b>
-          <p>All marks must conform to the defined tile specification. Constraint is not optional.</p>
-        </li>
-        <li>
-          <b>Equality</b>
-          <p>MONOLITH follows the same rules as every participant. No privileged placement. No exceptions.</p>
-        </li>
-        <li>
-          <b>Finality</b>
-          <p>Once recorded, a mark becomes part of the wall of record forever.</p>
-        </li>
-      </ul>
-    </div>
+  <section class="section">
+    <h2>1. What You Are Buying</h2>
+    <p>You are buying a permanent public tile position on MONOLITH.</p>
+    <ul>
+      <li>Your tile has a coordinate, like <code>N23E11</code>, <code>S4W1</code>, or <code>N589</code>.</li>
+      <li>Your tile can show a tag, wallet, handle, link, note, and image.</li>
+      <li>Your tile becomes part of the public wall record after launch payment verification.</li>
+      <li>MONOLITH does not hold your wallet keys and does not take custody of your assets.</li>
+    </ul>
+  </section>
 
-    <div class="panel">
-      <h2>Identity</h2>
-      <ul class="law">
-        <li>
-          <b>Wallet As Identity</b>
-          <p>Public wallet address is the sole identity layer. No profiles. No usernames.</p>
-        </li>
-        <li>
-          <b>No Custody</b>
-          <p>MONOLITH never holds keys, funds, or credentials.</p>
-        </li>
-        <li>
-          <b>Public Data Only</b>
-          <p>All information displayed is derived from public, on-chain data.</p>
-        </li>
-      </ul>
-    </div>
+  <section class="section">
+    <h2>2. Coordinate Format</h2>
+    <p>The public format is simple: use north or south first, then east or west.</p>
+    <ul>
+      <li>Main format: <code>N23E11</code>, <code>S4W1</code>, <code>N8W24</code>.</li>
+      <li>Axis-only format: <code>N589</code>, <code>S4</code>, <code>E10</code>, <code>W24</code>.</li>
+      <li>Raw coordinate format also works: <code>-24,8</code>.</li>
+      <li>Dashes and lowercase are cleaned automatically.</li>
+    </ul>
+  </section>
 
-    <div class="panel">
-      <h2>Posting</h2>
-      <ul class="law">
-        <li>
-          <b>Economic Friction</b>
-          <p>Posting requires an XRP payment to prevent spam and preserve signal.</p>
-        </li>
-        <li>
-          <b>One Mark Per Action</b>
-          <p>Each post represents a single, discrete act of presence.</p>
-        </li>
-        <li>
-          <b>Deterministic Placement</b>
-          <p>Tile placement is algorithmic, auditable, and not manually curated.</p>
-        </li>
-      </ul>
-    </div>
+  <section class="section">
+    <h2>3. Pricing</h2>
+    <p>Prices are shown in USD. Payment is made in $XRP through Xaman at checkout.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>Price</th>
+          <th>What It Means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Regular</td>
+          <td>$99 USD</td>
+          <td>Standard claimable coordinates.</td>
+        </tr>
+        <tr>
+          <td>Premium</td>
+          <td>$249 USD</td>
+          <td>Cleaner numbers, repeats, milestones, and stronger positions.</td>
+        </tr>
+        <tr>
+          <td>Signature</td>
+          <td>$499 USD</td>
+          <td>Axis-only tiles, culturally significant numbers, and rare coordinates.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>At launch, the backend will convert the USD price into a live $XRP quote. Quotes expire after 5 minutes.</p>
+  </section>
 
-    <div class="panel">
-      <h2>Visibility</h2>
-      <ul class="law">
-        <li>
-          <b>Endless Record</b>
-          <p>The wall grows indefinitely. History is never erased.</p>
-        </li>
-        <li>
-          <b>Finite Attention</b>
-          <p>Visibility is time-weighted. Newer marks surface. Older marks archive.</p>
-        </li>
-        <li>
-          <b>No Algorithms</b>
-          <p>There are no likes, boosts, rankings, or engagement mechanics.</p>
-        </li>
-      </ul>
-    </div>
+  <section class="section">
+    <h2>4. Signature Numbers</h2>
+    <p>Some numbers are more valuable because people recognize them, want them, or use them as symbols.</p>
+    <ul>
+      <li>Axis-only tiles like <code>N1</code>, <code>S2</code>, <code>E10</code>, and <code>W24</code> are Signature tier.</li>
+      <li>Numbers like <code>42</code>, <code>67</code>, <code>69</code>, <code>86</code>, <code>143</code>, <code>314</code>, <code>404</code>, <code>420</code>, <code>589</code>, <code>777</code>, <code>808</code>, <code>888</code>, <code>911</code>, <code>999</code>, <code>1337</code>, <code>1776</code>, <code>1978</code>, <code>2012</code>, and <code>2026</code> are Signature tier.</li>
+      <li>Repeating numbers like <code>111</code>, <code>222</code>, <code>333</code>, <code>444</code>, <code>555</code>, <code>777</code>, <code>888</code>, and <code>999</code> are Signature tier.</li>
+    </ul>
+  </section>
 
-    <div class="panel">
-      <h2>What MONOLITH Is Not</h2>
-      <ul class="law">
-        <li>
-          <b>Not Social Media</b>
-          <p>No comments. No followers. No feeds.</p>
-        </li>
-        <li>
-          <b>Not Advertising Space</b>
-          <p>No banners. No takeovers. No promotional dominance.</p>
-        </li>
-        <li>
-          <b>Not Editable History</b>
-          <p>MONOLITH does not rewrite the past.</p>
-        </li>
-      </ul>
-    </div>
+  <section class="section">
+    <h2>5. Premium Numbers</h2>
+    <p>Some numbers are stronger than regular coordinates but not Signature.</p>
+    <ul>
+      <li>Examples: <code>10</code>, <code>11</code>, <code>22</code>, <code>25</code>, <code>33</code>, <code>44</code>, <code>50</code>, <code>55</code>, <code>66</code>, <code>75</code>, <code>77</code>, <code>99</code>, <code>100</code>, <code>200</code>, <code>300</code>, <code>400</code>, and <code>500</code>.</li>
+      <li>If a number appears in both Premium and Signature rules, Signature wins.</li>
+      <li>If a number is blocked, blocked wins over every tier.</li>
+    </ul>
+  </section>
 
-    <div class="panel">
-      <h2>Final Clause</h2>
-      <p>
-        MONOLITH is a credibility layer.
-        Presence is proven by action, not noise.
-      </p>
-      <p class="mono">
-        If you were real back then, you’re on MONOLITH.
-      </p>
-    </div>
+  <section class="section">
+    <h2>6. Not Available</h2>
+    <p>Some coordinates are not for sale.</p>
+    <ul>
+      <li>Any coordinate with <code>666</code> on either axis is not available.</li>
+      <li>Examples: <code>N666</code>, <code>S666</code>, <code>E666</code>, <code>W666</code>, <code>N666E1</code>, and <code>N1E666</code>.</li>
+      <li>Blocked coordinates override every price tier.</li>
+    </ul>
+  </section>
 
-    <div class="footer">
-      <div>MONOLITH · The Wall of Record</div>
-      <div class="mono">Law published once · No amendments</div>
-    </div>
+  <section class="section">
+    <h2>7. Reserved Tiles</h2>
+    <p>Reserved means the tile is being held. It does not mean free.</p>
+    <ul>
+      <li>Reserved tiles still show their real launch price.</li>
+      <li>A reserved Regular tile is still $99 USD.</li>
+      <li>A reserved Premium tile is still $249 USD.</li>
+      <li>A reserved Signature tile is still $499 USD.</li>
+      <li>Reserved tiles may require manual approval before checkout.</li>
+    </ul>
+  </section>
 
+  <section class="section">
+    <h2>8. Manual Review Numbers</h2>
+    <p>Some numbers may carry baggage, controversy, or misuse risk. MONOLITH can hold those for manual review.</p>
+    <ul>
+      <li>Manual review means the tile does not auto-sell without approval.</li>
+      <li>Manual review does not guarantee rejection.</li>
+      <li>Manual review protects the wall from garbage, abuse, and bad-faith claims.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>9. Claim Requirements</h2>
+    <ul>
+      <li>Use a valid coordinate.</li>
+      <li>Use a valid XRPL classic wallet address starting with <code>r</code>.</li>
+      <li>Tag is optional: 1 to 18 characters, letters, numbers, and underscores only.</li>
+      <li>Link is optional: use an <code>@handle</code> or full <code>https</code> URL.</li>
+      <li>Note is optional: max 160 characters, no angle brackets.</li>
+      <li>Image is optional: PNG, JPG, or WEBP only, max 2 MB.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>10. Launch Flow</h2>
+    <p>The current claim page is preview mode. It prepares claim data. It does not complete a real purchase yet.</p>
+    <ul>
+      <li>At launch, checkout will run through Xaman.</li>
+      <li>Payment will be made in $XRP.</li>
+      <li>The backend will verify the XRPL payment.</li>
+      <li>The tile will update only after backend verification.</li>
+      <li>The wall will eventually load ownership from the API instead of manual feed edits.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>11. Final Rules</h2>
+    <ul>
+      <li>No scams.</li>
+      <li>No illegal content.</li>
+      <li>No impersonation.</li>
+      <li>No malicious links.</li>
+      <li>No abusive images.</li>
+      <li>No fake wallet claims.</li>
+      <li>MONOLITH can reject, reserve, or block coordinates that create risk for the wall.</li>
+    </ul>
+  </section>
+
+  <div class="footer">
+    MONOLITH · The Wall of Record<br />
+    Rules page updated for claim preview, pricing, reserved tiles, and launch flow.
   </div>
+
+</div>
 </body>
 </html>
