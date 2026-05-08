@@ -707,9 +707,7 @@ function applyView(mode){
   try{ document.body.classList.toggle("view-imageonly", key === "brand" || key === "sat"); }catch(_){}
 
   state.zoom = clamp(PRESET[key].zoom, state.ZMIN, state.ZMAX);
-  state.camX = PRESET[key].camX;
-  state.camY = PRESET[key].camY;
-
+  
   updateWorldTransform();
   renderPool();
 }
@@ -1333,11 +1331,6 @@ el.close.addEventListener("click", function(e){
 
     if(el.btnCenter){
       el.btnCenter.addEventListener("click", () => {
-        if(state._viewMode && state._viewMode !== "free"){
-          restoreView();
-          toastShow("restored", "good");
-          return;
-        }
         centerOriginNow();
         toastShow("centered", "good");
       }, { passive:true });
@@ -1345,7 +1338,9 @@ el.close.addEventListener("click", function(e){
 
     if(el.btnNav){
       el.btnNav.addEventListener("click", () => {
-        centerOriginNow();
+        state.zoom = clamp(0.65, state.ZMIN, state.ZMAX);
+        updateWorldTransform();
+        renderPool();
         toastShow("navigation", "good");
       }, { passive:true });
     }
