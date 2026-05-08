@@ -1,4 +1,4 @@
-/* MONOLITH CLAIM PRICING v3 - locked number policy */
+/* MONOLITH CLAIM PRICING v4 - no manual review lane */
 (function () {
   "use strict";
 
@@ -7,11 +7,6 @@
   var PRICE_SIGNATURE_USD = 499;
 
   var UNAVAILABLE_NUMBERS = [666];
-
-  var MANUAL_REVIEW_NUMBERS = [
-    14, 18, 88, 1488, 311, 109, 110, 1312, 1352, 1390
-  ];
-
   var SIGNATURE_NUMBERS = [
     42, 67, 69, 86, 143, 314, 404, 420, 589,
     777, 808, 888, 911, 999, 1337, 1776,
@@ -58,11 +53,6 @@
   function isUnavailable(gx, gy) {
     return hasNumber(gx, gy, UNAVAILABLE_NUMBERS);
   }
-
-  function isManualReview(gx, gy) {
-    return hasNumber(gx, gy, MANUAL_REVIEW_NUMBERS);
-  }
-
   function isAxisOnly(gx, gy) {
     gx = parseInt(gx || "0", 10);
     gy = parseInt(gy || "0", 10);
@@ -80,7 +70,6 @@
 
   function tierFor(gx, gy) {
     if (isUnavailable(gx, gy)) return "na";
-    if (isManualReview(gx, gy)) return "manual";
     if (isAxisOnly(gx, gy)) return "signature";
     if (isSignature(gx, gy)) return "signature";
     if (isPremium(gx, gy)) return "premium";
@@ -183,15 +172,6 @@
         note: "This coordinate is locked and cannot be purchased."
       };
     }
-
-    if (tier === "manual") {
-      return {
-        badge: "MANUAL REVIEW",
-        price: null,
-        note: "This coordinate requires approval before purchase."
-      };
-    }
-
     if (tier === "signature") {
       return {
         badge: "SIGNATURE",
@@ -221,13 +201,11 @@
     tierFor: tierFor,
     formatPreview: formatPreview,
     isUnavailable: isUnavailable,
-    isManualReview: isManualReview,
     isAxisOnly: isAxisOnly,
     isSignature: isSignature,
     isPremium: isPremium,
     policy: {
       unavailable: UNAVAILABLE_NUMBERS,
-      manualReview: MANUAL_REVIEW_NUMBERS,
       signature: SIGNATURE_NUMBERS,
       signatureRepeats: SIGNATURE_REPEATS,
       premium: PREMIUM_NUMBERS
