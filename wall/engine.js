@@ -690,7 +690,7 @@ function applyView(mode){
 
   // Presets, tune here only
   const PRESET = {
-    brand:   { zoom: 0.55, camX: (STEP * 0.5), camY: (STEP * 0.5) },
+    brand:   { zoom: 0.65, camX: (STEP * 0.5), camY: (STEP * 0.5) },
     sat:   { zoom: 0.18, camX: (STEP * 0.5), camY: (STEP * 0.5) }
   };
 
