@@ -1338,6 +1338,12 @@ el.close.addEventListener("click", function(e){
 
     if(el.btnNav){
       el.btnNav.addEventListener("click", () => {
+        state._viewMode = "free";
+        try{
+          document.body.classList.remove("view-default");
+          document.body.classList.remove("view-brand");
+          document.body.classList.remove("view-imageonly");
+        }catch(_){}
         state.zoom = clamp(0.65, state.ZMIN, state.ZMAX);
         updateWorldTransform();
         renderPool();
