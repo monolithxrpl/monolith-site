@@ -8385,5 +8385,35 @@
     "locked": true,
     "tier": "reserved",
     "price_xrp": 0
+  },
+  {
+    "tile": "N7W7",
+    "gx": -7,
+    "gy": 7,
+    "tag": "RESERVED",
+    "img": "/assets/RESERVED.webp?v=20260506",
+    "handle": "@monolith_xrpl",
+    "ts": "2026-05-06",
+    "claimable": false,
+    "locked": true,
+    "tier": "reserved",
+    "price_xrp": 0,
+    "wallet": "rLUZ8X3ZiBTKqhnQr7377szjMtbj5gqpyJ",
+    "link": ""
+  },
+  {
+    "tile": "S407",
+    "gx": 0,
+    "gy": -407,
+    "tag": "RESERVED",
+    "img": "/assets/RESERVED.webp?v=20260506",
+    "handle": "@monolith_xrpl",
+    "ts": "2026-05-06",
+    "claimable": false,
+    "locked": true,
+    "tier": "reserved",
+    "price_xrp": 0,
+    "wallet": "rK99DieyHHxtQpnMXDt1N3RF14UANH7sfC",
+    "link": ""
   }
 ]
