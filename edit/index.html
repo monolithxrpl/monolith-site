@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit MONOLITH Tile</title>
+  <style>
+    :root{
+      --bg:#070b10;
+      --panel:#101722;
+      --panel2:#0d131c;
+      --line:#243447;
+      --text:#e9f2ff;
+      --muted:#9fb2c8;
+      --accent:#7ad3ff;
+      --good:#9af7c4;
+      --bad:#ff8b8b;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#070b10,#0b1119 45%,#070b10);
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+      line-height:1.5;
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:28px 16px 80px}
+    .card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(16,23,34,.98),rgba(12,18,27,.98));
+      border-radius:18px;
+      padding:22px;
+      margin-bottom:16px;
+      box-shadow:0 14px 42px rgba(0,0,0,.32);
+    }
+    h1,h2{margin:0 0 12px}
+    h1{font-size:32px}
+    h2{font-size:20px;color:var(--accent)}
+    p,label,.hint{color:var(--muted)}
+    label{display:block;font-weight:700;margin:14px 0 6px}
+    input,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#07101a;
+      color:var(--text);
+      padding:12px;
+      font-size:15px;
+    }
+    textarea{min-height:110px;resize:vertical}
+    button,a.btn{
+      display:inline-block;
+      border:1px solid rgba(122,211,255,.5);
+      border-radius:12px;
+      background:#0b1a27;
+      color:#e9f2ff;
+      padding:11px 14px;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:none;
+      margin:10px 8px 0 0;
+    }
+    button.secondary,a.secondary{border-color:var(--line);background:#07101a;color:var(--muted)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .status{border:1px solid var(--line);border-radius:14px;background:#07101a;padding:12px;margin-top:14px}
+    .ok{color:var(--good)}
+    .bad{color:var(--bad)}
+    .mono{font-family:var(--mono)}
+    pre{
+      display:none;
+      white-space:pre-wrap;
+      word-break:break-word;
+      background:#06101a;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      color:#dff3ff;
+      overflow:auto;
+      max-height:520px;
+    }
+    pre.show{display:block}
+    @media(max-width:720px){.row{grid-template-columns:1fr}h1{font-size:26px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Edit Your MONOLITH Tile</h1>
+      <p>Tile owners can edit tile details after purchase. The owner wallet is locked forever and cannot be changed here.</p>
+      <a class="btn secondary" href="/monolith.html">Back to Wall</a>
+      <a class="btn secondary" href="/claim/">Claim Page</a>
+    </div>
+
+    <div class="card">
+      <h2>1. Load Tile</h2>
+      <label>Coordinate</label>
+      <input id="coordinate" placeholder="N23E11" autocomplete="off" />
+      <button id="loadTile">Load tile</button>
+      <button id="startAuth">Start owner sign-in</button>
+      <div class="status" id="status">Ready</div>
+    </div>
+
+    <div class="card">
+      <h2>2. Owner Sign-In</h2>
+      <p class="hint">Use Xaman SignIn to prove the owner wallet. This does not move $XRP.</p>
+      <label>Payload UUID</label>
+      <input id="payloadUuid" placeholder="Xaman payload UUID" autocomplete="off" />
+      <div id="signBox"></div>
+    </div>
+
+    <div class="card">
+      <h2>3. Editable Tile Details</h2>
+      <div class="row">
+        <div>
+          <label>Owner tag</label>
+          <input id="ownerTag" placeholder="Project or owner tag" />
+        </div>
+        <div>
+          <label>Website URL</label>
+          <input id="websiteUrl" placeholder="https://..." />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Image URL</label>
+          <input id="imageUrl" placeholder="https://..." />
+        </div>
+        <div>
+          <label>X handle</label>
+          <input id="xHandle" placeholder="@handle" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Display name</label>
+          <input id="displayName" placeholder="Display name" />
+        </div>
+        <div>
+          <label>Project name</label>
+          <input id="projectName" placeholder="Project name" />
+        </div>
+      </div>
+
+      <label>Description</label>
+      <textarea id="description" placeholder="Short tile description"></textarea>
+
+      <label>Note</label>
+      <textarea id="note" placeholder="Optional owner note"></textarea>
+
+      <button id="applyEdit">Apply owner edit</button>
+      <button class="secondary" id="copy">Copy last response</button>
+
+      <pre id="out"></pre>
+    </div>
+  </div>
+
+  <script>
+    const qs = new URLSearchParams(location.search);
+    const el = {
+      coordinate: document.getElementById("coordinate"),
+      payloadUuid: document.getElementById("payloadUuid"),
+      ownerTag: document.getElementById("ownerTag"),
+      websiteUrl: document.getElementById("websiteUrl"),
+      imageUrl: document.getElementById("imageUrl"),
+      xHandle: document.getElementById("xHandle"),
+      displayName: document.getElementById("displayName"),
+      projectName: document.getElementById("projectName"),
+      description: document.getElementById("description"),
+      note: document.getElementById("note"),
+      status: document.getElementById("status"),
+      signBox: document.getElementById("signBox"),
+      out: document.getElementById("out")
+    };
+
+    let lastResponse = null;
+
+    function normCoord(v){
+      return String(v || "").trim().toUpperCase().replace(/[–—−_]/g,"-").replace(/\s+/g,"").replace(/-/g,"");
+    }
+
+    function setStatus(msg, bad){
+      el.status.innerHTML = "<span class='" + (bad ? "bad" : "ok") + "'>" + msg + "</span>";
+    }
+
+    function show(obj){
+      lastResponse = obj;
+      el.out.classList.add("show");
+      el.out.textContent = JSON.stringify(obj, null, 2);
+    }
+
+    function fill(tile){
+      el.ownerTag.value = tile.owner_tag || "";
+      el.websiteUrl.value = tile.website_url || "";
+      el.imageUrl.value = tile.image_url || "";
+      const m = tile.metadata || {};
+      el.xHandle.value = m.xHandle || "";
+      el.displayName.value = m.displayName || "";
+      el.projectName.value = m.projectName || "";
+      el.description.value = m.description || "";
+      el.note.value = m.note || "";
+    }
+
+    async function loadTile(){
+      const c = normCoord(el.coordinate.value);
+      if(!c){ setStatus("Coordinate required", true); return; }
+      el.coordinate.value = c;
+
+      const r = await fetch("/api/tile/" + encodeURIComponent(c), { cache:"no-store" });
+      const data = await r.json().catch(() => ({}));
+      show(data);
+
+      if(!r.ok || !data.ok){
+        setStatus(data.error || "Tile load failed", true);
+        return;
+      }
+
+      fill(data.tile);
+      setStatus("Tile loaded. Owner wallet is locked.", false);
+    }
+
+    async function startAuth(){
+      const c = normCoord(el.coordinate.value);
+      if(!c){ setStatus("Coordinate required", true); return; }
+      el.coordinate.value = c;
+
+      const r = await fetch("/api/tile/edit/start", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({ coordinate:c })
+      });
+
+      const data = await r.json().catch(() => ({}));
+      show(data);
+
+      if(!r.ok || !data.ok){
+        setStatus(data.error || "Owner sign-in failed", true);
+        return;
+      }
+
+      const auth = data.auth || {};
+      if(auth.payloadUuid) el.payloadUuid.value = auth.payloadUuid;
+
+      if(auth.signUrl){
+        el.signBox.innerHTML = "<a class='btn' target='_blank' rel='noopener' href='" + auth.signUrl + "'>Open Xaman owner sign-in</a>";
+      }
+
+      setStatus("Owner sign-in created. Sign with the tile owner wallet only.", false);
+    }
+
+    async function applyEdit(){
+      const c = normCoord(el.coordinate.value);
+      const payloadUuid = el.payloadUuid.value.trim();
+
+      if(!c){ setStatus("Coordinate required", true); return; }
+      if(!payloadUuid){ setStatus("Payload UUID required", true); return; }
+
+      const body = {
+        coordinate:c,
+        payloadUuid,
+        ownerTag:el.ownerTag.value,
+        websiteUrl:el.websiteUrl.value,
+        imageUrl:el.imageUrl.value,
+        xHandle:el.xHandle.value,
+        displayName:el.displayName.value,
+        projectName:el.projectName.value,
+        description:el.description.value,
+        note:el.note.value
+      };
+
+      const r = await fetch("/api/tile/edit/apply", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify(body)
+      });
+
+      const data = await r.json().catch(() => ({}));
+      show(data);
+
+      if(!r.ok || !data.ok){
+        setStatus(data.error || "Edit failed", true);
+        return;
+      }
+
+      fill(data.tile);
+      setStatus("Tile updated. Owner wallet stayed locked.", false);
+    }
+
+    async function copyLast(){
+      if(!lastResponse){ setStatus("Nothing to copy yet", true); return; }
+      await navigator.clipboard.writeText(JSON.stringify(lastResponse));
+      setStatus("Copied last response", false);
+    }
+
+    document.getElementById("loadTile").addEventListener("click", loadTile);
+    document.getElementById("startAuth").addEventListener("click", startAuth);
+    document.getElementById("applyEdit").addEventListener("click", applyEdit);
+    document.getElementById("copy").addEventListener("click", copyLast);
+
+    if(qs.get("edit")) el.coordinate.value = normCoord(qs.get("edit"));
+    if(qs.get("payload")) el.payloadUuid.value = qs.get("payload");
+  </script>
+</body>
+</html>
