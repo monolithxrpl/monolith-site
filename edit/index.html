@@ -80,6 +80,7 @@
       max-height:520px;
     }
     pre.show{display:block}
+    .hidden{display:none!important}
     @media(max-width:720px){.row{grid-template-columns:1fr}h1{font-size:26px}}
   </style>
 </head>
@@ -87,74 +88,40 @@
   <div class="wrap">
     <div class="card">
       <h1>Edit Your MONOLITH Tile</h1>
-      <p>Tile owners can edit tile details after purchase. The owner wallet is locked forever and cannot be changed here.</p>
+      <p>Tile editing is holder-only. No tile information is displayed until the owning wallet is verified through Xaman.</p>
       <a class="btn secondary" href="/monolith.html">Back to Wall</a>
       <a class="btn secondary" href="/market/">Market</a>
       <a class="btn secondary" href="/claim/">Claim Page</a>
     </div>
 
-    <div class="card">
-      <h2>1. Load Tile</h2>
-      <label>Coordinate</label>
+    <div class="card" id="loginPanel">
+      <h2>Owner Login</h2>
+      <p class="hint">Enter your coordinate, sign with the owner wallet, then verify. Tile information stays hidden until verification succeeds.</p>
+      <label>Tile Coordinate</label>
       <input id="coordinate" placeholder="N23E11" autocomplete="off" />
-      <button id="loadTile">Load tile</button>
       <button id="startAuth">Start owner sign-in</button>
-      <div class="status" id="status">Ready</div>
-    </div>
-
-    <div class="card">
-      <h2>2. Owner Sign-In</h2>
-      <p class="hint">Use Xaman SignIn to prove the owner wallet. This does not move $XRP. The sign-in session is handled automatically.</p>
+      <button id="verifyAuth" type="button">Verify owner</button>
+      <button class="secondary" id="clearLogin" type="button">Clear</button>
+      <div class="status" id="status">Owner sign-in required.</div>
       <input id="payloadUuid" type="hidden" autocomplete="off" />
       <div id="signBox"></div>
-      <button id="verifyAuth" type="button">Verify owner</button>
     </div>
 
-    <div class="card">
-      <h2>3. Editable Tile Details</h2>
-      <div class="row">
-        <div>
-          <label>Owner tag</label>
-          <input id="ownerTag" placeholder="Project or owner tag" />
-        </div>
-        <div>
-          <label>Website URL</label>
-          <input id="websiteUrl" placeholder="https://..." />
-        </div>
-      </div>
+    <div class="card hidden" id="editPanel">
+      <h2>Edit Tile</h2>
+      <p class="hint">Owner wallet is locked. Only the editable tile fields below can be changed.</p>
 
-      <div class="row">
-        <div>
-          <label>Image URL</label>
-          <input id="imageUrl" placeholder="https://..." />
-          <label>Replace image upload</label>
-          <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
-        </div>
-        <div>
-          <label>X handle</label>
-          <input id="xHandle" placeholder="@handle" />
-        </div>
-      </div>
+      <label>Owner tag</label>
+      <input id="ownerTag" placeholder="Project or owner tag" />
 
-      <div class="row">
-        <div>
-          <label>Display name</label>
-          <input id="displayName" placeholder="Display name" />
-        </div>
-        <div>
-          <label>Project name</label>
-          <input id="projectName" placeholder="Project name" />
-        </div>
-      </div>
+      <label>Website URL</label>
+      <input id="websiteUrl" placeholder="https://..." />
 
-      <label>Description</label>
-      <textarea id="description" placeholder="Short tile description"></textarea>
+      <label>Replace tile image</label>
+      <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
 
-      <label>Note</label>
-      <textarea id="note" placeholder="Optional owner note"></textarea>
-
-      <button id="applyEdit">Apply owner edit</button>
-      <button class="secondary" id="copy">Copy last response</button>
+      <button id="applyEdit">Save tile</button>
+      <button class="secondary" id="cancelEdit" type="button">Cancel</button>
 
       <pre id="out"></pre>
     </div>
@@ -168,13 +135,7 @@
       payloadUuid: document.getElementById("payloadUuid"),
       ownerTag: document.getElementById("ownerTag"),
       websiteUrl: document.getElementById("websiteUrl"),
-      imageUrl: document.getElementById("imageUrl"),
       imageFile: document.getElementById("imageFile"),
-      xHandle: document.getElementById("xHandle"),
-      displayName: document.getElementById("displayName"),
-      projectName: document.getElementById("projectName"),
-      description: document.getElementById("description"),
-      note: document.getElementById("note"),
       status: document.getElementById("status"),
       signBox: document.getElementById("signBox"),
       out: document.getElementById("out"),
@@ -187,13 +148,7 @@
     const EDIT_FIELD_IDS = [
       "ownerTag",
       "websiteUrl",
-      "imageUrl",
-      "imageFile",
-      "xHandle",
-      "displayName",
-      "projectName",
-      "description",
-      "note"
+      "imageFile"
     ];
 
     function setEditLocked(locked){
@@ -225,35 +180,40 @@
     }
 
     function fill(tile){
-      el.ownerTag.value = tile.owner_tag || "";
-      el.websiteUrl.value = tile.website_url || "";
-      el.imageUrl.value = tile.image_url || "";
-      const m = tile.metadata || {};
-      el.xHandle.value = m.xHandle || "";
-      el.displayName.value = m.displayName || "";
-      el.projectName.value = m.projectName || "";
-      el.description.value = m.description || "";
-      el.note.value = m.note || "";
+      el.ownerTag.value = tile.owner_tag || tile.ownerTag || tile.tag || "";
+      el.websiteUrl.value = tile.website_url || tile.websiteUrl || tile.url || "";
     }
 
-    async function loadTile(){
-      const c = normCoord(el.coordinate.value);
-      if(!c){ setStatus("Coordinate required", true); return; }
-      el.coordinate.value = c;
 
+    function unlockEditPanel(){
+      const loginPanel = document.getElementById("loginPanel");
+      const editPanel = document.getElementById("editPanel");
+      if(loginPanel) loginPanel.classList.add("hidden");
+      if(editPanel) editPanel.classList.remove("hidden");
+      setEditLocked(false);
+    }
+
+    function cancelEdit(){
+      localStorage.removeItem("monolithOwnerEditSession");
+      location.href = "/monolith.html";
+    }
+
+    function clearLogin(){
+      el.coordinate.value = "";
+      el.payloadUuid.value = "";
+      el.signBox.innerHTML = "";
+      setStatus("Owner sign-in required.", false);
+    }
+
+    async function loadTileAfterVerified(){
+      const c = normCoord(el.coordinate.value);
+      if(!c){ throw new Error("Coordinate required"); }
       const r = await fetch("/api/tile/" + encodeURIComponent(c), { cache:"no-store" });
       const data = await r.json().catch(() => ({}));
       show(data);
-
-      if(!r.ok || !data.ok){
-        setStatus(data.error || "Tile load failed", true);
-        return;
-      }
-
+      if(!r.ok || !data.ok){ throw new Error(data.error || "Tile load failed"); }
       fill(data.tile);
-      ownerVerified = false;
-      setEditLocked(true);
-      setStatus("Tile loaded. Owner wallet is locked. Start owner sign-in to unlock editing.", false);
+      unlockEditPanel();
     }
 
     async function startAuth(){
@@ -314,7 +274,7 @@
       }
 
       ownerVerified = true;
-      setEditLocked(false);
+      await loadTileAfterVerified();
       setStatus("Owner wallet verified. Editing unlocked.", false);
       return true;
     }
@@ -377,12 +337,13 @@
       await navigator.clipboard.writeText(JSON.stringify(lastResponse));
       setStatus("Copied last response", false);
     }
-
-    document.getElementById("loadTile").addEventListener("click", loadTile);
     document.getElementById("startAuth").addEventListener("click", startAuth);
     document.getElementById("applyEdit").addEventListener("click", applyEdit);
     document.getElementById("verifyAuth").addEventListener("click", verifyOwner);
-    document.getElementById("copy").addEventListener("click", copyLast);
+    const copyBtn = document.getElementById("copy");
+    if(copyBtn) copyBtn.addEventListener("click", copyLast);
+    document.getElementById("cancelEdit").addEventListener("click", cancelEdit);
+    document.getElementById("clearLogin").addEventListener("click", clearLogin);
     if(!DEBUG && document.getElementById("copy")){
       document.getElementById("copy").style.display = "none";
     }
