@@ -284,9 +284,9 @@
             </div>
 
             <div class="field">
-              <label>Wallet</label>
-              <input id="wallet" type="text" placeholder="r..." autocomplete="off" />
-              <div class="hint">XRPL classic address starting with r. This is the author wallet.</div>
+              <label>Owner wallet</label>
+              <input id="wallet" type="text" placeholder="Locked to paying wallet after Xaman payment" autocomplete="off" disabled />
+              <div class="hint">Ownership is not typed here. It is locked to the paying wallet after Xaman verification.</div>
             </div>
 
             <div class="field">
@@ -318,8 +318,8 @@
             </div>
 
             <div class="row">
-              <button class="btn" id="gen">Generate claim payload</button>
-              <button class="btn secondary" id="copy">Copy payload</button>
+              <button class="btn" id="gen">Start Xaman claim</button>
+              <button class="btn secondary" id="copy">Copy last response</button>
               <button class="btn secondary" id="clear">Clear</button>
             </div>
 
@@ -572,9 +572,6 @@ return null;
 
       el.tile.value = p.tile;
 
-      const wallet = (el.wallet.value || "").trim();
-      if(!validWallet(wallet)){ setStatus("Wallet invalid", true); showOutput({ error:"wallet invalid", input: wallet }); return null; }
-
       const tag = (el.tag.value || "").trim();
       if(!validTag(tag)){ setStatus("Tag invalid", true); showOutput({ error:"tag invalid", input: tag }); return null; }
 
@@ -597,33 +594,74 @@ return null;
       }
 
       const file = el.file.files && el.file.files[0] ? el.file.files[0] : null;
-      const img = file ? await buildImagePayload(file) : null;
-      if(img && img.error){ setStatus(img.error, true); showOutput({ error: img.error }); return null; }
+      if(file){
+        const okType = ["image/png","image/jpeg","image/webp"].includes(file.type);
+        if(!okType){ setStatus("Image must be PNG JPG WEBP", true); showOutput({ error:"bad image type" }); return null; }
+        if(file.size > 2 * 1024 * 1024){ setStatus("Image too large. Max 2 MB", true); showOutput({ error:"image too large" }); return null; }
+      }
 
-      const payload = {
-        v: 1,
-        tile: p.tile,
-        gx: p.gx,
-        gy: p.gy,
-        wallet,
-        tag: tag || null,
-        link: link || null,
-        note: note || null,
-        image: img || null,
-        ts: Date.now()
-      };
+      const websiteUrl = link && link.startsWith("http") ? link : "";
+      const ownerTag = tag || "MONOLITH";
 
-      setStatus("Payload ready", false);
-      showOutput(payload);
-      return payload;
+      const fd = new FormData();
+      fd.append("coordinate", p.tile);
+      fd.append("ownerTag", ownerTag);
+      if(websiteUrl) fd.append("websiteUrl", websiteUrl);
+      if(note) fd.append("note", note);
+      if(file) fd.append("image", file);
+
+      setStatus("Creating Xaman claim request...", false);
+
+      try{
+        const r = await fetch("/api/claim/start", { method:"POST", body:fd });
+        const data = await r.json().catch(() => ({}));
+
+        if(!r.ok || !data.ok){
+          setStatus(data.error || "Claim request failed", true);
+          showOutput(data);
+          return null;
+        }
+
+        const payment = data.payment || {};
+        const signUrl = payment.signUrl || data.signUrl || "";
+        const payload = {
+          ok:true,
+          tile:p.tile,
+          quote:data.quote || null,
+          claimIntent:data.claimIntent || null,
+          payment,
+          signUrl
+        };
+
+        state.lastPayload = payload;
+
+        if(signUrl){
+          setStatus("Xaman claim request ready. Open the sign link only when ready to pay live XRP.", false);
+          el.out.classList.add("show");
+          el.out.innerHTML = "<div><strong>Xaman sign link:</strong></div><div style='margin:10px 0'><a href='" + signUrl + "' target='_blank' rel='noopener' style='color:#9af7c4'>Open Xaman payment request</a></div><pre style='white-space:pre-wrap'>" + JSON.stringify(payload, null, 2) + "</pre>";
+          return payload;
+        }
+
+        setStatus("Claim request created", false);
+        showOutput(payload);
+        return payload;
+      }catch(e){
+        setStatus("Claim request failed", true);
+        showOutput({ error:"claim request failed", detail:String(e) });
+        return null;
+      }
     }
 
     async function copyPayload(){
-      const p = await generatePayload();
-      if(!p) return;
+      const p = state.lastPayload;
+      if(!p){
+        setStatus("No claim response to copy yet", true);
+        showOutput({ error:"no claim response" });
+        return;
+      }
       try{
         await navigator.clipboard.writeText(JSON.stringify(p));
-        setStatus("Copied payload", false);
+        setStatus("Copied last response", false);
       }catch(e){
         setStatus("Copy failed", true);
         showOutput({ error:"copy failed" });
