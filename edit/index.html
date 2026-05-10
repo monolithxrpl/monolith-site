@@ -126,6 +126,8 @@
         <div>
           <label>Image URL</label>
           <input id="imageUrl" placeholder="https://..." />
+          <label>Replace image upload</label>
+          <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
         </div>
         <div>
           <label>X handle</label>
@@ -165,6 +167,7 @@
       ownerTag: document.getElementById("ownerTag"),
       websiteUrl: document.getElementById("websiteUrl"),
       imageUrl: document.getElementById("imageUrl"),
+      imageFile: document.getElementById("imageFile"),
       xHandle: document.getElementById("xHandle"),
       displayName: document.getElementById("displayName"),
       projectName: document.getElementById("projectName"),
@@ -257,23 +260,34 @@
       if(!c){ setStatus("Coordinate required", true); return; }
       if(!payloadUuid){ setStatus("Payload UUID required", true); return; }
 
-      const body = {
-        coordinate:c,
-        payloadUuid,
-        ownerTag:el.ownerTag.value,
-        websiteUrl:el.websiteUrl.value,
-        imageUrl:el.imageUrl.value,
-        xHandle:el.xHandle.value,
-        displayName:el.displayName.value,
-        projectName:el.projectName.value,
-        description:el.description.value,
-        note:el.note.value
-      };
+      const fd = new FormData();
+      fd.append("coordinate", c);
+      fd.append("payloadUuid", payloadUuid);
+      fd.append("ownerTag", el.ownerTag.value);
+      fd.append("websiteUrl", el.websiteUrl.value);
+      fd.append("imageUrl", el.imageUrl.value);
+      fd.append("xHandle", el.xHandle.value);
+      fd.append("displayName", el.displayName.value);
+      fd.append("projectName", el.projectName.value);
+      fd.append("description", el.description.value);
+      fd.append("note", el.note.value);
+
+      const file = el.imageFile.files && el.imageFile.files[0] ? el.imageFile.files[0] : null;
+      if(file){
+        if(!["image/png","image/jpeg","image/webp"].includes(file.type)){
+          setStatus("Image must be PNG JPG WEBP", true);
+          return;
+        }
+        if(file.size > 2 * 1024 * 1024){
+          setStatus("Image too large. Max 2 MB", true);
+          return;
+        }
+        fd.append("image", file);
+      }
 
       const r = await fetch("/api/tile/edit/apply", {
         method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body:JSON.stringify(body)
+        body:fd
       });
 
       const data = await r.json().catch(() => ({}));
