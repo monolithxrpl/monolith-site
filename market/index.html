@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MONOLITH Tile Market</title>
+  <style>
+    :root{
+      --bg:#070b10;--panel:#101722;--panel2:#0d131c;--line:#243447;
+      --text:#e9f2ff;--muted:#9fb2c8;--accent:#7ad3ff;--good:#9af7c4;
+      --warn:#ffd166;--bad:#ff8b8b;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#070b10,#0b1119 45%,#070b10);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+    .wrap{max-width:1120px;margin:0 auto;padding:28px 16px 80px}
+    .card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(16,23,34,.98),rgba(12,18,27,.98));border-radius:18px;padding:22px;margin-bottom:16px;box-shadow:0 14px 42px rgba(0,0,0,.32)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .tile{border:1px solid var(--line);background:var(--panel2);border-radius:16px;padding:16px}
+    h1,h2,h3{margin:0 0 12px}
+    h1{font-size:34px}
+    h2{font-size:21px;color:var(--accent)}
+    h3{font-size:17px;color:var(--good)}
+    p,li,label{color:var(--muted)}
+    .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:6px 10px;margin:4px 6px 0 0;background:#07101a;color:var(--muted);font-size:13px}
+    input{width:100%;border:1px solid var(--line);border-radius:12px;background:#07101a;color:var(--text);padding:12px;font-size:15px}
+    button,a.btn{display:inline-block;border:1px solid rgba(122,211,255,.5);border-radius:12px;background:#0b1a27;color:#e9f2ff;padding:11px 14px;font-weight:800;cursor:pointer;text-decoration:none;margin:10px 8px 0 0}
+    button.disabled{opacity:.55;cursor:not-allowed;border-color:var(--line);background:#07101a;color:var(--muted)}
+    .status{border:1px solid var(--line);border-radius:14px;background:#07101a;padding:12px;margin-top:14px}
+    .ok{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}.mono{font-family:var(--mono)}
+    pre{display:none;white-space:pre-wrap;word-break:break-word;background:#06101a;border:1px solid var(--line);border-radius:12px;padding:12px;color:#dff3ff;overflow:auto;max-height:520px}
+    pre.show{display:block}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>MONOLITH Tile Market</h1>
+      <p>Sell, transfer, and rent systems are being staged. Ownership changes will require verified Coordinate Deed NFT movement. Rentals will never transfer ownership.</p>
+      <a class="btn" href="/monolith.html">Back to Wall</a>
+      <a class="btn" href="/claim/">Claim Tile</a>
+      <a class="btn" href="/edit/">Edit Tile</a>
+    </div>
+
+    <div class="card">
+      <h2>Market Rules</h2>
+      <div class="grid">
+        <div class="tile">
+          <h3>Secondary Sale Fee</h3>
+          <p><strong class="ok">5%</strong> MONOLITH fee on secondary Deed NFT sales.</p>
+          <span class="pill">XRPL TransferFee 5000</span>
+        </div>
+        <div class="tile">
+          <h3>Private Sales</h3>
+          <p>Private sales will use destination-locked Deed NFT offers.</p>
+          <span class="pill">Buyer wallet locked</span>
+        </div>
+        <div class="tile">
+          <h3>Transfers</h3>
+          <p>Transfers will use 0 XRP destination-locked Deed NFT offers.</p>
+          <span class="pill">No sale fee target</span>
+        </div>
+        <div class="tile">
+          <h3>Rentals</h3>
+          <p>Rentals grant temporary display rights. The Deed NFT stays with the owner.</p>
+          <span class="pill">No ownership transfer</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Check Tile Market Status</h2>
+      <label>Coordinate</label>
+      <input id="coordinate" placeholder="N589" autocomplete="off" />
+      <button id="check">Check status</button>
+      <div class="status" id="status">Ready</div>
+      <pre id="out"></pre>
+    </div>
+
+    <div class="card">
+      <h2>Actions Coming Next</h2>
+      <button class="disabled" type="button">Sell Tile</button>
+      <button class="disabled" type="button">Private Sale</button>
+      <button class="disabled" type="button">Transfer Tile</button>
+      <button class="disabled" type="button">Rent Tile</button>
+      <p class="warn">These buttons are intentionally inactive until Deed NFT minting, offer creation, and transfer verification are proven.</p>
+    </div>
+  </div>
+
+  <script>
+    const el = {
+      coordinate: document.getElementById("coordinate"),
+      check: document.getElementById("check"),
+      status: document.getElementById("status"),
+      out: document.getElementById("out")
+    };
+
+    function norm(v){
+      return String(v || "").trim().toUpperCase().replace(/[–—−_]/g,"-").replace(/\s+/g,"").replace(/-/g,"");
+    }
+
+    function status(msg,bad){
+      el.status.innerHTML = "<span class='" + (bad ? "bad" : "ok") + "'>" + msg + "</span>";
+    }
+
+    function show(obj){
+      el.out.classList.add("show");
+      el.out.textContent = JSON.stringify(obj,null,2);
+    }
+
+    async function checkMarket(){
+      const c = norm(el.coordinate.value);
+      if(!c){ status("Coordinate required", true); return; }
+      el.coordinate.value = c;
+
+      const r = await fetch("/api/market/" + encodeURIComponent(c), { cache:"no-store" });
+      const data = await r.json().catch(() => ({}));
+      show(data);
+
+      if(!r.ok || !data.ok){
+        status(data.error || "Market status unavailable", true);
+        return;
+      }
+
+      status("Market status loaded. Ownership changes require verified Deed NFT movement.", false);
+    }
+
+    el.check.addEventListener("click", checkMarket);
+  </script>
+</body>
+</html>
