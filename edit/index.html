@@ -104,9 +104,8 @@
 
     <div class="card">
       <h2>2. Owner Sign-In</h2>
-      <p class="hint">Use Xaman SignIn to prove the owner wallet. This does not move $XRP.</p>
-      <label>Payload UUID</label>
-      <input id="payloadUuid" placeholder="Xaman payload UUID" autocomplete="off" />
+      <p class="hint">Use Xaman SignIn to prove the owner wallet. This does not move $XRP. The sign-in session is handled automatically.</p>
+      <input id="payloadUuid" type="hidden" autocomplete="off" />
       <div id="signBox"></div>
     </div>
 
@@ -259,7 +258,7 @@
       const payloadUuid = el.payloadUuid.value.trim();
 
       if(!c){ setStatus("Coordinate required", true); return; }
-      if(!payloadUuid){ setStatus("Payload UUID required", true); return; }
+      if(!payloadUuid){ setStatus("Owner sign-in required. Start owner sign-in first.", true); return; }
 
       const fd = new FormData();
       fd.append("coordinate", c);
@@ -315,7 +314,10 @@
     document.getElementById("copy").addEventListener("click", copyLast);
 
     if(qs.get("edit")) el.coordinate.value = normCoord(qs.get("edit"));
-    if(qs.get("payload")) el.payloadUuid.value = qs.get("payload");
+    if(qs.get("payload")){
+      el.payloadUuid.value = qs.get("payload");
+      setStatus("Owner sign-in returned. Review details and apply edit.", false);
+    }
   </script>
 </body>
 </html>
