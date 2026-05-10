@@ -162,6 +162,7 @@
 
   <script>
     const qs = new URLSearchParams(location.search);
+    const DEBUG = qs.get("debug") === "1";
     const el = {
       coordinate: document.getElementById("coordinate"),
       payloadUuid: document.getElementById("payloadUuid"),
@@ -214,6 +215,11 @@
 
     function show(obj){
       lastResponse = obj;
+      if(!DEBUG){
+        el.out.classList.remove("show");
+        el.out.textContent = "";
+        return;
+      }
       el.out.classList.add("show");
       el.out.textContent = JSON.stringify(obj, null, 2);
     }
@@ -377,6 +383,9 @@
     document.getElementById("applyEdit").addEventListener("click", applyEdit);
     document.getElementById("verifyAuth").addEventListener("click", verifyOwner);
     document.getElementById("copy").addEventListener("click", copyLast);
+    if(!DEBUG && document.getElementById("copy")){
+      document.getElementById("copy").style.display = "none";
+    }
 
     if(qs.get("edit")) el.coordinate.value = normCoord(qs.get("edit"));
     if(qs.get("payload")){
