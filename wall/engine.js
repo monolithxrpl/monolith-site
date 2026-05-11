@@ -699,7 +699,7 @@ const isCreator  = hasCreator && (
         el.vBody.textContent = "";
 }
 
-      const finalPanelLabel = (window.coordDisplayFromG ? window.coordDisplayFromG(gx, gy) : tile);
+      const finalPanelLabel = String(tile || "").trim() || (window.coordDisplayFromG ? window.coordDisplayFromG(gx, gy) : tile);
       el.ptitle.textContent = "Tile " + finalPanelLabel;
       el.vTile.textContent = finalPanelLabel;
       if(el.q) el.q.value = finalPanelLabel;
