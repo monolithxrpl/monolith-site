@@ -667,7 +667,7 @@ const isCreator  = hasCreator && (
         if(isMonolith){
           el.vTag.textContent = MONOLITH_TAG;
           el.vTs.textContent = "2026-05-11 06:50:02";
-          setHandleUI("");
+          setHandleUI("@monolith_xrpl");
           setLinkUI("https://monolithxrpl.com/");
           el.vNote.textContent = "Leave your mark. Live forever.";
         }
@@ -681,7 +681,7 @@ const isCreator  = hasCreator && (
           el.vTag.textContent = MONOLITH_TAG;
           el.vTs.textContent = "2026-05-11 06:50:02";
           setWalletUI(MONOLITH_WALLET, false, true);
-          setHandleUI("");
+          setHandleUI("@monolith_xrpl");
           setLinkUI("https://monolithxrpl.com/");
           el.vNote.textContent = "Leave your mark. Live forever.";
         } else if(isCreator){
@@ -699,7 +699,10 @@ const isCreator  = hasCreator && (
         el.vBody.textContent = "";
 }
 
-      el.ptitle.textContent = "Tile " + tile;
+      const finalPanelLabel = (window.coordDisplayFromG ? window.coordDisplayFromG(gx, gy) : tile);
+      el.ptitle.textContent = "Tile " + finalPanelLabel;
+      el.vTile.textContent = finalPanelLabel;
+      if(el.q) el.q.value = finalPanelLabel;
       el.psub.textContent = "Tap a tile to inspect. Drag to move. Wheel or pinch to zoom.";
 
         // panel media
