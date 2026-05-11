@@ -518,6 +518,35 @@ function coordLabelFromG(gx, gy){
     }
 
     function backendCoordFromPanel(tile, gx, gy){
+      const rawTile = String(tile || "").trim().toUpperCase();
+
+      if(rawTile && rawTile !== "ORIGIN"){
+        const compact = rawTile.replace(/\s+/g, "").replace(/[–—−]/g, "-");
+
+        if(/^([NSEW])-?([0-9]+)$/.test(compact)){
+          return compact.replace(/^([NSEW])-?([0-9]+)$/,"$1$2");
+        }
+
+        if(/^([NS])-?([0-9]+)([EW])-?([0-9]+)$/.test(compact)){
+          return compact.replace(/^([NS])-?([0-9]+)([EW])-?([0-9]+)$/,"$1$2$3$4");
+        }
+
+        if(compact.includes("/")){
+          const parts = compact.split("/");
+          let y = "";
+          let x = "";
+
+          for(const part of parts){
+            const m = part.match(/^([NSEW])-?([0-9]+)$/);
+            if(!m) continue;
+            if(m[1] === "N" || m[1] === "S") y = m[1] + m[2];
+            if(m[1] === "E" || m[1] === "W") x = m[1] + m[2];
+          }
+
+          if(y || x) return y + x;
+        }
+      }
+
       gx = Number(gx);
       gy = Number(gy);
 
@@ -528,10 +557,10 @@ function coordLabelFromG(gx, gy){
         const x = gx > 0 ? "E" + gx : gx < 0 ? "W" + Math.abs(gx) : "";
 
         if(y && x) return y + x;
-        return y || x || String(tile || "").trim().toUpperCase();
+        return y || x || rawTile;
       }
 
-      return String(tile || "").trim().toUpperCase().replace(/^([NSEW])-([0-9]+)$/,"$1$2");
+      return rawTile === "ORIGIN" ? "ORIGIN" : rawTile.replace(/^([NSEW])-([0-9]+)$/,"$1$2");
     }
 
     async function refreshPanelFromBackend(tile, gx, gy){
