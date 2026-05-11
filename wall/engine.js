@@ -767,8 +767,18 @@ const isCreator  = hasCreator && (
       if(id){ id.textContent = (gx===0 && gy===0) ? "ORIGIN" : tile; }
 
       if(tag){
-        if(mark && mark.tag) tag.textContent = mark.tag;
-        else tag.textContent = taken ? "TAKEN" : "";
+        const hideExteriorLabels =
+          document.body.classList.contains("view-default") ||
+          document.body.classList.contains("view-brand") ||
+          document.body.classList.contains("view-imageonly");
+
+        if(hideExteriorLabels){
+          tag.textContent = "";
+        }else if(mark && mark.tag){
+          tag.textContent = mark.tag;
+        }else{
+          tag.textContent = taken ? "TAKEN" : "";
+        }
       }
 
       if(spray){
