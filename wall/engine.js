@@ -703,7 +703,7 @@ const isCreator  = hasCreator && (
         }
 
       panel.classList.add("open");
-      refreshPanelFromBackend(tile, gx, gy);
+      // Disabled: backend refresh was poisoning panel/feed maps after click.
     }
 
     function ensurePool(){
