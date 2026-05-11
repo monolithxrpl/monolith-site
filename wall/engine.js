@@ -664,13 +664,25 @@ const isCreator  = hasCreator && (
 
           setLinkUI(mark.link || "");
 
+        if(isMonolith){
+          el.vTag.textContent = MONOLITH_TAG;
+          el.vTs.textContent = "2026-05-11 06:50:02";
+          setHandleUI("");
+          setLinkUI("https://monolithxrpl.com/");
+          el.vNote.textContent = "Leave your mark. Live forever.";
+        }
+
         el.vBody.textContent = "";
 } else {
         el.vTag.textContent = taken ? "TAKEN" : "OPEN";
         el.vTs.textContent  = "None";
 
         if(isMonolith){
+          el.vTag.textContent = MONOLITH_TAG;
+          el.vTs.textContent = "2026-05-11 06:50:02";
           setWalletUI(MONOLITH_WALLET, false, true);
+          setHandleUI("");
+          setLinkUI("https://monolithxrpl.com/");
           el.vNote.textContent = "Leave your mark. Live forever.";
         } else if(isCreator){
           setWalletUI("", false, false);
