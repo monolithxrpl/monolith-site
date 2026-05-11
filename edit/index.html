@@ -96,11 +96,10 @@
 
     <div class="card" id="loginPanel">
       <h2>Owner Login</h2>
-      <p class="hint">Enter your coordinate, sign with the owner wallet, then verify. Tile information stays hidden until verification succeeds.</p>
+      <p class="hint">Enter your coordinate and sign with the owner wallet. MONOLITH verifies ownership automatically when you return.</p>
       <label>Tile Coordinate</label>
       <input id="coordinate" placeholder="N23E11" autocomplete="off" />
       <button id="startAuth">Start owner sign-in</button>
-      <button id="verifyAuth" type="button">Verify owner</button>
       <button class="secondary" id="clearLogin" type="button">Clear</button>
       <div class="status" id="status">Owner sign-in required.</div>
       <input id="payloadUuid" type="hidden" autocomplete="off" />
@@ -146,8 +145,7 @@
       imageFile: document.getElementById("imageFile"),
       status: document.getElementById("status"),
       signBox: document.getElementById("signBox"),
-      out: document.getElementById("out"),
-      verifyAuth: document.getElementById("verifyAuth")
+      out: document.getElementById("out")
     };
 
     let lastResponse = null;
@@ -355,7 +353,6 @@
     }
     document.getElementById("startAuth").addEventListener("click", startAuth);
     document.getElementById("applyEdit").addEventListener("click", applyEdit);
-    document.getElementById("verifyAuth").addEventListener("click", verifyOwner);
     const copyBtn = document.getElementById("copy");
     if(copyBtn) copyBtn.addEventListener("click", copyLast);
     document.getElementById("cancelEdit").addEventListener("click", cancelEdit);
@@ -369,7 +366,8 @@
       el.payloadUuid.value = qs.get("payload");
       ownerVerified = false;
       setEditLocked(true);
-      setStatus("Owner sign-in returned. Verify owner wallet to unlock editing.", false);
+      setStatus("Owner sign-in returned. Verifying owner wallet now.", false);
+      setTimeout(() => { verifyOwner(); }, 250);
     }
   </script>
 </body>
