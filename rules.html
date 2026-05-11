@@ -92,13 +92,36 @@
     <ul>
       <li>Your tile has a coordinate, like <code>N23E11</code>, <code>S4W1</code>, or <code>N589</code>.</li>
       <li>Your tile can show a tag, wallet, handle, link, note, and image.</li>
-      <li>Your tile becomes part of the public wall record after launch payment verification.</li>
+      <li>Your tile becomes part of the public wall record after verified payment or backend grant.</li>
       <li>MONOLITH does not hold your wallet keys and does not take custody of your assets.</li>
     </ul>
   </section>
 
+
   <section class="section">
-    <h2>2. Coordinate Format</h2>
+    <h2>2. Wallet Ownership</h2>
+    <ul>
+      <li>One wallet can own unlimited tiles.</li>
+      <li>One tile has one owner wallet.</li>
+      <li>Owner wallet is immutable after claim or backend grant.</li>
+      <li>Tile owners can edit tag, handle, link, note, and image through Xaman owner SignIn.</li>
+      <li>Editing requires the current owner wallet to sign. MONOLITH does not use passwords or custody.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>3. Gifted vs Reserved-Image Tiles</h2>
+    <ul>
+      <li>Gifted tiles are free only when backend-granted by MONOLITH.</li>
+      <li>Reserved-image follower tiles are visual placeholders unless backend ownership says otherwise.</li>
+      <li>Reserved-image placeholders still require normal payment when purchased.</li>
+      <li>N7W7 and S407 are backend-granted gifted tiles.</li>
+      <li>S4W1 and N8W24 are purchasable reserved-image placeholders unless later changed.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>4. Coordinate Format</h2>
     <p>The public format is simple: use north or south first, then east or west.</p>
     <ul>
       <li>Main format: <code>N23E11</code>, <code>S4W1</code>, <code>N8W24</code>.</li>
@@ -109,7 +132,7 @@
   </section>
 
   <section class="section">
-    <h2>3. Pricing</h2>
+    <h2>5. Pricing</h2>
     <p>Prices are shown in USD. Payment is made in $XRP through Xaman at checkout.</p>
     <table>
       <thead>
@@ -137,11 +160,11 @@
         </tr>
       </tbody>
     </table>
-    <p>At launch, the backend will convert the USD price into a live $XRP quote. Quotes expire after 5 minutes.</p>
+    <p>The backend converts the USD price into a live $XRP quote at checkout. Quotes expire after 5 minutes.</p>
   </section>
 
   <section class="section">
-    <h2>4. Signature Numbers</h2>
+    <h2>6. Signature Numbers</h2>
     <p>Some numbers are more valuable because people recognize them, want them, or use them as symbols.</p>
     <ul>
       <li>Axis-only tiles like <code>N1</code>, <code>S2</code>, <code>E10</code>, and <code>W24</code> are Signature tier.</li>
@@ -151,7 +174,7 @@
   </section>
 
   <section class="section">
-    <h2>5. Premium Numbers</h2>
+    <h2>7. Premium Numbers</h2>
     <p>Some numbers are stronger than regular coordinates but not Signature.</p>
     <ul>
       <li>Examples: <code>10</code>, <code>11</code>, <code>22</code>, <code>25</code>, <code>33</code>, <code>44</code>, <code>50</code>, <code>55</code>, <code>66</code>, <code>75</code>, <code>77</code>, <code>99</code>, <code>100</code>, <code>200</code>, <code>300</code>, <code>400</code>, and <code>500</code>.</li>
@@ -161,7 +184,7 @@
   </section>
 
   <section class="section">
-    <h2>6. Not Available</h2>
+    <h2>8. Not Available</h2>
     <p>Some coordinates are not for sale.</p>
     <ul>
       <li>Any coordinate with <code>666</code> on either axis is not available.</li>
@@ -171,10 +194,10 @@
   </section>
 
   <section class="section">
-    <h2>7. Reserved Tiles</h2>
+    <h2>9. Reserved Tiles</h2>
     <p>Reserved means the tile is being held. It does not mean free.</p>
     <ul>
-      <li>Reserved tiles still show their real launch price.</li>
+      <li>Reserved-image tiles still show their real price unless they were backend-granted as gifted tiles.</li>
       <li>A reserved Regular tile is still $99 USD.</li>
       <li>A reserved Premium tile is still $249 USD.</li>
       <li>A reserved Signature tile is still $499 USD.</li>
@@ -183,18 +206,18 @@
   </section>
 
   <section class="section">
-    <h2>8. Abuse Enforcement</h2>
+    <h2>10. Abuse Enforcement</h2>
     <p>MONOLITH does not use a manual-review lane for normal purchases. If a buyer abuses the wall, MONOLITH may refund the purchase, lock the tile, and block the wallet from future claims.</p>
     <ul>
       <li>No manual review tier.</li>
       <li>No approval lane for normal purchases.</li>
       <li>Abuse is handled after purchase through refund, tile lock, and wallet block.</li>
-      <li>Unavailable, claimed, reserved, or blocked tiles still cannot be purchased.</li>
+      <li>Unavailable, claimed, backend-reserved, or blocked tiles cannot be purchased. Visual RESERVED image placeholders can still be purchased unless the backend blocks them.</li>
     </ul>
   </section>
 
   <section class="section">
-    <h2>9. Claim Requirements</h2>
+    <h2>11. Claim Requirements</h2>
     <ul>
       <li>Use a valid coordinate.</li>
       <li>Use a valid XRPL classic wallet address starting with <code>r</code>.</li>
@@ -206,19 +229,19 @@
   </section>
 
   <section class="section">
-    <h2>10. Launch Flow</h2>
-    <p>The current claim page is preview mode. It prepares claim data. It does not complete a real purchase yet.</p>
+    <h2>12. Launch Flow</h2>
+    <p>The claim page is in pre-launch live mode. It can create live quotes and Xaman payment requests, but public launch still requires final approval.</p>
     <ul>
-      <li>At launch, checkout will run through Xaman.</li>
+      <li>Checkout runs through Xaman.</li>
       <li>Payment will be made in $XRP.</li>
-      <li>The backend will verify the XRPL payment.</li>
+      <li>The backend verifies the XRPL payment.</li>
       <li>The tile will update only after backend verification.</li>
-      <li>The wall will eventually load ownership from the API instead of static feed edits.</li>
+      <li>The wall refreshes tile panels and visible tile images from backend ownership data when available.</li>
     </ul>
   </section>
 
   <section class="section">
-    <h2>11. Final Rules</h2>
+    <h2>13. Final Rules</h2>
     <ul>
       <li>No scams.</li>
       <li>No illegal content.</li>
@@ -230,9 +253,15 @@
     </ul>
   </section>
 
+
+  <section class="section">
+    <h2>14. Market Status</h2>
+    <p>Market tools are staged, not publicly active. Secondary sale, private sale, transfer, and rental systems require Coordinate Deed NFT finalization and launch approval.</p>
+  </section>
+
   <div class="footer">
     MONOLITH - The Wall of Record<br />
-    Rules page updated for claim preview, pricing, reserved tiles, and launch flow.
+    Rules page updated for pre-launch ownership, owner editing, pricing, reserved tiles, claim flow, and market staging.
   </div>
 
 </div>
