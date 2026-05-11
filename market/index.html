@@ -47,7 +47,7 @@
         <div class="tile">
           <h3>Secondary Sale Fee</h3>
           <p><strong class="ok">5%</strong> MONOLITH fee on secondary Deed NFT sales.</p>
-          <span class="pill">XRPL TransferFee 5000</span>
+          <span class="pill">5% secondary fee</span>
         </div>
         <div class="tile">
           <h3>Private Sales</h3>
@@ -87,6 +87,9 @@
   </div>
 
   <script>
+    const qs = new URLSearchParams(location.search);
+    const DEBUG = qs.get("debug") === "1";
+
     const el = {
       coordinate: document.getElementById("coordinate"),
       check: document.getElementById("check"),
@@ -103,6 +106,12 @@
     }
 
     function show(obj){
+      if(!DEBUG){
+        el.out.classList.remove("show");
+        el.out.textContent = "";
+        return;
+      }
+
       el.out.classList.add("show");
       el.out.textContent = JSON.stringify(obj,null,2);
     }
@@ -121,7 +130,7 @@
         return;
       }
 
-      status("Market status loaded. Ownership changes require verified Deed NFT movement.", false);
+      status("Market status loaded. Tile market actions are staged until Deed NFT movement is proven.", false);
     }
 
     el.check.addEventListener("click", checkMarket);
