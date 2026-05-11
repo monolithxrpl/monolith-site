@@ -517,9 +517,26 @@ function coordLabelFromG(gx, gy){
       el.vBody.textContent = "";
     }
 
-    async function refreshPanelFromBackend(tile){
+    function backendCoordFromPanel(tile, gx, gy){
+      gx = Number(gx);
+      gy = Number(gy);
+
+      if(Number.isFinite(gx) && Number.isFinite(gy)){
+        if(gx === 0 && gy === 0) return "ORIGIN";
+
+        const y = gy > 0 ? "N" + gy : gy < 0 ? "S" + Math.abs(gy) : "";
+        const x = gx > 0 ? "E" + gx : gx < 0 ? "W" + Math.abs(gx) : "";
+
+        if(y && x) return y + x;
+        return y || x || String(tile || "").trim().toUpperCase();
+      }
+
+      return String(tile || "").trim().toUpperCase().replace(/^([NSEW])-([0-9]+)$/,"$1$2");
+    }
+
+    async function refreshPanelFromBackend(tile, gx, gy){
       try{
-        const clean = String(tile || "").trim().toUpperCase();
+        const clean = backendCoordFromPanel(tile, gx, gy);
         if(!clean) return;
 
         const res = await fetch("/api/tile/" + encodeURIComponent(clean), { cache:"no-store" });
@@ -604,7 +621,7 @@ const isCreator  = hasCreator && (
         }
 
       panel.classList.add("open");
-      refreshPanelFromBackend(tile);
+      refreshPanelFromBackend(tile, gx, gy);
     }
 
     function ensurePool(){
