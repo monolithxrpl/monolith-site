@@ -85,6 +85,7 @@ let CREATOR_LOGO = "";
 
       taken: new Set(),
       marksByTile: new Map(),
+      backendMarksByTile: new Map(),
 
       lastKey: "",
       raf: 0,
@@ -575,45 +576,60 @@ function coordLabelFromG(gx, gy){
         if(!data || !data.ok || !data.tile) return;
 
         const meta = parseTileMetadata(data.tile);
-        const key = String(tile || data.tile.coordinate || "").trim().toUpperCase();
+        const backendCoord = String(data.tile.coordinate || "").trim().toUpperCase();
+        const visibleTile = String(tile || "").trim().toUpperCase();
+        const cellTile = (Number.isFinite(Number(gx)) && Number.isFinite(Number(gy)))
+          ? tileIdFromCoords(Number(gx), Number(gy))
+          : "";
 
-        if(key){
+        const keys = new Set([
+          visibleTile,
+          backendCoord,
+          backendCoordFromPanel(tile, gx, gy),
+          cellTile
+        ].filter(Boolean));
+
+        const mark = {
+          id: data.tile.id || null,
+          tile: backendCoord || visibleTile || cellTile,
+          gx: Number.isFinite(Number(gx)) ? Number(gx) : null,
+          gy: Number.isFinite(Number(gy)) ? Number(gy) : null,
+          tag: data.tile.owner_tag || data.tile.ownerTag || null,
+          ts: data.tile.updated_at || data.tile.claimed_at || data.tile.created_at || null,
+          img: data.tile.image_url || data.tile.imageUrl || null,
+          wallet: data.tile.owner_wallet || data.tile.ownerWallet || null,
+          wallet_public: false,
+          wallet_visibility: null,
+          visibility: null,
+          public_wallet: null,
+          handle: meta.xHandle || data.tile.x_handle || data.tile.xHandle || null,
+          link: data.tile.website_url || data.tile.websiteUrl || null,
+          note: meta.note || data.tile.note || null
+        };
+
+        for(const key of keys){
           state.taken.add(key);
-          state.marksByTile.set(key, {
-            id: data.tile.id || null,
-            tile: key,
-            gx: Number.isFinite(Number(gx)) ? Number(gx) : null,
-            gy: Number.isFinite(Number(gy)) ? Number(gy) : null,
-            tag: data.tile.owner_tag || data.tile.ownerTag || null,
-            ts: data.tile.updated_at || data.tile.claimed_at || data.tile.created_at || null,
-            img: data.tile.image_url || data.tile.imageUrl || null,
-            wallet: data.tile.owner_wallet || data.tile.ownerWallet || null,
-            wallet_public: false,
-            wallet_visibility: null,
-            visibility: null,
-            public_wallet: null,
-            handle: meta.xHandle || data.tile.x_handle || data.tile.xHandle || null,
-            link: data.tile.website_url || data.tile.websiteUrl || null,
-            note: meta.note || data.tile.note || null
-          });
-
-          for(const cell of state.pool){
-            if(cell && cell.getAttribute("data-tile") === key){
-              const cgx = parseInt(cell.getAttribute("data-gx") || "0", 10);
-              const cgy = parseInt(cell.getAttribute("data-gy") || "0", 10);
-              setCell(cell, cgx, cgy);
-            }
-          }
-
-          state.lastKey = "";
+          state.backendMarksByTile.set(key, mark);
+          state.marksByTile.set(key, mark);
         }
+
+        for(const cell of state.pool){
+          const cellKey = String(cell && cell.getAttribute("data-tile") || "").trim().toUpperCase();
+          if(cell && keys.has(cellKey)){
+            const cgx = parseInt(cell.getAttribute("data-gx") || "0", 10);
+            const cgy = parseInt(cell.getAttribute("data-gy") || "0", 10);
+            setCell(cell, cgx, cgy);
+          }
+        }
+
+        state.lastKey = "";
 
         applyBackendTileToPanel(data.tile);
       }catch(_){}
     }
 
     function openPanel(tile, gx, gy){
-      const mark = state.marksByTile.get(tile) || null;
+      const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
       const taken = state.taken.has(tile);
 
       const markTag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
@@ -728,7 +744,7 @@ const isCreator  = hasCreator && (
 
     function setCell(cell, gx, gy){
       const tile = tileIdFromCoords(gx, gy);
-      const mark = state.marksByTile.get(tile) || null;
+      const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
       const taken = state.taken.has(tile);
 
       cell.style.left = (gx * STEP) + "px";
@@ -788,7 +804,7 @@ const isCreator  = hasCreator && (
       const startGX = Math.floor((state.camX - halfW) / STEP) - state.POOL_PAD;
       const startGY = Math.floor((-state.camY - halfH) / STEP) - state.POOL_PAD;
 
-      const key = `${startGX},${startGY},${state.cols},${state.rows},${state.taken.size},${state.marksByTile.size},${state.zoom.toFixed(3)}`;
+      const key = `${startGX},${startGY},${state.cols},${state.rows},${state.taken.size},${state.marksByTile.size},${state.backendMarksByTile.size},${state.zoom.toFixed(3)}`;
       if(key === state.lastKey) return;
       state.lastKey = key;
 
