@@ -1355,20 +1355,40 @@ function onWheel(e){
         const marks = new Map();
 
         if(Array.isArray(data)){
+          const feedKey = (v) => String(v || "").trim().toUpperCase();
+
+          const addFeedKey = (set, v) => {
+            const k = feedKey(v);
+            if(k) set.add(k);
+          };
+
+          const addFeedMark = (map, keys, mark) => {
+            for(const key of keys){
+              const k = feedKey(key);
+              if(k) map.set(k, mark);
+            }
+          };
+
           for(const it of data){
             if(!it) continue;
+
             const gx = (it.gx!=null) ? parseInt(it.gx,10) : null;
             const gy = (it.gy!=null) ? parseInt(it.gy,10) : null;
-            const tile = (Number.isFinite(gx) && Number.isFinite(gy))
-              ? tileIdFromCoords(gx, gy)
-              : String(it.tile || "").trim().toUpperCase();
+            const hasCoords = Number.isFinite(gx) && Number.isFinite(gy);
+
+            const rawTile = String(it.tile || "").trim().toUpperCase();
+            const displayTile = hasCoords ? tileIdFromCoords(gx, gy) : rawTile;
+            const labelTile = hasCoords ? coordLabelFromG(gx, gy) : rawTile;
+            const backendTile = hasCoords ? backendCoordFromPanel(displayTile, gx, gy) : backendCoordFromPanel(rawTile, gx, gy);
+
+            const tile = displayTile || rawTile || backendTile;
             if(!tile) continue;
-            taken.add(tile);
-            marks.set(tile, {
+
+            const mark = {
               id: it.id || null,
               tile,
-              gx: Number.isFinite(it.gx) ? it.gx : null,
-              gy: Number.isFinite(it.gy) ? it.gy : null,
+              gx: hasCoords ? gx : null,
+              gy: hasCoords ? gy : null,
               tag: it.tag || null,
               ts: it.ts || null,
               img: it.img || null,
@@ -1380,9 +1400,18 @@ function onWheel(e){
               public_wallet: it.public_wallet || null,
 
               handle: it.handle || null,
-                link: it.link || null,
+              link: it.link || null,
               note: it.note || null
-            });
+            };
+
+            const keys = new Set();
+            addFeedKey(keys, rawTile);
+            addFeedKey(keys, displayTile);
+            addFeedKey(keys, labelTile);
+            addFeedKey(keys, backendTile);
+
+            for(const key of keys) taken.add(key);
+            addFeedMark(marks, keys, mark);
           }
         }
 
