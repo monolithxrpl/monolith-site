@@ -623,6 +623,9 @@ function coordLabelFromG(gx, gy){
         }
 
         state.lastKey = "";
+        requestAnimationFrame(() => {
+          try{ renderPool(); }catch(_){}
+        });
 
         applyBackendTileToPanel(data.tile);
       }catch(_){}
@@ -1313,6 +1316,8 @@ function onWheel(e){
         return;
       }
       centerOn(p.gx, p.gy);
+      setTimeout(() => { refreshPanelFromBackend(p.tile, p.gx, p.gy); }, 120);
+      setTimeout(() => { refreshPanelFromBackend(p.tile, p.gx, p.gy); }, 650);
       toastShow("jump " + p.tile, "good");
     }
 
