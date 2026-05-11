@@ -496,11 +496,14 @@ return null;
 
     function showOutput(obj){
       state.lastPayload = obj;
-      if(!state.showErrors && !DEBUG){
+
+      if(!DEBUG){
         el.out.classList.remove("show");
         el.out.textContent = "";
+        el.out.innerHTML = "";
         return;
       }
+
       el.out.classList.add("show");
       el.out.textContent = JSON.stringify(obj, null, 2);
     }
@@ -648,8 +651,14 @@ return null;
 
         if(signUrl){
           setStatus("Xaman claim request ready. Open the sign link only when ready to pay live XRP.", false);
-          el.out.classList.add("show");
-          el.out.innerHTML = "<div><strong>Xaman sign link:</strong></div><div style='margin:10px 0'><a href='" + signUrl + "' target='_blank' rel='noopener' style='color:#9af7c4'>Open Xaman payment request</a></div><pre style='white-space:pre-wrap'>" + JSON.stringify(payload, null, 2) + "</pre>";
+          if(DEBUG){
+            el.out.classList.add("show");
+            el.out.innerHTML = "<div><strong>Xaman sign link:</strong></div><div style='margin:10px 0'><a href='" + signUrl + "' target='_blank' rel='noopener' style='color:#9af7c4'>Open Xaman payment request</a></div><pre style='white-space:pre-wrap'>" + JSON.stringify(payload, null, 2) + "</pre>";
+          }else{
+            el.out.classList.remove("show");
+            el.out.textContent = "";
+            el.out.innerHTML = "";
+          }
           return payload;
         }
 
