@@ -321,6 +321,7 @@
 
             <div class="row">
               <button class="btn" id="gen">Start Xaman claim</button>
+              <button class="btn secondary" id="verifyPay">Verify payment</button>
               <button class="btn secondary" id="copy">Copy last response</button>
               <button class="btn secondary" id="clear">Clear</button>
             </div>
@@ -650,15 +651,8 @@ return null;
         state.lastPayload = payload;
 
         if(signUrl){
-          setStatus("Xaman claim request ready. Open the sign link only when ready to pay live XRP.", false);
-          if(DEBUG){
-            el.out.classList.add("show");
-            el.out.innerHTML = "<div><strong>Xaman sign link:</strong></div><div style='margin:10px 0'><a href='" + signUrl + "' target='_blank' rel='noopener' style='color:#9af7c4'>Open Xaman payment request</a></div><pre style='white-space:pre-wrap'>" + JSON.stringify(payload, null, 2) + "</pre>";
-          }else{
-            el.out.classList.remove("show");
-            el.out.textContent = "";
-            el.out.innerHTML = "";
-          }
+          setStatus("Xaman claim request ready. Pay with Xaman, then return here and press Verify payment.", false);
+          renderPaymentReady(payload);
           return payload;
         }
 
@@ -668,6 +662,105 @@ return null;
       }catch(e){
         setStatus("Claim request failed", true);
         showOutput({ error:"claim request failed", detail:String(e) });
+        return null;
+      }
+    }
+
+    function htmlEscape(v){
+      return String(v == null ? "" : v)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+    }
+
+    function getPaymentPayloadUuid(payload){
+      const payment = payload && payload.payment ? payload.payment : {};
+      return payment.payloadUuid || payment.payload_uuid || payment.uuid || payload.payloadUuid || payload.payload_uuid || "";
+    }
+
+    function renderPaymentReady(payload){
+      const signUrl = payload && payload.signUrl ? payload.signUrl : "";
+      const uuid = getPaymentPayloadUuid(payload);
+
+      el.out.classList.add("show");
+      el.out.innerHTML =
+        "<div><strong>Step 1: Pay with Xaman</strong></div>" +
+        "<div style='margin:10px 0'><a class='btn' href='" + htmlEscape(signUrl) + "' target='_blank' rel='noopener'>Open Xaman payment request</a></div>" +
+        "<div style='color:var(--muted);line-height:1.45;margin-top:10px'>After payment is signed, return here and press <strong>Verify payment</strong>. MONOLITH will verify payment, claim the tile, mint the Coordinate Deed, create the 0 XRP delivery offer, and show the deed accept link.</div>" +
+        (uuid ? "<div style='margin-top:10px;color:var(--muted)'>Payment payload: <code>" + htmlEscape(uuid) + "</code></div>" : "");
+    }
+
+    function renderClaimVerified(result){
+      const verification = result && result.verification ? result.verification : result;
+      const claim = verification && verification.claim ? verification.claim : {};
+      const deed = verification && verification.deed ? verification.deed : {};
+      const deedUrl = deed.acceptSignUrl || "";
+      const deedStatus = deed.status || "not_started";
+
+      state.lastPayload = result;
+      el.out.classList.add("show");
+
+      let html = "";
+      html += "<div><strong>Tile claimed</strong></div>";
+      html += "<div style='margin-top:8px;color:var(--muted);line-height:1.45'>";
+      html += "Coordinate: <strong>" + htmlEscape(claim.coordinate || verification.coordinate || "") + "</strong><br>";
+      html += "Owner wallet: <code>" + htmlEscape(claim.ownerWallet || verification.fromWallet || "") + "</code><br>";
+      html += "Payment TX: <code>" + htmlEscape(verification.txid || "") + "</code>";
+      html += "</div>";
+
+      if(deed && deed.ok && deedUrl){
+        html += "<div style='margin-top:16px'><strong>Coordinate Deed ready</strong></div>";
+        html += "<div style='margin:10px 0'><a class='btn' href='" + htmlEscape(deedUrl) + "' target='_blank' rel='noopener'>Accept Your Deed in Xaman</a></div>";
+        html += "<div style='color:var(--muted);line-height:1.45'>Status: <strong>" + htmlEscape(deedStatus) + "</strong>. Sign this 0 XRP NFT accept request from the same owner wallet to receive the deed.</div>";
+        if(deed.acceptPayloadUuid){
+          html += "<div style='margin-top:10px;color:var(--muted)'>Deed payload: <code>" + htmlEscape(deed.acceptPayloadUuid) + "</code></div>";
+        }
+      }else{
+        html += "<div style='margin-top:16px'><strong>Deed delivery pending</strong></div>";
+        html += "<div style='color:var(--muted);line-height:1.45'>Tile ownership is verified. Deed status: <strong>" + htmlEscape(deedStatus) + "</strong>. This can be retried without affecting tile ownership.</div>";
+      }
+
+      el.out.innerHTML = html;
+    }
+
+    async function verifyPayment(){
+      const payload = state.lastPayload || {};
+      const payloadUuid = getPaymentPayloadUuid(payload);
+
+      if(!payloadUuid){
+        setStatus("No Xaman payment payload to verify yet", true);
+        showOutput({ error:"missing payment payload" });
+        return null;
+      }
+
+      setStatus("Verifying payment and preparing deed...", false);
+
+      try{
+        const r = await fetch("/api/xaman/verify", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body:JSON.stringify({ payloadUuid })
+        });
+
+        const data = await r.json().catch(() => ({}));
+
+        if(!r.ok || !data.ok){
+          const msg = data.error === "payment_not_signed"
+            ? "Payment not signed yet. Open Xaman, sign payment, then verify again."
+            : (data.error || "Payment verification failed");
+          setStatus(msg, true);
+          showOutput(data);
+          return null;
+        }
+
+        renderClaimVerified(data);
+        setStatus("Payment verified. Tile claimed. Deed flow ready.", false);
+        return data;
+      }catch(e){
+        setStatus("Payment verification failed", true);
+        showOutput({ error:"payment verification failed", detail:String(e) });
         return null;
       }
     }
@@ -716,6 +809,8 @@ return null;
     });
 
     el.gen.addEventListener("click", () => { generatePayload(); });
+    const verifyPayBtn = document.getElementById("verifyPay");
+    if(verifyPayBtn) verifyPayBtn.addEventListener("click", () => { verifyPayment(); });
     el.copy.addEventListener("click", () => { copyPayload(); });
     el.clear.addEventListener("click", () => { clearAll(); });
 
