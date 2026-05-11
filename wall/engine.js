@@ -478,6 +478,60 @@ function coordLabelFromG(gx, gy){
     }
 
 
+    function parseTileMetadata(tile){
+      const raw = tile && (tile.metadata || tile.metadata_json || tile.metadataJson);
+      if(!raw) return {};
+      if(typeof raw === "object") return raw;
+      if(typeof raw === "string"){
+        try{ return JSON.parse(raw || "{}"); }catch(_){ return {}; }
+      }
+      return {};
+    }
+
+    function applyBackendTileToPanel(apiTile){
+      if(!apiTile || !apiTile.coordinate) return;
+
+      const meta = parseTileMetadata(apiTile);
+      const coord = String(apiTile.coordinate || "").trim().toUpperCase();
+      const tag = apiTile.owner_tag || apiTile.ownerTag || "TAKEN";
+      const wallet = apiTile.owner_wallet || apiTile.ownerWallet || "";
+      const handle = meta.xHandle || apiTile.x_handle || apiTile.xHandle || "";
+      const note = meta.note || apiTile.note || "";
+      const link = apiTile.website_url || apiTile.websiteUrl || "";
+      const img = apiTile.image_url || apiTile.imageUrl || "";
+      const when = apiTile.updated_at || apiTile.claimed_at || apiTile.created_at || "None";
+
+      el.vTile.textContent = coord;
+      el.vTag.textContent = tag || "TAKEN";
+      el.vTs.textContent = when;
+      el.vNote.textContent = note ? String(note) : "None";
+
+      setWalletUI(String(wallet || ""), false, !!wallet);
+      setHandleUI(handle || "");
+      setLinkUI(link || "");
+
+      if(el.vMedia){
+        el.vMedia.innerHTML = img ? mediaHTML(img, coord) : "";
+      }
+
+      el.vBody.textContent = "";
+    }
+
+    async function refreshPanelFromBackend(tile){
+      try{
+        const clean = String(tile || "").trim().toUpperCase();
+        if(!clean) return;
+
+        const res = await fetch("/api/tile/" + encodeURIComponent(clean), { cache:"no-store" });
+        if(!res.ok) return;
+
+        const data = await res.json().catch(() => ({}));
+        if(!data || !data.ok || !data.tile) return;
+
+        applyBackendTileToPanel(data.tile);
+      }catch(_){}
+    }
+
     function openPanel(tile, gx, gy){
       const mark = state.marksByTile.get(tile) || null;
       const taken = state.taken.has(tile);
@@ -550,6 +604,7 @@ const isCreator  = hasCreator && (
         }
 
       panel.classList.add("open");
+      refreshPanelFromBackend(tile);
     }
 
     function ensurePool(){
