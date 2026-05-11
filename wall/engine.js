@@ -86,6 +86,9 @@ let CREATOR_LOGO = "";
       taken: new Set(),
       marksByTile: new Map(),
       backendMarksByTile: new Map(),
+      activePanelKey: "",
+      activePanelLabel: "",
+      activePanelRequestId: 0,
 
       lastKey: "",
       raf: 0,
@@ -489,31 +492,84 @@ function coordLabelFromG(gx, gy){
       return {};
     }
 
-    function applyBackendTileToPanel(apiTile){
+
+    function panelKey(v){
+      return String(v || "").trim().toUpperCase();
+    }
+
+    function usefulPanelValue(v){
+      if(v === null || v === undefined) return "";
+      const s = String(v).trim();
+      if(!s) return "";
+      if(/^(NONE|NULL|UNDEFINED)$/i.test(s)) return "";
+      return s;
+    }
+
+    function panelLookupKeys(tile, gx, gy){
+      const keys = [];
+      const add = (v) => {
+        const k = panelKey(v);
+        if(k && !keys.includes(k)) keys.push(k);
+      };
+      add(tile);
+      add(backendCoordFromPanel(tile, gx, gy));
+      if(Number.isFinite(Number(gx)) && Number.isFinite(Number(gy))){
+        add(tileIdFromCoords(Number(gx), Number(gy)));
+        add(coordLabelFromG(Number(gx), Number(gy)));
+      }
+      return keys;
+    }
+
+    function firstPanelMark(tile, gx, gy){
+      const keys = panelLookupKeys(tile, gx, gy);
+      for(const key of keys){
+        const m = state.backendMarksByTile.get(key);
+        if(m) return m;
+      }
+      for(const key of keys){
+        const m = state.marksByTile.get(key);
+        if(m) return m;
+      }
+      return null;
+    }
+
+    function hasPanelTaken(tile, gx, gy){
+      for(const key of panelLookupKeys(tile, gx, gy)){
+        if(state.taken.has(key)) return true;
+      }
+      return false;
+    }
+
+    
+    function applyBackendTileToPanel(apiTile, expectedKey, requestId, mark){
       if(!apiTile || !apiTile.coordinate) return;
+      if(requestId !== state.activePanelRequestId) return;
+      if(panelKey(expectedKey) !== panelKey(state.activePanelKey)) return;
+
+      const backendKey = backendCoordFromPanel(apiTile.coordinate, null, null);
+      if(panelKey(backendKey) !== panelKey(expectedKey)) return;
 
       const meta = parseTileMetadata(apiTile);
-      const coord = String(apiTile.coordinate || "").trim().toUpperCase();
-      const tag = apiTile.owner_tag || apiTile.ownerTag || "TAKEN";
-      const wallet = apiTile.owner_wallet || apiTile.ownerWallet || "";
-      const handle = meta.xHandle || apiTile.x_handle || apiTile.xHandle || "";
-      const note = meta.note || apiTile.note || "";
-      const link = apiTile.website_url || apiTile.websiteUrl || "";
-      const img = apiTile.image_url || apiTile.imageUrl || "";
-      const when = apiTile.updated_at || apiTile.claimed_at || apiTile.created_at || "None";
+      const m = mark || {};
+      const display = usefulPanelValue(state.activePanelLabel) || expectedKey;
 
-      el.vTile.textContent = coord;
-      el.vTag.textContent = tag || "TAKEN";
-      el.vTs.textContent = when;
-      el.vNote.textContent = note ? String(note) : "None";
+      el.vTile.textContent = display;
 
-      setWalletUI(String(wallet || ""), false, !!wallet);
-      setHandleUI(handle || "");
-      setLinkUI(link || "");
+      const tag = usefulPanelValue(m.tag || apiTile.owner_tag || apiTile.ownerTag);
+      const ts = usefulPanelValue(m.ts || apiTile.updated_at || apiTile.claimed_at || apiTile.created_at);
+      const note = usefulPanelValue(m.note || meta.note || apiTile.note);
+      const wallet = usefulPanelValue(m.wallet || apiTile.owner_wallet || apiTile.ownerWallet);
+      const handle = usefulPanelValue(m.handle || meta.xHandle || apiTile.x_handle || apiTile.xHandle);
+      const link = usefulPanelValue(m.link || apiTile.website_url || apiTile.websiteUrl);
+      const img = usefulPanelValue(m.img || apiTile.image_url || apiTile.imageUrl);
 
-      if(el.vMedia){
-        el.vMedia.innerHTML = img ? mediaHTML(img, coord) : "";
-      }
+      if(tag) el.vTag.textContent = tag;
+      if(ts) el.vTs.textContent = ts;
+      if(note) el.vNote.textContent = note;
+      if(wallet) setWalletUI(wallet, false, true);
+      if(handle) setHandleUI(handle);
+      if(link) setLinkUI(link);
+      if(el.vMedia && img) el.vMedia.innerHTML = mediaHTML(img, display);
 
       el.vBody.textContent = "";
     }
@@ -564,10 +620,13 @@ function coordLabelFromG(gx, gy){
       return rawTile === "ORIGIN" ? "ORIGIN" : rawTile.replace(/^([NSEW])-([0-9]+)$/,"$1$2");
     }
 
-    async function refreshPanelFromBackend(tile, gx, gy){
+    async 
+    async function refreshPanelFromBackend(tile, gx, gy, requestId){
       try{
         const clean = backendCoordFromPanel(tile, gx, gy);
         if(!clean) return;
+        if(requestId !== state.activePanelRequestId) return;
+        if(panelKey(clean) !== panelKey(state.activePanelKey)) return;
 
         const res = await fetch("/api/tile/" + encodeURIComponent(clean), { cache:"no-store" });
         if(!res.ok) return;
@@ -575,49 +634,48 @@ function coordLabelFromG(gx, gy){
         const data = await res.json().catch(() => ({}));
         if(!data || !data.ok || !data.tile) return;
 
+        const backendKey = backendCoordFromPanel(data.tile.coordinate, gx, gy);
+        if(panelKey(backendKey) !== panelKey(clean)) return;
+        if(requestId !== state.activePanelRequestId) return;
+        if(panelKey(clean) !== panelKey(state.activePanelKey)) return;
+
         const meta = parseTileMetadata(data.tile);
-        const backendCoord = String(data.tile.coordinate || "").trim().toUpperCase();
-        const visibleTile = String(tile || "").trim().toUpperCase();
-        const cellTile = (Number.isFinite(Number(gx)) && Number.isFinite(Number(gy)))
-          ? tileIdFromCoords(Number(gx), Number(gy))
-          : "";
+        const existing = firstPanelMark(tile, gx, gy) || {};
+        const mark = Object.assign({}, existing);
 
-        const keys = new Set([
-          visibleTile,
-          backendCoord,
-          backendCoordFromPanel(tile, gx, gy),
-          cellTile
-        ].filter(Boolean));
+        mark.id = data.tile.id || mark.id || null;
+        mark.tile = clean;
+        mark.gx = Number.isFinite(Number(gx)) ? Number(gx) : mark.gx;
+        mark.gy = Number.isFinite(Number(gy)) ? Number(gy) : mark.gy;
 
-        const mark = {
-          id: data.tile.id || null,
-          tile: backendCoord || visibleTile || cellTile,
-          gx: Number.isFinite(Number(gx)) ? Number(gx) : null,
-          gy: Number.isFinite(Number(gy)) ? Number(gy) : null,
-          tag: data.tile.owner_tag || data.tile.ownerTag || null,
-          ts: data.tile.updated_at || data.tile.claimed_at || data.tile.created_at || null,
-          img: data.tile.image_url || data.tile.imageUrl || null,
-          wallet: data.tile.owner_wallet || data.tile.ownerWallet || null,
-          wallet_public: false,
-          wallet_visibility: null,
-          visibility: null,
-          public_wallet: null,
-          handle: meta.xHandle || data.tile.x_handle || data.tile.xHandle || null,
-          link: data.tile.website_url || data.tile.websiteUrl || null,
-          note: meta.note || data.tile.note || null
-        };
+        const tag = usefulPanelValue(data.tile.owner_tag || data.tile.ownerTag);
+        const ts = usefulPanelValue(data.tile.updated_at || data.tile.claimed_at || data.tile.created_at);
+        const img = usefulPanelValue(data.tile.image_url || data.tile.imageUrl);
+        const wallet = usefulPanelValue(data.tile.owner_wallet || data.tile.ownerWallet);
+        const handle = usefulPanelValue(meta.xHandle || data.tile.x_handle || data.tile.xHandle);
+        const link = usefulPanelValue(data.tile.website_url || data.tile.websiteUrl);
+        const note = usefulPanelValue(meta.note || data.tile.note);
 
-        for(const key of keys){
+        if(tag) mark.tag = tag;
+        if(ts) mark.ts = ts;
+        if(img) mark.img = img;
+        if(wallet) mark.wallet = wallet;
+        if(handle) mark.handle = handle;
+        if(link) mark.link = link;
+        if(note) mark.note = note;
+
+        for(const key of panelLookupKeys(tile, gx, gy)){
           state.taken.add(key);
           state.backendMarksByTile.set(key, mark);
-          state.marksByTile.set(key, mark);
         }
+        state.backendMarksByTile.set(clean, mark);
 
         for(const cell of state.pool){
           const cellKey = String(cell && cell.getAttribute("data-tile") || "").trim().toUpperCase();
-          if(cell && keys.has(cellKey)){
-            const cgx = parseInt(cell.getAttribute("data-gx") || "0", 10);
-            const cgy = parseInt(cell.getAttribute("data-gy") || "0", 10);
+          const cgx = parseInt(cell && cell.getAttribute("data-gx") || "0", 10);
+          const cgy = parseInt(cell && cell.getAttribute("data-gy") || "0", 10);
+          const cellClean = backendCoordFromPanel(cellKey, cgx, cgy);
+          if(cell && panelKey(cellClean) === panelKey(clean)){
             setCell(cell, cgx, cgy);
           }
         }
@@ -627,45 +685,51 @@ function coordLabelFromG(gx, gy){
           try{ renderPool(); }catch(_){}
         });
 
-        applyBackendTileToPanel(data.tile);
+        applyBackendTileToPanel(data.tile, clean, requestId, mark);
       }catch(_){}
     }
 
+    
     function openPanel(tile, gx, gy){
-      const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
-      const taken = state.taken.has(tile);
+      const activeKey = backendCoordFromPanel(tile, gx, gy);
+      const panelLabel = (window.coordDisplayFromG ? window.coordDisplayFromG(gx, gy) : tile);
+
+      state.activePanelKey = activeKey;
+      state.activePanelLabel = panelLabel;
+      state.activePanelRequestId = (state.activePanelRequestId || 0) + 1;
+      const requestId = state.activePanelRequestId;
+
+      const mark = firstPanelMark(tile, gx, gy);
+      const taken = hasPanelTaken(tile, gx, gy);
 
       const markTag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
-      const isMonolith = (tile === MONOLITH_TILE) || (markTag === MONOLITH_TAG);
-const hasCreator = !!(CREATOR_TILE || CREATOR_TAG);
-const isCreator  = hasCreator && (
-  (CREATOR_TILE && tile === CREATOR_TILE) ||
-  (CREATOR_TAG  && markTag === CREATOR_TAG)
-);
+      const isMonolith = (activeKey === MONOLITH_TILE) || (tile === MONOLITH_TILE) || (markTag === MONOLITH_TAG);
+      const hasCreator = !!(CREATOR_TILE || CREATOR_TAG);
+      const isCreator  = hasCreator && (
+        (CREATOR_TILE && tile === CREATOR_TILE) ||
+        (CREATOR_TAG  && markTag === CREATOR_TAG)
+      );
 
-      el.vTile.textContent = (window.coordDisplayFromG ? window.coordDisplayFromG(gx, gy) : tile);
+      el.vTile.textContent = panelLabel;
 
       if(mark){
-        el.vTag.textContent = mark.tag || "TAKEN";
-        el.vTs.textContent  = mark.ts || "None";
-        el.vNote.textContent = mark.note ? String(mark.note) : "None";
+        el.vTag.textContent = usefulPanelValue(mark.tag) || "TAKEN";
+        el.vTs.textContent  = usefulPanelValue(mark.ts) || "None";
+        el.vNote.textContent = usefulPanelValue(mark.note) || "None";
 
-        if(isMonolith && !mark.note) el.vNote.textContent = "Leave your mark. Live forever.";
-// no creator fallback note
+        if(isMonolith && !usefulPanelValue(mark.note)) el.vNote.textContent = "Leave your mark. Live forever.";
 
         if(isMonolith){
           setWalletUI(MONOLITH_WALLET, false, true);
         } else {
-          const w = mark.wallet ? String(mark.wallet) : "";
+          const w = usefulPanelValue(mark.wallet);
           setWalletUI(w, isPublicWallet(mark), !!w);
         }
 
-        setHandleUI(mark.handle || "");
-
-          setLinkUI(mark.link || "");
-
+        setHandleUI(usefulPanelValue(mark.handle));
+        setLinkUI(usefulPanelValue(mark.link));
         el.vBody.textContent = "";
-} else {
+      } else {
         el.vTag.textContent = taken ? "TAKEN" : "OPEN";
         el.vTs.textContent  = "None";
 
@@ -674,36 +738,32 @@ const isCreator  = hasCreator && (
           el.vNote.textContent = "Leave your mark. Live forever.";
         } else if(isCreator){
           setWalletUI("", false, false);
-// no creator fallback note
         } else {
           setWalletUI("", false, false);
           el.vNote.textContent = "None";
         }
 
         setHandleUI("");
-
-          setLinkUI("");
-
+        setLinkUI("");
         el.vBody.textContent = "";
-}
+      }
 
-      el.ptitle.textContent = "Tile " + tile;
+      el.ptitle.textContent = "Tile " + panelLabel;
       el.psub.textContent = "Tap a tile to inspect. Drag to move. Wheel or pinch to zoom.";
 
-        // panel media
-        if(el.vMedia){
-          const img=(mark&&typeof mark.img==="string"&&mark.img.trim())?mark.img.trim():"";
-          const src=
-            isMonolith?MONOLITH_LOGO:
-            isCreator ?CREATOR_LOGO :
-            img?img:
-            taken?PLACEHOLDER_IMG:
-            "";
-          el.vMedia.innerHTML=src?mediaHTML(src,tile):"";
-        }
+      if(el.vMedia){
+        const img=(mark&&typeof mark.img==="string"&&mark.img.trim())?mark.img.trim():"";
+        const src=
+          isMonolith?MONOLITH_LOGO:
+          isCreator ?CREATOR_LOGO :
+          img?img:
+          taken?PLACEHOLDER_IMG:
+          "";
+        el.vMedia.innerHTML=src?mediaHTML(src,panelLabel):"";
+      }
 
       panel.classList.add("open");
-      refreshPanelFromBackend(tile, gx, gy);
+      refreshPanelFromBackend(tile, gx, gy, requestId);
     }
 
     function ensurePool(){
@@ -1326,8 +1386,7 @@ function onWheel(e){
         return;
       }
       centerOn(p.gx, p.gy);
-      setTimeout(() => { refreshPanelFromBackend(p.tile, p.gx, p.gy); }, 120);
-      setTimeout(() => { refreshPanelFromBackend(p.tile, p.gx, p.gy); }, 650);
+      // Search jump only centers the wall. Panel refresh runs through openPanel() after a tile click.
       toastShow("jump " + p.tile, "good");
     }
 
