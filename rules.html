@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en:contentReference[oaicite:0]{index=0}set="UTF-8" />
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MONOLITH Rules</title>
-  <meta name="description" content="MONOLITH rules, tile pricing, coordinate formats, reserved tiles, and launch claim flow." />
+  <meta name="description" content="MONOLITH rules, XRPL coordinate real estate, tile pricing, coordinate formats, reserved coordinates, owner editing, and pre-launch claim flow." />
   <style>
     :root{
       --bg:#070b10;
@@ -75,7 +77,7 @@
 
   <section class="hero">
     <h1>MONOLITH Rules</h1>
-    <p>MONOLITH is a public wall of record. A tile is a permanent coordinate tied to a public XRPL wallet, a tag, and optional public details.</p>
+    <p>MONOLITH is XRPL coordinate real estate. A tile is a fixed public coordinate tied to a wallet, a tag, and optional public details.</p>
     <div>
       <span class="pill">Paid in $XRP</span>
       <span class="pill">Xaman checkout</span>
@@ -92,7 +94,7 @@
     <ul>
       <li>Your tile has a coordinate, like <code>N23E11</code>, <code>S4W1</code>, or <code>N589</code>.</li>
       <li>Your tile can show a tag, wallet, handle, link, note, and image.</li>
-      <li>Your tile becomes part of the public wall record after verified payment or backend grant.</li>
+      <li>Your tile becomes part of the public wall record after verified ownership activation.</li>
       <li>MONOLITH does not hold your wallet keys and does not take custody of your assets.</li>
     </ul>
   </section>
@@ -103,20 +105,19 @@
     <ul>
       <li>One wallet can own unlimited tiles.</li>
       <li>One tile has one owner wallet.</li>
-      <li>Owner wallet is immutable after claim or backend grant.</li>
+      <li>Owner wallet is immutable after ownership activation.</li>
       <li>Tile owners can edit tag, handle, link, note, and image through Xaman owner SignIn.</li>
       <li>Editing requires the current owner wallet to sign. MONOLITH does not use passwords or custody.</li>
     </ul>
   </section>
-
   <section class="section">
-    <h2>3. Gifted vs Reserved-Image Tiles</h2>
+    <h2>3. Reserved Coordinates and Availability</h2>
     <ul>
-      <li>Gifted tiles are free only when backend-granted by MONOLITH.</li>
-      <li>Reserved-image follower tiles are visual placeholders unless backend ownership says otherwise.</li>
-      <li>Reserved-image placeholders still require normal payment when purchased.</li>
-      <li>N7W7 and S407 are backend-granted gifted tiles.</li>
-      <li>S4W1 and N8W24 are purchasable reserved-image placeholders unless later changed.</li>
+      <li>Reserved coordinates are controlled availability positions.</li>
+      <li>Reserved does not mean free.</li>
+      <li>Some coordinates may display reserved imagery before purchase.</li>
+      <li>Visual reserved imagery does not remove the payment requirement unless MONOLITH activates ownership through an official process.</li>
+      <li>Availability is controlled by backend ownership and reservation status.</li>
     </ul>
   </section>
 
@@ -197,7 +198,7 @@
     <h2>9. Reserved Tiles</h2>
     <p>Reserved means the tile is being held. It does not mean free.</p>
     <ul>
-      <li>Reserved-image tiles still show their real price unless they were backend-granted as gifted tiles.</li>
+      <li>Reserved coordinates still show their real price unless MONOLITH activates ownership through an official process.</li>
       <li>A reserved Regular tile is still $99 USD.</li>
       <li>A reserved Premium tile is still $249 USD.</li>
       <li>A reserved Signature tile is still $499 USD.</li>
@@ -212,7 +213,7 @@
       <li>No manual review tier.</li>
       <li>No approval lane for normal purchases.</li>
       <li>Abuse is handled after purchase through refund, tile lock, and wallet block.</li>
-      <li>Unavailable, claimed, backend-reserved, or blocked tiles cannot be purchased. Visual RESERVED image placeholders can still be purchased unless the backend blocks them.</li>
+      <li>Unavailable, claimed, backend-reserved, or blocked tiles cannot be purchased. Visual RESERVED image placeholders can still be purchased unless backend status blocks them.</li>
     </ul>
   </section>
 
@@ -261,7 +262,7 @@
 
   <div class="footer">
     MONOLITH - The Wall of Record<br />
-    Rules page updated for pre-launch ownership, owner editing, pricing, reserved tiles, claim flow, and market staging.
+    Rules page updated for pre-launch ownership, owner editing, XRPL coordinate real estate, pricing, reserved coordinates, claim flow, and market staging.
   </div>
 
 </div>
