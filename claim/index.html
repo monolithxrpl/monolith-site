@@ -566,6 +566,15 @@ return null;
       return { meta };
     }
 
+
+    function setTakenTileStatus(tile){
+      const cleanTile = String(tile || "").trim().toUpperCase();
+      const editUrl = "/edit/?edit=" + encodeURIComponent(cleanTile);
+      el.statusLine.innerHTML =
+        "<span class='bad'>This tile is already owned.</span> " +
+        "<a class='btn' href='" + editUrl + "'>Edit This Tile</a>";
+    }
+
     async function generatePayload(){
       state.showErrors = true;
 
@@ -590,8 +599,8 @@ return null;
       }
 
       if(state.feedLoaded && state.taken.has(p.tile)){
-        setStatus("Tile is taken", true);
-        showOutput({ error:"tile taken", tile:p.tile });
+        setTakenTileStatus(p.tile);
+        showOutput({ error:"tile taken", tile:p.tile, editUrl:"/edit/?edit=" + p.tile });
         return null;
       }
 
