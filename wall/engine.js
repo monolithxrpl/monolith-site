@@ -574,6 +574,40 @@ function coordLabelFromG(gx, gy){
         const data = await res.json().catch(() => ({}));
         if(!data || !data.ok || !data.tile) return;
 
+        const meta = parseTileMetadata(data.tile);
+        const key = String(tile || data.tile.coordinate || "").trim().toUpperCase();
+
+        if(key){
+          state.taken.add(key);
+          state.marksByTile.set(key, {
+            id: data.tile.id || null,
+            tile: key,
+            gx: Number.isFinite(Number(gx)) ? Number(gx) : null,
+            gy: Number.isFinite(Number(gy)) ? Number(gy) : null,
+            tag: data.tile.owner_tag || data.tile.ownerTag || null,
+            ts: data.tile.updated_at || data.tile.claimed_at || data.tile.created_at || null,
+            img: data.tile.image_url || data.tile.imageUrl || null,
+            wallet: data.tile.owner_wallet || data.tile.ownerWallet || null,
+            wallet_public: false,
+            wallet_visibility: null,
+            visibility: null,
+            public_wallet: null,
+            handle: meta.xHandle || data.tile.x_handle || data.tile.xHandle || null,
+            link: data.tile.website_url || data.tile.websiteUrl || null,
+            note: meta.note || data.tile.note || null
+          });
+
+          for(const cell of state.pool){
+            if(cell && cell.getAttribute("data-tile") === key){
+              const cgx = parseInt(cell.getAttribute("data-gx") || "0", 10);
+              const cgy = parseInt(cell.getAttribute("data-gy") || "0", 10);
+              setCell(cell, cgx, cgy);
+            }
+          }
+
+          state.lastKey = "";
+        }
+
         applyBackendTileToPanel(data.tile);
       }catch(_){}
     }
