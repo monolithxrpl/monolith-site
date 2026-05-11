@@ -627,7 +627,7 @@ function coordLabelFromG(gx, gy){
           try{ renderPool(); }catch(_){}
         });
 
-        applyBackendTileToPanel(data.tile);
+        // Disabled: backend refresh must not overwrite the visible panel after click.
       }catch(_){}
     }
 
