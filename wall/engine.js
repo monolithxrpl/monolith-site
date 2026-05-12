@@ -496,7 +496,7 @@ function coordLabelFromG(gx, gy){
       const coord = String(apiTile.coordinate || "").trim().toUpperCase();
       const tag = apiTile.owner_tag || apiTile.ownerTag || "TAKEN";
       const wallet = apiTile.owner_wallet || apiTile.ownerWallet || "";
-      const handle = meta.xHandle || apiTile.x_handle || apiTile.xHandle || "";
+      const handle = apiTile.handle || apiTile.x_handle || apiTile.xHandle || meta.handle || meta.xHandle || meta.feedHandle || "";
       const note = meta.note || apiTile.note || "";
       const link = apiTile.website_url || apiTile.websiteUrl || "";
       const img = apiTile.image_url || apiTile.imageUrl || "";
@@ -602,7 +602,7 @@ function coordLabelFromG(gx, gy){
           wallet_visibility: null,
           visibility: null,
           public_wallet: null,
-          handle: meta.xHandle || data.tile.x_handle || data.tile.xHandle || null,
+          handle: data.tile.handle || data.tile.x_handle || data.tile.xHandle || meta.handle || meta.xHandle || meta.feedHandle || null,
           link: data.tile.website_url || data.tile.websiteUrl || null,
           note: meta.note || data.tile.note || null
         };
@@ -1448,7 +1448,7 @@ function onWheel(e){
               visibility: it.visibility || null,
               public_wallet: it.public_wallet || null,
 
-              handle: it.handle || null,
+              handle: it.handle || it.x_handle || it.xHandle || (it.metadata && (it.metadata.handle || it.metadata.xHandle || it.metadata.feedHandle)) || null,
               link: it.link || null,
               note: it.note || null
             };
