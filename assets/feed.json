@@ -8361,19 +8361,6 @@
   {},
   {},
   {
-    "tile": "N8W24",
-    "gx": -24,
-    "gy": 8,
-    "tag": "RESERVED",
-    "img": "/assets/RESERVED.webp?v=20260506",
-    "handle": "@monolith_xrpl",
-    "ts": "2026-05-07",
-    "claimable": false,
-    "locked": true,
-    "tier": "reserved",
-    "price_xrp": 0
-  },
-  {
     "tile": "N7W7",
     "gx": -7,
     "gy": 7,
