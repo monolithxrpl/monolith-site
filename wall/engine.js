@@ -1171,7 +1171,11 @@ function onMove(e){
                 var cell = pickCellFromPoint(e.clientX, e.clientY);
                 var tile = tileFromCell(cell);
                 if(tile){
-                  try{ openPanel(tile, 0, 0); }catch(_){ }
+                  try{
+                    const rgx = parseInt(cell.getAttribute("data-gx") || "0", 10);
+                    const rgy = parseInt(cell.getAttribute("data-gy") || "0", 10);
+                    openPanel(tile, rgx, rgy);
+                  }catch(_){ }
                 }
               }
             }
