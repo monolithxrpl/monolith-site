@@ -54,13 +54,14 @@
     "tag": "NEB",
     "link": "https://houseofcauliman.com/neb/",
     "img": "/assets/neb_logo.webp",
-    "handle": "@mrcauliman",
+    "handle": "@NEB_XRPL",
     "ts": "2026-05-06",
     "note": "NEB is Network Edge Bot. A future XRPL trading console focused on spread capture, routing, and market-edge automation.",
     "claimable": false,
     "locked": true,
     "tier": "standard",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "xHandle": "@NEB_XRPL"
   },
   {
     "tile": "W-1",
