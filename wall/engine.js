@@ -1350,7 +1350,7 @@ function onWheel(e){
       toastShow("jump " + p.tile, "good");
     }
 
-    function handleDirectTileLink(){
+    async function handleDirectTileLink(){
       const params = new URLSearchParams(window.location.search);
       const directTile = params.get("tile");
       if(!directTile) return;
@@ -1358,11 +1358,21 @@ function onWheel(e){
       if(!p) return;
       if(el.q) el.q.value = p.tile;
       centerOn(p.gx, p.gy);
+
+      try{ await refreshPanelFromBackend(p.tile, p.gx, p.gy); }catch(_){}
+
       openPanel(p.tile, p.gx, p.gy);
+
+      // One delayed pass catches slow mobile/in-app browsers without recursive panel poison.
+      setTimeout(async () => {
+        try{ await refreshPanelFromBackend(p.tile, p.gx, p.gy); }catch(_){}
+        try{ openPanel(p.tile, p.gx, p.gy); }catch(_){}
+      }, 650);
+
       toastShow("tile " + p.tile, "good");
     }
 
-    setTimeout(handleDirectTileLink, 250);
+    setTimeout(() => { handleDirectTileLink(); }, 250);
 
     async function loadFeed(){
       try{
