@@ -636,7 +636,7 @@ function coordLabelFromG(gx, gy){
       const taken = state.taken.has(tile);
 
       const markTag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
-      const isMonolith = (tile === MONOLITH_TILE) || (markTag === MONOLITH_TAG);
+      const isMonolith = (tile === MONOLITH_TILE);
 const hasCreator = !!(CREATOR_TILE || CREATOR_TAG);
 const isCreator  = hasCreator && (
   (CREATOR_TILE && tile === CREATOR_TILE) ||
@@ -798,7 +798,7 @@ const isCreator  = hasCreator && (
 
       if(spray){
         const markTag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
-        const isMonolith = (tile === MONOLITH_TILE) || (markTag === MONOLITH_TAG);
+        const isMonolith = (tile === MONOLITH_TILE);
 const hasCreator = !!(CREATOR_TILE || CREATOR_TAG);
 const isCreator  = hasCreator && (
   (CREATOR_TILE && tile === CREATOR_TILE) ||
