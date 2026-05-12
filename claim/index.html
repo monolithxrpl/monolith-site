@@ -616,7 +616,7 @@ return null;
       }
 
       const websiteUrl = link && link.startsWith("http") ? link : "";
-      const ownerTag = tag || "MONOLITH";
+      const ownerTag = tag || p.tile;
 
       const fd = new FormData();
       fd.append("coordinate", p.tile);
