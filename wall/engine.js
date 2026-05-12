@@ -632,8 +632,25 @@ function coordLabelFromG(gx, gy){
     }
 
     function openPanel(tile, gx, gy){
-      const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
-      const taken = state.taken.has(tile);
+      const panelTile = String(tile || "").trim();
+      const backendTile = backendCoordFromPanel(panelTile, gx, gy);
+      const displayTile = (window.coordDisplayFromG ? window.coordDisplayFromG(gx, gy) : panelTile);
+      const lookupKeys = Array.from(new Set([
+        panelTile,
+        String(panelTile || "").toUpperCase(),
+        backendTile,
+        String(backendTile || "").toUpperCase(),
+        displayTile,
+        String(displayTile || "").toUpperCase()
+      ].filter(Boolean)));
+
+      let mark = null;
+      for(const key of lookupKeys){
+        mark = state.backendMarksByTile.get(key) || state.marksByTile.get(key) || null;
+        if(mark) break;
+      }
+
+      const taken = lookupKeys.some(key => state.taken.has(key));
 
       const markTag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
       const isMonolith = (tile === MONOLITH_TILE) || (markTag === MONOLITH_TAG);
@@ -643,7 +660,7 @@ const isCreator  = hasCreator && (
   (CREATOR_TAG  && markTag === CREATOR_TAG)
 );
 
-      el.vTile.textContent = (window.coordDisplayFromG ? window.coordDisplayFromG(gx, gy) : tile);
+      el.vTile.textContent = displayTile || panelTile;
 
       if(mark){
         el.vTag.textContent = mark.tag || "TAKEN";
@@ -699,7 +716,7 @@ const isCreator  = hasCreator && (
         el.vBody.textContent = "";
 }
 
-      const finalPanelLabel = String(tile || "").trim() || (window.coordDisplayFromG ? window.coordDisplayFromG(gx, gy) : tile);
+      const finalPanelLabel = displayTile || panelTile || backendTile;
       el.ptitle.textContent = "Tile " + finalPanelLabel;
       el.vTile.textContent = finalPanelLabel;
       if(el.q) el.q.value = finalPanelLabel;
@@ -714,11 +731,39 @@ const isCreator  = hasCreator && (
             img?img:
             taken?PLACEHOLDER_IMG:
             "";
-          el.vMedia.innerHTML=src?mediaHTML(src,tile):"";
+          el.vMedia.innerHTML=src?mediaHTML(src, finalPanelLabel || panelTile):"";
         }
 
       panel.classList.add("open");
-      // Disabled: backend refresh was poisoning panel/feed maps after click.
+
+      const refreshCoord = backendTile || panelTile;
+      if(refreshCoord && !state.panelBackendRefreshLock){
+        state.panelBackendRefreshLock = true;
+        Promise.resolve(copyWallet(refreshCoord, gx, gy)).then(() => {
+          state.panelBackendRefreshLock = false;
+
+          const freshKeys = Array.from(new Set([
+            panelTile,
+            String(panelTile || "").toUpperCase(),
+            backendTile,
+            String(backendTile || "").toUpperCase(),
+            displayTile,
+            String(displayTile || "").toUpperCase()
+          ].filter(Boolean)));
+
+          let freshMark = null;
+          for(const key of freshKeys){
+            freshMark = state.backendMarksByTile.get(key) || state.marksByTile.get(key) || null;
+            if(freshMark) break;
+          }
+
+          if(panel.classList.contains("open") && freshMark && (!mark || freshMark.tag !== mark.tag || freshMark.img !== mark.img || freshMark.wallet !== mark.wallet)){
+            openPanel(backendTile || panelTile, gx, gy);
+          }
+        }).catch(() => {
+          state.panelBackendRefreshLock = false;
+        });
+      }
     }
 
     function ensurePool(){
