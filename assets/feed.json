@@ -8390,16 +8390,18 @@
     "tile": "N7W7",
     "gx": -7,
     "gy": 7,
-    "tag": "RESERVED GRANT",
-    "img": "/assets/RESERVED.webp?v=20260506",
-    "handle": "@monolith_xrpl",
+    "tag": "XRPL Pulse",
+    "img": "https://monolithxrpl.com/api/uploads/tiles/tile_edit_1778564138694_33685c70fa1e3416.jpg",
+    "handle": "@XRPLPulse",
     "ts": "2026-05-06",
     "claimable": false,
     "locked": true,
     "tier": "regular",
     "price_xrp": 0,
     "wallet": "rLUZ8X3ZiBTKqhnQr7377szjMtbj5gqpyJ",
-    "link": "/edit/?edit=N7W7"
+    "link": "https://www.xrplpulse.com/",
+    "note": "XRPL Pulse is the no-BS hub that voids the noise and spotlights real builders shipping on the XRP Ledger.",
+    "status": "claimed"
   },
   {
     "tile": "S407",
