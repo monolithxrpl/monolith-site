@@ -8417,5 +8417,22 @@
     "price_xrp": 0,
     "wallet": "rK99DieyHHxtQpnMXDt1N3RF14UANH7sfC",
     "link": "/edit/?edit=S407"
+  },
+  {
+    "tile": "N33E22",
+    "gx": 22,
+    "gy": 33,
+    "tag": "N33E22",
+    "img": "https://monolithxrpl.com/assets/RESERVED.webp",
+    "handle": "",
+    "ts": "2026-05-12 16:14:55",
+    "claimable": false,
+    "locked": true,
+    "tier": "premium",
+    "price_xrp": 0,
+    "wallet": "rpgbkvKZjroqUcCU9MPC7Rx1UNnqAKz5UH",
+    "link": "",
+    "note": "",
+    "status": "claimed"
   }
 ]
