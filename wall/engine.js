@@ -1374,6 +1374,26 @@ function onWheel(e){
 
     setTimeout(() => { handleDirectTileLink(); }, 250);
 
+    async function loadBackendClaimedTiles(){
+      try{
+        const res = await fetch("/api/tiles/claimed", { cache: "no-store" });
+        if(!res.ok) return;
+
+        const data = await res.json().catch(() => ({}));
+        if(!data || !data.ok || !Array.isArray(data.tiles)) return;
+
+        for(const t of data.tiles){
+          if(!t || !t.coordinate) continue;
+          const gx = Number(t.gx);
+          const gy = Number(t.gy);
+          await refreshPanelFromBackend(t.coordinate, gx, gy);
+        }
+
+        state.lastKey = "";
+        try{ renderPool(); }catch(_){}
+      }catch(_){}
+    }
+
     async function loadFeed(){
       try{
         const res = await fetch(FEED_URL, { cache: "no-store" });
@@ -1598,6 +1618,7 @@ el.close.addEventListener("click", function(e){
     });
 
     loadFeed().then(() => {
+      setTimeout(() => { loadBackendClaimedTiles(); }, 900);
     centerOriginOnce();
 
     // Entry default view only. Navigation View remains original.
@@ -1606,5 +1627,6 @@ el.close.addEventListener("click", function(e){
     draw();
   });
     setInterval(loadFeed, 15000);
+    setInterval(() => { loadBackendClaimedTiles(); }, 30000);
   })();
 }
