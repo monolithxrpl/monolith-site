@@ -1627,6 +1627,6 @@ el.close.addEventListener("click", function(e){
     draw();
   });
     setInterval(loadFeed, 15000);
-    setInterval(() => { loadBackendClaimedTiles(); }, 30000);
+    setInterval(() => { loadBackendClaimedTiles(); }, 10000);
   })();
 }
