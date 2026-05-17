@@ -13,7 +13,8 @@
     "claimable": false,
     "locked": true,
     "tier": "origin",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "N1W1",
@@ -45,7 +46,8 @@
     "claimable": false,
     "locked": true,
     "tier": "standard",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "N1E1",
@@ -61,7 +63,8 @@
     "locked": true,
     "tier": "standard",
     "price_xrp": 0,
-    "xHandle": "@NEB_XRPL"
+    "xHandle": "@NEB_XRPL",
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "W-1",
@@ -77,7 +80,8 @@
     "claimable": false,
     "locked": true,
     "tier": "standard",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "E-1",
@@ -93,7 +97,8 @@
     "claimable": false,
     "locked": true,
     "tier": "standard",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "S1W1",
@@ -102,14 +107,16 @@
     "tag": "HOMEEZ",
     "link": "https://houseofcauliman.com/homeez/",
     "img": "/assets/homeez_logo.webp",
-    "handle": "@mrcauliman",
+    "handle": "@HOMEEZ_XRPL",
     "ts": "2026-05-06",
     "note": "HOMEEZ is the Capsule Toy Universe. Collectible character culture built inside the House of Cauliman ecosystem.",
     "claimable": false,
     "locked": true,
     "tier": "standard",
     "price_xrp": 0,
-    "wallet": "rfgFM8z2abu2uahXFaRre8aWw9PEv48QbS"
+    "wallet": "rfgFM8z2abu2uahXFaRre8aWw9PEv48QbS",
+    "displayDate": "04.01.2023 at 12:00:00",
+    "xHandle": "@HOMEEZ_XRPL"
   },
   {
     "tile": "S-1",
@@ -125,7 +132,8 @@
     "claimable": false,
     "locked": true,
     "tier": "standard",
-    "price_xrp": 0
+    "price_xrp": 0,
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "S1E1",
@@ -134,14 +142,16 @@
     "tag": "NFTITANS",
     "link": "https://houseofcauliman.com/nftitans/",
     "img": "/assets/NFTITANS_logo.webp",
-    "handle": "@mrcauliman",
+    "handle": "@NFTITANS_XRPL",
     "ts": "2026-05-06",
     "note": "NFTITANS is a House collection built around titan-scale characters, locked visual identity, and XRPL-native collectibles.",
     "claimable": false,
     "locked": true,
     "tier": "standard",
     "price_xrp": 0,
-    "wallet": "rfgFM8z2abu2uahXFaRre8aWw9PEv48QbS"
+    "wallet": "rfgFM8z2abu2uahXFaRre8aWw9PEv48QbS",
+    "displayDate": "04.01.2023 at 12:00:00",
+    "xHandle": "@NFTITANS_XRPL"
   },
   {
     "tile": "N2W1",
@@ -157,7 +167,8 @@
     "locked": true,
     "tier": "standard",
     "price_xrp": 0,
-    "wallet": "rNWj7ckrULcRX5Ny6jv3greTvfBZxtYaBF"
+    "wallet": "rNWj7ckrULcRX5Ny6jv3greTvfBZxtYaBF",
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "N-2",
@@ -328,7 +339,8 @@
     "tier": "house",
     "price_xrp": 0,
     "wallet": "rfgFM8z2abu2uahXFaRre8aWw9PEv48QbS",
-    "link": "https://houseofcauliman.com/xrpl/"
+    "link": "https://houseofcauliman.com/xrpl/",
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "S2W2",
@@ -344,7 +356,8 @@
     "tier": "house",
     "price_xrp": 0,
     "wallet": "rfgFM8z2abu2uahXFaRre8aWw9PEv48QbS",
-    "link": "https://houseofcauliman.com/ledgerdrop_xrpl/"
+    "link": "https://houseofcauliman.com/ledgerdrop_xrpl/",
+    "displayDate": "04.01.2023 at 12:00:00"
   },
   {
     "tile": "S2E2",
