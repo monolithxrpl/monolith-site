@@ -519,7 +519,7 @@ function coordLabelFromG(gx, gy){
       const note = meta.note || apiTile.note || "";
       const link = apiTile.website_url || apiTile.websiteUrl || "";
       const img = apiTile.image_url || apiTile.imageUrl || "";
-      const when = apiTile.updated_at || apiTile.claimed_at || apiTile.created_at || "None";
+      const when = meta.displayDate || apiTile.displayDate || apiTile.updated_at || apiTile.claimed_at || apiTile.created_at || "None";
 
       el.vTile.textContent = coord;
       el.vTag.textContent = tag || "TAKEN";
@@ -614,7 +614,7 @@ function coordLabelFromG(gx, gy){
           gx: Number.isFinite(Number(gx)) ? Number(gx) : null,
           gy: Number.isFinite(Number(gy)) ? Number(gy) : null,
           tag: data.tile.owner_tag || data.tile.ownerTag || null,
-          ts: data.tile.updated_at || data.tile.claimed_at || data.tile.created_at || null,
+          ts: meta.displayDate || data.tile.displayDate || data.tile.updated_at || data.tile.claimed_at || data.tile.created_at || null,
           img: data.tile.image_url || data.tile.imageUrl || null,
           wallet: data.tile.owner_wallet || data.tile.ownerWallet || null,
           wallet_public: false,
@@ -687,7 +687,7 @@ const isCreator  = hasCreator && (
 
         if(isMonolith){
           el.vTag.textContent = MONOLITH_TAG;
-          el.vTs.textContent = "2026-05-11 06:50:02";
+          el.vTs.textContent = mark.ts || "2026-05-11 06:50:02";
           setHandleUI("@monolith_xrpl");
           setLinkUI("https://monolithxrpl.com/");
           el.vNote.textContent = "Leave your mark. Live forever.";
@@ -700,7 +700,7 @@ const isCreator  = hasCreator && (
 
         if(isMonolith){
           el.vTag.textContent = MONOLITH_TAG;
-          el.vTs.textContent = "2026-05-11 06:50:02";
+          el.vTs.textContent = "2019-07-12 at 10:56:00";
           setWalletUI(MONOLITH_WALLET, false, true);
           setHandleUI("@monolith_xrpl");
           setLinkUI("https://monolithxrpl.com/");
@@ -1461,7 +1461,7 @@ function onWheel(e){
               gx: hasCoords ? gx : null,
               gy: hasCoords ? gy : null,
               tag: it.tag || null,
-              ts: it.ts || null,
+              ts: it.displayDate || (it.metadata && it.metadata.displayDate) || it.ts || null,
               img: it.img || null,
               wallet: it.wallet || null,
 
