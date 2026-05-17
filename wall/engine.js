@@ -48,6 +48,9 @@ let CREATOR_LOGO = "";
 
       vLinkWrap: document.getElementById("vLinkWrap"),
       vLink: document.getElementById("vLink"),
+      vTileUrlWrap: document.getElementById("vTileUrlWrap"),
+      vTileUrl: document.getElementById("vTileUrl"),
+      copyTileUrl: document.getElementById("copyTileUrl"),
       vMedia: document.getElementById("vMedia"),
 
       vNote: document.getElementById("vNote"),
@@ -287,6 +290,9 @@ function coordLabelFromG(gx, gy){
       return `<div class="mediaWrap"><img src="${src}" alt="${alt || ""}" /></div>`;
     }
 
+    function tileUrlFromPanel(tile,gx,gy){const c=backendCoordFromPanel(tile,gx,gy);return c?"https://monolithxrpl.com/tile/"+encodeURIComponent(c):"";}
+    function setTileUrlUI(url){if(!el.vTileUrl)return;el.vTileUrl.textContent=url||"None";if(el.copyTileUrl)el.copyTileUrl.style.display=url?"inline-flex":"none";}
+    async function copyTileUrl(){const url=el.vTileUrl?el.vTileUrl.textContent:"";if(!url||url==="None")return;try{await navigator.clipboard.writeText(url);toastShow("tile url copied","good");}catch(_){toastShow("copy fail","bad");}}
     function closePanel(){ panel.classList.remove("open"); }
 
     function maskWallet(addr){
@@ -718,6 +724,7 @@ const isCreator  = hasCreator && (
       el.ptitle.textContent = "Tile " + finalPanelLabel;
       el.vTile.textContent = finalPanelLabel;
       if(el.q) el.q.value = finalPanelLabel;
+      setTileUrlUI(tileUrlFromPanel(tile, gx, gy));
       el.psub.textContent = "Tap a tile to inspect. Drag to move. Wheel or pinch to zoom.";
 
         // panel media
@@ -1496,6 +1503,7 @@ function onWheel(e){
     }
 
     el.copyWallet.addEventListener("click", copyWallet, { passive:true });
+    if(el.copyTileUrl) el.copyTileUrl.addEventListener("click", copyTileUrl, { passive:true });
     el.revealWallet.addEventListener("click", revealWallet, { passive:true });
     el.hideWallet.addEventListener("click", hideWallet, { passive:true });
 
