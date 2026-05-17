@@ -629,7 +629,6 @@ function coordLabelFromG(gx, gy){
         for(const key of keys){
           state.taken.add(key);
           state.backendMarksByTile.set(key, mark);
-          state.marksByTile.set(key, mark);
         }
 
         updateTakenHud();
@@ -653,7 +652,9 @@ function coordLabelFromG(gx, gy){
     }
 
     function openPanel(tile, gx, gy){
-      const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
+      const feedMark = state.marksByTile.get(tile) || null;
+      const backMark = state.backendMarksByTile.get(tile) || null;
+      const mark = (backMark && feedMark) ? Object.assign({}, feedMark, backMark, {note: backMark.note || feedMark.note, link: backMark.link || feedMark.link, handle: backMark.handle || feedMark.handle, img: backMark.img || feedMark.img}) : (backMark || feedMark || null);
       const taken = state.taken.has(tile);
 
       const markTag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
