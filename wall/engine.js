@@ -110,6 +110,19 @@ zoom: 0.65,
 
     function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
 
+    function updateTakenHud(){
+      if(!el.kTaken) return;
+      const all = new Set();
+
+      try{
+        for(const key of state.taken || []) if(key) all.add(key);
+        for(const key of state.marksByTile.keys()) if(key) all.add(key);
+        for(const key of state.backendMarksByTile.keys()) if(key) all.add(key);
+      }catch(_){}
+
+      el.kTaken.textContent = String(all.size);
+    }
+
     function toastShow(msg, kind){
       toast.className = "toast " + (kind || "");
       toast.textContent = msg;
@@ -612,6 +625,8 @@ function coordLabelFromG(gx, gy){
           state.backendMarksByTile.set(key, mark);
           state.marksByTile.set(key, mark);
         }
+
+        updateTakenHud();
 
         for(const cell of state.pool){
           const cellKey = String(cell && cell.getAttribute("data-tile") || "").trim().toUpperCase();
@@ -1467,7 +1482,7 @@ function onWheel(e){
         state.taken = taken;
         state.marksByTile = marks;
 
-        el.kTaken.textContent = String(state.taken.size);
+        updateTakenHud();
 
         state.lastKey = "";
       }catch(_){
