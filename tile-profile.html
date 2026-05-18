@@ -194,7 +194,7 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
         <div class="card"><div class="k">Wallet Proof</div><div class="v" id="wallet">None</div></div>
         <div class="card"><div class="k">Deed Status</div><div class="v" id="deed">Checking</div></div>
         <div class="card"><div class="k">Date</div><div class="v" id="date">None</div></div>
-        <div class="card"><div class="k">Tile URL</div><div class="v" id="tileUrl">None</div></div>
+        <div class="card"><div class="k">Page URL</div><div class="v" id="tileUrl">None</div></div>
         <div class="card"><div class="k">Tier</div><div class="v" id="tier">None</div></div>
         <div class="card"><div class="k">Status</div><div class="v" id="status">None</div></div>
         <div class="card"><div class="k">Claim TX</div><div class="v" id="claimTx">None</div></div>
@@ -205,7 +205,7 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
         <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
         <a class="btn" id="wallLink" href="#">View on Wall</a>
         <a class="btn" id="editLink" href="#">Edit Tile</a>
-        <button class="btn" id="copyBtn" type="button">Copy Tile URL</button>
+        <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
       </div>
 
       <div class="socialGrid">
@@ -258,7 +258,7 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
   $("tileUrl").textContent=tileUrl;
   $("wallLink").href="/monolith.html?tile="+encodeURIComponent(coord);
   $("editLink").href="/edit/?edit="+encodeURIComponent(coord);
-  $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Tile URL",1200)};
+  $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Page URL",1200)};
 
   function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
   function maskWallet(w){w=String(w||"");return w.length>12?w.slice(0,6)+"..."+w.slice(-6):w||"None"}
