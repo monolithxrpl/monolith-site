@@ -69,7 +69,9 @@ h1{margin:0;font-size:36px}
 <script>
 (function(){
   const qs=new URLSearchParams(location.search);
-  const coord=(qs.get("tile")||"ORIGIN").trim().toUpperCase();
+  const pathParts=location.pathname.split("/").filter(Boolean);
+  const pathTile=(pathParts[0]==="tile"&&pathParts[1])?pathParts[1]:"";
+  const coord=(qs.get("tile")||pathTile||"ORIGIN").trim().toUpperCase();
   const tileUrl=location.origin+"/tile/"+encodeURIComponent(coord);
   const $=id=>document.getElementById(id);
 
