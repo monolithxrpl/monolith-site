@@ -78,7 +78,7 @@ body{
 .body{
   padding:14px;
   display:grid;
-  grid-template-columns:320px 1fr;
+  grid-template-columns:300px minmax(0,1fr) 220px;
   gap:14px;
 }
 .profile{
@@ -102,6 +102,7 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
 .muted{color:var(--muted)}
 .bio{
   grid-column:2;
+  grid-row:1;
   border:1px solid var(--line);
   background:var(--card);
   border-radius:8px;
@@ -116,8 +117,8 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
   gap:10px;
   margin-top:0;
 }
-.grid{grid-column:2}
-.socialGrid{grid-column:2}
+.grid{grid-column:1;grid-template-columns:1fr;grid-row:3}
+.socialGrid{grid-column:2 / 4;grid-row:2;align-self:start}.socialGrid .box{margin-top:0}
 .card,.box{
   border:1px solid var(--line);
   background:var(--card);
@@ -146,8 +147,17 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
   margin-top:0;
 }
 .galleryBox{
-  grid-column:1 / -1;
+  grid-column:2 / 4;
+  grid-row:3;
+  margin-top:0;
 }
+.musicRail{grid-column:1;grid-row:2;margin-top:0}
+.ownerBox{
+  grid-column:3;
+  grid-row:1;
+  margin-top:0;
+  font-size:13px;
+}.ownerBox .actions{margin-top:10px}.ownerBox .btn{padding:7px 9px;font-size:13px}
 .gallery{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
@@ -164,7 +174,15 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
 }
 @media(max-width:820px){
   .body{grid-template-columns:1fr}
-  .bio,.grid,.socialGrid,.galleryBox,.actions{grid-column:auto}
+  .bio,.grid,.socialGrid,.galleryBox,.actions,.ownerBox,.musicRail{grid-column:auto;grid-row:auto}
+  .profile{order:1}
+  .musicRail{order:2}
+  .bio{order:3}
+  .socialGrid{order:4}
+  .galleryBox{order:5}
+  .actions{order:6}
+  .ownerBox{order:100}
+  .grid{order:99}
   .avatar{height:220px}
 }
 </style>
@@ -187,6 +205,12 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
           <div class="muted" id="handle"></div>
         </div>
       </div>
+
+      <section class="box musicRail">
+        <div class="k">Music</div>
+        <div class="write" id="musicBox">No track added yet.</div>
+        <audio id="musicPlayer" controls style="display:none;width:100%;margin-top:10px"></audio>
+      </section>
 
       <div class="bio" id="bio">Loading tile profile...</div>
 
@@ -223,12 +247,6 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
           <div class="k">Interests</div>
           <div class="write" id="interestsBox">No interests listed yet.</div>
         </section>
-
-        <section class="box">
-          <div class="k">Music</div>
-          <div class="write" id="musicBox">No track added yet.</div>
-          <audio id="musicPlayer" controls style="display:none;width:100%;margin-top:10px"></audio>
-        </section>
       </div>
 
       <section class="box galleryBox">
@@ -236,7 +254,7 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
         <div class="gallery" id="gallery">No gallery images yet.</div>
       </section>
 
-      <section class="box">
+      <section class="box ownerBox">
         <div class="k">Owner Controls</div>
         <div class="write">Profile edits, wallpaper uploads, profile image uploads, gallery uploads, deletions, and music edits will live behind wallet verification.</div>
         <div class="actions"><a class="btn" id="ownerEditLink" href="#">Edit Profile & Media</a></div>
