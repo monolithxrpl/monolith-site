@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MONOLITH Tile Profile</title>
+<style>
+:root{--bg:#050805;--panel:#0b130d;--card:#101b13;--line:#24442c;--text:#eaffef;--muted:#9fb5a5;--green:#41ff7a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#102416,#050805 52%,#020402);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:22px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.brand{font-weight:900;letter-spacing:.08em;color:var(--green)}
+.btn{border:1px solid var(--line);background:#0d1a11;color:var(--text);border-radius:999px;padding:10px 14px;text-decoration:none;display:inline-flex;cursor:pointer}
+.hero{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--panel);box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.banner{height:220px;background:linear-gradient(135deg,#102416,#173a20 45%,#081008);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:900;letter-spacing:.12em}
+.body{padding:22px}
+.profile{display:grid;grid-template-columns:148px 1fr;gap:18px;align-items:end;margin-top:-86px}
+.avatar{width:148px;height:148px;border-radius:24px;border:1px solid var(--line);background:#071009;object-fit:contain;padding:8px}
+h1{margin:0;font-size:36px}
+.muted{color:var(--muted)}
+.bio{font-size:17px;line-height:1.55;margin-top:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px;min-height:76px}
+.k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.v{word-break:break-word}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+@media(max-width:650px){.profile{grid-template-columns:1fr;margin-top:-70px}.avatar{width:132px;height:132px}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <div class="brand">MONOLITH</div>
+    <a class="btn" href="/monolith.html">View Wall</a>
+  </div>
+
+  <section class="hero">
+    <div class="banner">TILE PROFILE</div>
+    <div class="body">
+      <div class="profile">
+        <img class="avatar" id="avatar" alt="">
+        <div>
+          <div class="muted" id="coord">Loading...</div>
+          <h1 id="title">Tile</h1>
+          <div class="muted" id="handle"></div>
+        </div>
+      </div>
+
+      <div class="bio" id="bio">Loading tile profile...</div>
+
+      <div class="grid">
+        <div class="card"><div class="k">Wallet Proof</div><div class="v" id="wallet">None</div></div>
+        <div class="card"><div class="k">Deed Status</div><div class="v" id="deed">Checking</div></div>
+        <div class="card"><div class="k">Date</div><div class="v" id="date">None</div></div>
+        <div class="card"><div class="k">Tile URL</div><div class="v" id="tileUrl">None</div></div>
+      </div>
+
+      <div class="actions">
+        <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
+        <a class="btn" id="wallLink" href="#">View on Wall</a>
+        <a class="btn" id="editLink" href="#">Edit Tile</a>
+        <button class="btn" id="copyBtn" type="button">Copy Tile URL</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  const qs=new URLSearchParams(location.search);
+  const coord=(qs.get("tile")||"ORIGIN").trim().toUpperCase();
+  const tileUrl=location.origin+"/tile/"+encodeURIComponent(coord);
+  const $=id=>document.getElementById(id);
+
+  $("coord").textContent=coord;
+  $("tileUrl").textContent=tileUrl;
+  $("wallLink").href="/monolith.html?tile="+encodeURIComponent(coord);
+  $("editLink").href="/edit/?edit="+encodeURIComponent(coord);
+  $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Tile URL",1200)};
+
+  function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
+  function coordFromFeed(x){
+    const gx=Number(x.gx)||0,gy=Number(x.gy)||0;
+    if(gx===0&&gy===0)return"ORIGIN";
+    const y=gy>0?"N"+gy:gy<0?"S"+Math.abs(gy):"";
+    const z=gx>0?"E"+gx:gx<0?"W"+Math.abs(gx):"";
+    return y+z;
+  }
+
+  Promise.all([
+    fetch("/api/tile/"+encodeURIComponent(coord),{cache:"no-store"}).then(r=>r.json()),
+    fetch("/assets/feed.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[])
+  ]).then(([d,feed])=>{
+    if(!d||!d.ok||!d.tile)throw new Error("not found");
+    const t=d.tile,m=metaOf(t);
+    const f=Array.isArray(feed)?feed.find(x=>x&&(String(x.tile).toUpperCase()===coord||coordFromFeed(x)===coord)):null;
+
+    const tag=t.owner_tag||f?.tag||coord;
+    const img=t.image_url||f?.img||"/assets/RESERVED.webp";
+    const handle=t.handle||t.xHandle||m.handle||m.xHandle||f?.handle||f?.xHandle||"";
+    const note=m.note||t.note||f?.note||"No bio has been added yet.";
+    const link=t.website_url||m.feedLink||m.link||f?.link||"";
+    const date=m.displayDate||t.displayDate||f?.displayDate||t.claimed_at||t.created_at||"None";
+
+    document.title=tag+" • MONOLITH";
+    $("title").textContent=tag;
+    $("avatar").src=img;
+    $("handle").textContent=handle;
+    $("bio").textContent=note;
+    $("wallet").textContent=t.owner_wallet||"None";
+    $("date").textContent=date;
+    $("deed").textContent=t.deed_nft_id?"Coordinate Deed linked":"No deed linked";
+    if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"}
+  }).catch(()=>{
+    $("title").textContent=coord;
+    $("avatar").src="/assets/RESERVED.webp";
+    $("bio").textContent="This tile is open or not yet published.";
+    $("wallet").textContent="None";
+    $("deed").textContent="No deed";
+  });
+})();
+</script>
+</body>
+</html>
