@@ -10,7 +10,7 @@
 body{margin:0;background:radial-gradient(circle at top,#102416,#050805 52%,#020402);color:var(--text);font-family:Arial,Helvetica,sans-serif}
 .wrap{max-width:1000px;margin:0 auto;padding:22px}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.brand{font-weight:900;letter-spacing:.08em;color:var(--green)}
+.brand{font-weight:900;letter-spacing:.08em;color:var(--green);display:flex;align-items:center;gap:10px}.brand img{width:30px;height:30px;object-fit:contain}
 .btn{border:1px solid var(--line);background:#0d1a11;color:var(--text);border-radius:999px;padding:10px 14px;text-decoration:none;display:inline-flex;cursor:pointer}
 .hero{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--panel);box-shadow:0 24px 70px rgba(0,0,0,.35)}
 .banner{height:220px;background:linear-gradient(135deg,#102416,#173a20 45%,#081008);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:900;letter-spacing:.12em}
@@ -31,7 +31,7 @@ h1{margin:0;font-size:36px}
 <body>
 <main class="wrap">
   <div class="top">
-    <div class="brand">MONOLITH</div>
+    <div class="brand"><img src="/assets/monolith_icon.webp" alt="">MONOLITH</div>
     <a class="btn" href="/monolith.html">View Wall</a>
   </div>
 
@@ -86,6 +86,7 @@ h1{margin:0;font-size:36px}
   $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Tile URL",1200)};
 
   function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
+  function maskWallet(w){w=String(w||"");return w.length>12?w.slice(0,6)+"..."+w.slice(-6):w||"None"}
   function coordFromFeed(x){
     const gx=Number(x.gx)||0,gy=Number(x.gy)||0;
     if(gx===0&&gy===0)return"ORIGIN";
@@ -114,7 +115,7 @@ h1{margin:0;font-size:36px}
     $("avatar").src=img;
     $("handle").textContent=handle;
     $("bio").textContent=note;
-    $("wallet").textContent=t.owner_wallet||"None";
+    $("wallet").textContent=maskWallet(t.owner_wallet);
     $("date").textContent=date;
     $("deed").textContent=t.deed_nft_id?"Coordinate Deed linked":"No deed linked";
     $("tier").textContent=t.tier||"None";
