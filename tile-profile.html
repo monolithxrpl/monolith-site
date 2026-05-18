@@ -24,7 +24,7 @@ h1{margin:0;font-size:36px}
 .card{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px;min-height:76px}
 .k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
 .v{word-break:break-word}
-.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.socialGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:20px}.box{border:1px solid var(--line);background:rgba(16,27,19,.92);border-radius:18px;padding:14px;margin-top:12px}.write{color:var(--text);line-height:1.55;white-space:pre-wrap}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:10px}.gallery img{width:100%;aspect-ratio:1/1;border-radius:14px;border:1px solid var(--line);object-fit:cover;background:#071009}.galleryBox{margin-top:20px}
 @media(max-width:650px){.profile{grid-template-columns:1fr;margin-top:-70px}.avatar{width:132px;height:132px}h1{font-size:30px}}
 </style>
 </head>
@@ -66,6 +66,40 @@ h1{margin:0;font-size:36px}
         <a class="btn" id="editLink" href="#">Edit Tile</a>
         <button class="btn" id="copyBtn" type="button">Copy Tile URL</button>
       </div>
+
+      <div class="socialGrid">
+        <section class="box">
+          <div class="k">About</div>
+          <div class="write" id="aboutBox">No about section yet.</div>
+        </section>
+
+        <section class="box">
+          <div class="k">Status</div>
+          <div class="write" id="statusBox">No status yet.</div>
+        </section>
+
+        <section class="box">
+          <div class="k">Interests</div>
+          <div class="write" id="interestsBox">No interests listed yet.</div>
+        </section>
+
+        <section class="box">
+          <div class="k">Music</div>
+          <div class="write" id="musicBox">No track added yet.</div>
+          <audio id="musicPlayer" controls style="display:none;width:100%;margin-top:10px"></audio>
+        </section>
+      </div>
+
+      <section class="box galleryBox">
+        <div class="k">Image Gallery</div>
+        <div class="gallery" id="gallery">No gallery images yet.</div>
+      </section>
+
+      <section class="box">
+        <div class="k">Owner Controls</div>
+        <div class="write">Profile edits, wallpaper uploads, profile image uploads, gallery uploads, deletions, and music edits will live behind wallet verification.</div>
+        <div class="actions"><a class="btn" id="ownerEditLink" href="#">Edit Profile & Media</a></div>
+      </section>
     </div>
   </section>
 </main>
@@ -109,6 +143,13 @@ h1{margin:0;font-size:36px}
     const note=m.note||t.note||f?.note||"No bio has been added yet.";
     const link=t.website_url||m.feedLink||m.link||f?.link||"";
     const date=m.displayDate||t.displayDate||f?.displayDate||t.claimed_at||t.created_at||"None";
+    const banner=m.bannerUrl||m.wallpaperUrl||f?.bannerUrl||f?.wallpaperUrl||"";
+    const about=m.about||m.profileAbout||"";
+    const statusText=m.statusText||m.status||"";
+    const interests=m.interests||"";
+    const musicUrl=m.musicUrl||"";
+    const musicTitle=m.musicTitle||"";
+    const gallery=Array.isArray(m.gallery)?m.gallery:[];
 
     document.title=tag+" • MONOLITH";
     $("title").textContent=tag;
@@ -123,6 +164,13 @@ h1{margin:0;font-size:36px}
     $("claimTx").textContent=t.claim_tx_hash||"None";
     $("deedId").textContent=t.deed_nft_id||"None";
     if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"}
+    if(banner){document.querySelector(".banner").style.backgroundImage="linear-gradient(rgba(5,8,5,.35),rgba(5,8,5,.65)),url('"+banner+"')";document.querySelector(".banner").style.backgroundSize="cover";document.querySelector(".banner").style.backgroundPosition="center"}
+    $("aboutBox").textContent=about||note||"No about section yet.";
+    $("statusBox").textContent=statusText||"No status yet.";
+    $("interestsBox").textContent=interests||"No interests listed yet.";
+    $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
+    if(musicUrl){$("musicBox").textContent=musicTitle||"Tile track";$("musicPlayer").src=musicUrl;$("musicPlayer").style.display="block"}
+    if(gallery.length){$("gallery").innerHTML=gallery.map(src=>'<img src="'+String(src).replace(/"/g,"&quot;")+'" alt="">').join("")}
   }).catch(()=>{
     $("title").textContent=coord;
     $("avatar").src="/assets/RESERVED.webp";
