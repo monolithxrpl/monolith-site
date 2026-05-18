@@ -54,6 +54,10 @@ h1{margin:0;font-size:36px}
         <div class="card"><div class="k">Deed Status</div><div class="v" id="deed">Checking</div></div>
         <div class="card"><div class="k">Date</div><div class="v" id="date">None</div></div>
         <div class="card"><div class="k">Tile URL</div><div class="v" id="tileUrl">None</div></div>
+        <div class="card"><div class="k">Tier</div><div class="v" id="tier">None</div></div>
+        <div class="card"><div class="k">Status</div><div class="v" id="status">None</div></div>
+        <div class="card"><div class="k">Claim TX</div><div class="v" id="claimTx">None</div></div>
+        <div class="card"><div class="k">Deed NFT</div><div class="v" id="deedId">None</div></div>
       </div>
 
       <div class="actions">
@@ -113,6 +117,10 @@ h1{margin:0;font-size:36px}
     $("wallet").textContent=t.owner_wallet||"None";
     $("date").textContent=date;
     $("deed").textContent=t.deed_nft_id?"Coordinate Deed linked":"No deed linked";
+    $("tier").textContent=t.tier||"None";
+    $("status").textContent=t.status||"None";
+    $("claimTx").textContent=t.claim_tx_hash||"None";
+    $("deedId").textContent=t.deed_nft_id||"None";
     if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"}
   }).catch(()=>{
     $("title").textContent=coord;
