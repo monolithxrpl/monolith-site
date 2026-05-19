@@ -1419,11 +1419,58 @@ function onWheel(e){
         const data = await res.json().catch(() => ({}));
         if(!data || !data.ok || !Array.isArray(data.tiles)) return;
 
+        const feedKey = (v) => String(v || "").trim().toUpperCase();
+
+        const parseMeta = (t) => {
+          if(t && t.metadata && typeof t.metadata === "object") return t.metadata;
+          try{
+            if(t && t.metadata_json) return JSON.parse(t.metadata_json);
+          }catch(_){}
+          return {};
+        };
+
+        const addBackendMark = (key, mark) => {
+          const k = feedKey(key);
+          if(!k) return;
+          state.taken.add(k);
+          state.backendMarksByTile.set(k, mark);
+        };
+
         for(const t of data.tiles){
           if(!t || !t.coordinate) continue;
+
+          const meta = parseMeta(t);
           const gx = Number(t.gx);
           const gy = Number(t.gy);
-          await refreshPanelFromBackend(t.coordinate, gx, gy);
+          const hasCoords = Number.isFinite(gx) && Number.isFinite(gy);
+
+          const backendTile = feedKey(t.coordinate);
+          const displayTile = hasCoords ? tileIdFromCoords(gx, gy) : backendTile;
+          const labelTile = hasCoords ? coordLabelFromG(gx, gy) : backendTile;
+
+          const mark = {
+            id: t.id || null,
+            tile: displayTile || backendTile,
+            gx: hasCoords ? gx : null,
+            gy: hasCoords ? gy : null,
+            tag: t.owner_tag || t.ownerTag || meta.ownerTag || backendTile,
+            ts: meta.displayDate || t.claimed_at || t.created_at || null,
+            img: t.image_url || t.imageUrl || meta.imageUrl || meta.img || null,
+            wallet: t.owner_wallet || t.ownerWallet || null,
+            wallet_public: true,
+            wallet_visibility: "public",
+            visibility: "public",
+            public_wallet: t.owner_wallet || t.ownerWallet || null,
+            handle: t.handle || t.xHandle || t.x_handle || meta.handle || meta.xHandle || meta.feedHandle || null,
+            link: t.website_url || t.websiteUrl || meta.feedLink || meta.link || null,
+            note: t.note || meta.note || meta.about || null,
+            metadata: meta
+          };
+
+          addBackendMark(backendTile, mark);
+          addBackendMark(displayTile, mark);
+          addBackendMark(labelTile, mark);
+          if(hasCoords) addBackendMark(backendCoordFromPanel(displayTile, gx, gy), mark);
         }
 
         state.lastKey = "";
