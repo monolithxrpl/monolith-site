@@ -256,6 +256,187 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/monolith/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="MONOLITH" />
   <meta name="application-name" content="MONOLITH" />
+
+<!-- MONOLITH_ENTRANCE_BLUE_THEME_20260519_START -->
+<style id="monolith-entrance-blue-theme">
+  :root{
+    --green:#49bfff!important;
+    --accent:#49bfff!important;
+    --accent2:#7ad3ff!important;
+    --line:#1f6fa8!important;
+    --text:#eaf7ff!important;
+    --muted:#9fc5dd!important;
+  }
+
+  html,
+  body{
+    background:
+      radial-gradient(circle at top left, rgba(73,191,255,.16), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(10,55,94,.22), transparent 36%),
+      linear-gradient(180deg, #030914 0%, #06111f 45%, #030914 100%)!important;
+    color:#eaf7ff!important;
+  }
+
+  .hero,
+  .panel,
+  .card,
+  .box,
+  .section,
+  header,
+  footer{
+    border-color:rgba(73,191,255,.36)!important;
+  }
+
+  .hero,
+  .panel,
+  .card,
+  .box,
+  .section{
+    background:
+      linear-gradient(180deg, rgba(8,24,39,.94), rgba(4,13,25,.96))!important;
+    box-shadow:
+      0 18px 54px rgba(0,0,0,.42),
+      0 0 24px rgba(73,191,255,.08)!important;
+  }
+
+  h1,
+  h2,
+  h3,
+  .brand,
+  .title,
+  .k,
+  .label,
+  strong{
+    color:#eaf7ff!important;
+  }
+
+  p,
+  li,
+  .muted,
+  .sub,
+  .hint,
+  small{
+    color:#9fc5dd!important;
+  }
+
+  a{
+    color:#7ad3ff!important;
+  }
+
+  .dot,
+  .status-dot{
+    background:#49bfff!important;
+    box-shadow:
+      0 0 0 3px rgba(73,191,255,.20),
+      0 0 14px rgba(73,191,255,.35)!important;
+  }
+
+  .pill,
+  .chip,
+  .badge,
+  .tag,
+  .status,
+  .hud{
+    background:rgba(7,24,39,.92)!important;
+    border-color:rgba(73,191,255,.42)!important;
+    color:#7ad3ff!important;
+  }
+
+  button,
+  .btn,
+  .button,
+  .cta,
+  input,
+  select,
+  textarea{
+    background:linear-gradient(180deg, #0b253d, #061421)!important;
+    border-color:rgba(73,191,255,.48)!important;
+    color:#eaf7ff!important;
+    box-shadow:
+      0 10px 24px rgba(0,0,0,.26),
+      0 0 16px rgba(73,191,255,.10)!important;
+  }
+
+  button:hover,
+  .btn:hover,
+  .button:hover,
+  .cta:hover{
+    border-color:rgba(122,211,255,.82)!important;
+    box-shadow:
+      0 0 22px rgba(73,191,255,.24),
+      0 12px 28px rgba(0,0,0,.32)!important;
+  }
+
+  hr,
+  .line,
+  .divider{
+    border-color:rgba(73,191,255,.34)!important;
+  }
+
+  ::selection{
+    background:rgba(73,191,255,.35)!important;
+    color:#fff!important;
+  }
+</style>
+<!-- MONOLITH_ENTRANCE_BLUE_THEME_20260519_END -->
+
+
+<!-- MONOLITH_CLAIMS_LIVE_BLUE_GLOW_20260519_START -->
+<style id="monolith-claims-live-blue-glow">
+  @keyframes monolithClaimsPillPulse {
+    0% {
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.10),
+        0 0 12px rgba(73,191,255,.28),
+        0 0 26px rgba(36,112,255,.14);
+    }
+    50% {
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.18),
+        0 0 24px rgba(73,191,255,.58),
+        0 0 48px rgba(36,112,255,.30);
+    }
+    100% {
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.10),
+        0 0 12px rgba(73,191,255,.28),
+        0 0 26px rgba(36,112,255,.14);
+    }
+  }
+
+  .status-hud {
+    background:
+      radial-gradient(circle at top left, rgba(122,211,255,.14), transparent 38%),
+      linear-gradient(135deg, rgba(5,21,47,.94), rgba(6,25,48,.96) 52%, rgba(2,10,24,.96)) !important;
+    border:1px solid rgba(122,211,255,.40) !important;
+    box-shadow:none !important;
+    animation:none !important;
+  }
+
+  .status-pill-live {
+    background:
+      linear-gradient(180deg, rgba(122,211,255,.52), rgba(20,83,175,.98) 48%, rgba(6,28,70,.98)) !important;
+    border:1px solid rgba(190,235,255,.88) !important;
+    color:#ffffff !important;
+    letter-spacing:.12em !important;
+    text-shadow:
+      0 0 10px rgba(255,255,255,.30),
+      0 0 18px rgba(73,191,255,.62) !important;
+    animation:monolithClaimsPillPulse 2.8s ease-in-out infinite;
+  }
+
+  .status-copy {
+    color:#d4ecff !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .status-pill-live {
+      animation:none;
+    }
+  }
+</style>
+<!-- MONOLITH_CLAIMS_LIVE_BLUE_GLOW_20260519_END -->
+
 </head>
 
 <body>
