@@ -139,5 +139,51 @@
     render:renderStatus
   };
 
-  document.addEventListener("DOMContentLoaded", renderStatus);
+
+  function hydrateReturnPayload(){
+    const qs = new URLSearchParams(location.search);
+    const payloadUuid = qs.get("payload") || qs.get("payloadUuid") || qs.get("payload_uuid") || "";
+    const sourceCoordinate = norm(qs.get("edit") || qs.get("coordinate") || "");
+
+    if (!payloadUuid || !sourceCoordinate) return false;
+
+    const existing = getSession();
+    const keep = existing && existing.payloadUuid === payloadUuid ? existing : {};
+
+    setSession({
+      sourceCoordinate,
+      payloadUuid,
+      signUrl:keep.signUrl || "",
+      ownerVerified:false,
+      ownerWallet:"",
+      createdAt:keep.createdAt || Date.now(),
+      hydratedFromReturn:true
+    });
+
+    return true;
+  }
+
+  function cleanReturnPayloadUrl(){
+    try {
+      const u = new URL(location.href);
+      u.searchParams.delete("payload");
+      u.searchParams.delete("payloadUuid");
+      u.searchParams.delete("payload_uuid");
+      u.searchParams.delete("edit");
+      history.replaceState(null, "", u.pathname + (u.search ? u.search : "") + u.hash);
+    } catch (_) {}
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    const hydrated = hydrateReturnPayload();
+    renderStatus();
+
+    if (hydrated) {
+      verifySession().then((result) => {
+        if (result && result.ok) cleanReturnPayloadUrl();
+        renderStatus();
+      }).catch(() => renderStatus());
+    }
+  });
 })();
+
