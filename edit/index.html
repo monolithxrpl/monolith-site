@@ -141,6 +141,12 @@
 
       <label>Music URL</label>
       <input id="musicUrl" placeholder="https://..." />
+      <p class="hint">
+        Find a track URL:
+        <a href="https://open.spotify.com/search" target="_blank" rel="noopener">Spotify</a> ·
+        <a href="https://soundcloud.com/search" target="_blank" rel="noopener">SoundCloud</a> ·
+        <a href="https://www.youtube.com/results?search_query=music" target="_blank" rel="noopener">YouTube</a>
+      </p>
 
       <label>Gallery Image URLs</label>
       <textarea id="gallery" placeholder="One image URL per line"></textarea>
@@ -241,15 +247,18 @@
       el.ownerTag.value = tile.owner_tag || tile.ownerTag || tile.tag || "";
       el.websiteUrl.value = tile.website_url || tile.websiteUrl || tile.url || "";
       el.xHandle.value = meta.xHandle || tile.x_handle || tile.xHandle || "";
-      el.note.value = meta.note || tile.note || "";
+      const currentNote = meta.note || tile.note || "";
+      const currentLink = tile.website_url || tile.websiteUrl || tile.url || meta.feedLink || "";
+
+      el.note.value = currentNote;
       el.bannerUrl.value = meta.bannerUrl || meta.wallpaperUrl || "";
-      el.about.value = meta.about || meta.profileAbout || "";
+      el.about.value = meta.about || meta.profileAbout || currentNote || "";
       el.statusText.value = meta.statusText || meta.status || "";
       el.interests.value = meta.interests || "";
       el.musicTitle.value = meta.musicTitle || "";
       el.musicUrl.value = meta.musicUrl || "";
       el.gallery.value = Array.isArray(meta.gallery) ? meta.gallery.join("\n") : "";
-      el.links.value = Array.isArray(meta.links) ? meta.links.join("\n") : "";
+      el.links.value = Array.isArray(meta.links) ? meta.links.join("\n") : (currentLink ? currentLink : "");
     }
 
 
