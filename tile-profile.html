@@ -375,6 +375,54 @@ h1{
   .gallery{grid-template-columns:repeat(2,minmax(130px,1fr))}
 }
 
+
+/* MONOLITH_TOP6_GALLERY_BALANCE_20260519 */
+.topTilesBox{
+  min-height:0!important;
+  align-self:start;
+  padding:8px;
+}
+.topTiles{
+  grid-template-columns:repeat(auto-fill,minmax(70px,86px));
+  gap:6px;
+}
+.tileMini{
+  padding:4px;
+  font-size:11px;
+}
+.tileMini img{
+  max-width:86px;
+}
+.tileMini strong{
+  font-size:11px;
+}
+.tileMini span{
+  font-size:10px;
+}
+.galleryBox{
+  min-height:420px;
+  align-self:stretch;
+  padding:12px;
+}
+.gallery{
+  grid-template-columns:repeat(auto-fill,minmax(160px,200px));
+  gap:10px;
+}
+.gallery img{
+  max-width:200px;
+}
+@media(max-width:820px){
+  .topTiles{
+    grid-template-columns:repeat(3,minmax(70px,1fr));
+  }
+  .gallery{
+    grid-template-columns:repeat(2,minmax(140px,1fr));
+  }
+  .galleryBox{
+    min-height:320px;
+  }
+}
+
 </style>
 </head>
 <body>
