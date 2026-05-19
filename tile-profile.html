@@ -779,7 +779,22 @@ h1{
     $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
     if(musicUrl){
       const directAudio=/\.(mp3|wav|ogg|m4a)(\?|#|$)/i.test(musicUrl);
-      $("musicBox").innerHTML='<a class="btn" target="_blank" rel="noopener" href="'+String(musicUrl).replace(/"/g,"&quot;")+'">'+String(musicTitle||"Open Track").replace(/</g,"&lt;")+'</a>';
+      const safeUrl=String(musicUrl).replace(/"/g,"&quot;");
+      const safeTitle=String(musicTitle||"Open Track").replace(/</g,"&lt;");
+      let spotifyEmbed="";
+      try{
+        const su=new URL(musicUrl);
+        if(/(^|\.)open\.spotify\.com$/i.test(su.hostname)){
+          const parts=su.pathname.split("/").filter(Boolean);
+          if(parts.length>=2 && /^(track|album|playlist|episode|show|artist)$/.test(parts[0])){
+            const sid=parts[1].replace(/[^A-Za-z0-9]/g,"");
+            if(sid) spotifyEmbed="https://open.spotify.com/embed/"+parts[0]+"/"+sid+"?utm_source=generator";
+          }
+        }
+      }catch(e){}
+      const musicLink='<a class="btn" target="_blank" rel="noopener" href="'+safeUrl+'">'+safeTitle+'</a>';
+      const spotifyFrame=spotifyEmbed?'<iframe title="MONOLITH music player" src="'+spotifyEmbed+'" width="100%" height="152" style="border:0;border-radius:14px;background:#06111f;margin-top:12px" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>':'';
+      $("musicBox").innerHTML=musicLink+spotifyFrame;
       if(directAudio){$("musicPlayer").src=musicUrl;$("musicPlayer").style.display="block"}else{$("musicPlayer").style.display="none"}
     }
     if(gallery.length){$("gallery").innerHTML=gallery.map(src=>'<button class="galleryItem" type="button"><img src="'+String(src).replace(/"/g,"&quot;")+'" alt=""></button>').join("")}
