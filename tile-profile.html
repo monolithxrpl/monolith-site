@@ -146,11 +146,40 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
   gap:8px;
   margin-top:0;
 }
-.galleryBox{
+.topTilesBox{
   grid-column:2 / 4;
   grid-row:3;
   margin-top:0;
 }
+.galleryBox{
+  grid-column:2 / 4;
+  grid-row:4;
+  margin-top:0;
+}
+.topTiles{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+.tileMini{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  border-radius:4px;
+  padding:8px;
+  text-decoration:none;
+  display:block;
+}
+.tileMini img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:contain;
+  background:#020713;
+  border:1px solid var(--line);
+}
+.tileMini strong{display:block;margin-top:6px}
+.tileMini span{display:block;font-size:12px;color:#31556b}
 .musicRail{grid-column:1;grid-row:2;margin-top:0}
 .ownerBox{
   grid-column:3;
@@ -174,7 +203,7 @@ h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
 }
 @media(max-width:820px){
   .body{grid-template-columns:1fr}
-  .bio,.grid,.socialGrid,.galleryBox,.actions,.ownerBox,.musicRail{grid-column:auto;grid-row:auto}
+  .bio,.grid,.socialGrid,.topTilesBox,.galleryBox,.actions,.ownerBox,.musicRail{grid-column:auto;grid-row:auto}
   .profile{order:1}
   .musicRail{order:2}
   .bio{order:3}
@@ -283,6 +312,44 @@ h1{
   filter:drop-shadow(0 0 8px rgba(56,189,248,.25));
 }
 
+
+/* MONOLITH_COMPACT_GALLERIES_20260519 */
+.topTilesBox,.galleryBox{
+  padding:10px;
+}
+.topTiles,.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(92px,110px));
+  gap:8px;
+  align-items:start;
+  justify-content:start;
+}
+.tileMini{
+  padding:6px;
+  font-size:12px;
+}
+.tileMini img,.gallery img{
+  width:100%;
+  aspect-ratio:1/1;
+  max-width:110px;
+  object-fit:cover;
+}
+.tileMini strong{
+  font-size:12px;
+  line-height:1.15;
+}
+.tileMini span{
+  font-size:11px;
+  line-height:1.15;
+}
+@media(max-width:820px){
+  .topTilesBox{order:5}
+  .galleryBox{order:6}
+  .topTiles,.gallery{
+    grid-template-columns:repeat(3,minmax(80px,1fr));
+  }
+}
+
 </style>
 </head>
 <body>
@@ -347,6 +414,11 @@ h1{
         </section>
       </div>
 
+      <section class="box topTilesBox">
+        <div class="k">Top 6 Tiles</div>
+        <div class="topTiles" id="topTiles">No favorite tiles yet.</div>
+      </section>
+
       <section class="box galleryBox">
         <div class="k">Image Gallery</div>
         <div class="gallery" id="gallery">No gallery images yet.</div>
@@ -407,6 +479,7 @@ h1{
     const musicUrl=m.musicUrl||"";
     const musicTitle=m.musicTitle||"";
     const gallery=Array.isArray(m.gallery)?m.gallery:[];
+    const favoriteTiles=Array.isArray(m.favoriteTiles)?m.favoriteTiles.slice(0,6):[];
 
     document.title=tag+" • MONOLITH";
     $("title").textContent=tag;
@@ -426,8 +499,27 @@ h1{
     $("statusBox").textContent=statusText||"No status yet.";
     $("interestsBox").textContent=interests||"No interests listed yet.";
     $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
-    if(musicUrl){$("musicBox").textContent=musicTitle||"Tile track";$("musicPlayer").src=musicUrl;$("musicPlayer").style.display="block"}
+    if(musicUrl){
+      const directAudio=/\.(mp3|wav|ogg|m4a)(\?|#|$)/i.test(musicUrl);
+      $("musicBox").innerHTML='<a class="btn" target="_blank" rel="noopener" href="'+String(musicUrl).replace(/"/g,"&quot;")+'">'+String(musicTitle||"Open Track").replace(/</g,"&lt;")+'</a>';
+      if(directAudio){$("musicPlayer").src=musicUrl;$("musicPlayer").style.display="block"}else{$("musicPlayer").style.display="none"}
+    }
     if(gallery.length){$("gallery").innerHTML=gallery.map(src=>'<img src="'+String(src).replace(/"/g,"&quot;")+'" alt="">').join("")}
+    if(favoriteTiles.length){
+      $("topTiles").textContent="Loading tiles...";
+      Promise.all(favoriteTiles.map(c=>fetch("/api/tile/"+encodeURIComponent(c),{cache:"no-store"}).then(r=>r.json()).catch(()=>null))).then(rows=>{
+        const html=rows.map((r,i)=>{
+          const c=String(favoriteTiles[i]||"").toUpperCase();
+          const t=r&&r.ok?r.tile:null;
+          const m=t&&t.metadata?t.metadata:{};
+          const img=(t&&t.image_url)||"/assets/RESERVED.webp";
+          const tag=(t&&t.owner_tag)||c;
+          const handle=(t&&t.xHandle)||m.xHandle||m.handle||"";
+          return '<a class="tileMini" href="/tile-profile.html?tile='+encodeURIComponent(c)+'"><img src="'+String(img).replace(/"/g,"&quot;")+'" alt=""><strong>'+c+'</strong><span>'+String(tag).replace(/</g,"&lt;")+'</span><span>'+String(handle).replace(/</g,"&lt;")+'</span></a>';
+        }).join("");
+        $("topTiles").innerHTML=html||"No favorite tiles yet.";
+      });
+    }
   }).catch(()=>{
     $("title").textContent=coord;
     $("avatar").src="/assets/RESERVED.webp";
