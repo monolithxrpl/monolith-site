@@ -122,6 +122,32 @@
       <label>Note</label>
       <textarea id="note" placeholder="Short tile note"></textarea>
 
+      <h2>Profile Page</h2>
+
+      <label>Wallpaper / Banner URL</label>
+      <input id="bannerUrl" placeholder="https://..." />
+
+      <label>About</label>
+      <textarea id="about" placeholder="Write your profile about section"></textarea>
+
+      <label>Status</label>
+      <textarea id="statusText" placeholder="What should your tile say right now?"></textarea>
+
+      <label>Interests</label>
+      <textarea id="interests" placeholder="List interests, projects, links, or culture"></textarea>
+
+      <label>Music Title</label>
+      <input id="musicTitle" placeholder="Track title" />
+
+      <label>Music URL</label>
+      <input id="musicUrl" placeholder="https://..." />
+
+      <label>Gallery Image URLs</label>
+      <textarea id="gallery" placeholder="One image URL per line"></textarea>
+
+      <label>Links</label>
+      <textarea id="links" placeholder="One URL per line"></textarea>
+
       <label>Replace tile image</label>
       <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
 
@@ -143,6 +169,14 @@
       websiteUrl: document.getElementById("websiteUrl"),
       xHandle: document.getElementById("xHandle"),
       note: document.getElementById("note"),
+      bannerUrl: document.getElementById("bannerUrl"),
+      about: document.getElementById("about"),
+      statusText: document.getElementById("statusText"),
+      interests: document.getElementById("interests"),
+      musicTitle: document.getElementById("musicTitle"),
+      musicUrl: document.getElementById("musicUrl"),
+      gallery: document.getElementById("gallery"),
+      links: document.getElementById("links"),
       imageFile: document.getElementById("imageFile"),
       status: document.getElementById("status"),
       editStatus: document.getElementById("editStatus"),
@@ -208,6 +242,14 @@
       el.websiteUrl.value = tile.website_url || tile.websiteUrl || tile.url || "";
       el.xHandle.value = meta.xHandle || tile.x_handle || tile.xHandle || "";
       el.note.value = meta.note || tile.note || "";
+      el.bannerUrl.value = meta.bannerUrl || meta.wallpaperUrl || "";
+      el.about.value = meta.about || meta.profileAbout || "";
+      el.statusText.value = meta.statusText || meta.status || "";
+      el.interests.value = meta.interests || "";
+      el.musicTitle.value = meta.musicTitle || "";
+      el.musicUrl.value = meta.musicUrl || "";
+      el.gallery.value = Array.isArray(meta.gallery) ? meta.gallery.join("\n") : "";
+      el.links.value = Array.isArray(meta.links) ? meta.links.join("\n") : "";
     }
 
 
@@ -323,6 +365,14 @@
       fd.append("websiteUrl", el.websiteUrl.value);
       fd.append("xHandle", el.xHandle.value);
       fd.append("note", el.note.value);
+      fd.append("bannerUrl", el.bannerUrl.value);
+      fd.append("about", el.about.value);
+      fd.append("statusText", el.statusText.value);
+      fd.append("interests", el.interests.value);
+      fd.append("musicTitle", el.musicTitle.value);
+      fd.append("musicUrl", el.musicUrl.value);
+      fd.append("gallery", el.gallery.value);
+      fd.append("links", el.links.value);
 
       const file = el.imageFile.files && el.imageFile.files[0] ? el.imageFile.files[0] : null;
       if(file){
