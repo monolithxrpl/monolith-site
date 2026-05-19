@@ -645,6 +645,59 @@ body.view-imageonly .cell .spray{ filter:none; }
 </style>
 <!-- MONOLITH_BLUE_THEME_20260519_END -->
 
+
+<!-- MONOLITH_TILE_LEDGER_BLUE_20260519_START -->
+<style id="monolith-tile-ledger-blue">
+  :root{
+    --green:#49bfff!important;
+  }
+
+  .dot{
+    background:#49bfff!important;
+    box-shadow:0 0 0 3px rgba(73,191,255,.20), 0 0 14px rgba(73,191,255,.35)!important;
+  }
+
+  .cell,
+  .cell.taken,
+  .cell.locked,
+  .cell.claimed,
+  .cell.marked,
+  .cell.reserved{
+    border-color:rgba(73,191,255,.28)!important;
+    box-shadow:
+      inset 0 0 0 1px rgba(122,211,255,.09),
+      0 0 10px rgba(73,191,255,.07)!important;
+  }
+
+  .cell.taken,
+  .cell.claimed,
+  .cell.marked{
+    border-color:rgba(73,191,255,.46)!important;
+    box-shadow:
+      inset 0 0 0 1px rgba(122,211,255,.18),
+      0 0 16px rgba(73,191,255,.16)!important;
+  }
+
+  .cell:hover,
+  .cell.taken:hover,
+  .cell.claimed:hover,
+  .cell.marked:hover{
+    border-color:rgba(122,211,255,.82)!important;
+    box-shadow:
+      inset 0 0 0 1px rgba(122,211,255,.30),
+      0 0 24px rgba(73,191,255,.28)!important;
+  }
+
+  .cell .tag,
+  .cell .id{
+    color:#eaf7ff!important;
+    text-shadow:
+      0 0 8px rgba(73,191,255,.68),
+      0 0 18px rgba(73,191,255,.24)!important;
+  }
+</style>
+<!-- MONOLITH_TILE_LEDGER_BLUE_20260519_END -->
+
 </head>
 <style>
 @media (max-width: 900px){
@@ -2128,6 +2181,67 @@ el.close.addEventListener("click", function(e){
   });
 })();
 </script>
+
+
+<!-- MONOLITH_FINAL_TILE_BLUE_OUTLINE_20260519_START -->
+<style id="monolith-final-tile-blue-outline">
+  :root{
+    --green:#49bfff!important;
+    --accent2:#7ad3ff!important;
+  }
+
+  .cell,
+  .cell *,
+  .cell::before,
+  .cell::after,
+  .cell.taken,
+  .cell.locked,
+  .cell.claimed,
+  .cell.marked,
+  .cell.reserved,
+  .cell.taken::before,
+  .cell.taken::after,
+  .cell.claimed::before,
+  .cell.claimed::after,
+  .cell.marked::before,
+  .cell.marked::after{
+    border-color:rgba(73,191,255,.55)!important;
+    outline-color:rgba(73,191,255,.70)!important;
+  }
+
+  .cell{
+    outline:1px solid rgba(73,191,255,.22)!important;
+    box-shadow:
+      inset 0 0 0 1px rgba(122,211,255,.16),
+      0 0 10px rgba(73,191,255,.10)!important;
+  }
+
+  .cell.taken,
+  .cell.claimed,
+  .cell.marked{
+    outline:1px solid rgba(73,191,255,.38)!important;
+    box-shadow:
+      inset 0 0 0 1px rgba(122,211,255,.24),
+      0 0 16px rgba(73,191,255,.18)!important;
+  }
+
+  .cell:hover,
+  .cell.taken:hover,
+  .cell.claimed:hover,
+  .cell.marked:hover{
+    outline:1px solid rgba(122,211,255,.82)!important;
+    border-color:rgba(122,211,255,.90)!important;
+    box-shadow:
+      inset 0 0 0 1px rgba(122,211,255,.36),
+      0 0 24px rgba(73,191,255,.32)!important;
+  }
+
+  .dot{
+    background:#49bfff!important;
+    box-shadow:0 0 0 3px rgba(73,191,255,.20), 0 0 14px rgba(73,191,255,.35)!important;
+  }
+</style>
+<!-- MONOLITH_FINAL_TILE_BLUE_OUTLINE_20260519_END -->
 
 </body>
 </html>
