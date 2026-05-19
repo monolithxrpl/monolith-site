@@ -82,7 +82,18 @@
     pre.show{display:block}
     .hidden{display:none!important}
     @media(max-width:720px){.row{grid-template-columns:1fr}h1{font-size:26px}}
-  </style>
+  
+    .topSixEditor{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      gap:8px;
+      margin:8px 0 14px;
+    }
+    .topSixEditor input{
+      font-weight:700;
+    }
+
+</style>
 </head>
 <body>
   <div class="wrap">
@@ -162,7 +173,16 @@
       <textarea id="links" placeholder="One URL per line"></textarea>
 
       <label>Top 6 Tiles</label>
-      <textarea id="favoriteTiles" placeholder="One tile coordinate per line. Example: N1W1"></textarea>
+      <p class="hint">Add up to 6 MONOLITH tile coordinates. Order matters. Example: N1W1</p>
+      <div class="topSixEditor">
+        <input class="favoriteTileInput" placeholder="1. N1W1" />
+        <input class="favoriteTileInput" placeholder="2. ORIGIN" />
+        <input class="favoriteTileInput" placeholder="3. S1W1" />
+        <input class="favoriteTileInput" placeholder="4." />
+        <input class="favoriteTileInput" placeholder="5." />
+        <input class="favoriteTileInput" placeholder="6." />
+      </div>
+      <textarea id="favoriteTiles" style="display:none"></textarea>
 
       <label>Replace tile image</label>
       <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
@@ -196,6 +216,7 @@
       galleryFiles: document.getElementById("galleryFiles"),
       links: document.getElementById("links"),
       favoriteTiles: document.getElementById("favoriteTiles"),
+      favoriteTileInputs: Array.from(document.querySelectorAll(".favoriteTileInput")),
       imageFile: document.getElementById("imageFile"),
       status: document.getElementById("status"),
       editStatus: document.getElementById("editStatus"),
@@ -272,7 +293,11 @@
       el.musicUrl.value = meta.musicUrl || "";
       el.gallery.value = Array.isArray(meta.gallery) ? meta.gallery.join("\n") : "";
       el.links.value = Array.isArray(meta.links) ? meta.links.join("\n") : (currentLink ? currentLink : "");
-      el.favoriteTiles.value = Array.isArray(meta.favoriteTiles) ? meta.favoriteTiles.join("\n") : "";
+      const favs = Array.isArray(meta.favoriteTiles) ? meta.favoriteTiles.slice(0,6) : [];
+      el.favoriteTiles.value = favs.join("\n");
+      if(el.favoriteTileInputs){
+        el.favoriteTileInputs.forEach((input, i) => input.value = favs[i] || "");
+      }
     }
 
 
@@ -396,6 +421,8 @@
       fd.append("musicUrl", el.musicUrl.value);
       fd.append("gallery", el.gallery.value);
       fd.append("links", el.links.value);
+      const favs = (el.favoriteTileInputs || []).map(x => x.value.trim().toUpperCase()).filter(Boolean).slice(0,6);
+      el.favoriteTiles.value = favs.join("\n");
       fd.append("favoriteTiles", el.favoriteTiles.value);
 
       const validImage = (file) => {
@@ -448,6 +475,11 @@
       }
 
       fill(data.tile);
+
+      if(el.imageFile) el.imageFile.value = "";
+      if(el.bannerFile) el.bannerFile.value = "";
+      if(el.galleryFiles) el.galleryFiles.value = "";
+
       setStatus("Tile updated. Owner wallet stayed locked.", false);
     }
 
