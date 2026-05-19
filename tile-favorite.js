@@ -1,4 +1,6 @@
 (function(){
+  const STORE_KEY = "monolithFavoritePending";
+
   function viewedCoord(){
     const qs = new URLSearchParams(location.search);
     const pathParts = location.pathname.split("/").filter(Boolean);
@@ -8,6 +10,56 @@
 
   function norm(v){
     return String(v || "").trim().toUpperCase().replace(/\s+/g, "");
+  }
+
+  function btn(){
+    return document.getElementById("favoriteBtn");
+  }
+
+  function getPending(){
+    try {
+      return JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function setPending(data){
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }
+
+  function clearPending(){
+    localStorage.removeItem(STORE_KEY);
+  }
+
+  function setButton(text, disabled){
+    const b = btn();
+    if (!b) return;
+    b.textContent = text;
+    b.disabled = Boolean(disabled);
+  }
+
+  function removeSignLink(){
+    const old = document.getElementById("favoriteSignLink");
+    if (old) old.remove();
+  }
+
+  function showSignLink(signUrl){
+    removeSignLink();
+
+    const b = btn();
+    if (!b || !signUrl) return;
+
+    const a = document.createElement("a");
+    a.id = "favoriteSignLink";
+    a.className = "btn";
+    a.href = signUrl;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = "Open Xaman Sign-In";
+    a.style.marginLeft = "8px";
+
+    b.insertAdjacentElement("afterend", a);
   }
 
   async function jsonFetch(url, body){
@@ -20,11 +72,9 @@
     return { res, data };
   }
 
-  async function addFavoriteToTopSix(){
-    const btn = document.getElementById("favoriteBtn");
-    if (!btn) return;
-
+  async function startFavorite(){
     const targetCoordinate = viewedCoord();
+
     const source = prompt("Enter YOUR tile coordinate to add " + targetCoordinate + " to your Top 6:");
     if (!source) return;
 
@@ -37,39 +87,69 @@
       return;
     }
 
-    btn.disabled = true;
-    btn.textContent = "Creating owner sign-in...";
+    setButton("Creating owner sign-in...", true);
 
     try {
       const start = await jsonFetch("/api/tile/edit/start", { coordinate:sourceCoordinate });
 
       if (!start.res.ok || !start.data.ok || !start.data.auth || !start.data.auth.payloadUuid) {
         alert(start.data.error || "Owner sign-in failed.");
-        btn.disabled = false;
-        btn.textContent = "♡ Add to Top 6";
+        setButton("♡ Add to Top 6", false);
         return;
       }
 
-      if (start.data.auth.signUrl) {
-        window.open(start.data.auth.signUrl, "_blank", "noopener,noreferrer");
-      }
+      const pending = {
+        sourceCoordinate,
+        targetCoordinate,
+        payloadUuid:start.data.auth.payloadUuid,
+        signUrl:start.data.auth.signUrl || "",
+        createdAt:Date.now()
+      };
 
-      alert("Approve the owner sign-in in Xaman, then press OK here to continue.");
+      setPending(pending);
+      showSignLink(pending.signUrl);
+      setButton("I Signed — Save Top 6", false);
 
-      async function submitFavorite(replaceIndex){
-        const body = {
-          sourceCoordinate,
-          targetCoordinate,
-          payloadUuid:start.data.auth.payloadUuid
-        };
+      alert("Open the Xaman sign-in link, approve with the owner wallet, then click I Signed — Save Top 6.");
+    } catch (e) {
+      alert("Favorite failed.");
+      setButton("♡ Add to Top 6", false);
+    }
+  }
 
-        if (Number.isInteger(replaceIndex)) body.replaceIndex = replaceIndex;
+  async function submitFavorite(replaceIndex){
+    const pending = getPending();
+    if (!pending || pending.targetCoordinate !== viewedCoord()) {
+      clearPending();
+      setButton("♡ Add to Top 6", false);
+      return;
+    }
 
-        return jsonFetch("/api/tile/favorite", body);
-      }
+    const body = {
+      sourceCoordinate:pending.sourceCoordinate,
+      targetCoordinate:pending.targetCoordinate,
+      payloadUuid:pending.payloadUuid
+    };
 
-      btn.textContent = "Verifying owner...";
+    if (Number.isInteger(replaceIndex)) body.replaceIndex = replaceIndex;
+
+    return jsonFetch("/api/tile/favorite", body);
+  }
+
+  async function finishFavorite(){
+    setButton("Verifying owner...", true);
+
+    try {
       let result = await submitFavorite();
+
+      if (!result) return;
+
+      if (result.res.status === 409 && result.data && result.data.error === "owner_signin_not_signed") {
+        showSignLink(getPending() && getPending().signUrl);
+        alert("Xaman sign-in is not signed yet. Open the sign-in link, approve it, then click I Signed — Save Top 6 again.");
+        setButton("I Signed — Save Top 6", false);
+        return;
+      }
 
       if (result.res.status === 409 && result.data && result.data.error === "top_six_full") {
         const list = Array.isArray(result.data.favoriteTiles) ? result.data.favoriteTiles : [];
@@ -79,8 +159,7 @@
         );
 
         if (!choice) {
-          btn.disabled = false;
-          btn.textContent = "♡ Add to Top 6";
+          setButton("I Signed — Save Top 6", false);
           return;
         }
 
@@ -88,8 +167,7 @@
 
         if (!Number.isInteger(idx) || idx < 0 || idx > 5) {
           alert("Invalid slot.");
-          btn.disabled = false;
-          btn.textContent = "♡ Add to Top 6";
+          setButton("I Signed — Save Top 6", false);
           return;
         }
 
@@ -98,22 +176,45 @@
 
       if (!result.res.ok || !result.data.ok) {
         alert(result.data.error || "Favorite failed.");
-        btn.disabled = false;
-        btn.textContent = "♡ Add to Top 6";
+        setButton("I Signed — Save Top 6", false);
         return;
       }
 
-      btn.textContent = result.data.alreadyFavorited ? "♥ Already Top 6" : "♥ Added to Top 6";
+      clearPending();
+      removeSignLink();
+
+      setButton(result.data.alreadyFavorited ? "♥ Already Top 6" : "♥ Added to Top 6", true);
       setTimeout(() => location.reload(), 900);
     } catch (e) {
       alert("Favorite failed.");
-      btn.disabled = false;
-      btn.textContent = "♡ Add to Top 6";
+      setButton("I Signed — Save Top 6", false);
     }
   }
 
+  function hydratePending(){
+    const pending = getPending();
+    if (!pending || pending.targetCoordinate !== viewedCoord()) return;
+
+    showSignLink(pending.signUrl);
+    setButton("I Signed — Save Top 6", false);
+  }
+
+  async function handleClick(){
+    const pending = getPending();
+
+    if (pending && pending.targetCoordinate === viewedCoord()) {
+      await finishFavorite();
+      return;
+    }
+
+    await startFavorite();
+  }
+
   document.addEventListener("DOMContentLoaded", function(){
-    const btn = document.getElementById("favoriteBtn");
-    if (btn) btn.addEventListener("click", addFavoriteToTopSix);
+    const b = btn();
+    if (!b) return;
+
+    b.addEventListener("click", handleClick);
+    hydratePending();
   });
 })();
