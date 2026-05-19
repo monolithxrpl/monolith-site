@@ -93,6 +93,11 @@
       font-weight:700;
     }
 
+
+    .uploadRow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
+    .uploadPreview{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+    .uploadPreview img{width:74px;height:74px;object-fit:cover;border:1px solid var(--line);border-radius:6px;background:#07101a}
+
 </style>
 </head>
 <body>
@@ -121,6 +126,13 @@
       <h2>Edit Tile</h2>
       <p class="hint">Owner wallet is locked. Only the editable tile fields below can be changed.</p>
 
+      <label>Profile / Tile Image</label>
+      <div class="uploadRow">
+        <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
+        <button class="secondary" id="uploadTileImage" type="button">Upload Tile Image</button>
+      </div>
+      <div class="uploadPreview" id="imagePreview"></div>
+
       <label>Owner tag</label>
       <input id="ownerTag" placeholder="Project or owner tag" />
 
@@ -139,7 +151,11 @@
       <input id="bannerUrl" placeholder="https://..." />
 
       <label>Upload Wallpaper / Banner Image</label>
-      <input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp" />
+      <div class="uploadRow">
+        <input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp" />
+        <button class="secondary" id="uploadBanner" type="button">Upload Banner</button>
+      </div>
+      <div class="uploadPreview" id="bannerPreview"></div>
 
       <label>About</label>
       <textarea id="about" placeholder="Write your profile about section"></textarea>
@@ -167,7 +183,11 @@
       <p class="hint">Delete a gallery image by removing its URL above and saving. Max 12 gallery images.</p>
 
       <label>Add Gallery Images</label>
-      <input id="galleryFiles" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+      <div class="uploadRow">
+        <input id="galleryFiles" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+        <button class="secondary" id="uploadGallery" type="button">Upload Gallery Images</button>
+      </div>
+      <div class="uploadPreview" id="galleryPreview"></div>
 
       <label>Links</label>
       <textarea id="links" placeholder="One URL per line"></textarea>
@@ -184,8 +204,6 @@
       </div>
       <textarea id="favoriteTiles" style="display:none"></textarea>
 
-      <label>Replace tile image</label>
-      <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
 
       <button id="applyEdit">Save tile</button>
       <button class="secondary" id="cancelEdit" type="button">Cancel</button>
@@ -207,6 +225,8 @@
       note: document.getElementById("note"),
       bannerUrl: document.getElementById("bannerUrl"),
       bannerFile: document.getElementById("bannerFile"),
+      uploadBanner: document.getElementById("uploadBanner"),
+      bannerPreview: document.getElementById("bannerPreview"),
       about: document.getElementById("about"),
       statusText: document.getElementById("statusText"),
       interests: document.getElementById("interests"),
@@ -214,10 +234,14 @@
       musicUrl: document.getElementById("musicUrl"),
       gallery: document.getElementById("gallery"),
       galleryFiles: document.getElementById("galleryFiles"),
+      uploadGallery: document.getElementById("uploadGallery"),
+      galleryPreview: document.getElementById("galleryPreview"),
       links: document.getElementById("links"),
       favoriteTiles: document.getElementById("favoriteTiles"),
       favoriteTileInputs: Array.from(document.querySelectorAll(".favoriteTileInput")),
       imageFile: document.getElementById("imageFile"),
+      uploadTileImage: document.getElementById("uploadTileImage"),
+      imagePreview: document.getElementById("imagePreview"),
       status: document.getElementById("status"),
       editStatus: document.getElementById("editStatus"),
       signBox: document.getElementById("signBox"),
@@ -395,6 +419,19 @@
       return true;
     }
 
+    function previewFiles(input, target){
+      if(!input || !target) return;
+      const files = Array.from(input.files || []);
+      target.innerHTML = "";
+      files.slice(0,12).forEach(file => {
+        if(!file.type || !file.type.startsWith("image/")) return;
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name || "upload preview";
+        target.appendChild(img);
+      });
+    }
+
     async function applyEdit(){
       const c = normCoord(el.coordinate.value);
       const payloadUuid = el.payloadUuid.value.trim();
@@ -479,6 +516,9 @@
       if(el.imageFile) el.imageFile.value = "";
       if(el.bannerFile) el.bannerFile.value = "";
       if(el.galleryFiles) el.galleryFiles.value = "";
+      if(el.imagePreview) el.imagePreview.innerHTML = "";
+      if(el.bannerPreview) el.bannerPreview.innerHTML = "";
+      if(el.galleryPreview) el.galleryPreview.innerHTML = "";
 
       setStatus("Tile updated. Owner wallet stayed locked.", false);
     }
@@ -490,6 +530,12 @@
     }
     document.getElementById("startAuth").addEventListener("click", startAuth);
     document.getElementById("applyEdit").addEventListener("click", applyEdit);
+    if(el.uploadTileImage) el.uploadTileImage.addEventListener("click", applyEdit);
+    if(el.uploadBanner) el.uploadBanner.addEventListener("click", applyEdit);
+    if(el.uploadGallery) el.uploadGallery.addEventListener("click", applyEdit);
+    if(el.imageFile) el.imageFile.addEventListener("change", () => previewFiles(el.imageFile, el.imagePreview));
+    if(el.bannerFile) el.bannerFile.addEventListener("change", () => previewFiles(el.bannerFile, el.bannerPreview));
+    if(el.galleryFiles) el.galleryFiles.addEventListener("change", () => previewFiles(el.galleryFiles, el.galleryPreview));
     const copyBtn = document.getElementById("copy");
     if(copyBtn) copyBtn.addEventListener("click", copyLast);
     document.getElementById("cancelEdit").addEventListener("click", cancelEdit);
