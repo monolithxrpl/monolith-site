@@ -1,6 +1,4 @@
 (function(){
-  const STORE_KEY = "monolithFavoritePending";
-
   function viewedCoord(){
     const qs = new URLSearchParams(location.search);
     const pathParts = location.pathname.split("/").filter(Boolean);
@@ -8,35 +6,8 @@
     return String(qs.get("tile") || pathTile || "ORIGIN").trim().toUpperCase();
   }
 
-  function norm(v){
-    return String(v || "").trim().toUpperCase().replace(/\s+/g, "");
-  }
-
   function btn(){
     return document.getElementById("favoriteBtn");
-  }
-
-  function getPending(){
-    try {
-      return JSON.parse(localStorage.getItem(STORE_KEY) || "null");
-    } catch (_) {
-      return null;
-    }
-  }
-
-  function setPending(data){
-    localStorage.setItem(STORE_KEY, JSON.stringify(data));
-  }
-
-  function clearPending(){
-    localStorage.removeItem(STORE_KEY);
-  }
-
-  function setButton(text, disabled){
-    const b = btn();
-    if (!b) return;
-    b.textContent = text;
-    b.disabled = Boolean(disabled);
   }
 
   function removeSignLink(){
@@ -56,7 +27,7 @@
     a.href = signUrl;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
-    a.textContent = "Open Xaman Sign-In";
+    a.textContent = "Open Xaman";
     a.style.marginLeft = "8px";
 
     b.insertAdjacentElement("afterend", a);
@@ -72,63 +43,69 @@
     return { res, data };
   }
 
-  async function startFavorite(){
-    const targetCoordinate = viewedCoord();
-
-    const source = prompt("Enter YOUR tile coordinate to add " + targetCoordinate + " to your Top 6:");
-    if (!source) return;
-
-    const sourceCoordinate = norm(source);
-
-    if (!sourceCoordinate) return;
-
-    if (sourceCoordinate === targetCoordinate) {
-      alert("You cannot favorite your own tile.");
-      return;
+  async function ensureSession(){
+    if (!window.MonolithSession) {
+      alert("Owner session system is not loaded.");
+      return null;
     }
 
-    setButton("Creating owner sign-in...", true);
+    let session = window.MonolithSession.get();
 
-    try {
-      const start = await jsonFetch("/api/tile/edit/start", { coordinate:sourceCoordinate });
+    if (!session) {
+      const source = prompt("Enter YOUR MONOLITH tile coordinate to sign in:");
+      if (!source) return null;
 
-      if (!start.res.ok || !start.data.ok || !start.data.auth || !start.data.auth.payloadUuid) {
-        alert(start.data.error || "Owner sign-in failed.");
-        setButton("♡ Add to Top 6", false);
-        return;
+      const b = btn();
+      if (b) {
+        b.disabled = true;
+        b.textContent = "Creating sign-in...";
       }
 
-      const pending = {
-        sourceCoordinate,
-        targetCoordinate,
-        payloadUuid:start.data.auth.payloadUuid,
-        signUrl:start.data.auth.signUrl || "",
-        createdAt:Date.now()
-      };
+      try {
+        session = await window.MonolithSession.start(source);
+        showSignLink(session.signUrl);
 
-      setPending(pending);
-      showSignLink(pending.signUrl);
-      setButton("I Signed — Save Top 6", false);
+        if (b) {
+          b.disabled = false;
+          b.textContent = "I Signed — Add to Top 6";
+        }
 
-      alert("Open the Xaman sign-in link, approve with the owner wallet, then click I Signed — Save Top 6.");
-    } catch (e) {
-      alert("Favorite failed.");
-      setButton("♡ Add to Top 6", false);
+        if (window.MonolithSession.render) window.MonolithSession.render();
+
+        alert("Open Xaman, approve the owner sign-in, then click I Signed — Add to Top 6.");
+        return null;
+      } catch (e) {
+        alert(e.message || "Owner sign-in failed.");
+        if (b) {
+          b.disabled = false;
+          b.textContent = "♡ Add to Top 6";
+        }
+        return null;
+      }
     }
+
+    const verified = await window.MonolithSession.verify();
+
+    if (!verified.ok) {
+      showSignLink(session.signUrl);
+
+      const b = btn();
+      if (b) b.textContent = "I Signed — Add to Top 6";
+
+      alert("Owner sign-in is not verified yet. Open Xaman, approve it, then click I Signed — Add to Top 6 again.");
+      return null;
+    }
+
+    removeSignLink();
+    if (window.MonolithSession.render) window.MonolithSession.render();
+    return verified.session;
   }
 
-  async function submitFavorite(replaceIndex){
-    const pending = getPending();
-    if (!pending || pending.targetCoordinate !== viewedCoord()) {
-      clearPending();
-      setButton("♡ Add to Top 6", false);
-      return;
-    }
-
+  async function submitFavorite(session, replaceIndex){
     const body = {
-      sourceCoordinate:pending.sourceCoordinate,
-      targetCoordinate:pending.targetCoordinate,
-      payloadUuid:pending.payloadUuid
+      sourceCoordinate:session.sourceCoordinate,
+      targetCoordinate:viewedCoord(),
+      payloadUuid:session.payloadUuid
     };
 
     if (Number.isInteger(replaceIndex)) body.replaceIndex = replaceIndex;
@@ -136,20 +113,33 @@
     return jsonFetch("/api/tile/favorite", body);
   }
 
-  async function finishFavorite(){
-    setButton("Verifying owner...", true);
+  async function addFavoriteToTopSix(){
+    const b = btn();
+    if (!b) return;
+
+    const targetCoordinate = viewedCoord();
+
+    b.disabled = true;
+    b.textContent = "Checking sign-in...";
 
     try {
-      let result = await submitFavorite();
+      const session = await ensureSession();
 
-      if (!result) return;
-
-      if (result.res.status === 409 && result.data && result.data.error === "owner_signin_not_signed") {
-        showSignLink(getPending() && getPending().signUrl);
-        alert("Xaman sign-in is not signed yet. Open the sign-in link, approve it, then click I Signed — Save Top 6 again.");
-        setButton("I Signed — Save Top 6", false);
+      if (!session) {
+        b.disabled = false;
         return;
       }
+
+      if (session.sourceCoordinate === targetCoordinate) {
+        alert("You cannot favorite your own tile.");
+        b.disabled = false;
+        b.textContent = "♡ Add to Top 6";
+        return;
+      }
+
+      b.textContent = "Saving Top 6...";
+
+      let result = await submitFavorite(session);
 
       if (result.res.status === 409 && result.data && result.data.error === "top_six_full") {
         const list = Array.isArray(result.data.favoriteTiles) ? result.data.favoriteTiles : [];
@@ -159,7 +149,8 @@
         );
 
         if (!choice) {
-          setButton("I Signed — Save Top 6", false);
+          b.disabled = false;
+          b.textContent = "♡ Add to Top 6";
           return;
         }
 
@@ -167,54 +158,39 @@
 
         if (!Number.isInteger(idx) || idx < 0 || idx > 5) {
           alert("Invalid slot.");
-          setButton("I Signed — Save Top 6", false);
+          b.disabled = false;
+          b.textContent = "♡ Add to Top 6";
           return;
         }
 
-        result = await submitFavorite(idx);
+        result = await submitFavorite(session, idx);
       }
 
       if (!result.res.ok || !result.data.ok) {
         alert(result.data.error || "Favorite failed.");
-        setButton("I Signed — Save Top 6", false);
+        b.disabled = false;
+        b.textContent = "♡ Add to Top 6";
         return;
       }
 
-      clearPending();
-      removeSignLink();
-
-      setButton(result.data.alreadyFavorited ? "♥ Already Top 6" : "♥ Added to Top 6", true);
+      b.textContent = result.data.alreadyFavorited ? "♥ Already Top 6" : "♥ Added to Top 6";
       setTimeout(() => location.reload(), 900);
     } catch (e) {
       alert("Favorite failed.");
-      setButton("I Signed — Save Top 6", false);
+      b.disabled = false;
+      b.textContent = "♡ Add to Top 6";
     }
-  }
-
-  function hydratePending(){
-    const pending = getPending();
-    if (!pending || pending.targetCoordinate !== viewedCoord()) return;
-
-    showSignLink(pending.signUrl);
-    setButton("I Signed — Save Top 6", false);
-  }
-
-  async function handleClick(){
-    const pending = getPending();
-
-    if (pending && pending.targetCoordinate === viewedCoord()) {
-      await finishFavorite();
-      return;
-    }
-
-    await startFavorite();
   }
 
   document.addEventListener("DOMContentLoaded", function(){
     const b = btn();
     if (!b) return;
 
-    b.addEventListener("click", handleClick);
-    hydratePending();
+    b.addEventListener("click", addFavoriteToTopSix);
+
+    if (window.MonolithSession) {
+      const s = window.MonolithSession.get();
+      if (s && s.sourceCoordinate) b.textContent = "♡ Add to Top 6";
+    }
   });
 })();
