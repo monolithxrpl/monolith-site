@@ -423,6 +423,205 @@ h1{
   }
 }
 
+
+
+/* MONOLITH_TOP6_GALLERY_FINAL_STACK_20260519 */
+.topTilesBox{
+  grid-column:2 / 4!important;
+  grid-row:3!important;
+  margin:0 0 8px!important;
+  padding:8px!important;
+  min-height:0!important;
+  align-self:start!important;
+}
+.topTiles{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:start!important;
+}
+.tileMini{
+  min-height:140px!important;
+  padding:6px!important;
+  text-align:center!important;
+}
+.tileMini img{
+  width:100%!important;
+  max-width:118px!important;
+  height:82px!important;
+  object-fit:contain!important;
+  margin:0 auto!important;
+  display:block!important;
+}
+.tileMini strong{
+  font-size:12px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.tileMini span{
+  font-size:10px!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.galleryBox{
+  grid-column:2 / 4!important;
+  grid-row:4!important;
+  margin:0!important;
+  padding:12px!important;
+  min-height:420px!important;
+  align-self:start!important;
+}
+.gallery{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fill,minmax(170px,220px))!important;
+  gap:12px!important;
+  justify-content:start!important;
+  align-items:start!important;
+}
+.gallery img{
+  width:100%!important;
+  max-width:220px!important;
+  aspect-ratio:1/1!important;
+  object-fit:cover!important;
+}
+@media(max-width:820px){
+  .topTilesBox{order:5!important}
+  .galleryBox{order:6!important;margin-top:8px!important;min-height:320px!important}
+  .topTiles{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .tileMini img{height:100px!important;max-width:150px!important}
+  .gallery{grid-template-columns:repeat(2,minmax(140px,1fr))!important}
+}
+
+
+/* MONOLITH_GALLERY_PULL_UP_20260519 */
+.body{
+  row-gap:8px!important;
+}
+.topTilesBox{
+  margin-bottom:0!important;
+}
+.galleryBox{
+  grid-column:2 / 4!important;
+  grid-row:4!important;
+  margin-top:-4px!important;
+  padding-top:10px!important;
+}
+@media(max-width:820px){
+  .galleryBox{
+    order:6!important;
+    margin-top:4px!important;
+  }
+}
+
+
+/* MONOLITH_MEDIA_GRID_FINAL_FIX_20260519 */
+.centerMediaStack{
+  grid-column:2 / 4!important;
+  grid-row:3!important;
+  width:100%!important;
+  max-width:none!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+  align-self:start!important;
+  justify-self:stretch!important;
+}
+.centerMediaStack .topTilesBox,
+.centerMediaStack .galleryBox{
+  width:100%!important;
+  max-width:none!important;
+  grid-column:auto!important;
+  grid-row:auto!important;
+  margin:0!important;
+}
+.centerMediaStack .topTiles{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+.centerMediaStack .tileMini{
+  min-height:150px!important;
+  padding:8px!important;
+  text-align:center!important;
+}
+.centerMediaStack .tileMini img{
+  width:100%!important;
+  height:92px!important;
+  max-width:130px!important;
+  object-fit:contain!important;
+  margin:0 auto!important;
+  display:block!important;
+}
+.centerMediaStack .galleryBox{
+  min-height:420px!important;
+}
+.centerMediaStack .gallery{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+.galleryItem{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:4px;
+  cursor:pointer;
+}
+.galleryItem img{
+  width:100%!important;
+  max-width:none!important;
+  aspect-ratio:1/1!important;
+  object-fit:cover!important;
+  display:block;
+}
+.imageModal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.86);
+  z-index:9999;
+  padding:24px;
+}
+.imageModal.open{display:flex}
+.imageModal img{
+  max-width:min(96vw,1200px);
+  max-height:90vh;
+  object-fit:contain;
+  border:2px solid var(--ledger-blue,#38bdf8);
+  background:#000;
+}
+.imageModalClose{
+  position:fixed;
+  top:16px;
+  right:18px;
+  width:42px;
+  height:42px;
+  border:1px solid #fff;
+  background:#000;
+  color:#fff;
+  font-size:30px;
+  line-height:1;
+  cursor:pointer;
+}
+@media(max-width:820px){
+  .centerMediaStack{
+    grid-column:auto!important;
+    grid-row:auto!important;
+    order:5!important;
+  }
+  .centerMediaStack .topTiles{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  .centerMediaStack .gallery{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -466,8 +665,7 @@ h1{
       <div class="actions">
         <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
         <a class="btn" id="wallLink" href="#">View on Wall</a>
-        <a class="btn" id="editLink" href="#">Edit Tile</a>
-        <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
+<button class="btn" id="copyBtn" type="button">Copy Page URL</button>
       </div>
 
       <div class="socialGrid">
@@ -487,15 +685,17 @@ h1{
         </section>
       </div>
 
-      <section class="box topTilesBox">
-        <div class="k">Top 6 Tiles</div>
-        <div class="topTiles" id="topTiles">No favorite tiles yet.</div>
-      </section>
+      <div class="centerMediaStack">
+        <section class="box topTilesBox">
+          <div class="k">Top 6 Tiles</div>
+          <div class="topTiles" id="topTiles">No favorite tiles yet.</div>
+        </section>
 
-      <section class="box galleryBox">
-        <div class="k">Image Gallery</div>
-        <div class="gallery" id="gallery">No gallery images yet.</div>
-      </section>
+        <section class="box galleryBox">
+          <div class="k">Image Gallery</div>
+          <div class="gallery" id="gallery">No gallery images yet.</div>
+        </section>
+      </div>
 
       <section class="box ownerBox">
         <div class="k">Owner Controls</div>
@@ -505,6 +705,11 @@ h1{
     </div>
   </section>
 </main>
+
+  <div class="imageModal" id="imageModal" aria-hidden="true">
+    <button class="imageModalClose" id="imageModalClose" type="button">×</button>
+    <img id="imageModalImg" alt="">
+  </div>
 
 <script>
 (function(){
@@ -518,7 +723,7 @@ h1{
   $("coord").textContent=coord;
   $("tileUrl").textContent=tileUrl;
   $("wallLink").href="/monolith.html?tile="+encodeURIComponent(coord);
-  $("editLink").href="/edit/?edit="+encodeURIComponent(coord);
+  const editLink=$("editLink"); if(editLink) editLink.href="/edit/?edit="+encodeURIComponent(coord);
   $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Page URL",1200)};
 
   function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
@@ -577,7 +782,7 @@ h1{
       $("musicBox").innerHTML='<a class="btn" target="_blank" rel="noopener" href="'+String(musicUrl).replace(/"/g,"&quot;")+'">'+String(musicTitle||"Open Track").replace(/</g,"&lt;")+'</a>';
       if(directAudio){$("musicPlayer").src=musicUrl;$("musicPlayer").style.display="block"}else{$("musicPlayer").style.display="none"}
     }
-    if(gallery.length){$("gallery").innerHTML=gallery.map(src=>'<img src="'+String(src).replace(/"/g,"&quot;")+'" alt="">').join("")}
+    if(gallery.length){$("gallery").innerHTML=gallery.map(src=>'<button class="galleryItem" type="button"><img src="'+String(src).replace(/"/g,"&quot;")+'" alt=""></button>').join("")}
     if(favoriteTiles.length){
       $("topTiles").textContent="Loading tiles...";
       Promise.all(favoriteTiles.map(c=>fetch("/api/tile/"+encodeURIComponent(c),{cache:"no-store"}).then(r=>r.json()).catch(()=>null))).then(rows=>{
@@ -593,6 +798,32 @@ h1{
         $("topTiles").innerHTML=html||"No favorite tiles yet.";
       });
     }
+
+    const modal=$("imageModal");
+    const modalImg=$("imageModalImg");
+    const modalClose=$("imageModalClose");
+    if($("gallery")){
+      $("gallery").addEventListener("click", e=>{
+        const img=e.target&&e.target.closest?e.target.closest(".galleryItem img"):null;
+        if(!img||!modal||!modalImg)return;
+        modalImg.src=img.src;
+        modal.setAttribute("aria-hidden","false");
+        modal.classList.add("open");
+      });
+    }
+    if(modalClose) modalClose.addEventListener("click", ()=>{
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden","true");
+      if(modalImg) modalImg.src="";
+    });
+    if(modal) modal.addEventListener("click", e=>{
+      if(e.target===modal){
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden","true");
+        if(modalImg) modalImg.src="";
+      }
+    });
+
   }).catch(()=>{
     $("title").textContent=coord;
     $("avatar").src="/assets/RESERVED.webp";

@@ -93,7 +93,6 @@
       font-weight:700;
     }
 
-
     .uploadRow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
     .uploadPreview{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
     .uploadPreview img{width:74px;height:74px;object-fit:cover;border:1px solid var(--line);border-radius:6px;background:#07101a}
@@ -207,7 +206,6 @@
       </div>
       <textarea id="favoriteTiles" style="display:none"></textarea>
 
-
       <button id="applyEdit">Save tile</button>
       <button class="secondary" id="cancelEdit" type="button">Cancel</button>
 
@@ -296,7 +294,34 @@
       el.out.textContent = JSON.stringify(obj, null, 2);
     }
 
-    function fill(tile){
+    let feedRows = null;
+
+    function coordFromFeedRow(x){
+      if(!x) return "";
+      const raw = String(x.tile || "").trim().toUpperCase();
+      if(raw) return raw.replace(/^([NSEW])-([0-9]+)$/,"$1$2");
+      const gx = Number(x.gx)||0;
+      const gy = Number(x.gy)||0;
+      if(gx === 0 && gy === 0) return "ORIGIN";
+      const y = gy > 0 ? "N"+gy : gy < 0 ? "S"+Math.abs(gy) : "";
+      const z = gx > 0 ? "E"+gx : gx < 0 ? "W"+Math.abs(gx) : "";
+      return y + z;
+    }
+
+    async function getFeedFallback(coord){
+      try{
+        if(!feedRows){
+          const r = await fetch("/assets/feed.json", { cache:"no-store" });
+          feedRows = await r.json();
+        }
+        const c = String(coord || "").trim().toUpperCase();
+        return Array.isArray(feedRows) ? feedRows.find(x => coordFromFeedRow(x) === c) || null : null;
+      }catch(_){
+        return null;
+      }
+    }
+
+    async function fill(tile){
       const m = tile.metadata || tile.metadata_json || tile.metadataJson || {};
       let meta = {};
       if(typeof m === "string"){
@@ -305,10 +330,15 @@
         meta = m;
       }
 
-      el.ownerTag.value = tile.owner_tag || tile.ownerTag || tile.tag || "";
-      el.websiteUrl.value = tile.website_url || tile.websiteUrl || tile.url || "";
-      el.xHandle.value = meta.xHandle || tile.x_handle || tile.xHandle || "";
-      const currentNote = meta.note || tile.note || "";
+      const feed = await getFeedFallback(tile.coordinate || tile.coord || el.coordinate.value);
+
+      el.ownerTag.value = tile.owner_tag || tile.ownerTag || tile.tag || feed?.tag || "";
+
+      el.websiteUrl.value = tile.website_url || tile.websiteUrl || tile.url || meta.feedLink || feed?.link || "";
+
+      el.xHandle.value = meta.xHandle || meta.handle || meta.feedHandle || tile.x_handle || tile.xHandle || feed?.xHandle || feed?.handle || "";
+
+      const currentNote = meta.note || tile.note || meta.about || meta.profileAbout || meta.description || feed?.note || "";
       const currentLink = tile.website_url || tile.websiteUrl || tile.url || meta.feedLink || "";
 
       el.note.value = currentNote;
@@ -326,7 +356,6 @@
         el.favoriteTileInputs.forEach((input, i) => input.value = favs[i] || "");
       }
     }
-
 
     function unlockEditPanel(){
       const loginPanel = document.getElementById("loginPanel");
@@ -355,7 +384,7 @@
       const data = await r.json().catch(() => ({}));
       show(data);
       if(!r.ok || !data.ok){ throw new Error(data.error || "Tile load failed"); }
-      fill(data.tile);
+      await fill(data.tile);
       unlockEditPanel();
     }
 
@@ -391,7 +420,6 @@
 
       setStatus("Owner sign-in created. Sign with the tile owner wallet only.", false);
     }
-
 
     async function verifyOwner(){
       const c = normCoord(el.coordinate.value);
@@ -514,7 +542,7 @@
         return;
       }
 
-      fill(data.tile);
+      await fill(data.tile);
 
       if(el.imageFile) el.imageFile.value = "";
       if(el.bannerFile) el.bannerFile.value = "";
