@@ -154,6 +154,9 @@
       <label>Links</label>
       <textarea id="links" placeholder="One URL per line"></textarea>
 
+      <label>Top 6 Tiles</label>
+      <textarea id="favoriteTiles" placeholder="One tile coordinate per line. Example: N1W1"></textarea>
+
       <label>Replace tile image</label>
       <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
 
@@ -183,6 +186,7 @@
       musicUrl: document.getElementById("musicUrl"),
       gallery: document.getElementById("gallery"),
       links: document.getElementById("links"),
+      favoriteTiles: document.getElementById("favoriteTiles"),
       imageFile: document.getElementById("imageFile"),
       status: document.getElementById("status"),
       editStatus: document.getElementById("editStatus"),
@@ -259,6 +263,7 @@
       el.musicUrl.value = meta.musicUrl || "";
       el.gallery.value = Array.isArray(meta.gallery) ? meta.gallery.join("\n") : "";
       el.links.value = Array.isArray(meta.links) ? meta.links.join("\n") : (currentLink ? currentLink : "");
+      el.favoriteTiles.value = Array.isArray(meta.favoriteTiles) ? meta.favoriteTiles.join("\n") : "";
     }
 
 
@@ -382,6 +387,7 @@
       fd.append("musicUrl", el.musicUrl.value);
       fd.append("gallery", el.gallery.value);
       fd.append("links", el.links.value);
+      fd.append("favoriteTiles", el.favoriteTiles.value);
 
       const file = el.imageFile.files && el.imageFile.files[0] ? el.imageFile.files[0] : null;
       if(file){
