@@ -1,5 +1,6 @@
 (function(){
   const KEY = "monolithOwnerSession";
+  const MAX_AGE_MS = 12 * 60 * 60 * 1000;
 
   function norm(v){
     return String(v || "").trim().toUpperCase().replace(/\s+/g, "");
@@ -11,10 +12,17 @@
 
   function getSession(){
     try {
-      const raw = sessionStorage.getItem(KEY);
+      const raw = localStorage.getItem(KEY);
       if (!raw) return null;
+
       const s = JSON.parse(raw);
       if (!s || !s.sourceCoordinate || !s.payloadUuid) return null;
+
+      if (s.createdAt && Date.now() - Number(s.createdAt) > MAX_AGE_MS) {
+        clearSession();
+        return null;
+      }
+
       return s;
     } catch (_) {
       return null;
@@ -22,11 +30,12 @@
   }
 
   function setSession(data){
-    sessionStorage.setItem(KEY, JSON.stringify(data));
+    localStorage.setItem(KEY, JSON.stringify(data));
   }
 
   function clearSession(){
-    sessionStorage.removeItem(KEY);
+    localStorage.removeItem(KEY);
+    localStorage.removeItem("monolithFavoritePending");
   }
 
   async function postJson(url, body){
@@ -58,10 +67,13 @@
       sourceCoordinate,
       payloadUuid:started.data.auth.payloadUuid,
       signUrl:started.data.auth.signUrl || "",
+      ownerVerified:false,
+      ownerWallet:"",
       createdAt:Date.now()
     };
 
     setSession(session);
+    renderStatus();
     return session;
   }
 
@@ -75,24 +87,41 @@
     });
 
     if (verified.res.ok && verified.data.ok && verified.data.ownerVerified) {
+      session.ownerVerified = true;
       session.ownerWallet = verified.data.signer || verified.data.ownerWallet || "";
+      session.verifiedAt = Date.now();
       setSession(session);
+      renderStatus();
       return { ok:true, session, data:verified.data };
     }
 
-    return { ok:false, session, error:verified.data.error || "owner_session_not_verified", data:verified.data };
+    session.ownerVerified = false;
+    setSession(session);
+    renderStatus();
+
+    return {
+      ok:false,
+      session,
+      error:verified.data.error || "owner_session_not_verified",
+      data:verified.data
+    };
   }
 
   function renderStatus(){
-    const nodes = document.querySelectorAll("[data-monolith-session-status]");
     const session = getSession();
+    const verified = Boolean(session && session.ownerVerified);
 
-    nodes.forEach((node) => {
-      node.textContent = session ? "Signed in: " + session.sourceCoordinate : "Not signed in";
+    document.querySelectorAll("[data-monolith-session-status]").forEach((node) => {
+      node.textContent = verified ? "Signed in: " + session.sourceCoordinate : "Not signed in";
+      node.style.display = "none";
     });
 
     document.querySelectorAll("[data-monolith-session-signout]").forEach((node) => {
-      node.style.display = session ? "" : "none";
+      node.style.display = "none";
+    });
+
+    document.querySelectorAll("[data-monolith-session-toggle]").forEach((node) => {
+      node.textContent = verified ? "Sign Out" : (session ? "Check Sign-In" : "Sign In");
     });
   }
 
@@ -110,14 +139,5 @@
     render:renderStatus
   };
 
-  document.addEventListener("DOMContentLoaded", function(){
-    document.querySelectorAll("[data-monolith-session-signout]").forEach((node) => {
-      node.addEventListener("click", function(){
-        clearSession();
-        renderStatus();
-      });
-    });
-
-    renderStatus();
-  });
+  document.addEventListener("DOMContentLoaded", renderStatus);
 })();

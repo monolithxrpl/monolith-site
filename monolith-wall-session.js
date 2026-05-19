@@ -1,5 +1,7 @@
 (function(){
-  function btn(){ return document.getElementById("monolithWallSignIn"); }
+  function btn(){
+    return document.getElementById("monolithWallSignIn");
+  }
 
   function removeSignLink(){
     const old = document.getElementById("monolithWallSignLink");
@@ -24,21 +26,35 @@
     b.insertAdjacentElement("afterend", a);
   }
 
-  async function signIn(){
+  async function signInFlow(){
     const b = btn();
     if (!b || !window.MonolithSession) return;
 
     const current = window.MonolithSession.get();
-    if (current && current.payloadUuid) {
+
+    if (current && current.ownerVerified) {
+      window.MonolithSession.clear();
+      removeSignLink();
+      b.textContent = "Sign In";
+      return;
+    }
+
+    if (current && !current.ownerVerified) {
+      b.disabled = true;
+      b.textContent = "Checking...";
+
       const verified = await window.MonolithSession.verify();
+
+      b.disabled = false;
+
       if (verified.ok) {
-        alert("Signed in as " + verified.session.sourceCoordinate);
-        window.MonolithSession.render();
+        removeSignLink();
+        b.textContent = "Sign Out";
         return;
       }
 
       showSignLink(current.signUrl);
-      alert("Session exists but is not signed yet. Open Xaman, approve it, then click Sign In again.");
+      b.textContent = "Check Sign-In";
       return;
     }
 
@@ -46,15 +62,13 @@
     if (!source) return;
 
     b.disabled = true;
-    b.textContent = "Creating sign-in...";
+    b.textContent = "Creating...";
 
     try {
       const session = await window.MonolithSession.start(source);
       showSignLink(session.signUrl);
       b.textContent = "Check Sign-In";
       b.disabled = false;
-      window.MonolithSession.render();
-      alert("Open Xaman, approve the owner sign-in, then click Check Sign-In.");
     } catch (e) {
       alert(e.message || "Sign-in failed.");
       b.textContent = "Sign In";
@@ -64,12 +78,24 @@
 
   document.addEventListener("DOMContentLoaded", function(){
     const b = btn();
-    if (b) b.addEventListener("click", signIn);
+    if (!b || !window.MonolithSession) return;
 
-    if (window.MonolithSession) {
-      const session = window.MonolithSession.get();
-      if (session && session.signUrl) showSignLink(session.signUrl);
-      window.MonolithSession.render();
+    b.setAttribute("data-monolith-session-toggle", "1");
+    b.addEventListener("click", signInFlow);
+
+    const session = window.MonolithSession.get();
+
+    if (session && session.ownerVerified) {
+      b.textContent = "Sign Out";
+      removeSignLink();
+    } else if (session) {
+      b.textContent = "Check Sign-In";
+      showSignLink(session.signUrl);
+    } else {
+      b.textContent = "Sign In";
+      removeSignLink();
     }
+
+    window.MonolithSession.render();
   });
 })();
