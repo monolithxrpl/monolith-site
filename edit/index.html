@@ -127,6 +127,9 @@
       <label>Wallpaper / Banner URL</label>
       <input id="bannerUrl" placeholder="https://..." />
 
+      <label>Upload Wallpaper / Banner Image</label>
+      <input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp" />
+
       <label>About</label>
       <textarea id="about" placeholder="Write your profile about section"></textarea>
 
@@ -150,6 +153,10 @@
 
       <label>Gallery Image URLs</label>
       <textarea id="gallery" placeholder="One image URL per line"></textarea>
+      <p class="hint">Delete a gallery image by removing its URL above and saving. Max 12 gallery images.</p>
+
+      <label>Add Gallery Images</label>
+      <input id="galleryFiles" type="file" accept="image/png,image/jpeg,image/webp" multiple />
 
       <label>Links</label>
       <textarea id="links" placeholder="One URL per line"></textarea>
@@ -179,12 +186,14 @@
       xHandle: document.getElementById("xHandle"),
       note: document.getElementById("note"),
       bannerUrl: document.getElementById("bannerUrl"),
+      bannerFile: document.getElementById("bannerFile"),
       about: document.getElementById("about"),
       statusText: document.getElementById("statusText"),
       interests: document.getElementById("interests"),
       musicTitle: document.getElementById("musicTitle"),
       musicUrl: document.getElementById("musicUrl"),
       gallery: document.getElementById("gallery"),
+      galleryFiles: document.getElementById("galleryFiles"),
       links: document.getElementById("links"),
       favoriteTiles: document.getElementById("favoriteTiles"),
       imageFile: document.getElementById("imageFile"),
@@ -389,17 +398,40 @@
       fd.append("links", el.links.value);
       fd.append("favoriteTiles", el.favoriteTiles.value);
 
-      const file = el.imageFile.files && el.imageFile.files[0] ? el.imageFile.files[0] : null;
-      if(file){
+      const validImage = (file) => {
         if(!["image/png","image/jpeg","image/webp"].includes(file.type)){
           setStatus("Image must be PNG JPG WEBP", true);
-          return;
+          return false;
         }
         if(file.size > 2 * 1024 * 1024){
           setStatus("Image too large. Max 2 MB", true);
-          return;
+          return false;
         }
+        return true;
+      };
+
+      const file = el.imageFile.files && el.imageFile.files[0] ? el.imageFile.files[0] : null;
+      if(file){
+        if(!validImage(file)) return;
         fd.append("image", file);
+      }
+
+      const bannerFile = el.bannerFile.files && el.bannerFile.files[0] ? el.bannerFile.files[0] : null;
+      if(bannerFile){
+        if(!validImage(bannerFile)) return;
+        fd.append("banner", bannerFile);
+      }
+
+      const galleryFiles = Array.from(el.galleryFiles.files || []);
+      const existingGallery = el.gallery.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      if(existingGallery.length + galleryFiles.length > 12){
+        setStatus("Gallery max is 12 images. Remove old URLs first.", true);
+        return;
+      }
+
+      for(const gf of galleryFiles){
+        if(!validImage(gf)) return;
+        fd.append("gallery", gf);
       }
 
       const r = await fetch("/api/tile/edit/apply", {
