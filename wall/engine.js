@@ -291,6 +291,16 @@ function coordLabelFromG(gx, gy){
     }
 
     function tileUrlFromPanel(tile,gx,gy){const c=backendCoordFromPanel(tile,gx,gy);return c?"https://monolithxrpl.com/tile/"+encodeURIComponent(c):"";}
+    function isPublicProfileTile(tile){
+      return !!(state.taken.has(tile) || state.backendMarksByTile.has(tile) || state.marksByTile.has(tile));
+    }
+    function goTileProfileFromWallClick(tile,gx,gy){
+      if(!tile || !isPublicProfileTile(tile)) return false;
+      const url = tileUrlFromPanel(tile,gx,gy);
+      if(!url) return false;
+      window.location.href = url;
+      return true;
+    }
     function setTileUrlUI(url){if(!el.vTileUrl)return;el.vTileUrl.textContent=url||"None";if(el.copyTileUrl)el.copyTileUrl.style.display=url?"inline-flex":"none";}
     async function copyTileUrl(){const url=el.vTileUrl?el.vTileUrl.textContent:"";if(!url||url==="None")return;try{await navigator.clipboard.writeText(url);toastShow("tile url copied","good");}catch(_){toastShow("copy fail","bad");}}
     function closePanel(){ panel.classList.remove("open"); }
@@ -778,6 +788,7 @@ const isCreator  = hasCreator && (
           const gx = parseInt(d.getAttribute("data-gx") || "0", 10);
           const gy = parseInt(d.getAttribute("data-gy") || "0", 10);
           const tile = d.getAttribute("data-tile") || tileIdFromCoords(gx, gy);
+          if(goTileProfileFromWallClick(tile, gx, gy)) return;
           openPanel(tile, gx, gy);
         }, { passive:true });
       }
@@ -1197,6 +1208,7 @@ function onMove(e){
                   try{
                     const rgx = parseInt(cell.getAttribute("data-gx") || "0", 10);
                     const rgy = parseInt(cell.getAttribute("data-gy") || "0", 10);
+                    if(goTileProfileFromWallClick(tile, rgx, rgy)) return;
                     openPanel(tile, rgx, rgy);
                   }catch(_){ }
                 }
@@ -1253,6 +1265,8 @@ function onMove(e){
         const gy = _intAttr(cell, ["data-gy","data-y","data-row","data-r","data-j"]);
 
         const tile = cell.getAttribute("data-tile") || cell.getAttribute("data-id") || cell.id || tileIdFromCoords(gx, gy);
+
+        if(goTileProfileFromWallClick(tile, gx, gy)) return true;
 
         openPanel(tile, gx, gy);
 
