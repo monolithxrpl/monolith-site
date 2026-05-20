@@ -665,6 +665,7 @@ h1{
       <div class="actions">
         <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
         <a class="btn" id="wallLink" href="#">View on Wall</a>
+        <a class="btn" id="reportTileLink" href="#">Report Tile</a>
         <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
         <button class="btn" id="resetWallStartBtn" type="button">Reset Wall Start</button>
         <button class="btn" id="favoriteBtn" type="button">♡ Add to Top 6</button>
@@ -726,6 +727,7 @@ h1{
   $("coord").textContent=coord;
   $("tileUrl").textContent=tileUrl;
   $("wallLink").href="/monolith.html?tile="+encodeURIComponent(coord);
+  const reportTileLink=$("reportTileLink"); if(reportTileLink) reportTileLink.href="/report/?tile="+encodeURIComponent(coord);
   const editLink=$("editLink"); if(editLink) editLink.href="/edit/?edit="+encodeURIComponent(coord);
   $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Page URL",1200)};
   const wallStartBtn=$("wallStartBtn");

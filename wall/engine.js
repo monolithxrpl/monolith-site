@@ -52,6 +52,7 @@ let CREATOR_LOGO = "";
       vTileUrl: document.getElementById("vTileUrl"),
       copyTileUrl: document.getElementById("copyTileUrl"),
       viewTilePage: document.getElementById("viewTilePage"),
+      reportTilePage: document.getElementById("reportTilePage"),
       vMedia: document.getElementById("vMedia"),
 
       vNote: document.getElementById("vNote"),
@@ -309,6 +310,16 @@ function coordLabelFromG(gx, gy){
       if(el.viewTilePage){
         el.viewTilePage.href=url||"#";
         el.viewTilePage.style.display=url?"inline-flex":"none";
+      }
+      if(el.reportTilePage){
+        let coord="";
+        try{
+          const u=new URL(url, window.location.origin);
+          const parts=u.pathname.split("/").filter(Boolean);
+          coord=(parts[0]==="tile" && parts[1]) ? parts[1].toUpperCase() : "";
+        }catch(_){}
+        el.reportTilePage.href=coord?"/report/?tile="+encodeURIComponent(coord):"#";
+        el.reportTilePage.style.display=url?"inline-flex":"none";
       }
     }
     async function copyTileUrl(){const url=el.vTileUrl?el.vTileUrl.textContent:"";if(!url||url==="None")return;try{await navigator.clipboard.writeText(url);toastShow("tile url copied","good");}catch(_){toastShow("copy fail","bad");}}
