@@ -622,6 +622,20 @@ h1{
   }
 }
 
+
+
+/* MONOLITH_PROFILE_ACTIONS_UNDER_MUSIC_LOCK_20260520_START */
+@media(max-width:900px){
+  .musicRail{order:2!important}
+  .actions{order:3!important}
+  .grid{order:4!important}
+  .socialGrid{order:5!important}
+  .topTilesBox{order:6!important}
+  .galleryBox{order:7!important}
+  .ownerBox{order:8!important}
+}
+/* MONOLITH_PROFILE_ACTIONS_UNDER_MUSIC_LOCK_20260520_END */
+
 </style>
 </head>
 <body>
@@ -649,6 +663,16 @@ h1{
         <audio id="musicPlayer" controls style="display:none;width:100%;margin-top:10px"></audio>
       </section>
 
+      <div class="actions">
+        <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
+        <a class="btn" id="wallLink" href="#">View on Wall</a>
+        <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
+        <button class="btn" id="resetWallStartBtn" type="button">Reset Wall Start</button>
+        <button class="btn" id="favoriteBtn" type="button">♡ Add to Top 6</button>
+        <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
+        <a class="btn" id="reportTileLink" href="#">Report Tile</a>
+      </div>
+
       <div class="bio" id="bio">Loading tile profile...</div>
 
       <div class="grid">
@@ -662,15 +686,6 @@ h1{
         <div class="card"><div class="k">Deed NFT</div><div class="v" id="deedId">None</div></div>
       </div>
 
-      <div class="actions">
-        <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
-        <a class="btn" id="wallLink" href="#">View on Wall</a>
-        <a class="btn" id="reportTileLink" href="#">Report Tile</a>
-        <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
-        <button class="btn" id="resetWallStartBtn" type="button">Reset Wall Start</button>
-        <button class="btn" id="favoriteBtn" type="button">♡ Add to Top 6</button>
-        <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
-      </div>
 
       <div class="socialGrid">
         <section class="box">
