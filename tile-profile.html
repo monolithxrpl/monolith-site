@@ -624,17 +624,80 @@ h1{
 
 
 
-/* MONOLITH_PROFILE_ACTIONS_UNDER_MUSIC_LOCK_20260520_START */
-@media(max-width:900px){
-  .musicRail{order:2!important}
-  .actions{order:3!important}
-  .grid{order:4!important}
-  .socialGrid{order:5!important}
-  .topTilesBox{order:6!important}
-  .galleryBox{order:7!important}
-  .ownerBox{order:8!important}
+
+
+
+
+
+
+
+
+
+
+
+
+/* MONOLITH_PROFILE_RAIL_LAYOUT_20260520_START */
+.body{
+  display:grid!important;
+  grid-template-columns:300px minmax(0,1fr) 220px!important;
+  gap:12px!important;
+  align-items:start!important;
 }
-/* MONOLITH_PROFILE_ACTIONS_UNDER_MUSIC_LOCK_20260520_END */
+
+.leftRail,.centerRail,.rightRail{
+  min-width:0!important;
+  align-self:start!important;
+}
+
+.leftRail{
+  grid-column:1!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+}
+
+.centerRail{
+  grid-column:2!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+}
+
+.rightRail{
+  grid-column:3!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+}
+
+.leftRail > *,
+.centerRail > *,
+.rightRail > *{
+  grid-column:auto!important;
+  grid-row:auto!important;
+  align-self:stretch!important;
+  margin-top:0!important;
+}
+
+.profileActionsMain .btn{
+  width:100%!important;
+}
+
+@media(max-width:900px){
+  .body{
+    grid-template-columns:1fr!important;
+  }
+  .leftRail,.centerRail,.rightRail{
+    grid-column:auto!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+  }
+  .leftRail{order:1!important}
+  .centerRail{order:2!important}
+  .rightRail{order:3!important}
+}
+/* MONOLITH_PROFILE_RAIL_LAYOUT_20260520_END */
 
 </style>
 </head>
@@ -648,6 +711,7 @@ h1{
   <section class="hero">
     <div class="banner" aria-label="Tile banner"></div>
     <div class="body">
+      <div class="leftRail">
       <div class="profile">
         <img class="avatar" id="avatar" alt="">
         <div>
@@ -663,7 +727,7 @@ h1{
         <audio id="musicPlayer" controls style="display:none;width:100%;margin-top:10px"></audio>
       </section>
 
-      <div class="actions">
+      <div class="actions profileActionsMain">
         <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
         <a class="btn" id="wallLink" href="#">View on Wall</a>
         <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
