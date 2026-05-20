@@ -8,6 +8,40 @@
     if (old) old.remove();
   }
 
+  function removeResetLink(){
+    const old = document.getElementById("monolithWallResetSignIn");
+    if (old) old.remove();
+  }
+
+  function resetSignInUI(){
+    if (!window.MonolithSession) return;
+    window.MonolithSession.clear();
+    removeSignLink();
+    removeResetLink();
+    const b = btn();
+    if (b) {
+      b.disabled = false;
+      b.textContent = "Sign In";
+    }
+  }
+
+  function showResetLink(){
+    removeResetLink();
+
+    const b = btn();
+    if (!b) return;
+
+    const r = document.createElement("button");
+    r.id = "monolithWallResetSignIn";
+    r.className = "btn";
+    r.type = "button";
+    r.textContent = "Reset Sign-In";
+    r.style.marginLeft = "6px";
+    r.onclick = resetSignInUI;
+
+    b.insertAdjacentElement("afterend", r);
+  }
+
   function showSignLink(signUrl){
     removeSignLink();
 
@@ -24,6 +58,7 @@
     a.style.marginLeft = "6px";
 
     b.insertAdjacentElement("afterend", a);
+    showResetLink();
   }
 
   async function signInFlow(){
@@ -33,9 +68,7 @@
     const current = window.MonolithSession.get();
 
     if (current && current.ownerVerified) {
-      window.MonolithSession.clear();
-      removeSignLink();
-      b.textContent = "Sign In";
+      resetSignInUI();
       return;
     }
 
@@ -49,12 +82,21 @@
 
       if (verified.ok) {
         removeSignLink();
+        removeResetLink();
         b.textContent = "Sign Out";
+        return;
+      }
+
+      if (verified.cleared) {
+        removeSignLink();
+        removeResetLink();
+        b.textContent = "Sign In";
         return;
       }
 
       showSignLink(current.signUrl);
       b.textContent = "Check Sign-In";
+      showResetLink();
       return;
     }
 
@@ -67,12 +109,12 @@
     try {
       const session = await window.MonolithSession.start(source);
       showSignLink(session.signUrl);
+      showResetLink();
       b.textContent = "Check Sign-In";
       b.disabled = false;
     } catch (e) {
+      resetSignInUI();
       alert(e.message || "Sign-in failed.");
-      b.textContent = "Sign In";
-      b.disabled = false;
     }
   }
 
@@ -88,12 +130,15 @@
     if (session && session.ownerVerified) {
       b.textContent = "Sign Out";
       removeSignLink();
+      removeResetLink();
     } else if (session) {
       b.textContent = "Check Sign-In";
       showSignLink(session.signUrl);
+      showResetLink();
     } else {
       b.textContent = "Sign In";
       removeSignLink();
+      removeResetLink();
     }
 
     window.MonolithSession.render();
