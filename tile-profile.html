@@ -928,6 +928,30 @@ h1{
 
 
 
+
+
+/* MONOLITH_TABLET_INSIDE_SOCIALGRID_20260520_START */
+/* THE TABLET lives inside About / Status / Interests. Mobile order is DOM-native. */
+.socialGrid > .tabletBox{
+  display:block!important;
+}
+
+@media(max-width:899px){
+  .socialGrid > .tabletBox{
+    order:4!important;
+    width:100%!important;
+  }
+}
+
+@media(min-width:900px){
+  .leftRail .socialGrid > .tabletBox{
+    grid-column:1 / -1!important;
+    grid-row:auto!important;
+    min-height:112px!important;
+  }
+}
+/* MONOLITH_TABLET_INSIDE_SOCIALGRID_20260520_END */
+
 </style>
 </head>
 <body>
@@ -995,13 +1019,17 @@ h1{
           <div class="k">Interests</div>
           <div class="write" id="interestsBox">No interests listed yet.</div>
         </section>
+      
+        <section class="box tabletBox">
+          <div class="k">THE TABLET</div>
+          <div class="tabletDesc">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
+          <div class="write" id="tabletBox">No entries carved yet.</div>
+        </section>
       </div>
 
-      <section class="box tabletBox">
-        <div class="k">THE TABLET</div>
-        <div class="tabletDesc">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
-        <div class="write" id="tabletBox">No entries carved yet.</div>
-      </section>
+
+
+      
 
       <div class="centerMediaStack">
         <section class="box topTilesBox">
