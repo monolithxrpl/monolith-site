@@ -752,6 +752,7 @@ body.view-imageonly .cell .spray{ filter:none; }
       <button class="btn" id="monolithWallSignIn" type="button"><span>Sign In</span></button>
       <a class="btn" href="/market/" aria-label="tile market"><span>Market</span></a>
       <button class="btn" id="btnCenter" type="button" aria-label="return to center"><span>Return to Center</span></button>
+      <button class="btn" id="btnResetWallStart" type="button" aria-label="reset wall start" style="display:none"><span>Reset Wall Start</span></button>
       <button class="btn" id="btnNav" type="button" aria-label="navigation view"><span>Navigation View</span></button>
       <button class="btn" id="btnBrand" type="button" aria-label="brand view"><span>Brand View</span></button>
       <button class="btn" id="btnSat" type="button" aria-label="satellite view"><span>Satellite View</span></button>
@@ -2247,6 +2248,35 @@ el.close.addEventListener("click", function(e){
 
 <script src="/monolith-session.js?v=monolith_owner_session_return_hydrate_20260519" defer></script>
 <script src="/monolith-wall-session.js?v=monolith_wall_session_20260519" defer></script>
+
+<script>
+(function(){
+  function syncWallStartReset(){
+    const btn=document.getElementById("btnResetWallStart");
+    if(!btn) return;
+    let saved="";
+    try{ saved=localStorage.getItem("monolithLandingTile")||""; }catch(e){}
+    btn.style.display=saved ? "inline-flex" : "none";
+  }
+
+  document.addEventListener("DOMContentLoaded",function(){
+    const btn=document.getElementById("btnResetWallStart");
+    if(btn){
+      btn.addEventListener("click",function(){
+        try{ localStorage.removeItem("monolithLandingTile"); }catch(e){}
+        const span=btn.querySelector("span");
+        if(span) span.textContent="Wall Start Reset";
+        setTimeout(function(){
+          if(span) span.textContent="Reset Wall Start";
+          syncWallStartReset();
+        },900);
+      });
+    }
+    syncWallStartReset();
+  });
+})();
+</script>
+
 </body>
 </html>
 
