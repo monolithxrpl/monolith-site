@@ -95,6 +95,47 @@
       return { ok:true, session, data:verified.data };
     }
 
+    const error = String(verified.data.error || "owner_session_not_verified");
+
+    const pendingErrors = new Set([
+      "owner_signin_not_signed",
+      "payload_not_signed",
+      "not_signed",
+      "pending",
+      "owner_session_pending"
+    ]);
+
+    const terminalErrors = new Set([
+      "owner_signin_rejected",
+      "payload_rejected",
+      "rejected",
+      "cancelled",
+      "canceled",
+      "expired",
+      "payload_expired",
+      "owner_signin_expired",
+      "wallet_not_owner",
+      "wrong_wallet",
+      "owner_wallet_mismatch",
+      "signer_not_owner",
+      "tile_owner_mismatch",
+      "payload_not_found",
+      "not_found",
+      "owner_session_not_verified"
+    ]);
+
+    if (terminalErrors.has(error) || !pendingErrors.has(error)) {
+      clearSession();
+      renderStatus();
+      return {
+        ok:false,
+        session:null,
+        cleared:true,
+        error,
+        data:verified.data
+      };
+    }
+
     session.ownerVerified = false;
     setSession(session);
     renderStatus();
@@ -102,7 +143,8 @@
     return {
       ok:false,
       session,
-      error:verified.data.error || "owner_session_not_verified",
+      cleared:false,
+      error,
       data:verified.data
     };
   }
