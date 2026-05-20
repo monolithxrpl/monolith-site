@@ -790,6 +790,131 @@ h1{
 }
 /* MONOLITH_PROFILE_DESKTOP_LEFT_RAIL_GRID_20260520_END */
 
+
+
+/* MONOLITH_PROFILE_DESKTOP_POLISH_WALL_LOG_20260520_START */
+/* Desktop polish only. Mobile portrait stays untouched. */
+.tabletBox{
+  display:none;
+}
+
+@media (min-width:900px){
+  .leftRail{
+    gap:8px!important;
+  }
+
+  .leftRail .socialGrid{
+    grid-column:2!important;
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .ownerBox{
+    grid-column:3!important;
+    grid-row:1!important;
+    min-height:auto!important;
+  }
+
+  .leftRail .tabletBox{
+    display:block!important;
+    grid-column:2!important;
+    grid-row:2!important;
+    min-height:112px!important;
+  }
+
+  .leftRail .centerMediaStack{
+    grid-column:2!important;
+    grid-row:3!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:auto!important;
+    margin-top:0!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:230px!important;
+    margin-top:0!important;
+  }
+
+  .leftRail .topTiles{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .gallery{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .tileMini img{
+    height:58px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .gallery img{
+    height:72px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .box,
+  .leftRail .card{
+    padding:8px!important;
+  }
+
+  .leftRail > .grid{
+    gap:6px!important;
+  }
+}
+/* MONOLITH_PROFILE_DESKTOP_POLISH_WALL_LOG_20260520_END */
+
+
+
+/* MONOLITH_PROFILE_TABLET_LABELS_20260520_START */
+/* Tablet label and button descriptions on mobile and desktop. */
+.tabletDesc{
+  color:#9fc5dd;
+  font-size:12px;
+  line-height:1.35;
+  margin:4px 0 8px;
+}
+
+.profileActionsMain .btn[data-desc]{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:2px!important;
+  line-height:1.1!important;
+  min-height:46px!important;
+  text-align:center!important;
+}
+
+.profileActionsMain .btn[data-desc]::after{
+  content:attr(data-desc);
+  display:block;
+  font-size:10px;
+  font-weight:600;
+  opacity:.68;
+  letter-spacing:0;
+  text-transform:none;
+}
+
+@media (min-width:900px){
+  .leftRail .tabletBox{
+    display:block!important;
+    grid-column:2!important;
+    grid-row:2!important;
+    min-height:112px!important;
+  }
+}
+/* MONOLITH_PROFILE_TABLET_LABELS_20260520_END */
+
 </style>
 </head>
 <body>
@@ -819,13 +944,13 @@ h1{
       </section>
 
       <div class="actions profileActionsMain">
-        <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
-        <a class="btn" id="wallLink" href="#">View on Wall</a>
-        <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
-        <button class="btn" id="resetWallStartBtn" type="button">Reset Wall Start</button>
-        <button class="btn" id="favoriteBtn" type="button">♡ Add to Top 6</button>
-        <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
-        <a class="btn" id="reportTileLink" href="#">Report Tile</a>
+        <a class="btn" id="siteLink" href="#" style="display:none" data-desc="Open owner website">Visit Link</a>
+        <a class="btn" id="wallLink" href="#" data-desc="Jump to wall view">View on Wall</a>
+        <button class="btn" id="wallStartBtn" type="button" data-desc="Open wall here">Set Wall Start</button>
+        <button class="btn" id="resetWallStartBtn" type="button" data-desc="Restore default entry">Reset Wall Start</button>
+        <button class="btn" id="favoriteBtn" type="button" data-desc="Save to Top 6">♡ Add to Top 6</button>
+        <button class="btn" id="copyBtn" type="button" data-desc="Copy this page">Copy Page URL</button>
+        <a class="btn" id="reportTileLink" href="#" data-desc="Flag abuse or content">Report Tile</a>
       </div>
 
       <div class="bio" id="bio">Loading tile profile...</div>
@@ -858,6 +983,12 @@ h1{
           <div class="write" id="interestsBox">No interests listed yet.</div>
         </section>
       </div>
+
+      <section class="box tabletBox">
+        <div class="k">THE TABLET</div>
+        <div class="tabletDesc">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
+        <div class="write" id="tabletBox">No entries carved yet.</div>
+      </section>
 
       <div class="centerMediaStack">
         <section class="box topTilesBox">
