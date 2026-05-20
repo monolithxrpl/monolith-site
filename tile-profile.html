@@ -622,6 +622,45 @@ h1{
   }
 }
 
+
+/* MONOLITH_PROFILE_ACTION_BUTTONS_20260520_START */
+.profileActions{
+  grid-column:1;
+  grid-row:3;
+  margin-top:10px;
+  display:grid;
+  gap:8px;
+}
+.profileActions .actionBtn{
+  width:100%;
+  display:flex!important;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:3px;
+  line-height:1.1;
+  text-align:left;
+}
+.profileActions .btnMain{
+  display:block;
+  font-size:14px;
+  font-weight:900;
+}
+.profileActions .btnSub{
+  display:block;
+  font-size:11px;
+  font-weight:700;
+  opacity:.68;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+@media(max-width:900px){
+  .profileActions{order:3}
+}
+/* MONOLITH_PROFILE_ACTION_BUTTONS_20260520_END */
+
 </style>
 </head>
 <body>
@@ -649,6 +688,29 @@ h1{
         <audio id="musicPlayer" controls style="display:none;width:100%;margin-top:10px"></audio>
       </section>
 
+      <div class="actions profileActions">
+        <a class="btn actionBtn" id="siteLink" href="#" style="display:none">
+          <span class="btnMain">Visit Link</span>
+          <span class="btnSub" id="siteLinkHint">owner link</span>
+        </a>
+        <a class="btn actionBtn" id="wallLink" href="#">
+          <span class="btnMain">View on Wall</span>
+          <span class="btnSub" id="wallLinkHint">open coordinate</span>
+        </a>
+        <button class="btn actionBtn" id="wallStartBtn" type="button">
+          <span class="btnMain" id="wallStartLabel">Set Wall Start</span>
+          <span class="btnSub" id="wallStartHint">default wall landing</span>
+        </button>
+        <button class="btn actionBtn" id="favoriteBtn" type="button">
+          <span class="btnMain">♡ Add to Top 6</span>
+          <span class="btnSub">save to your profile</span>
+        </button>
+        <button class="btn actionBtn" id="copyBtn" type="button">
+          <span class="btnMain" id="copyBtnLabel">Copy Page URL</span>
+          <span class="btnSub" id="copyUrlHint">/tile</span>
+        </button>
+      </div>
+
       <div class="bio" id="bio">Loading tile profile...</div>
 
       <div class="grid">
@@ -660,14 +722,6 @@ h1{
         <div class="card"><div class="k">Status</div><div class="v" id="status">None</div></div>
         <div class="card"><div class="k">Claim TX</div><div class="v" id="claimTx">None</div></div>
         <div class="card"><div class="k">Deed NFT</div><div class="v" id="deedId">None</div></div>
-      </div>
-
-      <div class="actions">
-        <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
-        <a class="btn" id="wallLink" href="#">View on Wall</a>
-        <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
-        <button class="btn" id="favoriteBtn" type="button">♡ Add to Top 6</button>
-        <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
       </div>
 
       <div class="socialGrid">
@@ -726,20 +780,54 @@ h1{
   $("tileUrl").textContent=tileUrl;
   $("wallLink").href="/monolith.html?tile="+encodeURIComponent(coord);
   const editLink=$("editLink"); if(editLink) editLink.href="/edit/?edit="+encodeURIComponent(coord);
-  $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Page URL",1200)};
+  function shortUrl(value){
+    try{
+      const u=new URL(value, location.origin);
+      return u.hostname.replace(/^www\./,"") + (u.pathname && u.pathname!=="/" ? u.pathname.replace(/\/$/,"") : "");
+    }catch(e){
+      return String(value||"").replace(/^https?:\/\//,"").replace(/^www\./,"").slice(0,42);
+    }
+  }
+
+  function setActionLabel(mainId, mainText, subId, subText){
+    const main=$(mainId), sub=$(subId);
+    if(main) main.textContent=mainText;
+    if(sub) sub.textContent=subText;
+  }
+
+  const wallHint=$("wallLinkHint"); if(wallHint) wallHint.textContent="open "+coord;
+  setActionLabel("copyBtnLabel","Copy Page URL","copyUrlHint","/tile/"+coord);
+
+  $("copyBtn").onclick=async()=>{
+    try{
+      await navigator.clipboard.writeText(tileUrl);
+      setActionLabel("copyBtnLabel","Copied","copyUrlHint","/tile/"+coord);
+    }catch(e){
+      setActionLabel("copyBtnLabel","Copy failed","copyUrlHint","try again");
+    }
+    setTimeout(()=>setActionLabel("copyBtnLabel","Copy Page URL","copyUrlHint","/tile/"+coord),1200);
+  };
+
   const wallStartBtn=$("wallStartBtn");
   if(wallStartBtn){
     try{
-      if(localStorage.getItem("monolithLandingTile")===coord) wallStartBtn.textContent="Wall Start Set";
+      if(localStorage.getItem("monolithLandingTile")===coord){
+        setActionLabel("wallStartLabel","Wall Start Set","wallStartHint","opens here by default");
+      }
     }catch(e){}
     wallStartBtn.onclick=()=>{
       try{
         localStorage.setItem("monolithLandingTile",coord);
-        wallStartBtn.textContent="Wall Start Set";
+        setActionLabel("wallStartLabel","Wall Start Set","wallStartHint","opens here by default");
       }catch(e){
-        wallStartBtn.textContent="Set Failed";
+        setActionLabel("wallStartLabel","Set Failed","wallStartHint","try again");
       }
-      setTimeout(()=>{ if(wallStartBtn.textContent==="Set Failed") wallStartBtn.textContent="Set Wall Start"; },1400);
+      setTimeout(()=>{
+        const main=$("wallStartLabel");
+        if(main && main.textContent==="Set Failed"){
+          setActionLabel("wallStartLabel","Set Wall Start","wallStartHint","default wall landing");
+        }
+      },1400);
     };
   }
 
@@ -789,7 +877,7 @@ h1{
     $("status").textContent=t.status||"None";
     $("claimTx").textContent=t.claim_tx_hash||"None";
     $("deedId").textContent=t.deed_nft_id||"None";
-    if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"}
+    if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"; const slh=$("siteLinkHint"); if(slh) slh.textContent=shortUrl(link)}
     if(banner){document.querySelector(".banner").style.backgroundImage="linear-gradient(rgba(5,8,5,.35),rgba(5,8,5,.65)),url('"+banner+"')";document.querySelector(".banner").style.backgroundSize="cover";document.querySelector(".banner").style.backgroundPosition="center"}
     $("aboutBox").textContent=about||note||"No about section yet.";
     $("statusBox").textContent=statusText||"No status yet.";
