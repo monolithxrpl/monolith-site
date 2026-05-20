@@ -623,7 +623,10 @@ h1{
 }
 
 
-/* MONOLITH_PROFILE_ACTION_BUTTONS_20260520_START */
+
+
+
+/* MONOLITH_PROFILE_ACTIONS_SIMPLE_20260520_START */
 .profileActions{
   grid-column:1;
   grid-row:3;
@@ -631,35 +634,15 @@ h1{
   display:grid;
   gap:8px;
 }
-.profileActions .actionBtn{
+.profileActions .btn{
   width:100%;
-  display:flex!important;
-  flex-direction:column;
-  align-items:flex-start;
   justify-content:center;
-  gap:3px;
-  line-height:1.1;
-  text-align:left;
-}
-.profileActions .btnMain{
-  display:block;
-  font-size:14px;
-  font-weight:900;
-}
-.profileActions .btnSub{
-  display:block;
-  font-size:11px;
-  font-weight:700;
-  opacity:.68;
-  max-width:100%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+  text-align:center;
 }
 @media(max-width:900px){
   .profileActions{order:3}
 }
-/* MONOLITH_PROFILE_ACTION_BUTTONS_20260520_END */
+/* MONOLITH_PROFILE_ACTIONS_SIMPLE_20260520_END */
 
 </style>
 </head>
@@ -689,26 +672,11 @@ h1{
       </section>
 
       <div class="actions profileActions">
-        <a class="btn actionBtn" id="siteLink" href="#" style="display:none">
-          <span class="btnMain">Visit Link</span>
-          <span class="btnSub" id="siteLinkHint">owner link</span>
-        </a>
-        <a class="btn actionBtn" id="wallLink" href="#">
-          <span class="btnMain">View on Wall</span>
-          <span class="btnSub" id="wallLinkHint">open coordinate</span>
-        </a>
-        <button class="btn actionBtn" id="wallStartBtn" type="button">
-          <span class="btnMain" id="wallStartLabel">Set Wall Start</span>
-          <span class="btnSub" id="wallStartHint">default wall landing</span>
-        </button>
-        <button class="btn actionBtn" id="favoriteBtn" type="button">
-          <span class="btnMain">♡ Add to Top 6</span>
-          <span class="btnSub">save to your profile</span>
-        </button>
-        <button class="btn actionBtn" id="copyBtn" type="button">
-          <span class="btnMain" id="copyBtnLabel">Copy Page URL</span>
-          <span class="btnSub" id="copyUrlHint">/tile</span>
-        </button>
+        <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
+        <a class="btn" id="wallLink" href="#">View on Wall</a>
+        <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
+        <button class="btn" id="favoriteBtn" type="button">♡ Add to Top 6</button>
+        <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
       </div>
 
       <div class="bio" id="bio">Loading tile profile...</div>
@@ -780,57 +748,22 @@ h1{
   $("tileUrl").textContent=tileUrl;
   $("wallLink").href="/monolith.html?tile="+encodeURIComponent(coord);
   const editLink=$("editLink"); if(editLink) editLink.href="/edit/?edit="+encodeURIComponent(coord);
-  function shortUrl(value){
-    try{
-      const u=new URL(value, location.origin);
-      return u.hostname.replace(/^www\./,"") + (u.pathname && u.pathname!=="/" ? u.pathname.replace(/\/$/,"") : "");
-    }catch(e){
-      return String(value||"").replace(/^https?:\/\//,"").replace(/^www\./,"").slice(0,42);
-    }
-  }
-
-  function setActionLabel(mainId, mainText, subId, subText){
-    const main=$(mainId), sub=$(subId);
-    if(main) main.textContent=mainText;
-    if(sub) sub.textContent=subText;
-  }
-
-  const wallHint=$("wallLinkHint"); if(wallHint) wallHint.textContent="open "+coord;
-  setActionLabel("copyBtnLabel","Copy Page URL","copyUrlHint","/tile/"+coord);
-
-  $("copyBtn").onclick=async()=>{
-    try{
-      await navigator.clipboard.writeText(tileUrl);
-      setActionLabel("copyBtnLabel","Copied","copyUrlHint","/tile/"+coord);
-    }catch(e){
-      setActionLabel("copyBtnLabel","Copy failed","copyUrlHint","try again");
-    }
-    setTimeout(()=>setActionLabel("copyBtnLabel","Copy Page URL","copyUrlHint","/tile/"+coord),1200);
-  };
-
+  $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Page URL",1200)};
   const wallStartBtn=$("wallStartBtn");
   if(wallStartBtn){
     try{
-      if(localStorage.getItem("monolithLandingTile")===coord){
-        setActionLabel("wallStartLabel","Wall Start Set","wallStartHint","opens here by default");
-      }
+      if(localStorage.getItem("monolithLandingTile")===coord) wallStartBtn.textContent="Wall Start Set";
     }catch(e){}
     wallStartBtn.onclick=()=>{
       try{
         localStorage.setItem("monolithLandingTile",coord);
-        setActionLabel("wallStartLabel","Wall Start Set","wallStartHint","opens here by default");
+        wallStartBtn.textContent="Wall Start Set";
       }catch(e){
-        setActionLabel("wallStartLabel","Set Failed","wallStartHint","try again");
+        wallStartBtn.textContent="Set Failed";
       }
-      setTimeout(()=>{
-        const main=$("wallStartLabel");
-        if(main && main.textContent==="Set Failed"){
-          setActionLabel("wallStartLabel","Set Wall Start","wallStartHint","default wall landing");
-        }
-      },1400);
+      setTimeout(()=>{ if(wallStartBtn.textContent==="Set Failed") wallStartBtn.textContent="Set Wall Start"; },1400);
     };
   }
-
 
   function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
   function maskWallet(w){w=String(w||"");return w.length>12?w.slice(0,6)+"..."+w.slice(-6):w||"None"}
@@ -877,7 +810,7 @@ h1{
     $("status").textContent=t.status||"None";
     $("claimTx").textContent=t.claim_tx_hash||"None";
     $("deedId").textContent=t.deed_nft_id||"None";
-    if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"; const slh=$("siteLinkHint"); if(slh) slh.textContent=shortUrl(link)}
+    if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"}
     if(banner){document.querySelector(".banner").style.backgroundImage="linear-gradient(rgba(5,8,5,.35),rgba(5,8,5,.65)),url('"+banner+"')";document.querySelector(".banner").style.backgroundSize="cover";document.querySelector(".banner").style.backgroundPosition="center"}
     $("aboutBox").textContent=about||note||"No about section yet.";
     $("statusBox").textContent=statusText||"No status yet.";
