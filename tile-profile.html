@@ -666,6 +666,7 @@ h1{
         <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
         <a class="btn" id="wallLink" href="#">View on Wall</a>
         <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
+        <button class="btn" id="resetWallStartBtn" type="button">Reset Wall Start</button>
         <button class="btn" id="favoriteBtn" type="button">♡ Add to Top 6</button>
         <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
       </div>
@@ -740,6 +741,20 @@ h1{
         wallStartBtn.textContent="Set Failed";
       }
       setTimeout(()=>{ if(wallStartBtn.textContent==="Set Failed") wallStartBtn.textContent="Set Wall Start"; },1400);
+    };
+  }
+
+  const resetWallStartBtn=$("resetWallStartBtn");
+  if(resetWallStartBtn){
+    resetWallStartBtn.onclick=()=>{
+      try{
+        localStorage.removeItem("monolithLandingTile");
+        resetWallStartBtn.textContent="Wall Start Reset";
+        if(wallStartBtn) wallStartBtn.textContent="Set Wall Start";
+      }catch(e){
+        resetWallStartBtn.textContent="Reset Failed";
+      }
+      setTimeout(()=>{ resetWallStartBtn.textContent="Reset Wall Start"; },1400);
     };
   }
 
