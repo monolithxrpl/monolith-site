@@ -51,6 +51,7 @@ let CREATOR_LOGO = "";
       vTileUrlWrap: document.getElementById("vTileUrlWrap"),
       vTileUrl: document.getElementById("vTileUrl"),
       copyTileUrl: document.getElementById("copyTileUrl"),
+      viewTilePage: document.getElementById("viewTilePage"),
       vMedia: document.getElementById("vMedia"),
 
       vNote: document.getElementById("vNote"),
@@ -301,7 +302,15 @@ function coordLabelFromG(gx, gy){
       window.location.href = url;
       return true;
     }
-    function setTileUrlUI(url){if(!el.vTileUrl)return;el.vTileUrl.textContent=url||"None";if(el.copyTileUrl)el.copyTileUrl.style.display=url?"inline-flex":"none";}
+    function setTileUrlUI(url){
+      if(!el.vTileUrl)return;
+      el.vTileUrl.textContent=url||"None";
+      if(el.copyTileUrl)el.copyTileUrl.style.display=url?"inline-flex":"none";
+      if(el.viewTilePage){
+        el.viewTilePage.href=url||"#";
+        el.viewTilePage.style.display=url?"inline-flex":"none";
+      }
+    }
     async function copyTileUrl(){const url=el.vTileUrl?el.vTileUrl.textContent:"";if(!url||url==="None")return;try{await navigator.clipboard.writeText(url);toastShow("tile url copied","good");}catch(_){toastShow("copy fail","bad");}}
     function closePanel(){ panel.classList.remove("open"); }
 
