@@ -1390,8 +1390,15 @@ function onWheel(e){
     async function handleDirectTileLink(){
       const params = new URLSearchParams(window.location.search);
       const directTile = params.get("tile");
-      if(!directTile) return;
-      const p = parseQueryToCoords(directTile);
+      let startTile = directTile;
+
+      if(!startTile){
+        try{ startTile = localStorage.getItem("monolithLandingTile") || ""; }catch(_){}
+      }
+
+      if(!startTile) return;
+
+      const p = parseQueryToCoords(startTile);
       if(!p) return;
       if(el.q) el.q.value = p.tile;
       centerOn(p.gx, p.gy);
@@ -1406,7 +1413,7 @@ function onWheel(e){
         try{ openPanel(p.tile, p.gx, p.gy); }catch(_){}
       }, 650);
 
-      toastShow("tile " + p.tile, "good");
+      toastShow((directTile ? "tile " : "wall start ") + p.tile, "good");
     }
 
     setTimeout(() => { handleDirectTileLink(); }, 250);

@@ -665,6 +665,7 @@ h1{
       <div class="actions">
         <a class="btn" id="siteLink" href="#" style="display:none">Visit Link</a>
         <a class="btn" id="wallLink" href="#">View on Wall</a>
+        <button class="btn" id="wallStartBtn" type="button">Set Wall Start</button>
         <button class="btn" id="favoriteBtn" type="button">♡ Add to Top 6</button>
         <button class="btn" id="copyBtn" type="button">Copy Page URL</button>
       </div>
@@ -726,6 +727,22 @@ h1{
   $("wallLink").href="/monolith.html?tile="+encodeURIComponent(coord);
   const editLink=$("editLink"); if(editLink) editLink.href="/edit/?edit="+encodeURIComponent(coord);
   $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Page URL",1200)};
+  const wallStartBtn=$("wallStartBtn");
+  if(wallStartBtn){
+    try{
+      if(localStorage.getItem("monolithLandingTile")===coord) wallStartBtn.textContent="Wall Start Set";
+    }catch(e){}
+    wallStartBtn.onclick=()=>{
+      try{
+        localStorage.setItem("monolithLandingTile",coord);
+        wallStartBtn.textContent="Wall Start Set";
+      }catch(e){
+        wallStartBtn.textContent="Set Failed";
+      }
+      setTimeout(()=>{ if(wallStartBtn.textContent==="Set Failed") wallStartBtn.textContent="Set Wall Start"; },1400);
+    };
+  }
+
 
   function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
   function maskWallet(w){w=String(w||"");return w.length>12?w.slice(0,6)+"..."+w.slice(-6):w||"None"}
