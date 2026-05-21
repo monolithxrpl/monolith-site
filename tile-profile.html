@@ -1277,7 +1277,7 @@ h1{
   /* Bottom ledger strip */
   .leftRail > .grid{
     position:absolute!important;
-    top:1360px!important;
+    top:1400px!important;
     left:0!important;
     right:0!important;
     width:auto!important;
@@ -1345,7 +1345,7 @@ h1{
 
   /* Bottom proof ledger stays clean */
   .leftRail > .grid{
-    top:1375px!important;
+    top:1400px!important;
     grid-template-columns:repeat(4,minmax(0,1fr))!important;
     gap:8px!important;
   }
@@ -1806,7 +1806,7 @@ h1{
 
   /* Make Image Gallery bottom line up with Owner Controls bottom */
   .leftRail .galleryBox{
-    min-height:602px!important;
+    min-height:540px!important;
   }
 
   .leftRail .gallery img{
@@ -1860,6 +1860,308 @@ h1{
   }
 }
 /* MONOLITH_DESKTOP_MUSIC_HEADER_FULL_WIDTH_20260520_END */
+
+
+
+/* MONOLITH_SIDEWAYS_PHONE_DESKTOP_LOCK_20260520_START */
+/* Sideways phone only. Desktop and portrait mobile stay locked. */
+@media (orientation:landscape) and (max-height:520px) and (max-width:950px){
+  html,
+  body{
+    overflow-x:auto!important;
+  }
+
+  .wrap{
+    width:1080px!important;
+    min-width:1080px!important;
+    max-width:none!important;
+  }
+
+  .body{
+    display:block!important;
+  }
+
+  .leftRail{
+    --mono-left-w:310px!important;
+    --mono-gap:8px!important;
+    position:relative!important;
+    display:block!important;
+    width:100%!important;
+    min-height:1845px!important;
+  }
+
+  /* Left column locked order: Profile, Bio, Music, Buttons, Owner Controls */
+  .leftRail .profile,
+  .leftRail .bio,
+  .leftRail .musicRail,
+  .leftRail .profileActionsMain,
+  .leftRail .ownerBox{
+    position:absolute!important;
+    left:0!important;
+    width:var(--mono-left-w)!important;
+    max-width:var(--mono-left-w)!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    z-index:10!important;
+  }
+
+  .leftRail .profile{
+    top:0!important;
+    min-height:350px!important;
+    overflow:visible!important;
+  }
+
+  .leftRail .profile .avatar{
+    width:245px!important;
+    height:245px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .profile h1{
+    font-size:28px!important;
+    line-height:1.05!important;
+    white-space:normal!important;
+  }
+
+  .leftRail .bio{
+    top: 1265px!important;
+    min-height:82px!important;
+    height:auto!important;
+    max-height:none!important;
+    padding:8px!important;
+    font-size:12px!important;
+    line-height:1.25!important;
+    overflow:visible!important;
+  }
+
+  .leftRail .musicRail{
+    top:450px!important;
+    min-height:270px!important;
+    padding:10px!important;
+    padding-top:34px!important;
+    overflow:hidden!important;
+  }
+
+  .leftRail .musicRail::before{
+    content:""!important;
+    position:absolute!important;
+    top:0!important;
+    left:0!important;
+    right:0!important;
+    height:26px!important;
+    display:block!important;
+    background:linear-gradient(#1777bd,#064d86)!important;
+    z-index:1!important;
+  }
+
+  .leftRail .musicRail > .k{
+    position:absolute!important;
+    top:0!important;
+    left:0!important;
+    right:0!important;
+    height:26px!important;
+    line-height:26px!important;
+    width:auto!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0 10px!important;
+    background:transparent!important;
+    z-index:2!important;
+    box-sizing:border-box!important;
+  }
+
+  .leftRail .profileActionsMain{
+    top:748px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+  }
+
+  .leftRail .profileActionsMain .btn{
+    min-height:50px!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  .leftRail .ownerBox{
+    top:1203px!important;
+    min-height:250px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .ownerBox .btn{
+    width:100%!important;
+  }
+
+  /* Center / right puzzle board */
+  .leftRail .socialGrid{
+    position:absolute!important;
+    top:0!important;
+    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
+    right:0!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+    margin:0!important;
+    z-index:2!important;
+  }
+
+  .leftRail .socialGrid > .box:not(.tabletBox){
+    min-height:125px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .socialGrid > .tabletBox{
+    grid-column:1 / -1!important;
+    min-height:390px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .tabletBox .write{
+    min-height:300px!important;
+    font-size:14px!important;
+    line-height:1.5!important;
+  }
+
+  .leftRail .centerMediaStack{
+    position:absolute!important;
+    top:545px!important;
+    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
+    right:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    margin:0!important;
+    z-index:2!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:360px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:540px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .topTiles{
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .gallery{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .tileMini img{
+    height:118px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .gallery img{
+    height:126px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail > .grid{
+    position:absolute!important;
+    top:1535px!important;
+    left:0!important;
+    right:0!important;
+    width:auto!important;
+    max-width:none!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+    z-index:6!important;
+  }
+}
+/* MONOLITH_SIDEWAYS_PHONE_DESKTOP_LOCK_20260520_END */
+
+
+
+/* MONOLITH_SIDEWAYS_CONSTRAIN_MEDIA_CENTER_20260520_START */
+/* Sideways phone only: constrain Top 6 and Gallery to center/right, never under left rail. */
+@media (orientation:landscape) and (max-height:520px) and (max-width:950px){
+  .leftRail .centerMediaStack{
+    position:absolute!important;
+    top:545px!important;
+    left:calc(var(--mono-left-w,310px) + var(--mono-gap,8px))!important;
+    right:0!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  .leftRail .centerMediaStack .topTilesBox,
+  .leftRail .centerMediaStack .galleryBox{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+    margin:0!important;
+  }
+
+  .leftRail .centerMediaStack .topTiles,
+  .leftRail .centerMediaStack .gallery{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+}
+/* MONOLITH_SIDEWAYS_CONSTRAIN_MEDIA_CENTER_20260520_END */
+\n
+
+
+\n
+
+
+
+
+
+
+
+
+
+/* MONOLITH_SIDEWAYS_OWNER_FIXED_FINAL_20260520_START */
+/* Sideways phone only: move Owner Controls down and keep it there. */
+@media (orientation:landscape) and (max-height:520px) and (max-width:950px){
+  .leftRail .ownerBox{
+    position:absolute!important;
+    top:1535px!important;
+    bottom:auto!important;
+    left:0!important;
+    right:auto!important;
+    width:var(--mono-left-w,310px)!important;
+    max-width:var(--mono-left-w,310px)!important;
+    min-height:250px!important;
+    z-index:50!important;
+    box-sizing:border-box!important;
+  }
+}
+/* MONOLITH_SIDEWAYS_OWNER_FIXED_FINAL_20260520_END */
+\n
+/* MONOLITH_TEXT_OVERFLOW_SAFETY_20260521_START */
+.socialGrid .write,.ownerBox .write,.tabletBox .write,.grid .v{
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.socialGrid>.box:not(.tabletBox) .write{max-height:90px!important;overflow:auto!important}
+.ownerBox .write{max-height:155px!important;overflow:auto!important}
+.tabletBox .write{max-height:300px!important;overflow:auto!important}
+.grid .v{max-height:58px!important;overflow:auto!important}
+/* MONOLITH_TEXT_OVERFLOW_SAFETY_20260521_END */
 
 </style>
 </head>
@@ -2154,5 +2456,8 @@ h1{
 </script>
 <script src="/monolith-session.js?v=monolith_owner_session_terminal_reset_20260520" defer></script>
 <script src="/tile-favorite.js?v=monolith_owner_session_favorite_20260519" defer></script>
+
+
+
 </body>
 </html>
