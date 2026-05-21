@@ -1048,6 +1048,272 @@ h1{
 }
 /* MONOLITH_DESKTOP_FILL_CENTER_ONLY_20260520_END */
 
+
+
+/* MONOLITH_DESKTOP_PUZZLE_BOARD_20260520_START */
+/* Desktop-only puzzle board. Mobile layout/order untouched. */
+@media (min-width:900px){
+  .body{
+    display:block!important;
+  }
+
+  .leftRail{
+    --mono-left-w: 300px;
+    --mono-right-w: 240px;
+    --mono-gap: 8px;
+    position:relative!important;
+    display:block!important;
+    width:100%!important;
+    min-height:1280px!important;
+  }
+
+  /* Left independent stack */
+  .leftRail .profile,
+  .leftRail .bio,
+  .leftRail .musicRail,
+  .leftRail .profileActionsMain,
+  .leftRail > .grid{
+    position:relative!important;
+    width:var(--mono-left-w)!important;
+    max-width:var(--mono-left-w)!important;
+    margin:0 0 var(--mono-gap) 0!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    align-self:auto!important;
+  }
+
+  .leftRail > .grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+  }
+
+  .leftRail .card{
+    padding:7px!important;
+  }
+
+  .profileActionsMain .btn{
+    width:100%!important;
+  }
+
+  /* Middle top puzzle block */
+  .leftRail .socialGrid{
+    position:absolute!important;
+    top:0!important;
+    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
+    right:calc(var(--mono-right-w) + var(--mono-gap))!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:var(--mono-gap)!important;
+    margin:0!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+  }
+
+  .leftRail .socialGrid > .box:not(.tabletBox){
+    min-height:112px!important;
+    padding:9px!important;
+  }
+
+  .leftRail .socialGrid > .tabletBox{
+    grid-column:1 / -1!important;
+    min-height:310px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .tabletBox .write{
+    min-height:230px!important;
+    font-size:14px!important;
+    line-height:1.5!important;
+  }
+
+  /* Right top puzzle block */
+  .leftRail .ownerBox{
+    position:absolute!important;
+    top:0!important;
+    right:0!important;
+    width:var(--mono-right-w)!important;
+    min-height:170px!important;
+    padding:10px!important;
+    margin:0!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+  }
+
+  /* Middle/right lower puzzle block */
+  .leftRail .centerMediaStack{
+    position:absolute!important;
+    top:445px!important;
+    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
+    right:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:var(--mono-gap)!important;
+    margin:0!important;
+    width:auto!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:330px!important;
+    padding:10px!important;
+    margin:0!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:520px!important;
+    padding:10px!important;
+    margin:0!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+  }
+
+  .leftRail .topTiles{
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .gallery{
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .tileMini img{
+    height:105px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .gallery img{
+    height:115px!important;
+    object-fit:cover!important;
+  }
+}
+/* MONOLITH_DESKTOP_PUZZLE_BOARD_20260520_END */
+
+
+
+/* MONOLITH_DESKTOP_LEFT_STACK_SLOTS_20260520_START */
+/* Desktop only: lock left column slots so bio/music/buttons cannot slide behind puzzle sections. */
+@media (min-width:900px){
+  .leftRail{
+    min-height:1500px!important;
+  }
+
+  .leftRail .profile,
+  .leftRail .bio,
+  .leftRail .musicRail,
+  .leftRail .profileActionsMain,
+  .leftRail > .grid{
+    position:absolute!important;
+    left:0!important;
+    width:var(--mono-left-w,300px)!important;
+    max-width:var(--mono-left-w,300px)!important;
+    z-index:5!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+  }
+
+  .leftRail .profile{
+    top:0!important;
+  }
+
+  .leftRail .bio{
+    top:350px!important;
+  }
+
+  .leftRail .musicRail{
+    top:455px!important;
+    overflow:hidden!important;
+  }
+
+  .leftRail .musicRail iframe,
+  .leftRail .musicRail audio,
+  .leftRail .musicRail .write,
+  .leftRail .musicRail *{
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  .leftRail .profileActionsMain{
+    top:650px!important;
+  }
+
+  .leftRail > .grid{
+    top:910px!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+  }
+
+  .leftRail .socialGrid,
+  .leftRail .ownerBox,
+  .leftRail .centerMediaStack{
+    z-index:2!important;
+  }
+}
+/* MONOLITH_DESKTOP_LEFT_STACK_SLOTS_20260520_END */
+
+
+
+/* MONOLITH_DESKTOP_BOTTOM_PROOF_LEDGER_20260520_START */
+/* Desktop only: move proof/deed cards into a bottom ledger strip. Mobile untouched. */
+@media (min-width:900px){
+  .leftRail{
+    min-height:1720px!important;
+  }
+
+  /* Keep left side cleaner now that proof cards move down */
+  .leftRail .musicRail{
+    top:435px!important;
+  }
+
+  .leftRail .profileActionsMain{
+    top:645px!important;
+  }
+
+  /* Bottom ledger strip */
+  .leftRail > .grid{
+    position:absolute!important;
+    top:1360px!important;
+    left:0!important;
+    right:0!important;
+    width:auto!important;
+    max-width:none!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+    z-index:6!important;
+    margin:0!important;
+  }
+
+  .leftRail > .grid .card{
+    min-height:82px!important;
+    padding:9px!important;
+  }
+
+  .leftRail > .grid .card .v{
+    word-break:break-word!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  /* Make center puzzle sit above the ledger cleanly */
+  .leftRail .centerMediaStack{
+    top:445px!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:330px!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:520px!important;
+  }
+}
+/* MONOLITH_DESKTOP_BOTTOM_PROOF_LEDGER_20260520_END */
+
 </style>
 </head>
 <body>
