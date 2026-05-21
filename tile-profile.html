@@ -1421,6 +1421,178 @@ h1{
 }
 /* MONOLITH_DESKTOP_PUZZLE_TIGHTEN_20260520_END */
 
+
+
+/* MONOLITH_DESKTOP_PUZZLE_OVERLAP_FIX_20260520_START */
+/* Desktop-only overlap correction. Mobile untouched. */
+@media (min-width:900px){
+  .leftRail{
+    min-height:1800px!important;
+  }
+
+  /* Left column: stop buttons from overlapping Music */
+  .leftRail .bio{
+    top:340px!important;
+  }
+
+  .leftRail .musicRail{
+    top:455px!important;
+  }
+
+  .leftRail .profileActionsMain{
+    top:760px!important;
+  }
+
+  /* Center puzzle: create clean separation between Tablet and media blocks */
+  .leftRail .centerMediaStack{
+    top:510px!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:345px!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:545px!important;
+  }
+
+  /* Bottom ledger clears the gallery */
+  .leftRail > .grid{
+    top:1435px!important;
+  }
+
+  /* Keep the puzzle edges honest */
+  .leftRail .socialGrid,
+  .leftRail .ownerBox,
+  .leftRail .centerMediaStack,
+  .leftRail > .grid{
+    box-sizing:border-box!important;
+  }
+
+  .leftRail .socialGrid > .box,
+  .leftRail .ownerBox,
+  .leftRail .topTilesBox,
+  .leftRail .galleryBox,
+  .leftRail > .grid .card{
+    box-sizing:border-box!important;
+  }
+}
+/* MONOLITH_DESKTOP_PUZZLE_OVERLAP_FIX_20260520_END */
+
+
+
+/* MONOLITH_DESKTOP_OWNER_LEFT_EXPAND_CENTER_20260520_START */
+/* Desktop only: move Owner Controls under buttons and expand center sections. Mobile untouched. */
+@media (min-width:900px){
+  .leftRail{
+    min-height:1880px!important;
+  }
+
+  /* Left column stack spacing */
+  .leftRail .bio{
+    top:340px!important;
+  }
+
+  .leftRail .musicRail{
+    top:455px!important;
+  }
+
+  .leftRail .profileActionsMain{
+    top:755px!important;
+  }
+
+  /* Owner Controls moves below public buttons on the left */
+  .leftRail .ownerBox{
+    position:absolute!important;
+    top:1055px!important;
+    left:0!important;
+    right:auto!important;
+    width:var(--mono-left-w,300px)!important;
+    min-height:210px!important;
+    padding:10px!important;
+    margin:0!important;
+    z-index:5!important;
+    box-sizing:border-box!important;
+  }
+
+  .leftRail .ownerBox .actions{
+    margin-top:10px!important;
+  }
+
+  .leftRail .ownerBox .btn{
+    width:100%!important;
+  }
+
+  /* Proof ledger moves lower to clear Owner Controls */
+  .leftRail > .grid{
+    top:1515px!important;
+  }
+
+  /* Center/right now owns the full space after left column */
+  .leftRail .socialGrid{
+    left:calc(var(--mono-left-w,300px) + var(--mono-gap,8px))!important;
+    right:0!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .socialGrid > .box:not(.tabletBox){
+    min-height:125px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .socialGrid > .tabletBox{
+    grid-column:1 / -1!important;
+    min-height:390px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .tabletBox .write{
+    min-height:300px!important;
+    font-size:14px!important;
+    line-height:1.5!important;
+  }
+
+  /* Media stack stretches full center/right width */
+  .leftRail .centerMediaStack{
+    top:545px!important;
+    left:calc(var(--mono-left-w,300px) + var(--mono-gap,8px))!important;
+    right:0!important;
+    gap:8px!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:360px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:585px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .topTiles{
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .gallery{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .tileMini img{
+    height:118px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .gallery img{
+    height:126px!important;
+    object-fit:cover!important;
+  }
+}
+/* MONOLITH_DESKTOP_OWNER_LEFT_EXPAND_CENTER_20260520_END */
+
 </style>
 </head>
 <body>
