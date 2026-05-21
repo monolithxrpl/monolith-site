@@ -1806,7 +1806,7 @@ h1{
 
   /* Make Image Gallery bottom line up with Owner Controls bottom */
   .leftRail .galleryBox{
-    min-height:602px!important;
+    min-height:540px!important;
   }
 
   .leftRail .gallery img{
@@ -1937,7 +1937,7 @@ h1{
   }
 
   .leftRail .musicRail{
-    top:462px!important;
+    top:450px!important;
     min-height:270px!important;
     padding:10px!important;
     padding-top:34px!important;
@@ -1986,7 +1986,7 @@ h1{
   }
 
   .leftRail .ownerBox{
-    top:1265px!important;
+    top:1203px!important;
     min-height:250px!important;
     padding:10px!important;
   }
@@ -2043,7 +2043,7 @@ h1{
   }
 
   .leftRail .galleryBox{
-    min-height:602px!important;
+    min-height:540px!important;
     padding:10px!important;
   }
 
@@ -2151,7 +2151,19 @@ h1{
   }
 }
 /* MONOLITH_SIDEWAYS_OWNER_FIXED_FINAL_20260520_END */
-\n</style>
+\n
+/* MONOLITH_TEXT_OVERFLOW_SAFETY_20260521_START */
+.socialGrid .write,.ownerBox .write,.tabletBox .write,.grid .v{
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.socialGrid>.box:not(.tabletBox) .write{max-height:90px!important;overflow:auto!important}
+.ownerBox .write{max-height:155px!important;overflow:auto!important}
+.tabletBox .write{max-height:300px!important;overflow:auto!important}
+.grid .v{max-height:58px!important;overflow:auto!important}
+/* MONOLITH_TEXT_OVERFLOW_SAFETY_20260521_END */
+
+</style>
 </head>
 <body>
 <main class="wrap">
