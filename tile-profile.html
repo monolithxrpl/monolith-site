@@ -950,6 +950,104 @@ h1{
 }
 /* MONOLITH_MOBILE_BIO_ABOVE_MUSIC_FORCE_20260520_END */
 
+
+
+/* MONOLITH_DESKTOP_FILL_CENTER_ONLY_20260520_START */
+/* Desktop only. Mobile layout/order untouched. */
+@media (min-width:900px){
+  .leftRail{
+    grid-template-columns:minmax(280px,300px) minmax(0,1fr) minmax(220px,240px)!important;
+    gap:8px!important;
+    align-items:start!important;
+  }
+
+  .leftRail > *{
+    margin-top:0!important;
+  }
+
+  .leftRail .socialGrid{
+    grid-column:2!important;
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important;
+    margin:0!important;
+  }
+
+  .leftRail .socialGrid > .box:not(.tabletBox){
+    min-height:110px!important;
+    padding:9px!important;
+  }
+
+  .leftRail .socialGrid > .tabletBox{
+    grid-column:1 / -1!important;
+    min-height:300px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .tabletBox .write{
+    min-height:220px!important;
+    font-size:14px!important;
+    line-height:1.5!important;
+  }
+
+  .leftRail .ownerBox{
+    grid-column:3!important;
+    grid-row:1!important;
+    min-height:160px!important;
+    padding:10px!important;
+    margin:0!important;
+  }
+
+  .leftRail .centerMediaStack{
+    grid-column:2 / 4!important;
+    grid-row:2!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    margin:0!important;
+    width:100%!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:330px!important;
+    padding:10px!important;
+    margin:0!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:520px!important;
+    padding:10px!important;
+    margin:0!important;
+  }
+
+  .leftRail .topTiles{
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .gallery{
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .tileMini img{
+    height:105px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .gallery img{
+    height:115px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .card,
+  .leftRail .box{
+    padding:8px!important;
+  }
+}
+/* MONOLITH_DESKTOP_FILL_CENTER_ONLY_20260520_END */
+
 </style>
 </head>
 <body>
