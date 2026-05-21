@@ -424,7 +424,6 @@ h1{
 }
 
 
-
 /* MONOLITH_TOP6_GALLERY_FINAL_STACK_20260519 */
 .topTilesBox{
   grid-column:2 / 4!important;
@@ -623,19 +622,6 @@ h1{
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* MONOLITH_PROFILE_RAIL_LAYOUT_20260520_START */
 .body{
   display:grid!important;
@@ -698,11 +684,6 @@ h1{
   .rightRail{order:3!important}
 }
 /* MONOLITH_PROFILE_RAIL_LAYOUT_20260520_END */
-
-
-
-
-
 
 
 /* MONOLITH_PROFILE_DESKTOP_LEFT_RAIL_GRID_20260520_START */
@@ -791,9 +772,86 @@ h1{
 /* MONOLITH_PROFILE_DESKTOP_LEFT_RAIL_GRID_20260520_END */
 
 
+/* MONOLITH_PROFILE_DESKTOP_POLISH_WALL_LOG_20260520_START */
+/* Desktop polish only. Mobile portrait stays untouched. */
+.tabletBox{
+  display:none;
+}
 
+@media (min-width:900px){
+  .leftRail{
+    gap:8px!important;
+  }
 
+  .leftRail .socialGrid{
+    grid-column:2!important;
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
 
+  .leftRail .ownerBox{
+    grid-column:3!important;
+    grid-row:1!important;
+    min-height:auto!important;
+  }
+
+  .leftRail .tabletBox{
+    display:block!important;
+    grid-column:2!important;
+    grid-row:2!important;
+    min-height:112px!important;
+  }
+
+  .leftRail .centerMediaStack{
+    grid-column:2!important;
+    grid-row:3!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:auto!important;
+    margin-top:0!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:230px!important;
+    margin-top:0!important;
+  }
+
+  .leftRail .topTiles{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .gallery{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .tileMini img{
+    height:58px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .gallery img{
+    height:72px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .box,
+  .leftRail .card{
+    padding:8px!important;
+  }
+
+  .leftRail > .grid{
+    gap:6px!important;
+  }
+}
+/* MONOLITH_PROFILE_DESKTOP_POLISH_WALL_LOG_20260520_END */
 
 
 /* MONOLITH_PROFILE_TABLET_LABELS_20260520_START */
@@ -837,18 +895,12 @@ h1{
 /* MONOLITH_PROFILE_TABLET_LABELS_20260520_END */
 
 
-
 /* MONOLITH_PROFILE_TABLET_MOBILE_VISIBLE_20260520_START */
 /* Make THE TABLET visible on mobile and desktop without changing layout order. */
 .tabletBox{
   display:block!important;
 }
 /* MONOLITH_PROFILE_TABLET_MOBILE_VISIBLE_20260520_END */
-
-
-
-
-
 
 
 /* MONOLITH_TABLET_INSIDE_SOCIALGRID_20260520_START */
@@ -875,128 +927,28 @@ h1{
 
 
 
-/* MONOLITH_PROFILE_DESKTOP_TIGHTEN_TABLET_20260520_START */
-/* Desktop polish only. Mobile layout stays untouched. */
-@media (min-width:900px){
-  .body{
-    display:block!important;
-  }
-
-  .body > .leftRail{
-    display:grid!important;
-    grid-template-columns:minmax(260px,300px) minmax(0,1fr) minmax(190px,225px)!important;
-    gap:10px!important;
-    align-items:start!important;
-    width:100%!important;
-  }
-
-  .leftRail > *{
-    margin-top:0!important;
-    min-width:0!important;
-    align-self:start!important;
+/* MONOLITH_MOBILE_BIO_ABOVE_MUSIC_FORCE_20260520_START */
+/* Mobile-only: force founder bio directly under profile and above Music. */
+@media (max-width:899px){
+  .leftRail{
+    display:flex!important;
+    flex-direction:column!important;
   }
 
   .leftRail .profile{
-    grid-column:1!important;
-    grid-row:1!important;
-  }
-
-  .leftRail .musicRail{
-    grid-column:1!important;
-    grid-row:2!important;
-  }
-
-  .leftRail .profileActionsMain{
-    grid-column:1!important;
-    grid-row:3!important;
+    order:1!important;
   }
 
   .leftRail .bio{
-    grid-column:1!important;
-    grid-row:4!important;
+    order:2!important;
+    display:block!important;
   }
 
-  .leftRail > .grid{
-    grid-column:1!important;
-    grid-row:5!important;
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:6px!important;
-  }
-
-  .leftRail .socialGrid{
-    grid-column:2!important;
-    grid-row:1!important;
-    display:grid!important;
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:8px!important;
-    margin-top:0!important;
-  }
-
-  .leftRail .socialGrid > .box{
-    padding:9px!important;
-    min-height:88px!important;
-  }
-
-  .leftRail .socialGrid > .tabletBox{
-    grid-column:1 / -1!important;
-    min-height:92px!important;
-  }
-
-  .leftRail .centerMediaStack{
-    grid-column:2!important;
-    grid-row:2!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-    margin-top:0!important;
-  }
-
-  .leftRail .topTilesBox,
-  .leftRail .galleryBox{
-    grid-column:auto!important;
-    grid-row:auto!important;
-    margin-top:0!important;
-    min-height:auto!important;
-    padding:9px!important;
-  }
-
-  .leftRail .topTiles{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .gallery{
-    grid-template-columns:repeat(4,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .tileMini img{
-    height:56px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .gallery img{
-    height:70px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .ownerBox{
-    grid-column:3!important;
-    grid-row:1!important;
-    margin-top:0!important;
-    padding:9px!important;
-  }
-
-  .leftRail .card{
-    padding:8px!important;
-  }
-
-  .profileActionsMain .btn{
-    width:100%!important;
+  .leftRail .musicRail{
+    order:3!important;
   }
 }
-/* MONOLITH_PROFILE_DESKTOP_TIGHTEN_TABLET_20260520_END */
+/* MONOLITH_MOBILE_BIO_ABOVE_MUSIC_FORCE_20260520_END */
 
 </style>
 </head>
@@ -1020,6 +972,8 @@ h1{
         </div>
       </div>
 
+      <div class="bio" id="bio">Loading tile profile...</div>
+
       <section class="box musicRail">
         <div class="k">Music</div>
         <div class="write" id="musicBox">No track added yet.</div>
@@ -1035,8 +989,6 @@ h1{
         <button class="btn" id="copyBtn" type="button" data-desc="Copy this page">Copy Page URL</button>
         <a class="btn" id="reportTileLink" href="#" data-desc="Flag abuse or content">Report Tile</a>
       </div>
-
-      <div class="bio" id="bio">Loading tile profile...</div>
 
       <div class="grid">
         <div class="card"><div class="k">Wallet Proof</div><div class="v" id="wallet">None</div></div>
@@ -1072,7 +1024,6 @@ h1{
           <div class="write" id="tabletBox">No entries carved yet.</div>
         </section>
       </div>
-
 
 
       
