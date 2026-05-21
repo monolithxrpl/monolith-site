@@ -1314,6 +1314,113 @@ h1{
 }
 /* MONOLITH_DESKTOP_BOTTOM_PROOF_LEDGER_20260520_END */
 
+
+
+/* MONOLITH_DESKTOP_PUZZLE_TIGHTEN_20260520_START */
+/* Desktop-only puzzle tightening. Mobile untouched. */
+@media (min-width:900px){
+  .leftRail{
+    --mono-left-w:300px!important;
+    --mono-right-w:255px!important;
+    --mono-gap:8px!important;
+    min-height:1740px!important;
+  }
+
+  /* Left column spacing */
+  .leftRail .profile{
+    top:0!important;
+  }
+
+  .leftRail .bio{
+    top:350px!important;
+  }
+
+  .leftRail .musicRail{
+    top:470px!important;
+  }
+
+  .leftRail .profileActionsMain{
+    top:700px!important;
+  }
+
+  /* Bottom proof ledger stays clean */
+  .leftRail > .grid{
+    top:1375px!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  /* Top puzzle pieces */
+  .leftRail .socialGrid{
+    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
+    right:calc(var(--mono-right-w) + var(--mono-gap))!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .socialGrid > .box:not(.tabletBox){
+    min-height:118px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .socialGrid > .tabletBox{
+    min-height:345px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .tabletBox .write{
+    min-height:260px!important;
+    font-size:14px!important;
+    line-height:1.5!important;
+  }
+
+  /* Owner Controls fills the right puzzle space */
+  .leftRail .ownerBox{
+    width:var(--mono-right-w)!important;
+    min-height:471px!important;
+    padding:10px!important;
+  }
+
+  /* Media block locks under tablet/owner like a puzzle */
+  .leftRail .centerMediaStack{
+    top:482px!important;
+    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
+    right:0!important;
+    gap:8px!important;
+  }
+
+  .leftRail .topTilesBox{
+    min-height:345px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .galleryBox{
+    min-height:545px!important;
+    padding:10px!important;
+  }
+
+  .leftRail .topTiles{
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .gallery{
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .tileMini img{
+    height:112px!important;
+    object-fit:cover!important;
+  }
+
+  .leftRail .gallery img{
+    height:122px!important;
+    object-fit:cover!important;
+  }
+}
+/* MONOLITH_DESKTOP_PUZZLE_TIGHTEN_20260520_END */
+
 </style>
 </head>
 <body>
