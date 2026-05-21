@@ -1775,6 +1775,47 @@ h1{
 }
 /* MONOLITH_DESKTOP_LEFT_RAIL_SPACING_FIX_20260520_END */
 
+
+
+/* MONOLITH_DESKTOP_LEDGER_GAP_CLOSE_20260520_START */
+/* Desktop only: pull bottom proof ledger upward to close footer gap. Mobile untouched. */
+@media (min-width:900px){
+  .leftRail{
+    min-height:1775px!important;
+  }
+
+  .leftRail > .grid{
+    top:1460px!important;
+  }
+}
+/* MONOLITH_DESKTOP_LEDGER_GAP_CLOSE_20260520_END */
+
+
+
+/* MONOLITH_DESKTOP_GALLERY_LEDGER_ALIGN_20260520_START */
+/* Desktop only: align gallery bottom with Owner Controls and move ledger down. Mobile untouched. */
+@media (min-width:900px){
+  .leftRail{
+    min-height:1845px!important;
+  }
+
+  /* Pull proof ledger down slightly */
+  .leftRail > .grid{
+    top:1535px!important;
+  }
+
+  /* Make Image Gallery bottom line up with Owner Controls bottom */
+  .leftRail .galleryBox{
+    min-height:602px!important;
+  }
+
+  .leftRail .gallery img{
+    height:126px!important;
+    object-fit:cover!important;
+  }
+}
+/* MONOLITH_DESKTOP_GALLERY_LEDGER_ALIGN_20260520_END */
+
 </style>
 </head>
 <body>
