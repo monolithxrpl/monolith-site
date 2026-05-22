@@ -408,7 +408,8 @@
       if(anchor) anchor.parentNode.insertBefore(box, anchor);
     }
     /* MONOLITH_EDIT_DEED_ACCEPT_BANNER_20260521_END */
-\n    async function loadTileAfterVerified(){
+
+    async function loadTileAfterVerified(){
       const c = normCoord(el.coordinate.value);
       if(!c){ throw new Error("Coordinate required"); }
       const r = await fetch("/api/tile/" + encodeURIComponent(c), { cache:"no-store" });
@@ -428,7 +429,7 @@
       const r = await fetch("/api/tile/edit/start", {
         method:"POST",
         headers:{ "Content-Type":"application/json" },
-        body:JSON.stringify({ coordinate:c })
+        body:JSON.stringify({ coordinate:c, returnUrl: window.location.origin + window.location.pathname + "?edit=" + encodeURIComponent(c) })
       });
 
       const data = await r.json().catch(() => ({}));
@@ -442,6 +443,8 @@
       const auth = data.auth || {};
       if(auth.payloadUuid){
         el.payloadUuid.value = auth.payloadUuid;
+        localStorage.setItem("monolith_edit_payload_uuid", auth.payloadUuid);
+        localStorage.setItem("monolith_edit_coordinate", c);
         ownerVerified = false;
         setEditLocked(true);
       }
@@ -477,6 +480,8 @@
       }
 
       ownerVerified = true;
+      localStorage.removeItem("monolith_edit_payload_uuid");
+      localStorage.removeItem("monolith_edit_coordinate");
       await loadTileAfterVerified();
       setStatus("Owner wallet verified. Editing unlocked.", false);
       return true;
@@ -608,6 +613,18 @@
     }
 
     if(qs.get("edit")) el.coordinate.value = normCoord(qs.get("edit"));
+
+    const restoredCoord = normCoord(el.coordinate.value);
+    const savedCoord = normCoord(localStorage.getItem("monolith_edit_coordinate") || "");
+    const savedPayload = localStorage.getItem("monolith_edit_payload_uuid") || "";
+
+    if(restoredCoord && savedPayload && savedCoord === restoredCoord){
+      el.payloadUuid.value = savedPayload;
+      setStatus("Owner sign-in returned. Verifying owner wallet now.", false);
+      setTimeout(() => {
+        verifyOwner().catch(e => setStatus(e.message || "Owner verification failed", true));
+      }, 350);
+    }
     if(qs.get("payload")){
       el.payloadUuid.value = qs.get("payload");
       ownerVerified = false;
