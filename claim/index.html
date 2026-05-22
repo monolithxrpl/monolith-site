@@ -515,61 +515,73 @@ return null;
         const r = await fetch(FEED_URL, { cache: "no-store" });
         if(!r.ok) throw new Error("feed http " + r.status);
         const arr = await r.json();
+
+        const feedKey = (v) => String(v || "").trim().toUpperCase();
+
+        const coordFromG = (gx,gy) => {
+          if(gx === 0 && gy === 0) return "ORIGIN";
+          let ns = gy > 0 ? "N"+gy : (gy < 0 ? "S"+Math.abs(gy) : "");
+          let ew = gx > 0 ? "E"+gx : (gx < 0 ? "W"+Math.abs(gx) : "");
+          return ns + ew;
+        };
+
         const taken = new Set();
-        for(const m of (Array.isArray(arr) ? arr : [])){
-          if(m && typeof m.tile === "string" && m.tile) taken.add(m.tile);
+
+        const add = (v) => {
+          const k = feedKey(v);
+          if(k) taken.add(k);
+        };
+
+        if(Array.isArray(arr)){
+          for(const it of arr){
+            if(!it) continue;
+
+            const gx = (it.gx!=null) ? parseInt(it.gx,10) : null;
+            const gy = (it.gy!=null) ? parseInt(it.gy,10) : null;
+            const hasCoords = Number.isFinite(gx) && Number.isFinite(gy);
+
+            const rawTile = feedKey(it.tile);
+            const coordTile = hasCoords ? coordFromG(gx,gy) : "";
+
+            add(rawTile);
+            add(coordTile);
+          }
         }
+
+        try{
+          const br = await fetch("/api/tiles/claimed", { cache:"no-store" });
+          if(br.ok){
+            const bd = await br.json();
+            for(const t of (Array.isArray(bd.tiles) ? bd.tiles : [])){
+              add(t.coordinate);
+              if(Number.isFinite(Number(t.gx)) && Number.isFinite(Number(t.gy))){
+                add(coordFromG(Number(t.gx), Number(t.gy)));
+              }
+            }
+          }
+        }catch(_){}
+
         state.taken = taken;
         state.feedLoaded = true;
+        let activeLabel = taken.size >= 1000 ? taken.size.toLocaleString() + "+" : taken.size.toLocaleString();
+        try{
+          const sr = await fetch("/api/wall/stats", { cache:"no-store" });
+          if(sr.ok){
+            const sd = await sr.json();
+            if(sd && sd.ok && sd.activeWallLabel) activeLabel = sd.activeWallLabel;
+          }
+        }catch(_){}
+
         const ms = Math.round(performance.now() - t0);
-        setFeedLine("<span class='mono'>Feed</span> loaded. Taken tiles: <span class='ok'>" + taken.size + "</span>. " + ms + "ms");
-        if(DEBUG) showOutput({ feed: "ok", taken: taken.size, ms });
+        setFeedLine("<span class='mono'>MONOLITH Wall</span> loaded. Active wall tiles: <span class='ok'>" + activeLabel + "</span>. " + ms + "ms");
+        if(DEBUG) showOutput({ feed: "ok", taken: taken.size, activeWallLabel: activeLabel, ms });
       }catch(e){
         state.taken = new Set();
         state.feedLoaded = false;
         setFeedLine("<span class='mono'>Feed</span> failed. Taken tile enforcement is not authoritative.");
-        if(DEBUG) showOutput({ feed: "fail", error: String(e) });
+        if(DEBUG) showOutput({ feed: "error", message: e.message });
       }
     }
-
-    async function sha256Hex(buf){
-      const hash = await crypto.subtle.digest("SHA-256", buf);
-      const bytes = new Uint8Array(hash);
-      let out = "";
-      for(const b of bytes) out += b.toString(16).padStart(2, "0");
-      return out;
-    }
-
-    async function buildImagePayload(file){
-      if(!file) return null;
-
-      const okType = ["image/png","image/jpeg","image/webp"].includes(file.type);
-      if(!okType) return { error: "Image must be PNG JPG WEBP" };
-      if(file.size > 2 * 1024 * 1024) return { error: "Image too large. Max 2 MB" };
-
-      const buf = await file.arrayBuffer();
-      const hash = await sha256Hex(buf);
-
-      const meta = {
-        name: file.name || "image",
-        type: file.type,
-        size: file.size,
-        sha256: hash
-      };
-
-      if(file.size <= 200 * 1024){
-        const dataUrl = await new Promise((res, rej) => {
-          const fr = new FileReader();
-          fr.onload = () => res(String(fr.result || ""));
-          fr.onerror = () => rej(new Error("file read failed"));
-          fr.readAsDataURL(file);
-        });
-        return { meta, dataUrl };
-      }
-
-      return { meta };
-    }
-
 
     function setTakenTileStatus(tile){
       const cleanTile = String(tile || "").trim().toUpperCase();

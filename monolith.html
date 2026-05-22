@@ -745,7 +745,7 @@ body.view-imageonly .cell .spray{ filter:none; }
     </div>
 
     <div class="kpi">
-      <div class="pill"><span class="dot"></span><span id="kTaken">0</span> taken</div>
+      <div class="pill"><span class="dot"></span><span id="kTaken">0</span> active</div>
       <a class="btn" href="/" aria-label="back to entrance"><span>Back to Entrance</span></a>
       <a class="btn primary" href="/claim/" aria-label="claim a tile"><span>Claim a Tile</span></a>
       <a class="btn" href="/edit/" aria-label="edit a tile"><span>Edit Tile</span></a>
@@ -2017,6 +2017,14 @@ function onWheel(e){
         state.marksByTile = marks;
 
         el.kTaken.textContent = String(state.taken.size);
+        fetch("/api/wall/stats", { cache:"no-store" })
+          .then(r => r.ok ? r.json() : null)
+          .then(d => {
+            if(d && d.ok && d.activeWallLabel && el.kTaken){
+              el.kTaken.textContent = d.activeWallLabel;
+            }
+          })
+          .catch(() => {});
 
         state.lastKey = "";
       }catch(_){
@@ -2172,7 +2180,7 @@ el.close.addEventListener("click", function(e){
 <!-- monolith-lock: TRUE -->
 <!-- monolith-lock-ts: 2026-02-07T00:00:00Z -->
 
-  <script src="/wall/engine.js?v=monolith_panel_report_tile_20260520"></script>
+  <script src="/wall/engine.js?v=monolith_active_wall_count_stats_20260522"></script>
 
 <script>
 (() => {

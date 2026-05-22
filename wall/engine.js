@@ -126,6 +126,14 @@ zoom: 0.65,
       }catch(_){}
 
       el.kTaken.textContent = String(all.size);
+      fetch("/api/wall/stats", { cache:"no-store" })
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if(d && d.ok && d.activeWallLabel && el.kTaken){
+            el.kTaken.textContent = d.activeWallLabel;
+          }
+        })
+        .catch(() => {});
     }
 
     function toastShow(msg, kind){
