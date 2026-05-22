@@ -2205,7 +2205,7 @@ h1{
 
       <div class="grid">
         <div class="card"><div class="k">Wallet Proof</div><div class="v" id="wallet">None</div></div>
-        <div class="card"><div class="k">Deed Status</div><div class="v" id="deed">Checking</div></div>
+        <div class="card"><div class="k">Deed Status</div><div class="v" id="deed">Checking</div><div class="muted" id="deedHelp" style="margin-top:8px;font-size:12px">Checking Coordinate Deed delivery.</div><a id="deedAccept" href="#" target="_blank" rel="noopener" style="display:none;margin-top:10px;text-decoration:none" class="btn">Accept Deed in Xaman</a></div>
         <div class="card"><div class="k">Date</div><div class="v" id="date">None</div></div>
         <div class="card"><div class="k">Page URL</div><div class="v" id="tileUrl">None</div></div>
         <div class="card"><div class="k">Tier</div><div class="v" id="tier">None</div></div>
@@ -2353,7 +2353,12 @@ h1{
     $("bio").textContent=note;
     $("wallet").textContent=maskWallet(t.owner_wallet);
     $("date").textContent=date;
-    $("deed").textContent=t.deed_nft_id?"Coordinate Deed linked":"No deed linked";
+    const deedDeliveryStatus=String(t.deed_delivery_status||"").toLowerCase();
+    const deedDelivered=!!(t.deed_delivery_accept_tx_hash||t.deed_delivery_accepted_at||deedDeliveryStatus.includes("accepted")||deedDeliveryStatus.includes("delivered"));
+    const deedPendingAccept=!!(t.deed_nft_id&&t.deed_delivery_accept_sign_url&&!deedDelivered);
+    $("deed").textContent=!t.deed_nft_id?"No deed linked":(deedDelivered?"Deed Delivered":(deedPendingAccept?"Pending Owner Accept":"Coordinate Deed linked"));
+    if($("deedHelp")) $("deedHelp").textContent=!t.deed_nft_id?"No Coordinate Deed is linked yet.":(deedDelivered?"Coordinate Deed accepted and delivered to the owner wallet.":(deedPendingAccept?"Tile is live. Final step: owner must accept the Coordinate Deed NFT in Xaman.":"Coordinate Deed minted and linked."));
+    if($("deedAccept")){if(deedPendingAccept){$("deedAccept").href=t.deed_delivery_accept_sign_url;$("deedAccept").style.display="inline-flex";}else{$("deedAccept").style.display="none";}}
     $("tier").textContent=t.tier||"None";
     $("status").textContent=t.status||"None";
     $("claimTx").textContent=t.claim_tx_hash||"None";
@@ -2451,6 +2456,8 @@ h1{
     $("bio").textContent="This tile is open or not yet published.";
     $("wallet").textContent="None";
     $("deed").textContent="No deed";
+    if($("deedHelp")) $("deedHelp").textContent="No Coordinate Deed is linked yet.";
+    if($("deedAccept")) $("deedAccept").style.display="none";
   });
 })();
 </script>
