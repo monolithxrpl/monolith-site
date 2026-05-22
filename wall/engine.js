@@ -301,7 +301,13 @@ function coordLabelFromG(gx, gy){
     }
 
     function tileUrlFromPanel(tile,gx,gy){const c=backendCoordFromPanel(tile,gx,gy);return c?"https://monolithxrpl.com/tile/"+encodeURIComponent(c):"";}
+    function isPlaceholderTile(tile){
+      const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
+      const tag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
+      return tag === "YOUR BRAND HERE";
+    }
     function isPublicProfileTile(tile){
+      if(isPlaceholderTile(tile)) return false;
       return !!(state.taken.has(tile) || state.backendMarksByTile.has(tile) || state.marksByTile.has(tile));
     }
     function goTileProfileFromWallClick(tile,gx,gy){
@@ -693,7 +699,7 @@ function coordLabelFromG(gx, gy){
       const feedMark = state.marksByTile.get(tile) || null;
       const backMark = state.backendMarksByTile.get(tile) || null;
       const mark = (backMark && feedMark) ? Object.assign({}, feedMark, backMark, {note: backMark.note || feedMark.note, link: backMark.link || feedMark.link, handle: backMark.handle || feedMark.handle, img: backMark.img || feedMark.img}) : (backMark || feedMark || null);
-      const taken = state.taken.has(tile);
+      const taken = state.taken.has(tile) && !isPlaceholderTile(tile);
 
       const markTag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
       const isMonolith = (tile === MONOLITH_TILE);
@@ -825,7 +831,7 @@ const isCreator  = hasCreator && (
     function setCell(cell, gx, gy){
       const tile = tileIdFromCoords(gx, gy);
       const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
-      const taken = state.taken.has(tile);
+      const taken = state.taken.has(tile) && !isPlaceholderTile(tile);
 
       cell.style.left = (gx * STEP) + "px";
       cell.style.top  = ((-gy) * STEP) + "px";

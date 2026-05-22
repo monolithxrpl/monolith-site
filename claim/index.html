@@ -516,35 +516,34 @@ return null;
         if(!r.ok) throw new Error("feed http " + r.status);
         const arr = await r.json();
 
-        const feedKey = (v) => String(v || "").trim().toUpperCase();
+        const blocked = new Set();
+        const key = v => String(v || "").trim().toUpperCase();
 
         const coordFromG = (gx,gy) => {
-          if(gx === 0 && gy === 0) return "ORIGIN";
-          let ns = gy > 0 ? "N"+gy : (gy < 0 ? "S"+Math.abs(gy) : "");
-          let ew = gx > 0 ? "E"+gx : (gx < 0 ? "W"+Math.abs(gx) : "");
-          return ns + ew;
+          gx=Number(gx); gy=Number(gy);
+          if(!Number.isFinite(gx)||!Number.isFinite(gy)) return "";
+          if(gx===0&&gy===0) return "ORIGIN";
+          return (gy>0?"N"+gy:(gy<0?"S"+Math.abs(gy):"")) + (gx>0?"E"+gx:(gx<0?"W"+Math.abs(gx):""));
         };
 
-        const taken = new Set();
+        const add = v => { const k=key(v); if(k) blocked.add(k); };
 
-        const add = (v) => {
-          const k = feedKey(v);
-          if(k) taken.add(k);
+        const isPlaceholder = m => String(m?.tag || m?.owner_tag || "").trim().toUpperCase() === "YOUR BRAND HERE";
+
+        const isBlocking = m => {
+          if(!m || isPlaceholder(m)) return false;
+          const status = String(m.status || "").toLowerCase();
+          const tier = String(m.tier || "").toLowerCase();
+          const tag = String(m.tag || m.owner_tag || "").trim();
+          return status==="claimed" || status==="reserved" || status==="taken" ||
+                 tier==="reserved" || m.locked===true || m.claimed===true ||
+                 m.reserved===true || (tag && tag.toUpperCase()!=="YOUR BRAND HERE");
         };
 
         if(Array.isArray(arr)){
           for(const it of arr){
-            if(!it) continue;
-
-            const gx = (it.gx!=null) ? parseInt(it.gx,10) : null;
-            const gy = (it.gy!=null) ? parseInt(it.gy,10) : null;
-            const hasCoords = Number.isFinite(gx) && Number.isFinite(gy);
-
-            const rawTile = feedKey(it.tile);
-            const coordTile = hasCoords ? coordFromG(gx,gy) : "";
-
-            add(rawTile);
-            add(coordTile);
+            if(!isBlocking(it)) continue;
+            add(it.tile); add(it.coordinate); add(it.coord); add(coordFromG(it.gx,it.gy));
           }
         }
 
@@ -553,17 +552,15 @@ return null;
           if(br.ok){
             const bd = await br.json();
             for(const t of (Array.isArray(bd.tiles) ? bd.tiles : [])){
-              add(t.coordinate);
-              if(Number.isFinite(Number(t.gx)) && Number.isFinite(Number(t.gy))){
-                add(coordFromG(Number(t.gx), Number(t.gy)));
-              }
+              add(t.coordinate); add(coordFromG(t.gx,t.gy));
             }
           }
         }catch(_){}
 
-        state.taken = taken;
+        state.taken = blocked;
         state.feedLoaded = true;
-        let activeLabel = taken.size >= 1000 ? taken.size.toLocaleString() + "+" : taken.size.toLocaleString();
+
+        let activeLabel = blocked.size.toLocaleString();
         try{
           const sr = await fetch("/api/wall/stats", { cache:"no-store" });
           if(sr.ok){
@@ -574,12 +571,12 @@ return null;
 
         const ms = Math.round(performance.now() - t0);
         setFeedLine("<span class='mono'>MONOLITH Wall</span> loaded. Active wall tiles: <span class='ok'>" + activeLabel + "</span>. " + ms + "ms");
-        if(DEBUG) showOutput({ feed: "ok", taken: taken.size, activeWallLabel: activeLabel, ms });
+        if(DEBUG) showOutput({ feed:"ok", blockedForClaims:blocked.size, activeWallLabel:activeLabel, ms });
       }catch(e){
         state.taken = new Set();
         state.feedLoaded = false;
         setFeedLine("<span class='mono'>Feed</span> failed. Taken tile enforcement is not authoritative.");
-        if(DEBUG) showOutput({ feed: "error", message: e.message });
+        if(DEBUG) showOutput({ feed:"error", message:e.message });
       }
     }
 
