@@ -704,6 +704,8 @@ return null;
 
       let html = "";
       html += "<div><strong>Tile claimed</strong></div>";
+      html += "<div class='muted' style='margin-top:8px'>Your tile is live. One final step remains: accept your MONOLITH Coordinate Deed NFT in Xaman. The Deed is the proof layer for this coordinate.</div>";
+      html += "<div class='muted' style='margin-top:8px'>If Xaman shows a warning, review the request and confirm it is for your MONOLITH Coordinate Deed, then accept.</div>";
       html += "<div style='margin-top:8px;color:var(--muted);line-height:1.45'>";
       html += "Coordinate: <strong>" + htmlEscape(claim.coordinate || verification.coordinate || "") + "</strong><br>";
       html += "Owner wallet: <code>" + htmlEscape(claim.ownerWallet || verification.fromWallet || "") + "</code><br>";
@@ -756,7 +758,7 @@ return null;
         }
 
         renderClaimVerified(data);
-        setStatus("Payment verified. Tile claimed. Deed flow ready.", false);
+        setStatus("Payment verified. Tile claimed. One final step: accept your Coordinate Deed NFT in Xaman.", false);
         return data;
       }catch(e){
         setStatus("Payment verification failed", true);
