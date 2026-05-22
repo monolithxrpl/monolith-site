@@ -1078,6 +1078,33 @@ function coordLabelFromG(gx, gy){
     function mediaHTML(src, alt){
       return `<div class="mediaWrap"><img src="${src}" alt="${alt || ""}" /></div>`;
     }
+    function brandHereSVG(tile){
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="54" fill="#050a10"/><rect x="22" y="22" width="468" height="468" rx="44" fill="none" stroke="#48bfff" stroke-width="10"/><text x="256" y="214" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="54" fill="#eaf8ff">YOUR</text><text x="256" y="282" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="46" fill="#eaf8ff">BRAND</text><text x="256" y="350" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="54" fill="#48bfff">HERE</text><text x="256" y="410" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#9fdcff">${tile}</text></svg>`;
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    }
+    function compactCoordFromG(gx, gy){
+      gx = Number(gx)||0;
+      gy = Number(gy)||0;
+      if(gx===0 && gy===0) return "ORIGIN";
+      const ns = gy>0 ? "N"+gy : (gy<0 ? "S"+Math.abs(gy) : "");
+      const ew = gx>0 ? "E"+gx : (gx<0 ? "W"+Math.abs(gx) : "");
+      return ns + ew;
+    }
+    function markForTile(tile, gx, gy){
+      const keys = [tile, compactCoordFromG(gx,gy), tileIdFromCoords(gx,gy), coordLabelFromG(gx,gy), backendCoordFromPanel(tile,gx,gy)];
+      for(const k of keys){
+        if(!k) continue;
+        const clean = String(k).trim().toUpperCase();
+        const mark = state.backendMarksByTile.get(clean) || state.marksByTile.get(clean);
+        if(mark) return mark;
+      }
+      return null;
+    }
+    function isPlaceholderTile(tile, gx, gy){
+      const mark = markForTile(tile, gx, gy);
+      const tag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
+      return tag === "YOUR BRAND HERE";
+    }
 
     function closePanel(){ panel.classList.remove("open"); }
 
@@ -1439,6 +1466,8 @@ const isCreator  = hasCreator && (
 
 } else if(isCreator){
           spray.innerHTML = mediaHTML(CREATOR_LOGO, "MRCAULIMAN");
+        } else if(isPlaceholderTile(tile, gx, gy)){
+          spray.innerHTML = mediaHTML(img || brandHereSVG(tile), "YOUR BRAND HERE");
         } else if(img){
           spray.innerHTML = mediaHTML(img, tile);
         } else {
