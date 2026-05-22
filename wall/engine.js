@@ -299,15 +299,43 @@ function coordLabelFromG(gx, gy){
     function mediaHTML(src, alt){
       return `<div class="mediaWrap"><img src="${src}" alt="${alt || ""}" /></div>`;
     }
+    function brandHereSVG(tile){
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="54" fill="#050a10"/><rect x="22" y="22" width="468" height="468" rx="44" fill="none" stroke="#48bfff" stroke-width="10"/><text x="256" y="214" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="54" fill="#eaf8ff">YOUR</text><text x="256" y="282" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="46" fill="#eaf8ff">BRAND</text><text x="256" y="350" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="54" fill="#48bfff">HERE</text><text x="256" y="410" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#9fdcff">${tile}</text></svg>`;
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    }
+    function compactCoordFromG(gx, gy){
+      gx = Number(gx)||0;
+      gy = Number(gy)||0;
+      if(gx===0 && gy===0) return "ORIGIN";
+      const ns = gy>0 ? "N"+gy : (gy<0 ? "S"+Math.abs(gy) : "");
+      const ew = gx>0 ? "E"+gx : (gx<0 ? "W"+Math.abs(gx) : "");
+      return ns + ew;
+    }
+    function markForTile(tile, gx, gy){
+      const keys = [
+        tile,
+        compactCoordFromG(gx, gy),
+        tileIdFromCoords(gx, gy),
+        coordLabelFromG(gx, gy),
+        backendCoordFromPanel(tile, gx, gy)
+      ];
+      for(const k of keys){
+        if(!k) continue;
+        const clean = String(k).trim().toUpperCase();
+        const mark = state.backendMarksByTile.get(clean) || state.marksByTile.get(clean);
+        if(mark) return mark;
+      }
+      return null;
+    }
 
     function tileUrlFromPanel(tile,gx,gy){const c=backendCoordFromPanel(tile,gx,gy);return c?"https://monolithxrpl.com/tile/"+encodeURIComponent(c):"";}
-    function isPlaceholderTile(tile){
-      const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
+    function isPlaceholderTile(tile, gx, gy){
+      const mark = markForTile(tile, gx, gy);
       const tag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
       return tag === "YOUR BRAND HERE";
     }
     function isPublicProfileTile(tile){
-      if(isPlaceholderTile(tile)) return false;
+      if(isPlaceholderTile(tile, 0, 0)) return false;
       return !!(state.taken.has(tile) || state.backendMarksByTile.has(tile) || state.marksByTile.has(tile));
     }
     function goTileProfileFromWallClick(tile,gx,gy){
@@ -696,10 +724,8 @@ function coordLabelFromG(gx, gy){
     }
 
     function openPanel(tile, gx, gy){
-      const feedMark = state.marksByTile.get(tile) || null;
-      const backMark = state.backendMarksByTile.get(tile) || null;
-      const mark = (backMark && feedMark) ? Object.assign({}, feedMark, backMark, {note: backMark.note || feedMark.note, link: backMark.link || feedMark.link, handle: backMark.handle || feedMark.handle, img: backMark.img || feedMark.img}) : (backMark || feedMark || null);
-      const taken = state.taken.has(tile) && !isPlaceholderTile(tile);
+      const mark = markForTile(tile, gx, gy);
+      const taken = state.taken.has(tile) && !isPlaceholderTile(tile, gx, gy);
 
       const markTag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
       const isMonolith = (tile === MONOLITH_TILE);
@@ -830,8 +856,8 @@ const isCreator  = hasCreator && (
 
     function setCell(cell, gx, gy){
       const tile = tileIdFromCoords(gx, gy);
-      const mark = state.backendMarksByTile.get(tile) || state.marksByTile.get(tile) || null;
-      const taken = state.taken.has(tile) && !isPlaceholderTile(tile);
+      const mark = markForTile(tile, gx, gy);
+      const taken = state.taken.has(tile) || !!mark;
 
       cell.style.left = (gx * STEP) + "px";
       cell.style.top  = ((-gy) * STEP) + "px";
@@ -880,6 +906,8 @@ const isCreator  = hasCreator && (
 
 } else if(isCreator){
           spray.innerHTML = mediaHTML(CREATOR_LOGO, "MRCAULIMAN");
+        } else if(isPlaceholderTile(tile, gx, gy)){
+          spray.innerHTML = mediaHTML(img || brandHereSVG(tile), "YOUR BRAND HERE");
         } else if(img){
           spray.innerHTML = mediaHTML(img, tile);
         } else {
