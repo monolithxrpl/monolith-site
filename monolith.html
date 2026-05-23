@@ -508,6 +508,60 @@ body.view-imageonly .cell .spray{ filter:none; }
   }
 }
 
+
+/* MONOLITH_WALL_ZOOM_CONTROLS_SAFE_20260523_START */
+.wall-zoom-controls{
+  position:fixed;
+  right:calc(14px + env(safe-area-inset-right, 0px));
+  bottom:calc(18px + env(safe-area-inset-bottom, 0px));
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:8px;
+  border:1px solid rgba(72,191,255,.35);
+  border-radius:18px;
+  background:rgba(5,10,16,.78);
+  backdrop-filter:blur(12px);
+  box-shadow:0 14px 35px rgba(0,0,0,.35);
+  pointer-events:auto;
+}
+.wall-zoom-controls button{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  border:1px solid rgba(72,191,255,.48);
+  background:rgba(8,18,28,.94);
+  color:#eaf8ff;
+  font-size:24px;
+  font-weight:900;
+  line-height:1;
+  cursor:pointer;
+  touch-action:manipulation;
+  pointer-events:auto;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.wall-zoom-controls button:hover{
+  border-color:rgba(72,191,255,.85);
+  box-shadow:0 0 18px rgba(72,191,255,.22);
+}
+@media(max-width:680px){
+  .wall-zoom-controls{
+    right:10px;
+    bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+    gap:7px;
+    padding:7px;
+  }
+  .wall-zoom-controls button{
+    width:39px;
+    height:39px;
+    border-radius:13px;
+    font-size:22px;
+  }
+}
+/* MONOLITH_WALL_ZOOM_CONTROLS_SAFE_20260523_END */
+
 </style>
   <script src="/coords.js"></script>
 
@@ -762,6 +816,12 @@ body.view-imageonly .cell .spray{ filter:none; }
   <div id="vp" aria-label="wall viewport">
     <div id="world" aria-label="wall world"></div>
     <div id="dbg"></div>
+  </div>
+
+  <div class="wall-zoom-controls" aria-label="wall zoom controls">
+    <button id="wallZoomIn" type="button" aria-label="Zoom in">+</button>
+    <button id="wallZoomOut" type="button" aria-label="Zoom out">−</button>
+    <button id="wallZoomCenter" type="button" aria-label="Return to center">◎</button>
   </div>
 
   <aside class="panel" id="panel" aria-label="tile detail panel">
@@ -2159,6 +2219,42 @@ el.close.addEventListener("click", function(e){
     window.addEventListener("mouseup", function(){ hardResetDrag(); }, true);
     window.addEventListener("blur", function(){ hardResetDrag(); }, true);
 
+
+/* MONOLITH_WALL_ZOOM_CONTROLS_SAFE_20260523_START */
+function bindWallZoomButton(id, fn){
+  const btn = document.getElementById(id);
+  if(!btn) return;
+
+  const fire = function(e){
+    if(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+    }
+    try{ hardResetDrag(); }catch(_){}
+    fn();
+    return false;
+  };
+
+  btn.addEventListener("pointerdown", fire, { passive:false, capture:true });
+  btn.addEventListener("touchstart", fire, { passive:false, capture:true });
+  btn.addEventListener("mousedown", fire, { passive:false, capture:true });
+  btn.addEventListener("click", fire, { passive:false, capture:true });
+}
+
+bindWallZoomButton("wallZoomIn", function(){
+  applyZoomAtScreen(state.zoom * 1.35, vp.clientWidth * 0.5, vp.clientHeight * 0.5);
+});
+
+bindWallZoomButton("wallZoomOut", function(){
+  applyZoomAtScreen(state.zoom * 0.74, vp.clientWidth * 0.5, vp.clientHeight * 0.5);
+});
+
+bindWallZoomButton("wallZoomCenter", function(){
+  centerOriginNow();
+});
+/* MONOLITH_WALL_ZOOM_CONTROLS_SAFE_20260523_END */
+
     if(el.btnCenter){
       el.btnCenter.addEventListener("click", () => {
         if(state._viewMode && state._viewMode !== "free"){
@@ -2209,7 +2305,7 @@ el.close.addEventListener("click", function(e){
 <!-- monolith-lock: TRUE -->
 <!-- monolith-lock-ts: 2026-02-07T00:00:00Z -->
 
-  <script src="/wall/engine.js?v=monolith_placeholder_alias_visual_20260522"></script>
+  <script src="/wall/engine.js?v=monolith_external_zoom_controls_20260523"></script>
 
 <script>
 (() => {

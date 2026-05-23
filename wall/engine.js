@@ -1727,6 +1727,42 @@ el.close.addEventListener("click", function(e){
     window.addEventListener("mouseup", function(){ hardResetDrag(); }, true);
     window.addEventListener("blur", function(){ hardResetDrag(); }, true);
 
+
+/* MONOLITH_EXTERNAL_WALL_ZOOM_CONTROLS_20260523_START */
+function monolithExternalWallZoomButton(id, fn){
+  const btn = document.getElementById(id);
+  if(!btn) return;
+
+  const fire = function(e){
+    if(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+    }
+    try{ hardResetDrag(); }catch(_){}
+    try{ fn(); }catch(err){ try{ console.warn("MONOLITH external zoom failed", err); }catch(_){} }
+    return false;
+  };
+
+  btn.addEventListener("pointerdown", fire, { passive:false, capture:true });
+  btn.addEventListener("touchstart", fire, { passive:false, capture:true });
+  btn.addEventListener("mousedown", fire, { passive:false, capture:true });
+  btn.addEventListener("click", fire, { passive:false, capture:true });
+}
+
+monolithExternalWallZoomButton("wallZoomIn", function(){
+  applyZoomAtScreen(state.zoom * 1.35, vp.clientWidth * 0.5, vp.clientHeight * 0.5);
+});
+
+monolithExternalWallZoomButton("wallZoomOut", function(){
+  applyZoomAtScreen(state.zoom * 0.74, vp.clientWidth * 0.5, vp.clientHeight * 0.5);
+});
+
+monolithExternalWallZoomButton("wallZoomCenter", function(){
+  centerOriginNow();
+});
+/* MONOLITH_EXTERNAL_WALL_ZOOM_CONTROLS_20260523_END */
+
     if(el.btnCenter){
       el.btnCenter.addEventListener("click", () => {
         centerOriginNow();
