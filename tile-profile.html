@@ -2555,6 +2555,19 @@ small,
 }
 
 </style>
+
+<style id="MONOLITH_FIND_ME_SHARE_TAB_20260524">
+#findMeMonolithTab{position:fixed;right:14px;bottom:18px;z-index:9998;border:1px solid rgba(130,220,255,.55);background:#06111f;color:#e9f6ff;border-radius:999px;padding:12px 15px;font-weight:900;cursor:pointer;box-shadow:0 0 25px rgba(75,188,255,.22)}
+#findMeMonolithOverlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(0,5,12,.78);backdrop-filter:blur(8px);padding:16px}
+#findMeMonolithOverlay.open{display:flex}
+#findMeMonolithPanel{width:min(720px,100%);background:#071423;border:1px solid rgba(130,220,255,.35);border-radius:22px;padding:18px;color:#e9f6ff}
+#findMeMonolithPanel h2{margin:0 0 8px;border:0;color:#e9f6ff}
+#findMeMonolithPreview{width:100%;border-radius:16px;border:1px solid rgba(130,220,255,.25);margin:12px 0}
+.findMeBtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.findMeBtns button,.findMeBtns a{border:1px solid rgba(130,220,255,.35);background:#0b2035;color:#e9f6ff;border-radius:13px;padding:12px;text-align:center;text-decoration:none;font-weight:900;cursor:pointer}
+@media(max-width:700px){.findMeBtns{grid-template-columns:1fr}}
+</style>
+
 </head>
 <body>
 <main class="wrap">
@@ -3076,6 +3089,77 @@ small,
 <script src="/tile-favorite.js?v=monolith_owner_session_favorite_20260519" defer></script>
 
 
+
+
+<!-- MONOLITH_FIND_ME_SHARE_TAB_20260524 -->
+<button id="findMeMonolithTab">Find Me</button>
+<div id="findMeMonolithOverlay">
+  <div id="findMeMonolithPanel">
+    <h2>Find Me on MONOLITH</h2>
+    <p>Share your tile with a MONOLITH card and direct link.</p>
+    <canvas id="findMeCanvas" width="1200" height="630" hidden></canvas>
+    <img id="findMeMonolithPreview" alt="Find Me on MONOLITH card">
+    <div class="findMeBtns">
+      <button id="findMeShare">Share Card</button>
+      <button id="findMeCopy">Copy Link</button>
+      <a id="findMeX" target="_blank" rel="noopener">Share to X</a>
+      <button id="findMeClose">Close</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const tab=document.getElementById('findMeMonolithTab');
+  const box=document.getElementById('findMeMonolithOverlay');
+  const cv=document.getElementById('findMeCanvas');
+  const ctx=cv.getContext('2d');
+  const img=document.getElementById('findMeMonolithPreview');
+
+  function coord(){
+    const q=new URLSearchParams(location.search).get('tile');
+    const m=location.pathname.match(/\/tile\/([^\/?#]+)/);
+    return String(q||(m&&m[1])||'ORIGIN').replace(/[^A-Za-z0-9_-]/g,'').toUpperCase();
+  }
+
+  function draw(){
+    const c=coord();
+    const u=location.origin+'/tile/'+c;
+    const g=ctx.createLinearGradient(0,0,1200,630);
+    g.addColorStop(0,'#071423');g.addColorStop(1,'#020711');
+    ctx.fillStyle=g;ctx.fillRect(0,0,1200,630);
+    ctx.strokeStyle='rgba(75,188,255,.25)';
+    for(let x=0;x<1200;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,630);ctx.stroke()}
+    for(let y=0;y<630;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1200,y);ctx.stroke()}
+    ctx.fillStyle='#e9f6ff';ctx.font='900 66px Arial';ctx.fillText('FIND ME ON',72,140);
+    ctx.fillStyle='#82dcff';ctx.font='900 96px Arial';ctx.fillText('MONOLITH',72,245);
+    ctx.fillStyle='#fff';ctx.font='900 58px Arial';ctx.fillText(c,72,340);
+    ctx.fillStyle='#9fc7dd';ctx.font='700 30px Arial';ctx.fillText(u.replace('https://',''),72,445);
+    ctx.fillStyle='#6ee7b7';ctx.font='900 26px Arial';ctx.fillText('$XRP LEDGER COORDINATE REAL ESTATE',72,575);
+    img.src=cv.toDataURL('image/png');
+    document.getElementById('findMeX').href='https://twitter.com/intent/tweet?text='+encodeURIComponent('Find me on MONOLITH at '+c)+'&url='+encodeURIComponent(u);
+    return {c,u};
+  }
+
+  async function share(){
+    const d=draw();
+    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+    const file=new File([blob],'find-me-on-monolith-'+d.c+'.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({title:'Find Me on MONOLITH',text:'Find me on MONOLITH at '+d.c,url:d.u,files:[file]});
+    }else if(navigator.share){
+      await navigator.share({title:'Find Me on MONOLITH',text:'Find me on MONOLITH at '+d.c,url:d.u});
+    }else{
+      await navigator.clipboard.writeText('Find me on MONOLITH at '+d.c+' '+d.u);
+      alert('Copied.');
+    }
+  }
+
+  tab.onclick=()=>{box.classList.add('open');draw()};
+  document.getElementById('findMeClose').onclick=()=>box.classList.remove('open');
+  document.getElementById('findMeCopy').onclick=async()=>{const d=draw();await navigator.clipboard.writeText('Find me on MONOLITH at '+d.c+' '+d.u);alert('Copied.')};
+  document.getElementById('findMeShare').onclick=share;
+})();
+</script>
 
 </body>
 </html>
