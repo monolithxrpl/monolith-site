@@ -2163,6 +2163,300 @@ h1{
 .grid .v{max-height:58px!important;overflow:auto!important}
 /* MONOLITH_TEXT_OVERFLOW_SAFETY_20260521_END */
 
+
+/* MONOLITH_TILE_PROFILE_LEDGER_BLUE_THEME_20260523_START */
+:root{
+  --orange:#49bfff !important;
+  --myspace-blue:#0b5f9f !important;
+  --ledger-blue:#49bfff !important;
+  --blue:#49bfff !important;
+  --soft-blue:#dff4ff !important;
+  --monolith-ledger-blue:#49bfff;
+  --monolith-ledger-blue-2:#7ad3ff;
+  --monolith-ledger-deep:#020712;
+  --monolith-ledger-panel:#061827;
+  --monolith-ledger-panel-2:#08213b;
+  --monolith-ledger-line:rgba(73,191,255,.42);
+  --monolith-ledger-line-strong:rgba(122,211,255,.70);
+  --monolith-ledger-text:#eaf7ff;
+  --monolith-ledger-muted:#9fc5dd;
+}
+
+body{
+  background:
+    radial-gradient(circle at 18% 0%, rgba(73,191,255,.18), transparent 30%),
+    radial-gradient(circle at 88% 18%, rgba(18,92,153,.22), transparent 34%),
+    linear-gradient(180deg,#020712 0%,#06111f 48%,#020712 100%) !important;
+  color:var(--monolith-ledger-text) !important;
+}
+
+.top,
+.shell,
+.page,
+.profile,
+.profileBox,
+.ownerBox,
+.card,
+.tileMini,
+.leftRail,
+.rightRail,
+.centerStage,
+.proofRail,
+.musicBox,
+.galleryBox,
+.tablet,
+.tabletBox,
+.statusBox,
+.linkBox,
+.deedBox{
+  border-color:var(--monolith-ledger-line) !important;
+  box-shadow:
+    0 18px 52px rgba(0,0,0,.42),
+    0 0 24px rgba(73,191,255,.08) !important;
+}
+
+.card,
+.ownerBox,
+.musicBox,
+.galleryBox,
+.profileBox,
+.tileMini{
+  background:linear-gradient(180deg,rgba(6,24,39,.96),rgba(3,9,20,.98)) !important;
+}
+
+h1,h2,h3,
+.title,
+.ttl,
+.profileTitle,
+.sectionTitle{
+  color:var(--monolith-ledger-text) !important;
+  text-shadow:0 0 16px rgba(73,191,255,.18) !important;
+}
+
+.k,
+.label,
+.muted,
+.sub,
+.meta,
+small{
+  color:var(--monolith-ledger-muted) !important;
+}
+
+a{
+  color:var(--monolith-ledger-blue-2) !important;
+}
+
+.btn,
+button,
+a.btn,
+.profileActionsMain .btn,
+.ownerBox .btn,
+.actions .btn{
+  background:linear-gradient(180deg,#1777bd,#064d86) !important;
+  border:1px solid var(--monolith-ledger-line-strong) !important;
+  color:#eaf7ff !important;
+  text-shadow:0 1px 0 rgba(0,0,0,.35) !important;
+  box-shadow:
+    0 0 18px rgba(73,191,255,.16),
+    inset 0 0 18px rgba(73,191,255,.05) !important;
+}
+
+.btn:hover,
+button:hover,
+a.btn:hover,
+.profileActionsMain .btn:hover,
+.ownerBox .btn:hover,
+.actions .btn:hover{
+  background:linear-gradient(180deg,#1e8fe0,#075b9e) !important;
+  border-color:rgba(122,211,255,.90) !important;
+  box-shadow:
+    0 0 26px rgba(73,191,255,.28),
+    inset 0 0 18px rgba(73,191,255,.08) !important;
+}
+
+#reportTileLink,
+.danger,
+.delete,
+.remove,
+.burn,
+.report,
+button.danger,
+.btn.danger{
+  background:linear-gradient(180deg,rgba(92,22,39,.96),rgba(35,8,18,.98)) !important;
+  border-color:rgba(251,113,133,.65) !important;
+  color:#ffe8ed !important;
+  box-shadow:0 0 18px rgba(251,113,133,.14) !important;
+}
+
+.pill,
+.badge,
+.tag,
+.status,
+.verified,
+.deed-status{
+  background:rgba(73,191,255,.10) !important;
+  border-color:rgba(73,191,255,.46) !important;
+  color:#dff3ff !important;
+}
+
+input,
+textarea,
+select{
+  background:rgba(2,7,18,.94) !important;
+  border-color:rgba(73,191,255,.38) !important;
+  color:#eaf7ff !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  outline:none !important;
+  border-color:rgba(122,211,255,.85) !important;
+  box-shadow:0 0 0 3px rgba(73,191,255,.16) !important;
+}
+/* MONOLITH_TILE_PROFILE_LEDGER_BLUE_THEME_20260523_END */
+
+
+/* MONOLITH_TILE_PROFILE_READABILITY_FIX_20260523_START */
+.v,
+.value,
+.card .v,
+.card .value,
+.proofRail .v,
+.proofRail .value,
+.ownerBox,
+.ownerBox p,
+.ownerBox .muted,
+.card,
+.card p,
+.card div,
+.deedBox,
+.walletBox,
+.profileBox,
+.musicBox,
+.galleryBox,
+.statusBox,
+.linkBox,
+.tileMini span{
+  color:#d8efff !important;
+}
+
+.k,
+.label,
+.card .k,
+.proofRail .k,
+.ownerBox .k{
+  color:#ffffff !important;
+  opacity:.96 !important;
+  letter-spacing:.08em !important;
+}
+
+.muted,
+.sub,
+.meta,
+small,
+#deedHelp{
+  color:#9fdcff !important;
+  opacity:1 !important;
+}
+
+.card .v,
+.proofRail .v,
+.wallet-card .v,
+.deed-card .v{
+  font-weight:700 !important;
+  text-shadow:0 0 10px rgba(73,191,255,.14) !important;
+}
+
+.ownerBox .muted,
+.ownerBox p{
+  color:#b8dcf2 !important;
+}
+
+.card{
+  background:linear-gradient(180deg,rgba(7,28,46,.97),rgba(3,12,24,.98)) !important;
+}
+
+.card a,
+.card a:visited,
+#deedAccept,
+#siteLink,
+#wallLink{
+  color:#eaf7ff !important;
+}
+
+.proofRail .card,
+.leftRail .ownerBox,
+.ownerBox{
+  border-color:rgba(73,191,255,.56) !important;
+}
+/* MONOLITH_TILE_PROFILE_READABILITY_FIX_20260523_END */
+
+
+/* MONOLITH_OWNER_CONTROLS_TEXT_FIX_20260523_START */
+.ownerBox,
+.ownerBox *,
+.leftRail .ownerBox,
+.leftRail .ownerBox *{
+  opacity:1 !important;
+}
+
+.ownerBox p,
+.ownerBox .muted,
+.ownerBox .sub,
+.ownerBox .meta,
+.ownerBox small,
+.leftRail .ownerBox p,
+.leftRail .ownerBox .muted,
+.leftRail .ownerBox .sub,
+.leftRail .ownerBox .meta,
+.leftRail .ownerBox small{
+  color:#bfe8ff !important;
+  opacity:1 !important;
+  text-shadow:0 0 10px rgba(73,191,255,.18) !important;
+}
+
+.ownerBox .k,
+.ownerBox .label,
+.leftRail .ownerBox .k,
+.leftRail .ownerBox .label{
+  color:#ffffff !important;
+  opacity:1 !important;
+}
+
+.ownerBox .btn,
+.leftRail .ownerBox .btn{
+  color:#ffffff !important;
+  font-weight:800 !important;
+}
+/* MONOLITH_OWNER_CONTROLS_TEXT_FIX_20260523_END */
+
+
+/* MONOLITH_OWNER_CONTROLS_WRITE_TEXT_FIX_20260523_START */
+.ownerBox .write,
+.leftRail .ownerBox .write,
+.ownerBox .write *,
+.leftRail .ownerBox .write *{
+  color:#dff4ff !important;
+  opacity:1 !important;
+  text-shadow:0 0 10px rgba(73,191,255,.22) !important;
+  font-weight:600 !important;
+}
+
+.ownerBox .write{
+  background:rgba(73,191,255,.045) !important;
+  border:1px solid rgba(73,191,255,.18) !important;
+  border-radius:10px !important;
+  padding:8px 9px !important;
+  line-height:1.35 !important;
+}
+
+.ownerBox .k{
+  color:#ffffff !important;
+  opacity:1 !important;
+}
+/* MONOLITH_OWNER_CONTROLS_WRITE_TEXT_FIX_20260523_END */
+
 </style>
 </head>
 <body>
