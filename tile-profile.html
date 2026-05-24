@@ -2615,6 +2615,44 @@ small,
       </section>
     </div>
   </section>
+
+<!-- MONOLITH_INLINE_EDIT_DRAWER_V1_20260524 -->
+<section class="box ownerBox" id="inlineEditDrawer" style="display:none">
+  <div class="k">Inline Edit</div>
+  <div class="write">Owner Mode is active. Edit core profile text directly on this page.</div>
+
+  <label>About</label>
+  <textarea id="inlineAbout" style="width:100%;min-height:90px"></textarea>
+
+  <label>Status</label>
+  <textarea id="inlineStatus" style="width:100%;min-height:70px"></textarea>
+
+  <label>Mood</label>
+  <input id="inlineMood" style="width:100%" />
+
+  <label>Interests</label>
+  <textarea id="inlineInterests" style="width:100%;min-height:70px"></textarea>
+
+  <label>Music Title</label>
+  <input id="inlineMusicTitle" style="width:100%" />
+
+  <label>Music URL</label>
+  <input id="inlineMusicUrl" style="width:100%" />
+
+  <label>Tablet Entry Title</label>
+  <input id="inlineTabletTitle" style="width:100%" />
+
+  <label>Tablet Entry Body</label>
+  <textarea id="inlineTabletBody" style="width:100%;min-height:100px"></textarea>
+
+  <div class="actions" style="margin-top:12px">
+    <button class="btn" id="inlineSaveBtn" type="button">Save Inline Changes</button>
+    <a class="btn" id="inlineFullEditLink" href="#">Open Full Edit Page</a>
+  </div>
+
+  <div class="write" id="inlineEditStatus">Ready after Owner Mode verification.</div>
+</section>
+
 </main>
 
   <div class="imageModal" id="imageModal" aria-hidden="true">
@@ -2783,6 +2821,84 @@ small,
       }
     }
 
+
+    /* MONOLITH_INLINE_EDIT_DRAWER_SAVE_V1_20260524 */
+    function setInlineEditStatus(msg, good){
+      const box = $("inlineEditStatus");
+      if(!box) return;
+      box.textContent = msg;
+      box.style.color = good ? "#6ee7b7" : "#9fc5dd";
+    }
+
+    function setInlineValue(id, value){
+      const el = $(id);
+      if(el) el.value = value || "";
+    }
+
+    function openInlineEditDrawer(payloadUuid){
+      const drawer = $("inlineEditDrawer");
+      if(!drawer) return;
+      const tabletEntry = Array.isArray(m.tabletEntries) ? (m.tabletEntries[0] || {}) : {};
+
+      setInlineValue("inlineAbout", about || note || "");
+      setInlineValue("inlineStatus", statusText || "");
+      setInlineValue("inlineMood", moodText || "");
+      setInlineValue("inlineInterests", interests || "");
+      setInlineValue("inlineMusicTitle", musicTitle || "");
+      setInlineValue("inlineMusicUrl", musicUrl || "");
+      setInlineValue("inlineTabletTitle", tabletEntry.title || "");
+      setInlineValue("inlineTabletBody", tabletEntry.body || "");
+
+      const full = $("inlineFullEditLink");
+      if(full) full.href="/edit/?edit="+encodeURIComponent(coord);
+
+      drawer.style.display = "block";
+      drawer.scrollIntoView({behavior:"smooth", block:"center"});
+      setInlineEditStatus("Owner Mode Active. Inline text editing unlocked.", true);
+
+      const save = $("inlineSaveBtn");
+      if(save) save.onclick = () => saveInlineEdit(payloadUuid);
+    }
+
+    async function saveInlineEdit(payloadUuid){
+      if(!payloadUuid){
+        setInlineEditStatus("Owner verification required before saving.", false);
+        return;
+      }
+
+      const fd = new FormData();
+      fd.append("coordinate", coord);
+      fd.append("payloadUuid", payloadUuid);
+      fd.append("about", $("inlineAbout").value);
+      fd.append("statusText", $("inlineStatus").value);
+      fd.append("mood", $("inlineMood").value);
+      fd.append("interests", $("inlineInterests").value);
+      fd.append("musicTitle", $("inlineMusicTitle").value);
+      fd.append("musicUrl", $("inlineMusicUrl").value);
+      fd.append("tabletEntryTitle", $("inlineTabletTitle").value);
+      fd.append("tabletEntryBody", $("inlineTabletBody").value);
+
+      fd.append("gallery", Array.isArray(m.gallery) ? m.gallery.join("\n") : "");
+      fd.append("links", Array.isArray(m.links) ? m.links.join("\n") : "");
+      fd.append("favoriteTiles", Array.isArray(m.favoriteTiles) ? m.favoriteTiles.join("\n") : "");
+
+      setInlineEditStatus("Saving inline changes...", false);
+
+      const r = await fetch("/api/tile/edit/apply", {
+        method:"POST",
+        body:fd
+      });
+
+      const data = await r.json().catch(() => ({}));
+      if(!r.ok || !data.ok){
+        setInlineEditStatus(data.error || "Inline save failed.", false);
+        return;
+      }
+
+      setInlineEditStatus("Saved. Reloading updated tile...", true);
+      setTimeout(() => location.reload(), 700);
+    }
+
     async function verifyOwnerMode(){
       const payloadUuid = localStorage.getItem(ownerModeKey) || "";
       const savedCoord = (localStorage.getItem(ownerCoordKey) || "").toUpperCase();
@@ -2801,7 +2917,8 @@ small,
         setOwnerModeStatus(data.error || "Owner wallet not verified.", false);
         return false;
       }
-      setOwnerModeStatus("Owner Mode Active. Inline editing comes next. Full edit page is unlocked through owner verification.", true);
+      setOwnerModeStatus("Owner Mode Active. Inline editing unlocked on this page.", true);
+      openInlineEditDrawer(payloadUuid);
       return true;
     }
 
