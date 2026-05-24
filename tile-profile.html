@@ -2495,6 +2495,17 @@ small,
   .monolithTabletTitle{font-size:19px}
 }
 
+
+/* MONOLITH_TOP8_FEATURED_TILES_20260524 */
+.centerMediaStack .topTiles{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+}
+@media(max-width:760px){
+  .centerMediaStack .topTiles{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2530,7 +2541,7 @@ small,
         <a class="btn" id="wallLink" href="#" data-desc="Jump to wall view">View on Wall</a>
         <button class="btn" id="wallStartBtn" type="button" data-desc="Open wall here">Set Wall Start</button>
         <button class="btn" id="resetWallStartBtn" type="button" data-desc="Restore default entry">Reset Wall Start</button>
-        <button class="btn" id="favoriteBtn" type="button" data-desc="Save to Top 6">♡ Add to Top 6</button>
+        <button class="btn" id="favoriteBtn" type="button" data-desc="Save to Top 8">♡ Add to Top 8</button>
         <button class="btn" id="copyBtn" type="button" data-desc="Copy this page">Copy Page URL</button>
         <a class="btn" id="reportTileLink" href="#" data-desc="Flag abuse or content">Report Tile</a>
       </div>
@@ -2575,7 +2586,7 @@ small,
 
       <div class="centerMediaStack">
         <section class="box topTilesBox">
-          <div class="k">Top 6 Tiles</div>
+          <div class="k">Top 8 / Featured Tiles</div>
           <div class="topTiles" id="topTiles">No favorite tiles yet.</div>
         </section>
 
@@ -2676,7 +2687,7 @@ small,
     const musicUrl=m.musicUrl||"";
     const musicTitle=m.musicTitle||"";
     const gallery=Array.isArray(m.gallery)?m.gallery:[];
-    const favoriteTiles=Array.isArray(m.favoriteTiles)?m.favoriteTiles.slice(0,6):[];
+    const favoriteTiles=Array.isArray(m.favoriteTiles)?m.favoriteTiles.slice(0,8):[];
 
     document.title=tag+" • MONOLITH";
     $("title").textContent=tag;

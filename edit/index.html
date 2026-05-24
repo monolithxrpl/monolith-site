@@ -203,8 +203,9 @@
       <label>Links</label>
       <textarea id="links" placeholder="One URL per line"></textarea>
 
-      <label>Top 6 Tiles</label>
-      <p class="hint">Enter up to 6 MONOLITH tile coordinates. Example: N1W1. Order controls how they appear on your page.</p>
+      <!-- MONOLITH_TOP8_FEATURED_TILES_20260524 -->
+      <label>Top 8 / Featured Tiles</label>
+      <p class="hint">Enter up to 8 MONOLITH tile coordinates. Example: N1W1. Order controls how they appear on your page.</p>
       <div class="topSixEditor">
         <input class="favoriteTileInput" placeholder="1. Coordinate" />
         <input class="favoriteTileInput" placeholder="2. Coordinate" />
@@ -212,6 +213,8 @@
         <input class="favoriteTileInput" placeholder="4. Coordinate" />
         <input class="favoriteTileInput" placeholder="5. Coordinate" />
         <input class="favoriteTileInput" placeholder="6. Coordinate" />
+        <input class="favoriteTileInput" placeholder="7. Coordinate" />
+        <input class="favoriteTileInput" placeholder="8. Coordinate" />
       </div>
       <textarea id="favoriteTiles" style="display:none"></textarea>
 
@@ -359,7 +362,7 @@
       el.musicUrl.value = meta.musicUrl || "";
       el.gallery.value = Array.isArray(meta.gallery) ? meta.gallery.join("\n") : "";
       el.links.value = Array.isArray(meta.links) ? meta.links.join("\n") : (currentLink ? currentLink : "");
-      const favs = Array.isArray(meta.favoriteTiles) ? meta.favoriteTiles.slice(0,6) : [];
+      const favs = Array.isArray(meta.favoriteTiles) ? meta.favoriteTiles.slice(0,8) : [];
       el.favoriteTiles.value = favs.join("\n");
       if(el.favoriteTileInputs){
         el.favoriteTileInputs.forEach((input, i) => input.value = favs[i] || "");
@@ -526,7 +529,7 @@
       fd.append("musicUrl", el.musicUrl.value);
       fd.append("gallery", el.gallery.value);
       fd.append("links", el.links.value);
-      const favs = (el.favoriteTileInputs || []).map(x => x.value.trim().toUpperCase()).filter(Boolean).slice(0,6);
+      const favs = (el.favoriteTileInputs || []).map(x => x.value.trim().toUpperCase()).filter(Boolean).slice(0,8);
       el.favoriteTiles.value = favs.join("\n");
       fd.append("favoriteTiles", el.favoriteTiles.value);
 
