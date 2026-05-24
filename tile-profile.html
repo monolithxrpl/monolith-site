@@ -2568,6 +2568,18 @@ small,
 @media(max-width:700px){.findMeBtns{grid-template-columns:1fr}}
 </style>
 
+
+<!-- MONOLITH_FIND_ME_OG_META_20260524 -->
+<meta property="og:title" content="Find Me on MONOLITH">
+<meta property="og:description" content="Find me on MONOLITH. Public XRPL coordinate real estate with a wallet-linked tile profile.">
+<meta property="og:image" content="https://monolithxrpl.com/assets/find-me-on-monolith-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Find Me on MONOLITH">
+<meta name="twitter:description" content="Find me on MONOLITH. Public XRPL coordinate real estate with a wallet-linked tile profile.">
+<meta name="twitter:image" content="https://monolithxrpl.com/assets/find-me-on-monolith-og.png">
+
 </head>
 <body>
 <main class="wrap">
@@ -3123,7 +3135,7 @@ small,
 
   function draw(){
     const c=coord();
-    const u=location.origin+'/tile/'+c;
+    const u=location.origin+'/tile/'+c+'?share=findme';
     const g=ctx.createLinearGradient(0,0,1200,630);
     g.addColorStop(0,'#071423');g.addColorStop(1,'#020711');
     ctx.fillStyle=g;ctx.fillRect(0,0,1200,630);
