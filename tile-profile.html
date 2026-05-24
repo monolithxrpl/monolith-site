@@ -2543,6 +2543,7 @@ small,
         <button class="btn" id="resetWallStartBtn" type="button" data-desc="Restore default entry">Reset Wall Start</button>
         <button class="btn" id="favoriteBtn" type="button" data-desc="Save to Top 8">♡ Add to Top 8</button>
         <button class="btn" id="copyBtn" type="button" data-desc="Copy this page">Copy Page URL</button>
+        <button class="btn" id="ownerModeBtn" type="button" data-desc="Edit this tile on this page">Owner Mode</button>
         <a class="btn" id="reportTileLink" href="#" data-desc="Flag abuse or content">Report Tile</a>
       </div>
 
@@ -2602,10 +2603,15 @@ small,
         </section>
       </div>
 
-      <section class="box ownerBox">
+      <!-- MONOLITH_INLINE_OWNER_MODE_SHELL_20260524 -->
+      <section class="box ownerBox" id="ownerModePanel">
         <div class="k">Owner Controls</div>
-        <div class="write">Profile edits, wallpaper uploads, profile image uploads, gallery uploads, deletions, and music edits will live behind wallet verification.</div>
-        <div class="actions"><a class="btn" id="ownerEditLink" href="#">Edit Profile & Media</a></div>
+        <div class="write" id="ownerModeStatus">Owner Mode lets the tile owner edit this page after Xaman wallet verification.</div>
+        <div class="actions">
+          <button class="btn" id="ownerModeStart" type="button">Start Owner Sign-In</button>
+          <button class="btn" id="ownerModeVerify" type="button">Verify Owner</button>
+          <a class="btn" id="ownerEditLink" href="#">Open Full Edit Page</a>
+        </div>
       </section>
     </div>
   </section>
@@ -2737,6 +2743,86 @@ small,
       $("tabletBox").textContent = "No entries carved yet.";
     }
     $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
+
+    /* MONOLITH_INLINE_OWNER_MODE_VERIFY_20260524 */
+    const ownerModeKey = "monolith_tile_owner_payload_uuid";
+    const ownerCoordKey = "monolith_tile_owner_coordinate";
+
+    function setOwnerModeStatus(msg, good){
+      const box = $("ownerModeStatus");
+      if(!box) return;
+      box.textContent = msg;
+      box.style.color = good ? "#6ee7b7" : "#9fc5dd";
+    }
+
+    async function startOwnerMode(){
+      setOwnerModeStatus("Creating owner sign-in...", false);
+      const r = await fetch("/api/tile/edit/start", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          coordinate:coord,
+          returnUrl:tileUrl+"?owner=1"
+        })
+      });
+      const data = await r.json().catch(() => ({}));
+      if(!r.ok || !data.ok){
+        setOwnerModeStatus(data.error || "Owner sign-in failed.", false);
+        return;
+      }
+      const auth = data.auth || {};
+      if(auth.payloadUuid){
+        localStorage.setItem(ownerModeKey, auth.payloadUuid);
+        localStorage.setItem(ownerCoordKey, coord);
+      }
+      if(auth.signUrl){
+        setOwnerModeStatus("Owner sign-in created. Open Xaman and sign with the owner wallet only.", false);
+        window.open(auth.signUrl, "_blank", "noopener");
+      }else{
+        setOwnerModeStatus("Owner sign-in created, but no sign URL returned.", false);
+      }
+    }
+
+    async function verifyOwnerMode(){
+      const payloadUuid = localStorage.getItem(ownerModeKey) || "";
+      const savedCoord = (localStorage.getItem(ownerCoordKey) || "").toUpperCase();
+      if(!payloadUuid || savedCoord !== coord){
+        setOwnerModeStatus("Start owner sign-in first.", false);
+        return false;
+      }
+      setOwnerModeStatus("Verifying owner wallet...", false);
+      const r = await fetch("/api/tile/edit/verify", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ coordinate:coord, payloadUuid })
+      });
+      const data = await r.json().catch(() => ({}));
+      if(!r.ok || !data.ok || !data.ownerVerified){
+        setOwnerModeStatus(data.error || "Owner wallet not verified.", false);
+        return false;
+      }
+      setOwnerModeStatus("Owner Mode Active. Inline editing comes next. Full edit page is unlocked through owner verification.", true);
+      return true;
+    }
+
+    const ownerModeBtn = $("ownerModeBtn");
+    if(ownerModeBtn){
+      ownerModeBtn.onclick = () => {
+        const panel = $("ownerModePanel");
+        if(panel) panel.scrollIntoView({behavior:"smooth", block:"center"});
+        setOwnerModeStatus("Owner Mode selected. Start owner sign-in to unlock this page.", false);
+      };
+    }
+
+    const ownerModeStart = $("ownerModeStart");
+    if(ownerModeStart) ownerModeStart.onclick = () => startOwnerMode();
+
+    const ownerModeVerify = $("ownerModeVerify");
+    if(ownerModeVerify) ownerModeVerify.onclick = () => verifyOwnerMode();
+
+    if(qs.get("owner")==="1"){
+      setTimeout(() => verifyOwnerMode().catch(() => setOwnerModeStatus("Owner verification failed.", false)), 350);
+    }
     if(musicUrl){
       const directAudio=/\.(mp3|wav|ogg|m4a)(\?|#|$)/i.test(musicUrl);
       const safeUrl=String(musicUrl).replace(/"/g,"&quot;");
