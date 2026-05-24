@@ -170,8 +170,12 @@
       <label>About</label>
       <textarea id="about" placeholder="Write your profile about section"></textarea>
 
+      <!-- MONOLITH_STATUS_MOOD_LAYER_20260524 -->
       <label>Status</label>
       <textarea id="statusText" placeholder="What should your tile say right now?"></textarea>
+
+      <label>Mood</label>
+      <input id="mood" placeholder="Locked in, building, on-chain, etc." />
 
       <label>Interests</label>
       <textarea id="interests" placeholder="List interests, projects, links, or culture"></textarea>
@@ -242,6 +246,7 @@
       bannerPreview: document.getElementById("bannerPreview"),
       about: document.getElementById("about"),
       statusText: document.getElementById("statusText"),
+      mood: document.getElementById("mood"),
       interests: document.getElementById("interests"),
       musicTitle: document.getElementById("musicTitle"),
       musicUrl: document.getElementById("musicUrl"),
@@ -357,6 +362,7 @@
       el.bannerUrl.value = meta.bannerUrl || meta.wallpaperUrl || "";
       el.about.value = meta.about || meta.profileAbout || currentNote || "";
       el.statusText.value = meta.statusText || meta.status || "";
+      el.mood.value = meta.mood || meta.moodText || "";
       el.interests.value = meta.interests || "";
       el.musicTitle.value = meta.musicTitle || "";
       el.musicUrl.value = meta.musicUrl || "";
@@ -524,6 +530,7 @@
       fd.append("bannerUrl", el.bannerUrl.value);
       fd.append("about", el.about.value);
       fd.append("statusText", el.statusText.value);
+      fd.append("mood", el.mood.value);
       fd.append("interests", el.interests.value);
       fd.append("musicTitle", el.musicTitle.value);
       fd.append("musicUrl", el.musicUrl.value);

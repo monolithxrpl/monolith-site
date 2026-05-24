@@ -2564,9 +2564,15 @@ small,
           <div class="write" id="aboutBox">No about section yet.</div>
         </section>
 
+        <!-- MONOLITH_STATUS_MOOD_LAYER_20260524 -->
         <section class="box">
           <div class="k">Status</div>
           <div class="write" id="statusBox">No status yet.</div>
+        </section>
+
+        <section class="box moodBox">
+          <div class="k">Mood</div>
+          <div class="write" id="moodBox">No mood set yet.</div>
         </section>
 
         <section class="box">
@@ -2683,6 +2689,7 @@ small,
     const banner=m.bannerUrl||m.wallpaperUrl||f?.bannerUrl||f?.wallpaperUrl||"";
     const about=m.about||m.profileAbout||"";
     const statusText=m.statusText||m.status||"";
+    const moodText=m.mood||m.moodText||"";
     const interests=m.interests||"";
     const musicUrl=m.musicUrl||"";
     const musicTitle=m.musicTitle||"";
@@ -2710,6 +2717,7 @@ small,
     if(banner){document.querySelector(".banner").style.backgroundImage="linear-gradient(rgba(5,8,5,.35),rgba(5,8,5,.65)),url('"+banner+"')";document.querySelector(".banner").style.backgroundSize="cover";document.querySelector(".banner").style.backgroundPosition="center"}
     $("aboutBox").textContent=about||note||"No about section yet.";
     $("statusBox").textContent=statusText||"No status yet.";
+    $("moodBox").textContent=moodText||"No mood set yet.";
     $("interestsBox").textContent=interests||"No interests listed yet.";
     $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
     if(musicUrl){
