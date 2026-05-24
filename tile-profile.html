@@ -2457,6 +2457,44 @@ small,
 }
 /* MONOLITH_OWNER_CONTROLS_WRITE_TEXT_FIX_20260523_END */
 
+
+/* MONOLITH_TABLET_VISUAL_SHELL_20260524 */
+.monolithTabletShell{
+  margin:22px 0;
+  padding:18px;
+  border:1px solid rgba(73,191,255,.42);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at top left,rgba(73,191,255,.16),transparent 34%),
+    linear-gradient(180deg,rgba(6,22,38,.96),rgba(3,10,20,.98));
+  box-shadow:0 18px 55px rgba(0,0,0,.36), inset 0 0 0 1px rgba(255,255,255,.025);
+  color:#eaf7ff;
+}
+.monolithTabletTitle{
+  font-size:22px;
+  line-height:1.05;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:900;
+  color:#eaf7ff;
+}
+.monolithTabletIntro{
+  color:#9fc5dd;
+  font-size:14px;
+  margin:6px 0 16px;
+}
+.monolithTabletEmpty{
+  border:1px dashed rgba(122,211,255,.28);
+  background:rgba(73,191,255,.055);
+  border-radius:17px;
+  padding:14px;
+  color:#9fc5dd;
+}
+@media(max-width:760px){
+  .monolithTabletShell{padding:15px;border-radius:18px}
+  .monolithTabletTitle{font-size:19px}
+}
+
 </style>
 </head>
 <body>
@@ -2525,10 +2563,10 @@ small,
           <div class="write" id="interestsBox">No interests listed yet.</div>
         </section>
       
-        <section class="box tabletBox">
-          <div class="k">THE TABLET</div>
-          <div class="tabletDesc">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
-          <div class="write" id="tabletBox">No entries carved yet.</div>
+        <section class="box tabletBox monolithTabletShell">
+          <div class="k monolithTabletTitle">THE TABLET</div>
+          <div class="tabletDesc monolithTabletIntro">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
+          <div class="write monolithTabletEmpty" id="tabletBox">No entries carved yet.</div>
         </section>
       </div>
 
