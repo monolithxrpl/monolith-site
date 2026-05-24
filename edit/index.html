@@ -180,6 +180,13 @@
       <label>Interests</label>
       <textarea id="interests" placeholder="List interests, projects, links, or culture"></textarea>
 
+      <!-- MONOLITH_TABLET_OWNER_WRITE_20260524 -->
+      <label>Tablet Entry Title</label>
+      <input id="tabletEntryTitle" placeholder="Milestone, update, proof note, or entry title" />
+
+      <label>Tablet Entry Body</label>
+      <textarea id="tabletEntryBody" placeholder="Write the first public Tablet entry for this coordinate"></textarea>
+
       <label>Music Title</label>
       <input id="musicTitle" placeholder="Track title" />
 
@@ -248,6 +255,8 @@
       statusText: document.getElementById("statusText"),
       mood: document.getElementById("mood"),
       interests: document.getElementById("interests"),
+      tabletEntryTitle: document.getElementById("tabletEntryTitle"),
+      tabletEntryBody: document.getElementById("tabletEntryBody"),
       musicTitle: document.getElementById("musicTitle"),
       musicUrl: document.getElementById("musicUrl"),
       gallery: document.getElementById("gallery"),
@@ -364,6 +373,9 @@
       el.statusText.value = meta.statusText || meta.status || "";
       el.mood.value = meta.mood || meta.moodText || "";
       el.interests.value = meta.interests || "";
+      const tabletEntry = Array.isArray(meta.tabletEntries) ? (meta.tabletEntries[0] || {}) : {};
+      el.tabletEntryTitle.value = tabletEntry.title || "";
+      el.tabletEntryBody.value = tabletEntry.body || "";
       el.musicTitle.value = meta.musicTitle || "";
       el.musicUrl.value = meta.musicUrl || "";
       el.gallery.value = Array.isArray(meta.gallery) ? meta.gallery.join("\n") : "";
@@ -532,6 +544,8 @@
       fd.append("statusText", el.statusText.value);
       fd.append("mood", el.mood.value);
       fd.append("interests", el.interests.value);
+      fd.append("tabletEntryTitle", el.tabletEntryTitle.value);
+      fd.append("tabletEntryBody", el.tabletEntryBody.value);
       fd.append("musicTitle", el.musicTitle.value);
       fd.append("musicUrl", el.musicUrl.value);
       fd.append("gallery", el.gallery.value);
