@@ -2507,24 +2507,22 @@ small,
 }
 
 
-/* MONOLITH_INLINE_EDIT_DISABLE_MOBILE_ZOOM_20260524 */
-#inlineEditDrawer input,
-#inlineEditDrawer textarea,
-#inlineEditDrawer select {
-  font-size:17px !important;
-  line-height:1.5;
-  padding:12px 13px !important;
-  border-radius:12px;
-  min-height:46px;
+/* MONOLITH_DESKTOP_MEDIA_STACK_DOWN_STABLE_20260524 */
+@media (min-width:900px) {
+  .leftRail .centerMediaStack {
+    top:680px!important;
+  }
 }
-#inlineEditDrawer textarea {
-  min-height:120px !important;
-}
-#inlineEditDrawer #inlineAbout {
-  min-height:140px !important;
-}
-#inlineEditDrawer #inlineTabletBody {
-  min-height:150px !important;
+
+
+/* MONOLITH_DESKTOP_BOTTOM_PROOF_LEDGER_DOWN_20260524 */
+@media (min-width:900px){
+  .leftRail{
+    min-height:1985px!important;
+  }
+  .leftRail > .grid{
+    top:1670px!important;
+  }
 }
 
 </style>
@@ -2564,7 +2562,6 @@ small,
         <button class="btn" id="resetWallStartBtn" type="button" data-desc="Restore default entry">Reset Wall Start</button>
         <button class="btn" id="favoriteBtn" type="button" data-desc="Save to Top 8">♡ Add to Top 8</button>
         <button class="btn" id="copyBtn" type="button" data-desc="Copy this page">Copy Page URL</button>
-        <button class="btn" id="ownerModeBtn" type="button" data-desc="Edit this tile on this page">Owner Mode</button>
         <a class="btn" id="reportTileLink" href="#" data-desc="Flag abuse or content">Report Tile</a>
       </div>
 
@@ -2605,8 +2602,6 @@ small,
         <section class="box tabletBox monolithTabletShell">
           <div class="k monolithTabletTitle">THE TABLET</div>
           <div class="tabletDesc monolithTabletIntro">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
-          <!-- MONOLITH_TABLET_EXPANSION_NOTE_20260524 -->
-          <div class="tabletDesc monolithTabletIntro">Coming soon: THE TABLET will expand into a full coordinate journal with multiple entries, updates, milestones, and a permanent public archive for this tile.</div>
           <div class="write monolithTabletEmpty" id="tabletBox">No entries carved yet.</div>
         </section>
       </div>
@@ -2626,56 +2621,13 @@ small,
         </section>
       </div>
 
-      <!-- MONOLITH_INLINE_OWNER_MODE_SHELL_20260524 -->
-      <section class="box ownerBox" id="ownerModePanel">
+      <section class="box ownerBox">
         <div class="k">Owner Controls</div>
-        <div class="write" id="ownerModeStatus">Owner Mode lets the tile owner edit this page after Xaman wallet verification.</div>
-        <div class="actions">
-          <button class="btn" id="ownerModeStart" type="button">Start Owner Sign-In</button>
-          <button class="btn" id="ownerModeVerify" type="button">Verify Owner</button>
-          <a class="btn" id="ownerEditLink" href="#">Open Full Edit Page</a>
-        </div>
+        <div class="write">Profile edits, wallpaper uploads, profile image uploads, gallery uploads, deletions, and music edits will live behind wallet verification.</div>
+        <div class="actions"><a class="btn" id="ownerEditLink" href="#">Edit Profile & Media</a></div>
       </section>
     </div>
   </section>
-
-<!-- MONOLITH_INLINE_EDIT_DRAWER_V1_20260524 -->
-<section class="box ownerBox" id="inlineEditDrawer" style="display:none">
-  <div class="k">Inline Edit</div>
-  <div class="write">Owner Mode is active. Edit core profile text directly on this page.</div>
-
-  <label>About</label>
-  <textarea id="inlineAbout" style="width:100%;min-height:90px"></textarea>
-
-  <label>Status</label>
-  <textarea id="inlineStatus" style="width:100%;min-height:70px"></textarea>
-
-  <label>Mood</label>
-  <input id="inlineMood" style="width:100%" />
-
-  <label>Interests</label>
-  <textarea id="inlineInterests" style="width:100%;min-height:70px"></textarea>
-
-  <label>Music Title</label>
-  <input id="inlineMusicTitle" style="width:100%" />
-
-  <label>Music URL</label>
-  <input id="inlineMusicUrl" style="width:100%" />
-
-  <label>Tablet Entry Title</label>
-  <input id="inlineTabletTitle" style="width:100%" />
-
-  <label>Tablet Entry Body</label>
-  <textarea id="inlineTabletBody" style="width:100%;min-height:100px"></textarea>
-
-  <div class="actions" style="margin-top:12px">
-    <button class="btn" id="inlineSaveBtn" type="button">Save Inline Changes</button>
-    <a class="btn" id="inlineFullEditLink" href="#">Open Full Edit Page</a>
-  </div>
-
-  <div class="write" id="inlineEditStatus">Ready after Owner Mode verification.</div>
-</section>
-
 </main>
 
   <div class="imageModal" id="imageModal" aria-hidden="true">
@@ -2804,165 +2756,6 @@ small,
       $("tabletBox").textContent = "No entries carved yet.";
     }
     $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
-
-    /* MONOLITH_INLINE_OWNER_MODE_VERIFY_20260524 */
-    const ownerModeKey = "monolith_tile_owner_payload_uuid";
-    const ownerCoordKey = "monolith_tile_owner_coordinate";
-
-    function setOwnerModeStatus(msg, good){
-      const box = $("ownerModeStatus");
-      if(!box) return;
-      box.textContent = msg;
-      box.style.color = good ? "#6ee7b7" : "#9fc5dd";
-    }
-
-    async function startOwnerMode(){
-      setOwnerModeStatus("Creating owner sign-in...", false);
-      const r = await fetch("/api/tile/edit/start", {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          coordinate:coord,
-          returnUrl:tileUrl+"?owner=1"
-        })
-      });
-      const data = await r.json().catch(() => ({}));
-      if(!r.ok || !data.ok){
-        setOwnerModeStatus(data.error || "Owner sign-in failed.", false);
-        return;
-      }
-      const auth = data.auth || {};
-      if(auth.payloadUuid){
-        localStorage.setItem(ownerModeKey, auth.payloadUuid);
-        localStorage.setItem(ownerCoordKey, coord);
-      }
-      if(auth.signUrl){
-        setOwnerModeStatus("Owner sign-in created. Open Xaman and sign with the owner wallet only.", false);
-        window.open(auth.signUrl, "_blank", "noopener");
-      }else{
-        setOwnerModeStatus("Owner sign-in created, but no sign URL returned.", false);
-      }
-    }
-
-
-    /* MONOLITH_INLINE_EDIT_DRAWER_SAVE_V1_20260524 */
-    function setInlineEditStatus(msg, good){
-      const box = $("inlineEditStatus");
-      if(!box) return;
-      box.textContent = msg;
-      box.style.color = good ? "#6ee7b7" : "#9fc5dd";
-    }
-
-    function setInlineValue(id, value){
-      const el = $(id);
-      if(el) el.value = value || "";
-    }
-
-    function openInlineEditDrawer(payloadUuid){
-      const drawer = $("inlineEditDrawer");
-      if(!drawer) return;
-      const tabletEntry = Array.isArray(m.tabletEntries) ? (m.tabletEntries[0] || {}) : {};
-
-      setInlineValue("inlineAbout", about || note || "");
-      setInlineValue("inlineStatus", statusText || "");
-      setInlineValue("inlineMood", moodText || "");
-      setInlineValue("inlineInterests", interests || "");
-      setInlineValue("inlineMusicTitle", musicTitle || "");
-      setInlineValue("inlineMusicUrl", musicUrl || "");
-      setInlineValue("inlineTabletTitle", tabletEntry.title || "");
-      setInlineValue("inlineTabletBody", tabletEntry.body || "");
-
-      const full = $("inlineFullEditLink");
-      if(full) full.href="/edit/?edit="+encodeURIComponent(coord);
-
-      drawer.style.display = "block";
-      drawer.scrollIntoView({behavior:"smooth", block:"center"});
-      setInlineEditStatus("Owner Mode Active. Inline text editing unlocked.", true);
-
-      const save = $("inlineSaveBtn");
-      if(save) save.onclick = () => saveInlineEdit(payloadUuid);
-    }
-
-    async function saveInlineEdit(payloadUuid){
-      if(!payloadUuid){
-        setInlineEditStatus("Owner verification required before saving.", false);
-        return;
-      }
-
-      const fd = new FormData();
-      fd.append("coordinate", coord);
-      fd.append("payloadUuid", payloadUuid);
-      fd.append("about", $("inlineAbout").value);
-      fd.append("statusText", $("inlineStatus").value);
-      fd.append("mood", $("inlineMood").value);
-      fd.append("interests", $("inlineInterests").value);
-      fd.append("musicTitle", $("inlineMusicTitle").value);
-      fd.append("musicUrl", $("inlineMusicUrl").value);
-      fd.append("tabletEntryTitle", $("inlineTabletTitle").value);
-      fd.append("tabletEntryBody", $("inlineTabletBody").value);
-
-      fd.append("gallery", Array.isArray(m.gallery) ? m.gallery.join("\n") : "");
-      fd.append("links", Array.isArray(m.links) ? m.links.join("\n") : "");
-      fd.append("favoriteTiles", Array.isArray(m.favoriteTiles) ? m.favoriteTiles.join("\n") : "");
-
-      setInlineEditStatus("Saving inline changes...", false);
-
-      const r = await fetch("/api/tile/edit/apply", {
-        method:"POST",
-        body:fd
-      });
-
-      const data = await r.json().catch(() => ({}));
-      if(!r.ok || !data.ok){
-        setInlineEditStatus(data.error || "Inline save failed.", false);
-        return;
-      }
-
-      setInlineEditStatus("Saved. Reloading updated tile...", true);
-      setTimeout(() => location.reload(), 700);
-    }
-
-    async function verifyOwnerMode(){
-      const payloadUuid = localStorage.getItem(ownerModeKey) || "";
-      const savedCoord = (localStorage.getItem(ownerCoordKey) || "").toUpperCase();
-      if(!payloadUuid || savedCoord !== coord){
-        setOwnerModeStatus("Start owner sign-in first.", false);
-        return false;
-      }
-      setOwnerModeStatus("Verifying owner wallet...", false);
-      const r = await fetch("/api/tile/edit/verify", {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({ coordinate:coord, payloadUuid })
-      });
-      const data = await r.json().catch(() => ({}));
-      if(!r.ok || !data.ok || !data.ownerVerified){
-        setOwnerModeStatus(data.error || "Owner wallet not verified.", false);
-        return false;
-      }
-      setOwnerModeStatus("Owner Mode Active. Inline editing unlocked on this page.", true);
-      openInlineEditDrawer(payloadUuid);
-      return true;
-    }
-
-    const ownerModeBtn = $("ownerModeBtn");
-    if(ownerModeBtn){
-      ownerModeBtn.onclick = () => {
-        const panel = $("ownerModePanel");
-        if(panel) panel.scrollIntoView({behavior:"smooth", block:"center"});
-        setOwnerModeStatus("Owner Mode selected. Start owner sign-in to unlock this page.", false);
-      };
-    }
-
-    const ownerModeStart = $("ownerModeStart");
-    if(ownerModeStart) ownerModeStart.onclick = () => startOwnerMode();
-
-    const ownerModeVerify = $("ownerModeVerify");
-    if(ownerModeVerify) ownerModeVerify.onclick = () => verifyOwnerMode();
-
-    if(qs.get("owner")==="1"){
-      setTimeout(() => verifyOwnerMode().catch(() => setOwnerModeStatus("Owner verification failed.", false)), 350);
-    }
     if(musicUrl){
       const directAudio=/\.(mp3|wav|ogg|m4a)(\?|#|$)/i.test(musicUrl);
       const safeUrl=String(musicUrl).replace(/"/g,"&quot;");
