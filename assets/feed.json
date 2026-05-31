@@ -24450,19 +24450,5 @@
     "tier": "reserved",
     "price_xrp": 0,
     "note": "RESERVED - CONTEST WINNER"
-  },
-  {
-    "tile": "N1W3",
-    "gx": -3,
-    "gy": 1,
-    "tag": "RESERVED",
-    "img": "/assets/RESERVED.webp?v=20260506",
-    "handle": "@monolith_xrpl",
-    "ts": "2026-05-29",
-    "claimable": false,
-    "locked": true,
-    "tier": "reserved",
-    "price_xrp": 0,
-    "note": "RESERVED - CONTEST WINNER"
   }
 ]
