@@ -24436,19 +24436,5 @@
     "tier": "reserved",
     "price_xrp": 0,
     "note": "RESERVED - CONTEST WINNER"
-  },
-  {
-    "tile": "N15E10",
-    "gx": 10,
-    "gy": 15,
-    "tag": "RESERVED",
-    "img": "/assets/RESERVED.webp?v=20260506",
-    "handle": "@monolith_xrpl",
-    "ts": "2026-05-29",
-    "claimable": false,
-    "locked": true,
-    "tier": "reserved",
-    "price_xrp": 0,
-    "note": "RESERVED - CONTEST WINNER"
   }
 ]
