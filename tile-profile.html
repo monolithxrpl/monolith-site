@@ -2580,7 +2580,173 @@ small,
 <meta name="twitter:description" content="Find me on MONOLITH. Public XRPL coordinate real estate with a wallet-linked tile profile.">
 <meta name="twitter:image" content="https://monolithxrpl.com/assets/find-me-on-monolith-og.png">
 
-</head>
+
+<style id="MONOLITH_MY_REAL_ESTATE_RESPONSIVE_V1">
+.realEstateBox{overflow:hidden}
+.realEstateBox,.realEstateStats,.realEstateTileList,
+.realEstateStats div,.realEstateTileLink{min-width:0}
+.realEstateStats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin:10px 0;
+}
+.realEstateStats div{
+  border:1px solid rgba(122,211,255,.22);
+  border-radius:12px;
+  padding:9px 6px;
+  text-align:center;
+  background:rgba(2,9,18,.55);
+}
+.realEstateStats strong{
+  display:block;
+  font-size:20px;
+  color:#82dcff;
+}
+.realEstateStats span{
+  display:block;
+  margin-top:2px;
+  font-size:10px;
+  color:#9fc7dd;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.realEstateTileList{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  margin-top:8px;
+}
+.realEstateTileLink{
+  display:block;
+  border:1px solid rgba(122,211,255,.20);
+  border-radius:10px;
+  padding:8px;
+  background:rgba(2,9,18,.48);
+  color:#dff6ff;
+  text-decoration:none;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+@media(max-width:899px){
+  .realEstateStats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .realEstateTileList{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(orientation:landscape) and (max-height:520px) and (max-width:950px){
+  .realEstateBox{max-width:100%;min-width:0}
+  .realEstateStats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .realEstateStats strong{font-size:16px}
+  .realEstateStats span{font-size:8px}
+  .realEstateTileList{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+
+
+<style id="MONOLITH_MY_REAL_ESTATE_DESKTOP_FIX_V1">
+@media(min-width:900px){
+  .leftRail .socialGrid > .realEstateBox{
+    grid-column:1 / -1!important;
+    grid-row:auto!important;
+    min-height:250px!important;
+    padding:10px!important;
+    display:block!important;
+  }
+
+  .leftRail .socialGrid{
+    min-height:790px!important;
+  }
+
+  .leftRail .centerMediaStack{
+    top:805px!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_MY_REAL_ESTATE_DESKTOP_FIX_V2">
+@media(min-width:900px){
+  .leftRail .socialGrid{
+    min-height:1050px!important;
+  }
+
+  .leftRail .socialGrid > .tabletBox{
+    min-height:300px!important;
+  }
+
+  .leftRail .tabletBox .write{
+    min-height:210px!important;
+  }
+
+  .leftRail .socialGrid > .realEstateBox{
+    grid-column:1 / -1!important;
+    min-height:365px!important;
+    overflow:visible!important;
+    padding:10px!important;
+    background:linear-gradient(180deg,#06192f,#020713)!important;
+  }
+
+  .leftRail .realEstateBox .tabletDesc{
+    color:#9fc7dd!important;
+  }
+
+  .leftRail .realEstateStats div,
+  .leftRail .realEstateTileLink{
+    background:rgba(5,17,31,.94)!important;
+    border-color:rgba(130,220,255,.28)!important;
+  }
+
+  .leftRail .realEstateTileList{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .leftRail .centerMediaStack{
+    top:1065px!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_MY_REAL_ESTATE_DESKTOP_LIST_HEIGHT_V1">
+@media(min-width:900px){
+  .leftRail #realEstateTiles{
+    min-height:175px!important;
+    max-height:175px!important;
+    overflow-y:auto!important;
+    padding-right:6px!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_MY_REAL_ESTATE_DESKTOP_FOOTER_CLEARANCE_V1">
+@media(min-width:900px){
+  .leftRail > .grid{
+    top:1860px!important;
+  }
+
+  .leftRail{
+    min-height:2220px!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_MY_REAL_ESTATE_DESKTOP_FOOTER_BOTTOM_V1">
+@media(min-width:900px){
+  .leftRail{
+    position:relative!important;
+    min-height:2380px!important;
+  }
+
+  .leftRail > .grid{
+    top:auto!important;
+    bottom:24px!important;
+  }
+}
+</style>
+\n</head>
 <body>
 <main class="wrap">
   <div class="top">
@@ -2658,6 +2824,18 @@ small,
           <div class="k monolithTabletTitle">THE TABLET</div>
           <div class="tabletDesc monolithTabletIntro">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
           <div class="write monolithTabletEmpty" id="tabletBox">No entries carved yet.</div>
+        </section>
+
+        <!-- MONOLITH_MY_REAL_ESTATE_V1 -->
+        <section class="box realEstateBox" id="realEstateBox">
+          <div class="k">MY REAL ESTATE</div>
+          <div class="tabletDesc">Owned tiles, connected blocks, and territory reach across MONOLITH.</div>
+          <div class="realEstateStats">
+            <div><strong id="realEstateTotal">0</strong><span>Owned Tiles</span></div>
+            <div><strong id="realEstateLargest">0</strong><span>Largest Block</span></div>
+            <div><strong id="realEstateClusters">0</strong><span>Territories</span></div>
+          </div>
+          <div class="write" id="realEstateTiles">Loading owned tiles...</div>
         </section>
       </div>
 
@@ -2854,6 +3032,29 @@ small,
       $("tabletBox").textContent = "No entries carved yet.";
     }
     $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
+
+    /* MONOLITH_MY_REAL_ESTATE_DATA_V1 */
+    fetch("/api/tiles/owned/"+encodeURIComponent(t.owner_wallet),{cache:"no-store"})
+      .then(r=>r.json())
+      .then(realEstate=>{
+        if(!realEstate||!realEstate.ok) throw new Error("owned tiles unavailable");
+
+        $("realEstateTotal").textContent=realEstate.totalTiles||0;
+        $("realEstateLargest").textContent=realEstate.largestConnectedBlock||0;
+        $("realEstateClusters").textContent=realEstate.clusterCount||0;
+
+        const owned=Array.isArray(realEstate.tiles)?realEstate.tiles:[];
+        $("realEstateTiles").innerHTML=owned.length
+          ? '<div class="realEstateTileList">'+owned.map(tile=>{
+              const c=String(tile.coordinate||"").replace(/</g,"&lt;");
+              const tag=String(tile.owner_tag||tile.coordinate||"Owned Tile").replace(/</g,"&lt;");
+              return '<a class="realEstateTileLink" href="/tile-profile.candidate-owned.html?tile='+encodeURIComponent(c)+'"><strong>'+c+'</strong><br><span>'+tag+'</span></a>';
+            }).join("")+'</div>'
+          : "No owned tiles found.";
+      })
+      .catch(()=>{
+        $("realEstateTiles").textContent="Owned tile data is temporarily unavailable.";
+      });
 
     /* MONOLITH_INLINE_EDIT_DRAWER_SAVE_V1_20260524 */
     function setInlineEditStatus(msg, good){
