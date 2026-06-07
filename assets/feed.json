@@ -24422,5 +24422,57 @@
     "price_xrp": 0,
     "ad_slot": 1,
     "id": "YBH_CENTER_SCATTER_S15E12_1779513147"
+  },
+  {
+    "tile": "N589",
+    "gx": 0,
+    "gy": 589,
+    "tag": "RESERVED",
+    "img": "/assets/RESERVED.webp?v=20260506",
+    "handle": "@monolith_xrpl",
+    "ts": "2026-05-20",
+    "claimable": false,
+    "locked": true,
+    "tier": "reserved",
+    "price_xrp": 0
+  },
+  {
+    "tile": "S589",
+    "gx": 0,
+    "gy": -589,
+    "tag": "RESERVED",
+    "img": "/assets/RESERVED.webp?v=20260506",
+    "handle": "@monolith_xrpl",
+    "ts": "2026-05-20",
+    "claimable": false,
+    "locked": true,
+    "tier": "reserved",
+    "price_xrp": 0
+  },
+  {
+    "tile": "E589",
+    "gx": 589,
+    "gy": 0,
+    "tag": "RESERVED",
+    "img": "/assets/RESERVED.webp?v=20260506",
+    "handle": "@monolith_xrpl",
+    "ts": "2026-05-20",
+    "claimable": false,
+    "locked": true,
+    "tier": "reserved",
+    "price_xrp": 0
+  },
+  {
+    "tile": "W589",
+    "gx": -589,
+    "gy": 0,
+    "tag": "RESERVED",
+    "img": "/assets/RESERVED.webp?v=20260506",
+    "handle": "@monolith_xrpl",
+    "ts": "2026-05-20",
+    "claimable": false,
+    "locked": true,
+    "tier": "reserved",
+    "price_xrp": 0
   }
 ]
