@@ -3049,7 +3049,7 @@ small,
           ? '<div class="realEstateTileList">'+owned.map(tile=>{
               const c=String(tile.coordinate||"").replace(/</g,"&lt;");
               const tag=String(tile.owner_tag||tile.coordinate||"Owned Tile").replace(/</g,"&lt;");
-              return '<a class="realEstateTileLink" href="/tile-profile.candidate-owned.html?tile='+encodeURIComponent(c)+'"><strong>'+c+'</strong><br><span>'+tag+'</span></a>';
+              return '<a class="realEstateTileLink" href="/tile-profile.html?tile='+encodeURIComponent(c)+'"><strong>'+c+'</strong><br><span>'+tag+'</span></a>';
             }).join("")+'</div>'
           : "No owned tiles found.";
       })
