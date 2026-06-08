@@ -2542,7 +2542,6 @@ small,
 #inlineEditDrawer #inlineAbout {
   min-height:140px !important;
 }
-#inlineEditDrawer #inlineTabletBody {
   min-height:150px !important;
 }
 
@@ -2863,6 +2862,204 @@ small,
 }
 </style>
 
+
+<style id="MONOLITH_TABLET_JOURNAL_RESPONSIVE_V1">
+#tabletJournalOwnerPanel{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid rgba(122,211,255,.22);
+}
+#tabletJournalOwnerPanel label{
+  display:block;
+  margin-top:8px;
+  font-size:11px;
+  color:#9fc7dd;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+#tabletJournalOwnerPanel input,
+#tabletJournalOwnerPanel textarea{
+  box-sizing:border-box;
+  margin-top:5px;
+}
+.tabletEntryCard{
+  border:1px solid rgba(122,211,255,.22);
+  border-radius:12px;
+  padding:10px;
+  margin:8px 0;
+  background:rgba(2,9,18,.55);
+}
+.tabletEntryActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px;
+}
+.tabletEntryActions .btn{
+  padding:6px 8px;
+  font-size:11px;
+}
+@media(max-width:899px){
+  #tabletJournalOwnerPanel textarea{
+    min-height:96px!important;
+  }
+}
+@media(orientation:landscape) and (max-height:520px) and (max-width:950px){
+  #tabletJournalOwnerPanel textarea{
+    min-height:78px!important;
+  }
+  .tabletEntryActions{
+    gap:4px;
+  }
+  .tabletEntryActions .btn{
+    padding:5px 6px;
+    font-size:10px;
+  }
+}
+</style>
+
+
+
+
+<style id="MONOLITH_OWNER_CONTROLS_UNDER_REPORT_V1">
+@media(max-width:899px){
+  .leftRail #ownerModePanel.ownerBox{
+    position:relative!important;
+    top:auto!important;
+    bottom:auto!important;
+    left:auto!important;
+    right:auto!important;
+    width:100%!important;
+    max-width:none!important;
+    order:7!important;
+    margin:8px 0 0!important;
+  }
+}
+@media(orientation:landscape) and (max-height:520px) and (max-width:950px){
+  .leftRail #ownerModePanel.ownerBox{
+    position:relative!important;
+    top:auto!important;
+    bottom:auto!important;
+    left:auto!important;
+    right:auto!important;
+    width:100%!important;
+    max-width:none!important;
+    order:7!important;
+    margin:8px 0 0!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_SIDEWAYS_NATURAL_FLOW_RESET_V1">
+@media(orientation:landscape) and (max-height:650px) and (max-width:1200px){
+  .body,
+  .leftRail{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    min-height:auto!important;
+    height:auto!important;
+  }
+
+  .leftRail > *,
+  .leftRail .profile,
+  .leftRail .bio,
+  .leftRail .musicRail,
+  .leftRail .profileActionsMain,
+  .leftRail #ownerModePanel.ownerBox,
+  .leftRail .socialGrid,
+  .leftRail .centerMediaStack,
+  .leftRail > .grid{
+    position:relative!important;
+    top:auto!important;
+    bottom:auto!important;
+    left:auto!important;
+    right:auto!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+  }
+
+  .leftRail .profile{order:1!important}
+  .leftRail .bio{order:2!important}
+  .leftRail .musicRail{order:3!important}
+  .leftRail .socialGrid{order:4!important}
+  .leftRail .centerMediaStack{order:5!important}
+  .leftRail .profileActionsMain{order:6!important}
+  .leftRail #ownerModePanel.ownerBox{order:7!important}
+  .leftRail > .grid{order:8!important}
+
+  .leftRail .socialGrid{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+  }
+
+  .leftRail .centerMediaStack{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+  }
+
+  .leftRail .topTiles,
+  .leftRail .gallery{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .tabletBox,
+  .realEstateBox,
+  .neighboringTilesBox,
+  .topTilesBox,
+  .galleryBox{
+    overflow:visible!important;
+    min-height:auto!important;
+  }
+
+  .tabletBox .write,
+  #realEstateTiles{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  .neighboringTilesGrid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_SIDEWAYS_FLOATING_CONTROLS_KILL_V1">
+@media(orientation:landscape) and (max-height:650px) and (max-width:1200px){
+  .leftRail .profileActionsMain,
+  .leftRail #ownerModePanel.ownerBox{
+    position:static!important;
+    inset:auto!important;
+    top:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    left:auto!important;
+    transform:none!important;
+    z-index:auto!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+  }
+
+  .leftRail .profileActionsMain{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+  }
+
+  .leftRail #ownerModePanel.ownerBox{
+    display:block!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <main class="wrap">
@@ -2903,6 +3100,18 @@ small,
         <a class="btn" id="reportTileLink" href="#" data-desc="Flag abuse or content">Report Tile</a>
       </div>
 
+      <!-- MONOLITH_INLINE_OWNER_MODE_SHELL_20260524 -->
+      <section class="box ownerBox" id="ownerModePanel">
+        <div class="k">Owner Controls</div>
+        <div class="write" id="ownerModeStatus">Owner Mode lets the tile owner edit this page after Xaman wallet verification.</div>
+        <div class="actions">
+          <button class="btn" id="ownerModeStart" type="button">Start Owner Sign-In</button>
+          <button class="btn" id="ownerModeVerify" type="button">Verify Owner</button>
+          <button class="btn" id="profileSettingsBtn" type="button" style="display:none">Edit Profile Settings</button>
+          <a class="btn" id="ownerEditLink" href="#">Open Full Edit Page</a>
+        </div>
+      </section>
+
       <div class="grid">
         <div class="card"><div class="k">Wallet Proof</div><div class="v" id="wallet">None</div></div>
         <div class="card"><div class="k">Deed Status</div><div class="v" id="deed">Checking</div><div class="muted" id="deedHelp" style="margin-top:8px;font-size:12px">Checking Coordinate Deed delivery.</div><a id="deedAccept" href="#" target="_blank" rel="noopener" style="display:none;margin-top:10px;text-decoration:none" class="btn">Accept Deed in Xaman</a></div>
@@ -2941,6 +3150,21 @@ small,
           <div class="k monolithTabletTitle">THE TABLET</div>
           <div class="tabletDesc monolithTabletIntro">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
           <div class="write monolithTabletEmpty" id="tabletBox">No entries carved yet.</div>
+
+          <!-- MONOLITH_TABLET_JOURNAL_OWNER_PANEL_V1 -->
+          <div id="tabletJournalOwnerPanel" style="display:none">
+            <label>New Tablet Entry Title</label>
+            <input id="tabletJournalTitle" style="width:100%" />
+
+            <label>New Tablet Entry Body</label>
+            <textarea id="tabletJournalBody" style="width:100%;min-height:110px"></textarea>
+
+            <div class="actions" style="margin-top:10px">
+              <button class="btn" id="tabletJournalAdd" type="button">Add Tablet Entry</button>
+            </div>
+
+            <div class="write" id="tabletJournalStatus">Owner Mode required.</div>
+          </div>
         </section>
 
         <!-- MONOLITH_MY_REAL_ESTATE_V1 -->
@@ -2977,24 +3201,13 @@ small,
           <div class="gallery" id="gallery">No gallery images yet.</div>
         </section>
       </div>
-
-      <!-- MONOLITH_INLINE_OWNER_MODE_SHELL_20260524 -->
-      <section class="box ownerBox" id="ownerModePanel">
-        <div class="k">Owner Controls</div>
-        <div class="write" id="ownerModeStatus">Owner Mode lets the tile owner edit this page after Xaman wallet verification.</div>
-        <div class="actions">
-          <button class="btn" id="ownerModeStart" type="button">Start Owner Sign-In</button>
-          <button class="btn" id="ownerModeVerify" type="button">Verify Owner</button>
-          <a class="btn" id="ownerEditLink" href="#">Open Full Edit Page</a>
-        </div>
-      </section>
     </div>
   </section>
 
 <!-- MONOLITH_INLINE_EDIT_DRAWER_V1_20260524 -->
 <section class="box ownerBox" id="inlineEditDrawer" style="display:none">
-  <div class="k">Inline Edit</div>
-  <div class="write">Owner Mode is active. Edit core profile text directly on this page.</div>
+  <div class="k">Profile Settings</div>
+  <div class="write">Edit profile information and page settings here. Module-specific controls stay inside their sections.</div>
 
   <label>About</label>
   <textarea id="inlineAbout" style="width:100%;min-height:90px"></textarea>
@@ -3007,18 +3220,6 @@ small,
 
   <label>Interests</label>
   <textarea id="inlineInterests" style="width:100%;min-height:70px"></textarea>
-
-  <label>Music Title</label>
-  <input id="inlineMusicTitle" style="width:100%" />
-
-  <label>Music URL</label>
-  <input id="inlineMusicUrl" style="width:100%" />
-
-  <label>Tablet Entry Title</label>
-  <input id="inlineTabletTitle" style="width:100%" />
-
-  <label>Tablet Entry Body</label>
-  <textarea id="inlineTabletBody" style="width:100%;min-height:100px"></textarea>
 
   <div class="actions" style="margin-top:12px">
     <button class="btn" id="inlineSaveBtn" type="button">Save Inline Changes</button>
@@ -3140,7 +3341,10 @@ small,
     $("interestsBox").textContent=interests||"No interests listed yet.";
 
     /* MONOLITH_TABLET_PUBLIC_READ_20260524 */
-    const tabletEntries = Array.isArray(m.tabletEntries) ? m.tabletEntries.slice(0,12) : [];
+    const tabletEntries = (Array.isArray(m.tabletEntries) ? m.tabletEntries : [])
+      .filter(entry => entry && entry.visibility !== "hidden")
+      .sort((a,b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)))
+      .slice(0,12);
     if(tabletEntries.length){
       $("tabletBox").innerHTML = tabletEntries.map((entry, i) => {
         const title = String(entry.title || "Tablet Entry").replace(/</g,"&lt;");
@@ -3244,29 +3448,187 @@ small,
       if(el) el.value = value || "";
     }
 
+
+
+    function escTablet(v){
+      return String(v||"")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;");
+    }
+
+    async function mutateTabletEntry(payloadUuid,entry,action){
+      let body={payloadUuid,action};
+
+      if(action==="edit"){
+        const title=prompt("Tablet entry title",entry.title||"") ?? null;
+        if(title===null) return;
+
+        const text=prompt("Tablet entry body",entry.body||"") ?? null;
+        if(text===null) return;
+
+        body={payloadUuid,action,title,body:text};
+      }
+
+      if(action==="delete"&&!confirm("Delete this Tablet entry permanently?")) return;
+
+      setTabletJournalStatus("Updating Tablet entry...",false);
+
+      const r=await fetch(
+        "/api/tile/"+encodeURIComponent(coord)+"/tablet/"+encodeURIComponent(entry.id),
+        {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify(body)
+        }
+      );
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setTabletJournalStatus(data.error||"Tablet update failed.",false);
+        return;
+      }
+
+      setTabletJournalStatus("Tablet updated.",true);
+      await loadOwnerTabletJournal(payloadUuid);
+    }
+
+    function renderOwnerTabletEntries(payloadUuid,entries){
+      const box=$("tabletBox");
+      if(!box) return;
+
+      if(!entries.length){
+        box.innerHTML='<div class="write">No Tablet entries yet.</div>';
+        return;
+      }
+
+      box.innerHTML=entries.map(entry=>{
+        const visibility=entry.visibility||"public";
+        const pinLabel=entry.pinned?"Unpin":"Pin";
+        const pinAction=entry.pinned?"unpin":"pin";
+        const visibilityLabel=visibility==="hidden"?"Show":"Hide";
+        const visibilityAction=visibility==="hidden"?"show":"hide";
+
+        return '<div class="tabletEntryCard">'
+          +'<strong>'+escTablet(entry.title||"Tablet Entry")+'</strong>'
+          +(entry.pinned?'<div style="font-size:11px;color:#82dcff;margin-top:3px">PINNED</div>':'')
+          +'<div style="font-size:11px;color:#9fc7dd;margin-top:3px">'+escTablet(visibility)+'</div>'
+          +(entry.body?'<div style="margin-top:7px">'+escTablet(entry.body)+'</div>':'')
+          +'<div class="tabletEntryActions">'
+          +'<button class="btn tabletAction" data-id="'+escTablet(entry.id)+'" data-action="edit">Edit</button>'
+          +'<button class="btn tabletAction" data-id="'+escTablet(entry.id)+'" data-action="'+pinAction+'">'+pinLabel+'</button>'
+          +'<button class="btn tabletAction" data-id="'+escTablet(entry.id)+'" data-action="'+visibilityAction+'">'+visibilityLabel+'</button>'
+          +'<button class="btn tabletAction" data-id="'+escTablet(entry.id)+'" data-action="delete">Delete</button>'
+          +'</div></div>';
+      }).join("");
+
+      box.querySelectorAll(".tabletAction").forEach(btn=>{
+        btn.onclick=()=>{
+          const entry=entries.find(x=>String(x.id)===String(btn.dataset.id));
+          if(entry) mutateTabletEntry(payloadUuid,entry,btn.dataset.action);
+        };
+      });
+    }
+
+    async function loadOwnerTabletJournal(payloadUuid){
+      const r=await fetch("/api/tile/"+encodeURIComponent(coord)+"/tablet/owner",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({payloadUuid})
+      });
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setTabletJournalStatus(data.error||"Unable to load Tablet entries.",false);
+        return;
+      }
+
+      renderOwnerTabletEntries(payloadUuid,Array.isArray(data.entries)?data.entries:[]);
+      setTabletJournalStatus("Tablet journal ready.",true);
+      setTimeout(syncDesktopPuzzleLayout,0);
+      setTimeout(syncDesktopPuzzleLayout,180);
+    }
+
+    function setTabletJournalStatus(msg, good){
+      const box=$("tabletJournalStatus");
+      if(!box) return;
+      box.textContent=msg;
+      box.style.color=good ? "#6ee7b7" : "#9fc7dd";
+    }
+
+    async function addTabletJournalEntry(payloadUuid){
+      const title=$("tabletJournalTitle").value;
+      const body=$("tabletJournalBody").value;
+
+      if(!title.trim()&&!body.trim()){
+        setTabletJournalStatus("Write a title or entry before saving.", false);
+        return;
+      }
+
+      setTabletJournalStatus("Carving new Tablet entry...", false);
+
+      const r=await fetch("/api/tile/"+encodeURIComponent(coord)+"/tablet",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({payloadUuid,title,body})
+      });
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setTabletJournalStatus(data.error||"Tablet entry failed.", false);
+        return;
+      }
+
+      setTabletJournalStatus("Tablet entry carved. Reloading...", true);
+
+      const u=new URL(location.href);
+      u.searchParams.set("owner","1");
+      setTimeout(()=>location.href=u.toString(),700);
+    }
+
     function openInlineEditDrawer(payloadUuid){
-      const drawer = $("inlineEditDrawer");
+      const drawer=$("inlineEditDrawer");
       if(!drawer) return;
-      const tabletEntry = Array.isArray(m.tabletEntries) ? (m.tabletEntries[0] || {}) : {};
 
-      setInlineValue("inlineAbout", about || note || "");
-      setInlineValue("inlineStatus", statusText || "");
-      setInlineValue("inlineMood", moodText || "");
-      setInlineValue("inlineInterests", interests || "");
-      setInlineValue("inlineMusicTitle", musicTitle || "");
-      setInlineValue("inlineMusicUrl", musicUrl || "");
-      setInlineValue("inlineTabletTitle", tabletEntry.title || "");
-      setInlineValue("inlineTabletBody", tabletEntry.body || "");
+      drawer.style.display="none";
 
-      const full = $("inlineFullEditLink");
+      setInlineValue("inlineAbout",about||note||"");
+      setInlineValue("inlineStatus",statusText||"");
+      setInlineValue("inlineMood",moodText||"");
+      setInlineValue("inlineInterests",interests||"");
+
+      const full=$("inlineFullEditLink");
       if(full) full.href="/edit/?edit="+encodeURIComponent(coord);
 
-      drawer.style.display = "block";
-      drawer.scrollIntoView({behavior:"smooth", block:"center"});
-      setInlineEditStatus("Owner Mode Active. Inline text editing unlocked.", true);
+      const save=$("inlineSaveBtn");
+      if(save) save.onclick=()=>saveInlineEdit(payloadUuid);
 
-      const save = $("inlineSaveBtn");
-      if(save) save.onclick = () => saveInlineEdit(payloadUuid);
+      const tabletPanel=$("tabletJournalOwnerPanel");
+      if(tabletPanel) tabletPanel.style.display="block";
+
+      const tabletAdd=$("tabletJournalAdd");
+      if(tabletAdd) tabletAdd.onclick=()=>addTabletJournalEntry(payloadUuid);
+
+      loadOwnerTabletJournal(payloadUuid);
+
+      const profileSettings=$("profileSettingsBtn");
+      if(profileSettings){
+        profileSettings.style.display="inline-flex";
+        profileSettings.onclick=()=>{
+          drawer.style.display=drawer.style.display==="none"?"block":"none";
+          if(drawer.style.display==="block"){
+            drawer.scrollIntoView({behavior:"smooth",block:"center"});
+          }
+        };
+      }
+
+      setInlineEditStatus("Profile settings ready.",true);
+      setOwnerModeStatus("Owner Mode Active. On-page controls unlocked.",true);
+
     }
 
     async function saveInlineEdit(payloadUuid){
@@ -3282,10 +3644,6 @@ small,
       fd.append("statusText", $("inlineStatus").value);
       fd.append("mood", $("inlineMood").value);
       fd.append("interests", $("inlineInterests").value);
-      fd.append("musicTitle", $("inlineMusicTitle").value);
-      fd.append("musicUrl", $("inlineMusicUrl").value);
-      fd.append("tabletEntryTitle", $("inlineTabletTitle").value);
-      fd.append("tabletEntryBody", $("inlineTabletBody").value);
       fd.append("gallery", Array.isArray(m.gallery) ? m.gallery.join("\n") : "");
       fd.append("links", Array.isArray(m.links) ? m.links.join("\n") : "");
       fd.append("favoriteTiles", Array.isArray(m.favoriteTiles) ? m.favoriteTiles.join("\n") : "");
@@ -3307,6 +3665,30 @@ small,
     const ownerModeKey = "monolith_tile_owner_payload_uuid";
     const ownerCoordKey = "monolith_tile_owner_coordinate";
 
+    function signOutOwnerMode(){
+      localStorage.removeItem(ownerModeKey);
+      localStorage.removeItem(ownerCoordKey);
+
+      const drawer=$("inlineEditDrawer");
+      if(drawer) drawer.style.display="none";
+
+      const tabletPanel=$("tabletJournalOwnerPanel");
+      if(tabletPanel) tabletPanel.style.display="none";
+
+      const profileSettings=$("profileSettingsBtn");
+      if(profileSettings) profileSettings.style.display="none";
+
+
+      setOwnerModeStatus("Owner Mode signed out.",true);
+
+      const u=new URL(location.href);
+      u.searchParams.delete("owner");
+      u.searchParams.set("cb",Date.now());
+
+      setTimeout(()=>location.href=u.toString(),350);
+    }
+
+
     function setOwnerModeStatus(msg, good){
       const box = $("ownerModeStatus");
       if(!box) return;
@@ -3319,7 +3701,7 @@ small,
       const r = await fetch("/api/tile/edit/start", {
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({ coordinate:coord, returnUrl:tileUrl+"?owner=1" })
+        body:JSON.stringify({ coordinate:coord, returnUrl:(()=>{const u=new URL(location.href);u.searchParams.set("owner","1");u.searchParams.set("cb",Date.now());return u.toString()})() })
       });
       const data = await r.json().catch(() => ({}));
       if(!r.ok || !data.ok){
@@ -3357,10 +3739,121 @@ small,
         setOwnerModeStatus(data.error || "Owner wallet not verified.", false);
         return false;
       }
-      setOwnerModeStatus("Owner Mode Active. Inline editing unlocked on this page.", true);
+      const start=$("ownerModeStart");
+      if(start){
+        start.textContent="Sign Out Owner Mode";
+        start.onclick=()=>signOutOwnerMode();
+      }
+
+      const verify=$("ownerModeVerify");
+      if(verify) verify.style.display="none";
+
+      setOwnerModeStatus("Owner Mode Active. On-page controls unlocked.", true);
       openInlineEditDrawer(payloadUuid);
       return true;
     }
+
+
+
+    function isSidewaysMobile(){
+      return window.innerWidth>window.innerHeight
+        && window.innerHeight<=650
+        && window.innerWidth<=1200;
+    }
+
+    function resetSidewaysFloatingControls(){
+      if(!isSidewaysMobile()) return;
+
+      const actions=document.querySelector(".profileActionsMain");
+      const panel=$("ownerModePanel");
+
+      [actions,panel].forEach(el=>{
+        if(!el) return;
+        el.style.setProperty("position","static","important");
+        el.style.setProperty("top","auto","important");
+        el.style.setProperty("right","auto","important");
+        el.style.setProperty("bottom","auto","important");
+        el.style.setProperty("left","auto","important");
+        el.style.setProperty("width","100%","important");
+        el.style.setProperty("max-width","none","important");
+        el.style.setProperty("margin","0","important");
+        el.style.setProperty("transform","none","important");
+        el.style.setProperty("z-index","auto","important");
+      });
+    }
+
+    function placeOwnerControlsUnderReport(){
+      const panel=$("ownerModePanel");
+      const actions=document.querySelector(".profileActionsMain");
+      if(!panel||!actions) return;
+
+      const sideways=isSidewaysMobile();
+
+      if(window.matchMedia("(min-width:900px)").matches&&!sideways){
+        panel.style.setProperty(
+          "top",
+          (actions.offsetTop+actions.offsetHeight+10)+"px",
+          "important"
+        );
+        panel.style.setProperty("left","0","important");
+        panel.style.setProperty("right","auto","important");
+        panel.style.setProperty("margin-top","0","important");
+      }
+    }
+
+
+    function syncSidewaysPuzzleLayout(){
+      return;
+    }
+
+    function syncDesktopPuzzleLayout(){
+      const rail=document.querySelector(".leftRail");
+      const social=rail&&rail.querySelector(".socialGrid");
+      const media=rail&&rail.querySelector(".centerMediaStack");
+      const proof=rail&&Array.from(rail.children).find(el=>el.classList.contains("grid"));
+
+      if(!rail||!social||!media||!proof) return;
+
+      const sideways=isSidewaysMobile();
+
+      if(!window.matchMedia("(min-width:900px)").matches||sideways) return;
+
+      const socialHeight=Math.max(social.offsetHeight,social.scrollHeight);
+      const mediaTop=social.offsetTop+socialHeight+16;
+
+      media.style.setProperty("top",mediaTop+"px","important");
+
+      requestAnimationFrame(()=>{
+        const mediaHeight=Math.max(media.offsetHeight,media.scrollHeight);
+        const proofHeight=Math.max(proof.offsetHeight,proof.scrollHeight);
+        const owner=$("ownerModePanel");
+        const ownerBottom=owner ? owner.offsetTop+owner.offsetHeight : 0;
+
+        const railHeight=Math.max(
+          2660,
+          mediaTop+mediaHeight+proofHeight+64,
+          ownerBottom+proofHeight+64
+        );
+
+        rail.style.setProperty("min-height",railHeight+"px","important");
+        proof.style.setProperty("top","auto","important");
+        proof.style.setProperty("bottom","24px","important");
+      });
+    }
+
+    window.addEventListener("resize",placeOwnerControlsUnderReport);
+    window.addEventListener("load",placeOwnerControlsUnderReport);
+    window.addEventListener("resize",resetSidewaysFloatingControls);
+    window.addEventListener("load",resetSidewaysFloatingControls);
+    window.addEventListener("resize",syncDesktopPuzzleLayout);
+    window.addEventListener("load",syncDesktopPuzzleLayout);
+
+    setTimeout(placeOwnerControlsUnderReport,0);
+    setTimeout(placeOwnerControlsUnderReport,300);
+    setTimeout(resetSidewaysFloatingControls,0);
+    setTimeout(resetSidewaysFloatingControls,350);
+    setTimeout(syncDesktopPuzzleLayout,0);
+    setTimeout(syncDesktopPuzzleLayout,350);
 
     const ownerModeBtn = $("ownerModeBtn");
     if(ownerModeBtn){
@@ -3378,6 +3871,8 @@ small,
     if(ownerModeVerify) ownerModeVerify.onclick = () => verifyOwnerMode();
 
     if(qs.get("owner")==="1"){
+      const drawer=$("inlineEditDrawer");
+      if(drawer) drawer.style.display="none";
       setTimeout(() => verifyOwnerMode().catch(() => setOwnerModeStatus("Owner verification failed.", false)), 350);
     }
 
