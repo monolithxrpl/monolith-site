@@ -128,6 +128,12 @@ function hook(){
   var tile = el("tile");
   if(!tile) return;
 
+  var params = new URLSearchParams(location.search);
+  var prefill = params.get("tile") || params.get("coordinate");
+  if(prefill && !tile.value){
+    tile.value = String(prefill).toUpperCase().replace(/-/g,"");
+  }
+
   function current(){
     render(String(tile.value || "").toUpperCase().replace(/-/g,""));
   }
