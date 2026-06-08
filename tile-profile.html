@@ -2747,6 +2747,122 @@ small,
 }
 </style>
 
+
+<style id="MONOLITH_NEIGHBORING_TILES_RESPONSIVE_V1">
+.neighboringTilesBox{overflow:hidden}
+.neighboringTilesGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin-top:10px;
+}
+.neighborTile{
+  display:block;
+  min-width:0;
+  border:1px solid rgba(122,211,255,.22);
+  border-radius:10px;
+  padding:8px;
+  background:rgba(2,9,18,.55);
+  color:#dff6ff;
+  text-decoration:none;
+  text-align:center;
+}
+.neighborTile strong{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.neighborTile span{
+  display:block;
+  margin-top:3px;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.neighborTile.open span{color:#6ee7b7}
+.neighborTile.claimed span{color:#82dcff}
+.neighborTile.reserved span,
+.neighborTile.not_available span{color:#ffd166}
+
+@media(max-width:899px){
+  .neighboringTilesGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(orientation:landscape) and (max-height:520px) and (max-width:950px){
+  .neighboringTilesGrid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+  .neighborTile{
+    padding:7px 5px;
+  }
+}
+
+@media(min-width:900px){
+  .leftRail .socialGrid > .neighboringTilesBox{
+    grid-column:1 / -1!important;
+    min-height:250px!important;
+    padding:10px!important;
+    display:block!important;
+  }
+
+  .leftRail .socialGrid{
+    min-height:1320px!important;
+  }
+
+  .leftRail .centerMediaStack{
+    top:1335px!important;
+  }
+
+  .leftRail{
+    min-height:2660px!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_NEIGHBORING_TILES_RING_V1">
+.neighboringTilesGrid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+.neighborTile.current{
+  border-color:#82dcff!important;
+  background:linear-gradient(180deg,#0b2f5a,#06192f)!important;
+}
+.neighborTile.current span{
+  color:#82dcff!important;
+}
+</style>
+
+
+<style id="MONOLITH_NEIGHBORING_TILES_SIDEWAYS_TEXT_FIX_V1">
+@media(orientation:landscape) and (max-height:520px) and (max-width:950px){
+  .neighborTile{
+    min-height:52px!important;
+    padding:6px 4px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+  }
+
+  .neighborTile strong{
+    font-size:12px!important;
+    line-height:1.05!important;
+  }
+
+  .neighborTile span{
+    font-size:8px!important;
+    line-height:1.05!important;
+    letter-spacing:0!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:break-word!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <main class="wrap">
@@ -2837,6 +2953,13 @@ small,
             <div><strong id="realEstateClusters">0</strong><span>Territories</span></div>
           </div>
           <div class="write" id="realEstateTiles">Loading owned tiles...</div>
+        </section>
+
+        <!-- MONOLITH_NEIGHBORING_TILES_V1 -->
+        <section class="box neighboringTilesBox" id="neighboringTilesBox">
+          <div class="k">NEIGHBORING TILES</div>
+          <div class="tabletDesc">Explore the real estate surrounding this coordinate.</div>
+          <div class="neighboringTilesGrid" id="neighboringTilesGrid">Loading neighboring tiles...</div>
         </section>
       </div>
 
@@ -3055,6 +3178,57 @@ small,
       })
       .catch(()=>{
         $("realEstateTiles").textContent="Owned tile data is temporarily unavailable.";
+      });
+
+
+    /* MONOLITH_NEIGHBORING_TILES_DATA_V1 */
+    fetch("/api/tiles/neighbors/"+encodeURIComponent(coord),{cache:"no-store"})
+      .then(r=>r.json())
+      .then(data=>{
+        if(!data||!data.ok) throw new Error("neighbors unavailable");
+
+        const esc=v=>String(v||"")
+          .replace(/&/g,"&amp;")
+          .replace(/</g,"&lt;")
+          .replace(/>/g,"&gt;")
+          .replace(/"/g,"&quot;");
+
+        const list=Array.isArray(data.neighbors)?data.neighbors:[];
+        const ring=[
+          ...list.slice(0,4),
+          {coordinate:coord,status:"current",ownerTag:tag},
+          ...list.slice(4)
+        ];
+
+        $("neighboringTilesGrid").innerHTML=ring.map(tile=>{
+          const c=String(tile.coordinate||"");
+          const status=String(tile.status||"open").toLowerCase();
+
+          const label=status==="current"
+            ?"YOU ARE HERE"
+            :status==="open"
+              ?"OPEN - CLAIM NEARBY"
+              :status==="claimed"
+                ?(tile.ownerTag||"CLAIMED")
+                :status==="reserved"
+                  ?"RESERVED"
+                  :"NOT AVAILABLE";
+
+          const inner="<strong>"+esc(c)+"</strong><span>"+esc(label)+"</span>";
+
+          if(status==="claimed"){
+            return '<a class="neighborTile claimed" href="/tile-profile.html?tile='+encodeURIComponent(c)+'">'+inner+'</a>';
+          }
+
+          if(status==="open"){
+            return '<a class="neighborTile open" href="/claim/?tile='+encodeURIComponent(c)+'">'+inner+'</a>';
+          }
+
+          return '<div class="neighborTile '+status+'">'+inner+'</div>';
+        }).join("");
+      })
+      .catch(()=>{
+        $("neighboringTilesGrid").textContent="Neighboring tile data is temporarily unavailable.";
       });
 
     /* MONOLITH_INLINE_EDIT_DRAWER_SAVE_V1_20260524 */
