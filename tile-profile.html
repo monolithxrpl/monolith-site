@@ -3060,6 +3060,81 @@ small,
 }
 </style>
 
+
+<style id="MONOLITH_PROFILE_SONG_RESPONSIVE_V1">
+#profileSongOwnerPanel{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid rgba(122,211,255,.22);
+}
+#profileSongOwnerPanel label{
+  display:block;
+  margin-top:8px;
+  color:#9fc7dd;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+#profileSongOwnerPanel input[type="text"],
+#profileSongOwnerPanel input[type="url"],
+#profileSongOwnerPanel input[type="file"]{
+  box-sizing:border-box;
+  width:100%;
+  margin-top:5px;
+}
+.profileSongAutoplayRow{
+  display:flex!important;
+  align-items:flex-start;
+  gap:8px;
+  text-transform:none!important;
+  letter-spacing:0!important;
+  line-height:1.35;
+}
+.profileSongAutoplayRow input{
+  margin-top:2px;
+}
+.profileSongActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+@media(orientation:landscape) and (max-height:650px) and (max-width:1200px){
+  .profileSongActions{
+    flex-direction:column;
+  }
+  .profileSongActions .btn{
+    width:100%!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_PROFILE_SONG_NOW_PLAYING_V1">
+.profileSongNowPlaying{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  margin-bottom:8px;
+}
+.profileSongNowPlaying strong{
+  color:#82dcff;
+  font-size:10px;
+  letter-spacing:.10em;
+}
+.profileSongNowPlaying span{
+  color:#eaf7ff;
+  font-size:14px;
+  font-weight:800;
+}
+.profileSongAutoplayNote{
+  margin-top:7px;
+  color:#9fc7dd;
+  font-size:11px;
+  line-height:1.35;
+}
+</style>
+
 </head>
 <body>
 <main class="wrap">
@@ -3084,9 +3159,33 @@ small,
       <div class="bio" id="bio">Loading tile profile...</div>
 
       <section class="box musicRail">
-        <div class="k">Music</div>
+        <div class="k">PROFILE SONG</div>
         <div class="write" id="musicBox">No track added yet.</div>
         <audio id="musicPlayer" controls style="display:none;width:100%;margin-top:10px"></audio>
+
+        <!-- MONOLITH_PROFILE_SONG_OWNER_PANEL_V1 -->
+        <div id="profileSongOwnerPanel" style="display:none">
+          <label>Song Title</label>
+          <input id="profileSongTitle" type="text" maxlength="120" placeholder="Profile song title" />
+
+          <label>Song URL</label>
+          <input id="profileSongUrl" type="url" placeholder="Spotify, SoundCloud, YouTube, or direct audio URL" />
+
+          <label>Upload One Full Song</label>
+          <input id="profileSongFile" type="file" accept=".mp3,.wav,.ogg,.m4a,audio/mpeg,audio/wav,audio/ogg,audio/mp4" />
+
+          <label class="profileSongAutoplayRow">
+            <input id="profileSongAutoplay" type="checkbox" />
+            <span>Autoplay when allowed. Otherwise begin on first touch.</span>
+          </label>
+
+          <div class="actions profileSongActions">
+            <button class="btn" id="profileSongSave" type="button">Save Profile Song</button>
+            <button class="btn" id="profileSongRemove" type="button">Remove Song</button>
+          </div>
+
+          <div class="write" id="profileSongStatus">Owner Mode required.</div>
+        </div>
       </section>
 
       <div class="actions profileActionsMain">
@@ -3590,6 +3689,97 @@ small,
       setTimeout(()=>location.href=u.toString(),700);
     }
 
+
+    function setProfileSongStatus(msg,good){
+      const box=$("profileSongStatus");
+      if(!box) return;
+      box.textContent=msg;
+      box.style.color=good?"#6ee7b7":"#9fc7dd";
+    }
+
+    async function saveProfileSong(payloadUuid){
+      const fd=new FormData();
+      fd.append("payloadUuid",payloadUuid);
+      fd.append("musicTitle",$("profileSongTitle").value);
+      fd.append("musicUrl",$("profileSongUrl").value);
+      fd.append("musicAutoplay",$("profileSongAutoplay").checked?"1":"0");
+
+      const file=$("profileSongFile").files[0];
+      if(file) fd.append("song",file);
+
+      setProfileSongStatus("Saving Profile Song...",false);
+
+      const r=await fetch("/api/tile/"+encodeURIComponent(coord)+"/song",{
+        method:"POST",
+        body:fd
+      });
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setProfileSongStatus(data.error||"Profile Song save failed.",false);
+        return;
+      }
+
+      setProfileSongStatus("Profile Song saved. Reloading...",true);
+
+      const u=new URL(location.href);
+      u.searchParams.set("owner","1");
+      u.searchParams.set("cb",Date.now());
+
+      setTimeout(()=>location.href=u.toString(),500);
+    }
+
+    async function removeProfileSong(payloadUuid){
+      if(!confirm("Remove the current Profile Song?")) return;
+
+      setProfileSongStatus("Removing Profile Song...",false);
+
+      const r=await fetch("/api/tile/"+encodeURIComponent(coord)+"/song/remove",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({payloadUuid})
+      });
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setProfileSongStatus(data.error||"Profile Song removal failed.",false);
+        return;
+      }
+
+      setProfileSongStatus("Profile Song removed. Reloading...",true);
+
+      const u=new URL(location.href);
+      u.searchParams.set("owner","1");
+      u.searchParams.set("cb",Date.now());
+
+      setTimeout(()=>location.href=u.toString(),500);
+    }
+
+    function unlockProfileSong(payloadUuid){
+      const panel=$("profileSongOwnerPanel");
+      if(!panel) return;
+
+      panel.style.display="block";
+
+      $("profileSongTitle").value=musicTitle||"";
+      $("profileSongUrl").value=musicUrl||"";
+      $("profileSongAutoplay").checked=Boolean(m.musicAutoplay);
+
+      $("profileSongSave").onclick=()=>saveProfileSong(payloadUuid);
+      $("profileSongRemove").onclick=()=>removeProfileSong(payloadUuid);
+
+      setProfileSongStatus("Profile Song controls ready.",true);
+
+      setTimeout(placeOwnerControlsUnderReport,0);
+      setTimeout(placeOwnerControlsUnderReport,180);
+      setTimeout(syncDesktopPuzzleLayout,0);
+      setTimeout(syncDesktopPuzzleLayout,180);
+      setTimeout(syncSidewaysPuzzleLayout,0);
+      setTimeout(syncSidewaysPuzzleLayout,180);
+    }
+
     function openInlineEditDrawer(payloadUuid){
       const drawer=$("inlineEditDrawer");
       if(!drawer) return;
@@ -3614,6 +3804,7 @@ small,
       if(tabletAdd) tabletAdd.onclick=()=>addTabletJournalEntry(payloadUuid);
 
       loadOwnerTabletJournal(payloadUuid);
+      unlockProfileSong(payloadUuid);
 
       const profileSettings=$("profileSettingsBtn");
       if(profileSettings){
@@ -3785,16 +3976,34 @@ small,
     function placeOwnerControlsUnderReport(){
       const panel=$("ownerModePanel");
       const actions=document.querySelector(".profileActionsMain");
-      if(!panel||!actions) return;
+      const music=document.querySelector(".musicRail");
+
+      if(!panel||!actions||!music) return;
 
       const sideways=isSidewaysMobile();
 
       if(window.matchMedia("(min-width:900px)").matches&&!sideways){
-        panel.style.setProperty(
+        const actionsTop=
+          music.offsetTop+
+          Math.max(music.offsetHeight,music.scrollHeight)+
+          10;
+
+        actions.style.setProperty(
           "top",
-          (actions.offsetTop+actions.offsetHeight+10)+"px",
+          actionsTop+"px",
           "important"
         );
+
+        panel.style.setProperty(
+          "top",
+          (
+            actionsTop+
+            Math.max(actions.offsetHeight,actions.scrollHeight)+
+            10
+          )+"px",
+          "important"
+        );
+
         panel.style.setProperty("left","0","important");
         panel.style.setProperty("right","auto","important");
         panel.style.setProperty("margin-top","0","important");
@@ -3841,6 +4050,15 @@ small,
       });
     }
 
+    const profileSongRail=document.querySelector(".musicRail");
+
+    if(profileSongRail&&"ResizeObserver" in window){
+      new ResizeObserver(()=>{
+        placeOwnerControlsUnderReport();
+        syncDesktopPuzzleLayout();
+      }).observe(profileSongRail);
+    }
+
     window.addEventListener("resize",placeOwnerControlsUnderReport);
     window.addEventListener("load",placeOwnerControlsUnderReport);
     window.addEventListener("resize",resetSidewaysFloatingControls);
@@ -3876,6 +4094,34 @@ small,
       setTimeout(() => verifyOwnerMode().catch(() => setOwnerModeStatus("Owner verification failed.", false)), 350);
     }
 
+
+    function armFirstTouchProfileSong(player){
+      if(!player) return;
+
+      const events=["touchstart","pointerdown","click","keydown"];
+      let armed=true;
+
+      function cleanup(){
+        if(!armed) return;
+        armed=false;
+        events.forEach(event=>{
+          document.removeEventListener(event,start,true);
+        });
+      }
+
+      function start(){
+        if(!armed) return;
+
+        player.play()
+          .then(cleanup)
+          .catch(()=>{});
+      }
+
+      events.forEach(event=>{
+        document.addEventListener(event,start,true);
+      });
+    }
+
     if(musicUrl){
       const directAudio=/\.(mp3|wav|ogg|m4a)(\?|#|$)/i.test(musicUrl);
       const safeUrl=String(musicUrl).replace(/"/g,"&quot;");
@@ -3904,16 +4150,31 @@ small,
           else if(list) musicEmbed="https://www.youtube.com/embed/videoseries?list="+list;
         }
       }catch(e){}
-      const autoplayKey="monolithMusicAutoplay";
-      const autoplayOn=localStorage.getItem(autoplayKey)==="1";
-      const musicLink='<a class="btn" target="_blank" rel="noopener" href="'+safeUrl+'">'+safeTitle+'</a>';
-      const autoplayBtn='<button class="btn" type="button" id="musicAutoplayToggle" style="margin-left:8px">Autoplay: '+(autoplayOn?"ON":"OFF")+'</button>';
+      const autoplayOn=Boolean(m.musicAutoplay);
+      const nowPlaying='<div class="profileSongNowPlaying"><strong>NOW PLAYING</strong><span>'+safeTitle+'</span></div>';
+      const musicLink='<a class="btn" target="_blank" rel="noopener" href="'+safeUrl+'">Open Song</a>';
+      const autoplayNote=autoplayOn
+        ? '<div class="profileSongAutoplayNote">Autoplay enabled. Starts immediately where allowed, otherwise on first touch.</div>'
+        : '';
       const musicSrc=musicEmbed+(musicEmbed && autoplayOn ? (musicEmbed.includes("?") ? "&autoplay=1" : "?autoplay=1") : "");
       const musicFrame=musicEmbed?'<iframe title="MONOLITH music player" src="'+musicSrc+'" width="100%" height="152" style="border:0;border-radius:14px;background:#06111f;margin-top:12px" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>':'';
-      $("musicBox").innerHTML=musicLink+autoplayBtn+musicFrame;
-      const toggle=$("musicAutoplayToggle");
-      if(toggle){toggle.onclick=function(){localStorage.setItem(autoplayKey, autoplayOn ? "0" : "1"); location.reload();};}
-      if(directAudio){$("musicPlayer").src=musicUrl;$("musicPlayer").style.display="block"; if(autoplayOn){$("musicPlayer").autoplay=true;$("musicPlayer").play().catch(()=>{})}}else{$("musicPlayer").style.display="none"}
+
+      $("musicBox").innerHTML=nowPlaying+musicLink+autoplayNote+musicFrame;
+
+      if(directAudio){
+        const player=$("musicPlayer");
+        player.src=musicUrl;
+        player.style.display="block";
+        player.autoplay=autoplayOn;
+
+        if(autoplayOn){
+          player.play().catch(()=>{
+            armFirstTouchProfileSong(player);
+          });
+        }
+      }else{
+        $("musicPlayer").style.display="none";
+      }
     }
     if(gallery.length){$("gallery").innerHTML=gallery.map(src=>'<button class="galleryItem" type="button"><img src="'+String(src).replace(/"/g,"&quot;")+'" alt=""></button>').join("")}
     if(favoriteTiles.length){
