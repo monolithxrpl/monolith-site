@@ -2526,26 +2526,6 @@ small,
 }
 
 
-/* MONOLITH_INLINE_EDIT_DISABLE_MOBILE_ZOOM_20260524 */
-#inlineEditDrawer input,
-#inlineEditDrawer textarea,
-#inlineEditDrawer select {
-  font-size:17px !important;
-  line-height:1.5;
-  padding:12px 13px !important;
-  border-radius:12px;
-  min-height:46px;
-}
-#inlineEditDrawer textarea {
-  min-height:120px !important;
-}
-#inlineEditDrawer #inlineAbout {
-  min-height:140px !important;
-}
-  min-height:150px !important;
-}
-
-
 /* MONOLITH_INLINE_OWNER_CONTROLS_DOWN_ONLY_20260524 */
 @media (min-width:900px){
   .leftRail #ownerModePanel.ownerBox{
@@ -3265,6 +3245,24 @@ body.tileWallpaperActive .hero{
 }
 </style>
 
+
+<style id="MONOLITH_INLINE_TEXT_EDITORS_V1">
+.inlineTextEditor{
+  margin-top:10px;
+  padding-top:9px;
+  border-top:1px solid rgba(122,211,255,.22);
+}
+.inlineTextEditor textarea,
+.inlineTextEditor input{
+  box-sizing:border-box;
+  width:100%;
+  margin-bottom:8px;
+}
+.inlineTextEditor .btn{
+  width:100%!important;
+}
+</style>
+
 </head>
 <body>
 <div id="tileWallpaperLayer" aria-hidden="true"></div>
@@ -3337,7 +3335,6 @@ body.tileWallpaperActive .hero{
         <div class="actions">
           <button class="btn" id="ownerModeStart" type="button">Start Owner Sign-In</button>
           <button class="btn" id="ownerModeVerify" type="button">Verify Owner</button>
-          <button class="btn" id="profileSettingsBtn" type="button" style="display:none">Edit Text Settings</button>
         </div>
 
         <!-- MONOLITH_INLINE_PAGE_VISUALS_OWNER_PANEL_V1 -->
@@ -3401,22 +3398,42 @@ body.tileWallpaperActive .hero{
         <section class="box">
           <div class="k">About</div>
           <div class="write" id="aboutBox">No about section yet.</div>
+          <div class="inlineTextEditor" id="aboutEditor" style="display:none">
+            <textarea id="aboutInput" rows="5"></textarea>
+            <button class="btn" id="aboutSave" type="button">Save About</button>
+            <div class="write inlineTextStatus" id="aboutSaveStatus"></div>
+          </div>
         </section>
 
         <!-- MONOLITH_STATUS_MOOD_LAYER_20260524 -->
         <section class="box">
           <div class="k">Status</div>
           <div class="write" id="statusBox">No status yet.</div>
+          <div class="inlineTextEditor" id="statusEditor" style="display:none">
+            <textarea id="statusInput" rows="3"></textarea>
+            <button class="btn" id="statusSave" type="button">Save Status</button>
+            <div class="write inlineTextStatus" id="statusSaveStatus"></div>
+          </div>
         </section>
 
         <section class="box moodBox">
           <div class="k">Mood</div>
           <div class="write" id="moodBox">No mood set yet.</div>
+          <div class="inlineTextEditor" id="moodEditor" style="display:none">
+            <input id="moodInput" type="text" maxlength="120" />
+            <button class="btn" id="moodSave" type="button">Save Mood</button>
+            <div class="write inlineTextStatus" id="moodSaveStatus"></div>
+          </div>
         </section>
 
         <section class="box">
           <div class="k">Interests</div>
           <div class="write" id="interestsBox">No interests listed yet.</div>
+          <div class="inlineTextEditor" id="interestsEditor" style="display:none">
+            <textarea id="interestsInput" rows="4"></textarea>
+            <button class="btn" id="interestsSave" type="button">Save Interests</button>
+            <div class="write inlineTextStatus" id="interestsSaveStatus"></div>
+          </div>
         </section>
       
         <section class="box tabletBox monolithTabletShell">
@@ -3495,28 +3512,7 @@ body.tileWallpaperActive .hero{
   </section>
 
 <!-- MONOLITH_INLINE_EDIT_DRAWER_V1_20260524 -->
-<section class="box ownerBox" id="inlineEditDrawer" style="display:none">
-  <div class="k">Profile Settings</div>
-  <div class="write">Edit profile information and page settings here. Module-specific controls stay inside their sections.</div>
 
-  <label>About</label>
-  <textarea id="inlineAbout" style="width:100%;min-height:90px"></textarea>
-
-  <label>Status</label>
-  <textarea id="inlineStatus" style="width:100%;min-height:70px"></textarea>
-
-  <label>Mood</label>
-  <input id="inlineMood" style="width:100%" />
-
-  <label>Interests</label>
-  <textarea id="inlineInterests" style="width:100%;min-height:70px"></textarea>
-
-  <div class="actions" style="margin-top:12px">
-    <button class="btn" id="inlineSaveBtn" type="button">Save Text Changes</button>
-  </div>
-
-  <div class="write" id="inlineEditStatus">Ready after Owner Mode verification.</div>
-</section>
 
 </main>
 
@@ -3772,18 +3768,6 @@ body.tileWallpaperActive .hero{
         $("neighboringTilesGrid").textContent="Neighboring tile data is temporarily unavailable.";
       });
 
-    /* MONOLITH_INLINE_EDIT_DRAWER_SAVE_V1_20260524 */
-    function setInlineEditStatus(msg, good){
-      const box = $("inlineEditStatus");
-      if(!box) return;
-      box.textContent = msg;
-      box.style.color = good ? "#6ee7b7" : "#9fc5dd";
-    }
-
-    function setInlineValue(id, value){
-      const el = $(id);
-      if(el) el.value = value || "";
-    }
 
 
 
@@ -4507,74 +4491,180 @@ body.tileWallpaperActive .hero{
       setTimeout(syncSidewaysPuzzleLayout,180);
     }
 
+    function syncInlineTextLayout(){
+      setTimeout(placeOwnerControlsUnderReport,0);
+      setTimeout(placeOwnerControlsUnderReport,180);
+      setTimeout(syncDesktopPuzzleLayout,0);
+      setTimeout(syncDesktopPuzzleLayout,180);
+      setTimeout(syncSidewaysPuzzleLayout,0);
+      setTimeout(syncSidewaysPuzzleLayout,180);
+    }
+
+    function setInlineTextSaveStatus(label,msg,good){
+      const map={
+        About:"aboutSaveStatus",
+        Status:"statusSaveStatus",
+        Mood:"moodSaveStatus",
+        Interests:"interestsSaveStatus"
+      };
+
+      const box=$(map[label]);
+
+      if(box){
+        box.textContent=msg;
+        box.style.color=good?"#6ee7b7":"#9fc7dd";
+      }
+
+      setOwnerModeStatus(msg,good);
+    }
+
+    async function saveInlineTextModules(payloadUuid,label){
+      if(!payloadUuid){
+        setInlineTextSaveStatus(
+          label,
+          "Owner verification required before saving.",
+          false
+        );
+        return;
+      }
+
+      const fd=new FormData();
+
+      fd.append("coordinate",coord);
+      fd.append("payloadUuid",payloadUuid);
+      fd.append("about",$("aboutInput").value);
+      fd.append("statusText",$("statusInput").value);
+      fd.append("mood",$("moodInput").value);
+      fd.append("interests",$("interestsInput").value);
+
+      fd.append(
+        "links",
+        Array.isArray(m.links)
+          ? m.links.join("\n")
+          : ""
+      );
+
+      fd.append(
+        "favoriteTiles",
+        Array.isArray(m.favoriteTiles)
+          ? m.favoriteTiles.join("\n")
+          : ""
+      );
+
+      setInlineTextSaveStatus(
+        label,
+        "Saving "+label+"...",
+        false
+      );
+
+      try{
+        const r=await fetch(
+          "/api/tile/edit/apply",
+          {
+            method:"POST",
+            body:fd
+          }
+        );
+
+        const data=await r.json().catch(()=>({}));
+
+        if(!r.ok||!data.ok){
+          setInlineTextSaveStatus(
+            label,
+            data.error||(label+" save failed. HTTP "+r.status),
+            false
+          );
+          return;
+        }
+
+        $("aboutBox").textContent=
+          $("aboutInput").value.trim()||
+          "No about section yet.";
+
+        $("statusBox").textContent=
+          $("statusInput").value.trim()||
+          "No status yet.";
+
+        $("moodBox").textContent=
+          $("moodInput").value.trim()||
+          "No mood set yet.";
+
+        $("interestsBox").textContent=
+          $("interestsInput").value.trim()||
+          "No interests listed yet.";
+
+        setInlineTextSaveStatus(
+          label,
+          label+" saved.",
+          true
+        );
+
+        syncInlineTextLayout();
+      }catch(e){
+        setInlineTextSaveStatus(
+          label,
+          label+" save failed. "+(e.message||"Network error."),
+          false
+        );
+      }
+    }
+
+    function unlockInlineTextEditors(payloadUuid){
+      $("aboutInput").value=about||note||"";
+      $("statusInput").value=statusText||"";
+      $("moodInput").value=moodText||"";
+      $("interestsInput").value=interests||"";
+
+      [
+        "aboutEditor",
+        "statusEditor",
+        "moodEditor",
+        "interestsEditor"
+      ].forEach(id=>{
+        const el=$(id);
+        if(el) el.style.display="block";
+      });
+
+      $("aboutSave").onclick=()=>{
+        saveInlineTextModules(payloadUuid,"About");
+      };
+
+      $("statusSave").onclick=()=>{
+        saveInlineTextModules(payloadUuid,"Status");
+      };
+
+      $("moodSave").onclick=()=>{
+        saveInlineTextModules(payloadUuid,"Mood");
+      };
+
+      $("interestsSave").onclick=()=>{
+        saveInlineTextModules(payloadUuid,"Interests");
+      };
+
+      syncInlineTextLayout();
+    }
+
     function openInlineEditDrawer(payloadUuid){
-      const drawer=$("inlineEditDrawer");
-      if(!drawer) return;
-
-      drawer.style.display="none";
-
-      setInlineValue("inlineAbout",about||note||"");
-      setInlineValue("inlineStatus",statusText||"");
-      setInlineValue("inlineMood",moodText||"");
-      setInlineValue("inlineInterests",interests||"");
-
-      const save=$("inlineSaveBtn");
-      if(save) save.onclick=()=>saveInlineEdit(payloadUuid);
-
       const tabletPanel=$("tabletJournalOwnerPanel");
       if(tabletPanel) tabletPanel.style.display="block";
 
       const tabletAdd=$("tabletJournalAdd");
-      if(tabletAdd) tabletAdd.onclick=()=>addTabletJournalEntry(payloadUuid);
+      if(tabletAdd){
+        tabletAdd.onclick=()=>{
+          addTabletJournalEntry(payloadUuid);
+        };
+      }
 
       loadOwnerTabletJournal(payloadUuid);
       unlockProfileSong(payloadUuid);
       unlockGallery(payloadUuid);
       unlockTileVisuals(payloadUuid);
+      unlockInlineTextEditors(payloadUuid);
 
-      const profileSettings=$("profileSettingsBtn");
-      if(profileSettings){
-        profileSettings.style.display="inline-flex";
-        profileSettings.onclick=()=>{
-          drawer.style.display=drawer.style.display==="none"?"block":"none";
-          if(drawer.style.display==="block"){
-            drawer.scrollIntoView({behavior:"smooth",block:"center"});
-          }
-        };
-      }
-
-      setInlineEditStatus("Profile settings ready.",true);
-      setOwnerModeStatus("Owner Mode Active. On-page controls unlocked.",true);
-
-    }
-
-    async function saveInlineEdit(payloadUuid){
-      if(!payloadUuid){
-        setInlineEditStatus("Owner verification required before saving.", false);
-        return;
-      }
-
-      const fd = new FormData();
-      fd.append("coordinate", coord);
-      fd.append("payloadUuid", payloadUuid);
-      fd.append("about", $("inlineAbout").value);
-      fd.append("statusText", $("inlineStatus").value);
-      fd.append("mood", $("inlineMood").value);
-      fd.append("interests", $("inlineInterests").value);
-      fd.append("links", Array.isArray(m.links) ? m.links.join("\n") : "");
-      fd.append("favoriteTiles", Array.isArray(m.favoriteTiles) ? m.favoriteTiles.join("\n") : "");
-
-      setInlineEditStatus("Saving inline changes...", false);
-
-      const r = await fetch("/api/tile/edit/apply", { method:"POST", body:fd });
-      const data = await r.json().catch(() => ({}));
-      if(!r.ok || !data.ok){
-        setInlineEditStatus(data.error || "Inline save failed.", false);
-        return;
-      }
-
-      setInlineEditStatus("Saved. Reloading updated tile...", true);
-      setTimeout(() => location.reload(), 700);
+      setOwnerModeStatus(
+        "Owner Mode Active. On-page controls unlocked.",
+        true
+      );
     }
 
     /* MONOLITH_INLINE_OWNER_MODE_VERIFY_20260524 */
@@ -4714,15 +4804,8 @@ body.tileWallpaperActive .hero{
       localStorage.removeItem("monolithOwnerSession");
       localStorage.removeItem("monolithFavoritePending");
 
-      const drawer=$("inlineEditDrawer");
-      if(drawer) drawer.style.display="none";
-
       const tabletPanel=$("tabletJournalOwnerPanel");
       if(tabletPanel) tabletPanel.style.display="none";
-
-      const profileSettings=$("profileSettingsBtn");
-      if(profileSettings) profileSettings.style.display="none";
-
 
       setOwnerModeStatus("Owner Mode signed out.",true);
 
@@ -4966,9 +5049,6 @@ body.tileWallpaperActive .hero{
     if(ownerModeVerify) ownerModeVerify.onclick = () => verifyOwnerMode();
 
     if(qs.get("owner")==="1"){
-      const drawer=$("inlineEditDrawer");
-      if(drawer) drawer.style.display="none";
-
       setTimeout(
         ()=>verifyOwnerMode().catch(
           ()=>setOwnerModeStatus(
