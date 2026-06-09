@@ -3186,8 +3186,88 @@ small,
 }
 </style>
 
+
+<style id="MONOLITH_INLINE_PAGE_VISUALS_RESPONSIVE_V1">
+#tileVisualsOwnerPanel{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid rgba(122,211,255,.22);
+}
+#tileVisualsOwnerPanel .k{
+  margin-bottom:6px;
+}
+.tileVisualsGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin-top:10px;
+}
+.tileVisualControl{
+  padding:9px;
+  border:1px solid rgba(122,211,255,.18);
+  border-radius:10px;
+  background:rgba(2,9,18,.45);
+}
+.tileVisualControl label{
+  display:block;
+  color:#9fc7dd;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.tileVisualControl input[type="file"]{
+  box-sizing:border-box;
+  width:100%;
+  margin:7px 0;
+}
+.tileVisualControl .btn{
+  width:100%!important;
+}
+.tileVisualsActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+@media(orientation:landscape) and (max-height:650px) and (max-width:1200px){
+  .tileVisualsActions{
+    flex-direction:column;
+  }
+  .tileVisualsActions .btn{
+    width:100%!important;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_TILE_WALLPAPER_LAYER_V1">
+#tileWallpaperLayer{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  opacity:0;
+  transition:opacity .22s ease;
+}
+body.tileWallpaperActive #tileWallpaperLayer{
+  opacity:1;
+}
+body.tileWallpaperActive .wrap{
+  position:relative;
+  z-index:1;
+}
+body.tileWallpaperActive .hero{
+  background:rgba(3,8,18,.84)!important;
+  backdrop-filter:blur(1px);
+}
+</style>
+
 </head>
 <body>
+<div id="tileWallpaperLayer" aria-hidden="true"></div>
 <main class="wrap">
   <div class="top">
     <div class="brand"><img src="/assets/monolith_icon.webp" alt="">MONOLITH</div>
@@ -3257,8 +3337,51 @@ small,
         <div class="actions">
           <button class="btn" id="ownerModeStart" type="button">Start Owner Sign-In</button>
           <button class="btn" id="ownerModeVerify" type="button">Verify Owner</button>
-          <button class="btn" id="profileSettingsBtn" type="button" style="display:none">Edit Profile Settings</button>
-          <a class="btn" id="ownerEditLink" href="#">Open Full Edit Page</a>
+          <button class="btn" id="profileSettingsBtn" type="button" style="display:none">Edit Text Settings</button>
+        </div>
+
+        <!-- MONOLITH_INLINE_PAGE_VISUALS_OWNER_PANEL_V1 -->
+        <div id="tileVisualsOwnerPanel" style="display:none">
+          <div class="k">PAGE VISUALS</div>
+          <div class="write">Manage your profile image, banner, and wallpaper directly from your tile page.</div>
+
+          <div class="tileVisualsGrid">
+            <div class="tileVisualControl">
+              <label>Profile Image</label>
+              <input
+                id="tileProfileImageFile"
+                type="file"
+                accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+              />
+              <button class="btn" id="tileProfileImageRemove" type="button">Remove Profile Image</button>
+            </div>
+
+            <div class="tileVisualControl">
+              <label>Banner</label>
+              <input
+                id="tileBannerFile"
+                type="file"
+                accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+              />
+              <button class="btn" id="tileBannerRemove" type="button">Remove Banner</button>
+            </div>
+
+            <div class="tileVisualControl">
+              <label>Wallpaper</label>
+              <input
+                id="tileWallpaperFile"
+                type="file"
+                accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+              />
+              <button class="btn" id="tileWallpaperRemove" type="button">Return to Default Wallpaper</button>
+            </div>
+          </div>
+
+          <div class="actions tileVisualsActions">
+            <button class="btn" id="tileVisualsSave" type="button">Save Visual Changes</button>
+          </div>
+
+          <div class="write" id="tileVisualsStatus">Owner Mode required.</div>
         </div>
       </section>
 
@@ -3389,8 +3512,7 @@ small,
   <textarea id="inlineInterests" style="width:100%;min-height:70px"></textarea>
 
   <div class="actions" style="margin-top:12px">
-    <button class="btn" id="inlineSaveBtn" type="button">Save Inline Changes</button>
-    <a class="btn" id="inlineFullEditLink" href="#">Open Full Edit Page</a>
+    <button class="btn" id="inlineSaveBtn" type="button">Save Text Changes</button>
   </div>
 
   <div class="write" id="inlineEditStatus">Ready after Owner Mode verification.</div>
@@ -3473,7 +3595,14 @@ small,
     const note=m.note||t.note||f?.note||"No bio has been added yet.";
     const link=t.website_url||m.feedLink||m.link||f?.link||"";
     const date=m.displayDate||t.displayDate||f?.displayDate||t.claimed_at||t.created_at||"None";
-    const banner=m.bannerUrl||m.wallpaperUrl||f?.bannerUrl||f?.wallpaperUrl||"";
+    const banner=m.bannerUrl||f?.bannerUrl||"";
+    const wallpaper=m.wallpaperUrl||f?.wallpaperUrl||"";
+
+    let currentTileVisuals={
+      profileImageUrl:img,
+      bannerUrl:banner,
+      wallpaperUrl:wallpaper
+    };
     const about=m.about||m.profileAbout||"";
     const statusText=m.statusText||m.status||"";
     const moodText=m.mood||m.moodText||"";
@@ -3501,7 +3630,49 @@ small,
     $("claimTx").textContent=t.claim_tx_hash||"None";
     $("deedId").textContent=t.deed_nft_id||"None";
     if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"}
-    if(banner){document.querySelector(".banner").style.backgroundImage="linear-gradient(rgba(5,8,5,.35),rgba(5,8,5,.65)),url('"+banner+"')";document.querySelector(".banner").style.backgroundSize="cover";document.querySelector(".banner").style.backgroundPosition="center"}
+    function applyTileVisualsToPage(visuals){
+      const v=visuals||{};
+      const avatar=$("avatar");
+      const bannerEl=document.querySelector(".banner");
+
+      if(avatar){
+        avatar.src=v.profileImageUrl||"/assets/RESERVED.webp";
+      }
+
+      if(bannerEl){
+        if(v.bannerUrl){
+          bannerEl.style.backgroundImage=
+            "linear-gradient(rgba(5,8,5,.35),rgba(5,8,5,.65)),url('"+
+            String(v.bannerUrl).replace(/'/g,"%27")+
+            "')";
+          bannerEl.style.backgroundSize="cover";
+          bannerEl.style.backgroundPosition="center";
+        }else{
+          bannerEl.style.backgroundImage="";
+        }
+      }
+
+      const wallpaperLayer=$("tileWallpaperLayer");
+
+      if(v.wallpaperUrl){
+        document.body.classList.add("tileWallpaperActive");
+
+        if(wallpaperLayer){
+          wallpaperLayer.style.backgroundImage=
+            "linear-gradient(rgba(3,7,12,.48),rgba(3,7,12,.68)),url('"+
+            String(v.wallpaperUrl).replace(/'/g,"%27")+
+            "')";
+        }
+      }else{
+        document.body.classList.remove("tileWallpaperActive");
+
+        if(wallpaperLayer){
+          wallpaperLayer.style.backgroundImage="";
+        }
+      }
+    }
+
+    applyTileVisualsToPage(currentTileVisuals);
     $("aboutBox").textContent=about||note||"No about section yet.";
     $("statusBox").textContent=statusText||"No status yet.";
     $("moodBox").textContent=moodText||"No mood set yet.";
@@ -3526,7 +3697,6 @@ small,
     }else{
       $("tabletBox").textContent = "No entries carved yet.";
     }
-    $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
 
     /* MONOLITH_MY_REAL_ESTATE_DATA_V1 */
     fetch("/api/tiles/owned/"+encodeURIComponent(t.owner_wallet),{cache:"no-store"})
@@ -4123,6 +4293,220 @@ small,
       syncGalleryLayout();
     }
 
+
+    function setTileVisualsStatus(msg,good){
+      const box=$("tileVisualsStatus");
+      if(!box) return;
+      box.textContent=msg;
+      box.style.color=good?"#6ee7b7":"#9fc7dd";
+    }
+
+    let removeTileProfileImage=false;
+    let removeTileBanner=false;
+    let removeTileWallpaper=false;
+
+    function previewTileVisualFile(input,kind){
+      const file=input&&input.files&&input.files[0]
+        ? input.files[0]
+        : null;
+
+      if(!file) return;
+
+      const url=URL.createObjectURL(file);
+
+      if(kind==="profile"){
+        removeTileProfileImage=false;
+        currentTileVisuals.profileImageUrl=url;
+      }
+
+      if(kind==="banner"){
+        removeTileBanner=false;
+        currentTileVisuals.bannerUrl=url;
+      }
+
+      if(kind==="wallpaper"){
+        removeTileWallpaper=false;
+        currentTileVisuals.wallpaperUrl=url;
+      }
+
+      applyTileVisualsToPage(currentTileVisuals);
+      setTileVisualsStatus("Preview ready. Save Visual Changes to lock it.",true);
+    }
+
+    function markTileVisualRemoved(kind){
+      if(kind==="profile"){
+        removeTileProfileImage=true;
+        currentTileVisuals.profileImageUrl="";
+        $("tileProfileImageFile").value="";
+      }
+
+      if(kind==="banner"){
+        removeTileBanner=true;
+        currentTileVisuals.bannerUrl="";
+        $("tileBannerFile").value="";
+      }
+
+      if(kind==="wallpaper"){
+        removeTileWallpaper=true;
+        currentTileVisuals.wallpaperUrl="";
+        $("tileWallpaperFile").value="";
+      }
+
+      applyTileVisualsToPage(currentTileVisuals);
+      setTileVisualsStatus("Removal previewed. Save Visual Changes to lock it.",true);
+    }
+
+    async function saveTileVisuals(payloadUuid){
+      const fd=new FormData();
+
+      fd.append("payloadUuid",payloadUuid);
+
+      if(removeTileProfileImage){
+        fd.append("removeProfileImage","1");
+      }
+
+      if(removeTileBanner){
+        fd.append("removeBanner","1");
+      }
+
+      if(removeTileWallpaper){
+        fd.append("removeWallpaper","1");
+      }
+
+      const profileFile=$("tileProfileImageFile").files[0];
+      const bannerFile=$("tileBannerFile").files[0];
+      const wallpaperFile=$("tileWallpaperFile").files[0];
+
+      const files=[
+        profileFile,
+        bannerFile,
+        wallpaperFile
+      ].filter(Boolean);
+
+      const tooLarge=files.find(file=>file.size>5*1024*1024);
+
+      if(tooLarge){
+        setTileVisualsStatus(
+          "Image is too large. Use a PNG, JPG, or WEBP under 5 MB.",
+          false
+        );
+        return;
+      }
+
+      if(profileFile){
+        fd.append("profileImage",profileFile);
+      }
+
+      if(bannerFile){
+        fd.append("banner",bannerFile);
+      }
+
+      if(wallpaperFile){
+        fd.append("wallpaper",wallpaperFile);
+      }
+
+      setTileVisualsStatus("Saving Page Visuals...",false);
+
+      try{
+        const r=await fetch(
+          "/api/tile/"+encodeURIComponent(coord)+"/visuals",
+          {
+            method:"POST",
+            body:fd
+          }
+        );
+
+        const data=await r.json().catch(()=>({}));
+
+        if(!r.ok||!data.ok){
+          setTileVisualsStatus(
+            data.error||("Page Visuals save failed. HTTP "+r.status),
+            false
+          );
+          return;
+        }
+
+        currentTileVisuals=data.visuals||currentTileVisuals;
+
+        removeTileProfileImage=false;
+        removeTileBanner=false;
+        removeTileWallpaper=false;
+
+        $("tileProfileImageFile").value="";
+        $("tileBannerFile").value="";
+        $("tileWallpaperFile").value="";
+
+        applyTileVisualsToPage(currentTileVisuals);
+
+        setTileVisualsStatus("Page Visuals saved.",true);
+
+        setTimeout(placeOwnerControlsUnderReport,0);
+        setTimeout(placeOwnerControlsUnderReport,180);
+        setTimeout(syncDesktopPuzzleLayout,0);
+        setTimeout(syncDesktopPuzzleLayout,180);
+        setTimeout(syncSidewaysPuzzleLayout,0);
+        setTimeout(syncSidewaysPuzzleLayout,180);
+      }catch(e){
+        setTileVisualsStatus(
+          "Page Visuals save failed. "+(e.message||"Network error."),
+          false
+        );
+      }
+    }
+
+    function unlockTileVisuals(payloadUuid){
+      const panel=$("tileVisualsOwnerPanel");
+      if(!panel) return;
+
+      panel.style.display="block";
+
+      $("tileProfileImageFile").onchange=()=>{
+        previewTileVisualFile(
+          $("tileProfileImageFile"),
+          "profile"
+        );
+      };
+
+      $("tileBannerFile").onchange=()=>{
+        previewTileVisualFile(
+          $("tileBannerFile"),
+          "banner"
+        );
+      };
+
+      $("tileWallpaperFile").onchange=()=>{
+        previewTileVisualFile(
+          $("tileWallpaperFile"),
+          "wallpaper"
+        );
+      };
+
+      $("tileProfileImageRemove").onclick=()=>{
+        markTileVisualRemoved("profile");
+      };
+
+      $("tileBannerRemove").onclick=()=>{
+        markTileVisualRemoved("banner");
+      };
+
+      $("tileWallpaperRemove").onclick=()=>{
+        markTileVisualRemoved("wallpaper");
+      };
+
+      $("tileVisualsSave").onclick=()=>{
+        saveTileVisuals(payloadUuid);
+      };
+
+      setTileVisualsStatus("Page Visuals controls ready.",true);
+
+      setTimeout(placeOwnerControlsUnderReport,0);
+      setTimeout(placeOwnerControlsUnderReport,180);
+      setTimeout(syncDesktopPuzzleLayout,0);
+      setTimeout(syncDesktopPuzzleLayout,180);
+      setTimeout(syncSidewaysPuzzleLayout,0);
+      setTimeout(syncSidewaysPuzzleLayout,180);
+    }
+
     function openInlineEditDrawer(payloadUuid){
       const drawer=$("inlineEditDrawer");
       if(!drawer) return;
@@ -4133,9 +4517,6 @@ small,
       setInlineValue("inlineStatus",statusText||"");
       setInlineValue("inlineMood",moodText||"");
       setInlineValue("inlineInterests",interests||"");
-
-      const full=$("inlineFullEditLink");
-      if(full) full.href="/edit/?edit="+encodeURIComponent(coord);
 
       const save=$("inlineSaveBtn");
       if(save) save.onclick=()=>saveInlineEdit(payloadUuid);
@@ -4149,6 +4530,7 @@ small,
       loadOwnerTabletJournal(payloadUuid);
       unlockProfileSong(payloadUuid);
       unlockGallery(payloadUuid);
+      unlockTileVisuals(payloadUuid);
 
       const profileSettings=$("profileSettingsBtn");
       if(profileSettings){
