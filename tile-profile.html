@@ -3135,6 +3135,57 @@ small,
 }
 </style>
 
+
+<style id="MONOLITH_INLINE_GALLERY_RESPONSIVE_V1">
+#galleryOwnerPanel{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid rgba(122,211,255,.22);
+}
+#galleryOwnerPanel label{
+  display:block;
+  margin-top:8px;
+  color:#9fc7dd;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+#galleryOwnerPanel input[type="file"]{
+  box-sizing:border-box;
+  width:100%;
+  margin-top:5px;
+}
+.galleryOwnerActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.galleryManageCard{
+  position:relative;
+}
+.galleryManageBar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:6px;
+}
+.galleryManageBar .btn{
+  flex:1 1 auto;
+  min-width:0;
+  padding:5px 7px!important;
+  font-size:10px!important;
+}
+@media(orientation:landscape) and (max-height:650px) and (max-width:1200px){
+  .galleryOwnerActions{
+    flex-direction:column;
+  }
+  .galleryOwnerActions .btn{
+    width:100%!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <main class="wrap">
@@ -3296,8 +3347,25 @@ small,
         </section>
 
         <section class="box galleryBox">
-          <div class="k">Image Gallery</div>
+          <div class="k">IMAGE GALLERY</div>
           <div class="gallery" id="gallery">No gallery images yet.</div>
+
+          <!-- MONOLITH_INLINE_GALLERY_OWNER_PANEL_V1 -->
+          <div id="galleryOwnerPanel" style="display:none">
+            <label>Upload Images</label>
+            <input
+              id="galleryUploadFiles"
+              type="file"
+              multiple
+              accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+            />
+
+            <div class="actions galleryOwnerActions">
+              <button class="btn" id="galleryUploadBtn" type="button">Upload Images</button>
+            </div>
+
+            <div class="write" id="galleryOwnerStatus">Owner Mode required.</div>
+          </div>
         </section>
       </div>
     </div>
@@ -3780,6 +3848,281 @@ small,
       setTimeout(syncSidewaysPuzzleLayout,180);
     }
 
+
+    function setGalleryOwnerStatus(msg,good){
+      const box=$("galleryOwnerStatus");
+      if(!box) return;
+      box.textContent=msg;
+      box.style.color=good?"#6ee7b7":"#9fc7dd";
+    }
+
+    function syncGalleryLayout(){
+      setTimeout(placeOwnerControlsUnderReport,0);
+      setTimeout(placeOwnerControlsUnderReport,180);
+      setTimeout(syncDesktopPuzzleLayout,0);
+      setTimeout(syncDesktopPuzzleLayout,180);
+      setTimeout(syncSidewaysPuzzleLayout,0);
+      setTimeout(syncSidewaysPuzzleLayout,180);
+    }
+
+    function gallerySafe(v){
+      return String(v||"")
+        .replace(/&/g,"&amp;")
+        .replace(/"/g,"&quot;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
+    }
+
+    function renderOwnerGallery(payloadUuid,images){
+      const box=$("gallery");
+      if(!box) return;
+
+      const list=Array.isArray(images)?images:[];
+
+      if(!list.length){
+        box.innerHTML='<div class="write">No gallery images yet.</div>';
+        syncGalleryLayout();
+        return;
+      }
+
+      box.innerHTML=list.map((src,index)=>{
+        const leftDisabled=index===0?" disabled":"";
+        const rightDisabled=index===list.length-1?" disabled":"";
+
+        return '<div class="galleryManageCard">'
+          +'<button class="galleryItem" type="button">'
+          +'<img src="'+gallerySafe(src)+'" alt="">'
+          +'</button>'
+          +'<div class="galleryManageBar">'
+          +'<button class="btn galleryMoveLeft" type="button" data-index="'+index+'"'+leftDisabled+'>←</button>'
+          +'<button class="btn galleryMoveRight" type="button" data-index="'+index+'"'+rightDisabled+'>→</button>'
+          +'<button class="btn galleryDelete" type="button" data-index="'+index+'">Delete</button>'
+          +'</div>'
+          +'</div>';
+      }).join("");
+
+      box.querySelectorAll(".galleryDelete").forEach(btn=>{
+        btn.onclick=()=>deleteGalleryImage(
+          payloadUuid,
+          Number(btn.dataset.index)
+        );
+      });
+
+      box.querySelectorAll(".galleryMoveLeft").forEach(btn=>{
+        btn.onclick=()=>moveGalleryImage(
+          payloadUuid,
+          list,
+          Number(btn.dataset.index),
+          -1
+        );
+      });
+
+      box.querySelectorAll(".galleryMoveRight").forEach(btn=>{
+        btn.onclick=()=>moveGalleryImage(
+          payloadUuid,
+          list,
+          Number(btn.dataset.index),
+          1
+        );
+      });
+
+      syncGalleryLayout();
+    }
+
+    async function loadOwnerGallery(payloadUuid){
+      const r=await fetch(
+        "/api/tile/"+encodeURIComponent(coord)+"/gallery",
+        {cache:"no-store"}
+      );
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setGalleryOwnerStatus(
+          data.error||"Unable to load Gallery.",
+          false
+        );
+        return;
+      }
+
+      renderOwnerGallery(
+        payloadUuid,
+        data.gallery
+      );
+
+      setGalleryOwnerStatus(
+        "Gallery controls ready.",
+        true
+      );
+    }
+
+    async function uploadGalleryImages(payloadUuid){
+      const files=Array.from(
+        $("galleryUploadFiles").files||[]
+      );
+
+      if(!files.length){
+        setGalleryOwnerStatus(
+          "Choose at least one image.",
+          false
+        );
+        return;
+      }
+
+      const fd=new FormData();
+      fd.append("payloadUuid",payloadUuid);
+
+      files.forEach(file=>{
+        fd.append("gallery",file);
+      });
+
+      setGalleryOwnerStatus(
+        "Uploading Gallery images...",
+        false
+      );
+
+      const r=await fetch(
+        "/api/tile/"+encodeURIComponent(coord)+"/gallery",
+        {
+          method:"POST",
+          body:fd
+        }
+      );
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setGalleryOwnerStatus(
+          data.error||"Gallery upload failed.",
+          false
+        );
+        return;
+      }
+
+      $("galleryUploadFiles").value="";
+
+      renderOwnerGallery(
+        payloadUuid,
+        data.gallery
+      );
+
+      setGalleryOwnerStatus(
+        "Gallery updated.",
+        true
+      );
+    }
+
+    async function deleteGalleryImage(payloadUuid,index){
+      if(!confirm("Delete this Gallery image?")) return;
+
+      setGalleryOwnerStatus(
+        "Deleting Gallery image...",
+        false
+      );
+
+      const r=await fetch(
+        "/api/tile/"+encodeURIComponent(coord)+"/gallery/delete",
+        {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({
+            payloadUuid,
+            index
+          })
+        }
+      );
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setGalleryOwnerStatus(
+          data.error||"Gallery delete failed.",
+          false
+        );
+        return;
+      }
+
+      renderOwnerGallery(
+        payloadUuid,
+        data.gallery
+      );
+
+      setGalleryOwnerStatus(
+        "Gallery image deleted.",
+        true
+      );
+    }
+
+    async function moveGalleryImage(payloadUuid,images,index,delta){
+      const next=index+delta;
+
+      if(
+        next<0 ||
+        next>=images.length
+      ) return;
+
+      const order=images.map((_,i)=>i);
+
+      [order[index],order[next]]=[
+        order[next],
+        order[index]
+      ];
+
+      setGalleryOwnerStatus(
+        "Reordering Gallery...",
+        false
+      );
+
+      const r=await fetch(
+        "/api/tile/"+encodeURIComponent(coord)+"/gallery/reorder",
+        {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({
+            payloadUuid,
+            order
+          })
+        }
+      );
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        setGalleryOwnerStatus(
+          data.error||"Gallery reorder failed.",
+          false
+        );
+        return;
+      }
+
+      renderOwnerGallery(
+        payloadUuid,
+        data.gallery
+      );
+
+      setGalleryOwnerStatus(
+        "Gallery reordered.",
+        true
+      );
+    }
+
+    function unlockGallery(payloadUuid){
+      const panel=$("galleryOwnerPanel");
+      if(!panel) return;
+
+      panel.style.display="block";
+
+      const upload=$("galleryUploadBtn");
+      if(upload){
+        upload.onclick=()=>uploadGalleryImages(
+          payloadUuid
+        );
+      }
+
+      loadOwnerGallery(payloadUuid);
+      syncGalleryLayout();
+    }
+
     function openInlineEditDrawer(payloadUuid){
       const drawer=$("inlineEditDrawer");
       if(!drawer) return;
@@ -3805,6 +4148,7 @@ small,
 
       loadOwnerTabletJournal(payloadUuid);
       unlockProfileSong(payloadUuid);
+      unlockGallery(payloadUuid);
 
       const profileSettings=$("profileSettingsBtn");
       if(profileSettings){
@@ -3835,7 +4179,6 @@ small,
       fd.append("statusText", $("inlineStatus").value);
       fd.append("mood", $("inlineMood").value);
       fd.append("interests", $("inlineInterests").value);
-      fd.append("gallery", Array.isArray(m.gallery) ? m.gallery.join("\n") : "");
       fd.append("links", Array.isArray(m.links) ? m.links.join("\n") : "");
       fd.append("favoriteTiles", Array.isArray(m.favoriteTiles) ? m.favoriteTiles.join("\n") : "");
 
@@ -3855,10 +4198,139 @@ small,
     /* MONOLITH_INLINE_OWNER_MODE_VERIFY_20260524 */
     const ownerModeKey = "monolith_tile_owner_payload_uuid";
     const ownerCoordKey = "monolith_tile_owner_coordinate";
+    const sharedOwnerSessionKey = "monolithOwnerSession";
+    const sharedOwnerSessionMaxAge = 12 * 60 * 60 * 1000;
+
+    function readSharedOwnerSession(){
+      try{
+        if(
+          window.MonolithSession &&
+          typeof window.MonolithSession.get==="function"
+        ){
+          return window.MonolithSession.get();
+        }
+      }catch(e){}
+
+      try{
+        const raw=localStorage.getItem(sharedOwnerSessionKey);
+        if(!raw) return null;
+
+        const session=JSON.parse(raw);
+
+        if(
+          !session ||
+          !session.payloadUuid
+        ){
+          return null;
+        }
+
+        if(
+          session.createdAt &&
+          Date.now()-Number(session.createdAt)>sharedOwnerSessionMaxAge
+        ){
+          localStorage.removeItem(sharedOwnerSessionKey);
+          return null;
+        }
+
+        return session;
+      }catch(e){
+        return null;
+      }
+    }
+
+    function saveSharedOwnerSession({
+      payloadUuid,
+      signUrl="",
+      ownerVerified=false,
+      ownerWallet=""
+    }){
+      if(!payloadUuid) return;
+
+      const existing=readSharedOwnerSession()||{};
+
+      const session={
+        sourceCoordinate:coord,
+        payloadUuid,
+        signUrl:signUrl||existing.signUrl||"",
+        ownerVerified:Boolean(ownerVerified),
+        ownerWallet:ownerWallet||existing.ownerWallet||"",
+        createdAt:existing.createdAt||Date.now()
+      };
+
+      if(ownerVerified){
+        session.verifiedAt=Date.now();
+      }
+
+      try{
+        if(
+          window.MonolithSession &&
+          typeof window.MonolithSession.set==="function"
+        ){
+          window.MonolithSession.set(session);
+        }else{
+          localStorage.setItem(
+            sharedOwnerSessionKey,
+            JSON.stringify(session)
+          );
+        }
+      }catch(e){
+        localStorage.setItem(
+          sharedOwnerSessionKey,
+          JSON.stringify(session)
+        );
+      }
+    }
+
+    function clearLocalOwnerMode(){
+      clearLocalOwnerMode();
+    }
+
+    async function restoreOwnerModeFromSharedSession(){
+      const session=readSharedOwnerSession();
+
+      if(
+        !session ||
+        !session.ownerVerified ||
+        !session.payloadUuid
+      ){
+        return false;
+      }
+
+      localStorage.setItem(
+        ownerModeKey,
+        session.payloadUuid
+      );
+
+      localStorage.setItem(
+        ownerCoordKey,
+        coord
+      );
+
+      return verifyOwnerMode({
+        silentRestore:true
+      });
+    }
 
     function signOutOwnerMode(){
       localStorage.removeItem(ownerModeKey);
       localStorage.removeItem(ownerCoordKey);
+
+      /*
+        MONOLITH_GLOBAL_OWNER_SIGNOUT_V1
+        Clear the shared wall session too.
+        Signing out anywhere must sign the owner out everywhere.
+      */
+      try{
+        if(
+          window.MonolithSession &&
+          typeof window.MonolithSession.clear==="function"
+        ){
+          window.MonolithSession.clear();
+        }
+      }catch(e){}
+
+      localStorage.removeItem("monolithOwnerSession");
+      localStorage.removeItem("monolithFavoritePending");
 
       const drawer=$("inlineEditDrawer");
       if(drawer) drawer.style.display="none";
@@ -3901,8 +4373,14 @@ small,
       }
       const auth = data.auth || {};
       if(auth.payloadUuid){
-        localStorage.setItem(ownerModeKey, auth.payloadUuid);
-        localStorage.setItem(ownerCoordKey, coord);
+        localStorage.setItem(ownerModeKey,auth.payloadUuid);
+        localStorage.setItem(ownerCoordKey,coord);
+
+        saveSharedOwnerSession({
+          payloadUuid:auth.payloadUuid,
+          signUrl:auth.signUrl||"",
+          ownerVerified:false
+        });
       }
       if(auth.signUrl){
         setOwnerModeStatus("Owner sign-in created. Open Xaman and sign with the owner wallet only.", false);
@@ -3912,11 +4390,13 @@ small,
       }
     }
 
-    async function verifyOwnerMode(){
+    async function verifyOwnerMode(options={}){
       const payloadUuid = localStorage.getItem(ownerModeKey) || "";
       const savedCoord = (localStorage.getItem(ownerCoordKey) || "").toUpperCase();
       if(!payloadUuid || savedCoord !== coord){
-        setOwnerModeStatus("Start owner sign-in first.", false);
+        if(!options.silentRestore){
+          setOwnerModeStatus("Start owner sign-in first.",false);
+        }
         return false;
       }
       setOwnerModeStatus("Verifying owner wallet...", false);
@@ -3927,9 +4407,24 @@ small,
       });
       const data = await r.json().catch(() => ({}));
       if(!r.ok || !data.ok || !data.ownerVerified){
-        setOwnerModeStatus(data.error || "Owner wallet not verified.", false);
+        if(options.silentRestore){
+          clearLocalOwnerMode();
+          return false;
+        }
+
+        setOwnerModeStatus(
+          data.error||"Owner wallet not verified.",
+          false
+        );
+
         return false;
       }
+      saveSharedOwnerSession({
+        payloadUuid,
+        ownerVerified:true,
+        ownerWallet:data.signer||data.ownerWallet||""
+      });
+
       const start=$("ownerModeStart");
       if(start){
         start.textContent="Sign Out Owner Mode";
@@ -4091,7 +4586,21 @@ small,
     if(qs.get("owner")==="1"){
       const drawer=$("inlineEditDrawer");
       if(drawer) drawer.style.display="none";
-      setTimeout(() => verifyOwnerMode().catch(() => setOwnerModeStatus("Owner verification failed.", false)), 350);
+
+      setTimeout(
+        ()=>verifyOwnerMode().catch(
+          ()=>setOwnerModeStatus(
+            "Owner verification failed.",
+            false
+          )
+        ),
+        350
+      );
+    }else{
+      setTimeout(
+        ()=>restoreOwnerModeFromSharedSession().catch(()=>{}),
+        350
+      );
     }
 
 
