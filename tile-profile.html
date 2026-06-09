@@ -2380,7 +2380,6 @@ small,
 .card a,
 .card a:visited,
 #deedAccept,
-#siteLink,
 #wallLink{
   color:#eaf7ff !important;
 }
@@ -3263,6 +3262,57 @@ body.tileWallpaperActive .hero{
 }
 </style>
 
+
+<style id="MONOLITH_INLINE_LINKS_RESPONSIVE_V1">
+.linksGrid{
+  display:grid;
+  gap:8px;
+}
+.linksPublicItem,
+.linksManageItem{
+  padding:9px;
+  border:1px solid rgba(122,211,255,.18);
+  border-radius:10px;
+  background:rgba(2,9,18,.45);
+  overflow-wrap:anywhere;
+}
+.linksPublicItem a,
+.linksManageItem a{
+  color:#7ad3ff;
+  text-decoration:none;
+}
+#linksOwnerPanel{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid rgba(122,211,255,.22);
+}
+#linksOwnerPanel label{
+  display:block;
+  color:#9fc7dd;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+#linksOwnerPanel input{
+  box-sizing:border-box;
+  width:100%;
+  margin-top:6px;
+}
+.linksOwnerActions,
+.linksManageActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px;
+}
+.linksManageActions .btn{
+  flex:1 1 auto;
+  min-width:0;
+  padding:5px 7px!important;
+  font-size:10px!important;
+}
+</style>
+
 </head>
 <body>
 <div id="tileWallpaperLayer" aria-hidden="true"></div>
@@ -3318,7 +3368,6 @@ body.tileWallpaperActive .hero{
       </section>
 
       <div class="actions profileActionsMain">
-        <a class="btn" id="siteLink" href="#" style="display:none" data-desc="Open owner website">Visit Link</a>
         <a class="btn" id="wallLink" href="#" data-desc="Jump to wall view">View on Wall</a>
         <button class="btn" id="wallStartBtn" type="button" data-desc="Open wall here">Set Wall Start</button>
         <button class="btn" id="resetWallStartBtn" type="button" data-desc="Restore default entry">Reset Wall Start</button>
@@ -3436,6 +3485,27 @@ body.tileWallpaperActive .hero{
           </div>
         </section>
       
+        <!-- MONOLITH_INLINE_LINKS_MODULE_V1 -->
+        <section class="box linksBox">
+          <div class="k">LINKS</div>
+          <div class="linksGrid" id="linksGrid">No links added yet.</div>
+
+          <div id="linksOwnerPanel" style="display:none">
+            <label>Add Link</label>
+            <input
+              id="linksNewUrl"
+              type="url"
+              placeholder="https://..."
+            />
+
+            <div class="actions linksOwnerActions">
+              <button class="btn" id="linksAddBtn" type="button">Add Link</button>
+            </div>
+
+            <div class="write" id="linksOwnerStatus">Owner Mode required.</div>
+          </div>
+        </section>
+
         <section class="box tabletBox monolithTabletShell">
           <div class="k monolithTabletTitle">THE TABLET</div>
           <div class="tabletDesc monolithTabletIntro">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
@@ -3606,6 +3676,17 @@ body.tileWallpaperActive .hero{
     const musicUrl=m.musicUrl||"";
     const musicTitle=m.musicTitle||"";
     const gallery=Array.isArray(m.gallery)?m.gallery:[];
+    let currentLinks=Array.isArray(m.links)?m.links.slice(0,10):[];
+
+    const legacyVisitLink=String(link||"").trim();
+
+    if(
+      legacyVisitLink &&
+      !currentLinks.includes(legacyVisitLink)
+    ){
+      currentLinks.unshift(legacyVisitLink);
+      currentLinks=currentLinks.slice(0,10);
+    }
     const favoriteTiles=Array.isArray(m.favoriteTiles)?m.favoriteTiles.slice(0,8):[];
 
     document.title=tag+" • MONOLITH";
@@ -3625,7 +3706,6 @@ body.tileWallpaperActive .hero{
     $("status").textContent=t.status||"None";
     $("claimTx").textContent=t.claim_tx_hash||"None";
     $("deedId").textContent=t.deed_nft_id||"None";
-    if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"}
     function applyTileVisualsToPage(visuals){
       const v=visuals||{};
       const avatar=$("avatar");
@@ -3673,6 +3753,7 @@ body.tileWallpaperActive .hero{
     $("statusBox").textContent=statusText||"No status yet.";
     $("moodBox").textContent=moodText||"No mood set yet.";
     $("interestsBox").textContent=interests||"No interests listed yet.";
+    renderLinks("");
 
     /* MONOLITH_TABLET_PUBLIC_READ_20260524 */
     const tabletEntries = (Array.isArray(m.tabletEntries) ? m.tabletEntries : [])
@@ -4539,9 +4620,7 @@ body.tileWallpaperActive .hero{
 
       fd.append(
         "links",
-        Array.isArray(m.links)
-          ? m.links.join("\n")
-          : ""
+        currentLinks.join("\n")
       );
 
       fd.append(
@@ -4644,6 +4723,191 @@ body.tileWallpaperActive .hero{
       syncInlineTextLayout();
     }
 
+
+    function linksEscape(v){
+      return String(v||"")
+        .replace(/&/g,"&amp;")
+        .replace(/"/g,"&quot;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
+    }
+
+    function normalizeTileLink(v){
+      const raw=String(v||"").trim();
+
+      if(!/^https?:\/\//i.test(raw)){
+        return "";
+      }
+
+      try{
+        return new URL(raw).toString();
+      }catch(e){
+        return "";
+      }
+    }
+
+    function tileLinkLabel(url){
+      try{
+        const u=new URL(url);
+        return u.hostname.replace(/^www\./i,"");
+      }catch(e){
+        return url;
+      }
+    }
+
+    function renderLinks(payloadUuid){
+      const box=$("linksGrid");
+      if(!box) return;
+
+      if(!currentLinks.length){
+        box.innerHTML='<div class="write">No links added yet.</div>';
+        return;
+      }
+
+      box.innerHTML=currentLinks.map((url,index)=>{
+        const safeUrl=linksEscape(url);
+        const safeLabel=linksEscape(tileLinkLabel(url));
+
+        if(!payloadUuid){
+          return '<div class="linksPublicItem">'
+            +'<a href="'+safeUrl+'" target="_blank" rel="noopener">'+safeLabel+'</a>'
+            +'</div>';
+        }
+
+        return '<div class="linksManageItem">'
+          +'<a href="'+safeUrl+'" target="_blank" rel="noopener">'+safeLabel+'</a>'
+          +'<div class="linksManageActions">'
+          +'<button class="btn linksMoveUp" type="button" data-index="'+index+'"'+(index===0?' disabled':'')+'>↑</button>'
+          +'<button class="btn linksMoveDown" type="button" data-index="'+index+'"'+(index===currentLinks.length-1?' disabled':'')+'>↓</button>'
+          +'<button class="btn linksEdit" type="button" data-index="'+index+'">Edit</button>'
+          +'<button class="btn linksDelete" type="button" data-index="'+index+'">Delete</button>'
+          +'</div>'
+          +'</div>';
+      }).join("");
+
+      box.querySelectorAll(".linksMoveUp").forEach(btn=>{
+        btn.onclick=()=>moveTileLink(payloadUuid,Number(btn.dataset.index),-1);
+      });
+
+      box.querySelectorAll(".linksMoveDown").forEach(btn=>{
+        btn.onclick=()=>moveTileLink(payloadUuid,Number(btn.dataset.index),1);
+      });
+
+      box.querySelectorAll(".linksEdit").forEach(btn=>{
+        btn.onclick=()=>editTileLink(payloadUuid,Number(btn.dataset.index));
+      });
+
+      box.querySelectorAll(".linksDelete").forEach(btn=>{
+        btn.onclick=()=>deleteTileLink(payloadUuid,Number(btn.dataset.index));
+      });
+    }
+
+    function setLinksOwnerStatus(msg,good){
+      const box=$("linksOwnerStatus");
+      if(!box) return;
+
+      box.textContent=msg;
+      box.style.color=good?"#6ee7b7":"#9fc7dd";
+    }
+
+    async function saveTileLinks(payloadUuid,msg){
+      const fd=new FormData();
+
+      fd.append("coordinate",coord);
+      fd.append("payloadUuid",payloadUuid);
+      fd.append("links",currentLinks.join("\n"));
+      fd.append("favoriteTiles",Array.isArray(m.favoriteTiles)?m.favoriteTiles.join("\n"):"");
+
+      setLinksOwnerStatus("Saving Links...",false);
+
+      try{
+        const r=await fetch("/api/tile/edit/apply",{
+          method:"POST",
+          body:fd
+        });
+
+        const data=await r.json().catch(()=>({}));
+
+        if(!r.ok||!data.ok){
+          setLinksOwnerStatus(data.error||"Links save failed.",false);
+          return;
+        }
+
+        renderLinks(payloadUuid);
+        setLinksOwnerStatus(msg,true);
+      }catch(e){
+        setLinksOwnerStatus("Links save failed. "+(e.message||"Network error."),false);
+      }
+    }
+
+    async function addTileLink(payloadUuid){
+      if(currentLinks.length>=10){
+        setLinksOwnerStatus("Maximum 10 links.",false);
+        return;
+      }
+
+      const url=normalizeTileLink($("linksNewUrl").value);
+
+      if(!url){
+        setLinksOwnerStatus("Enter a valid https:// link.",false);
+        return;
+      }
+
+      currentLinks.push(url);
+      $("linksNewUrl").value="";
+
+      await saveTileLinks(payloadUuid,"Link added.");
+    }
+
+    async function editTileLink(payloadUuid,index){
+      const next=prompt("Edit link",currentLinks[index]||"");
+      if(next===null) return;
+
+      const url=normalizeTileLink(next);
+
+      if(!url){
+        setLinksOwnerStatus("Enter a valid https:// link.",false);
+        return;
+      }
+
+      currentLinks[index]=url;
+      await saveTileLinks(payloadUuid,"Link updated.");
+    }
+
+    async function deleteTileLink(payloadUuid,index){
+      if(!confirm("Delete this link?")) return;
+
+      currentLinks.splice(index,1);
+      await saveTileLinks(payloadUuid,"Link deleted.");
+    }
+
+    async function moveTileLink(payloadUuid,index,delta){
+      const next=index+delta;
+
+      if(next<0||next>=currentLinks.length) return;
+
+      [currentLinks[index],currentLinks[next]]=[
+        currentLinks[next],
+        currentLinks[index]
+      ];
+
+      await saveTileLinks(payloadUuid,"Links reordered.");
+    }
+
+    function unlockLinks(payloadUuid){
+      const panel=$("linksOwnerPanel");
+      if(!panel) return;
+
+      panel.style.display="block";
+
+      $("linksAddBtn").onclick=()=>addTileLink(payloadUuid);
+
+      renderLinks(payloadUuid);
+      setLinksOwnerStatus("Links controls ready.",true);
+
+      syncInlineTextLayout();
+    }
+
     function openInlineEditDrawer(payloadUuid){
       const tabletPanel=$("tabletJournalOwnerPanel");
       if(tabletPanel) tabletPanel.style.display="block";
@@ -4660,6 +4924,7 @@ body.tileWallpaperActive .hero{
       unlockGallery(payloadUuid);
       unlockTileVisuals(payloadUuid);
       unlockInlineTextEditors(payloadUuid);
+      unlockLinks(payloadUuid);
 
       setOwnerModeStatus(
         "Owner Mode Active. On-page controls unlocked.",
