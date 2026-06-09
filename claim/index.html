@@ -264,7 +264,7 @@
       <div class="hd">
         <div class="h">CLAIM YOUR MARK</div>
         <div class="d">
-          Claim a wallet-linked coordinate on MONOLITH. Your mark is public, verifiable, and built to last. Errors stay quiet until action. Debug output requires <span class="mono">?debug=1</span>.
+          Claim a permanent XRPL coordinate on MONOLITH. Complete the $XRP payment through Xaman, receive your Coordinate Deed, then customize your tile directly from its live page.
         </div>
       </div>
 
@@ -286,37 +286,10 @@
             </div>
 
             <div class="field">
-              <label>Owner wallet</label>
-              <input id="wallet" type="text" placeholder="Locked to paying wallet after Xaman payment" autocomplete="off" disabled />
-              <div class="hint">Ownership is not typed here. It is locked to the paying wallet after Xaman verification.</div>
-            </div>
-
-            <div class="field">
-              <label>Tag</label>
-              <input id="tag" type="text" placeholder="TAG" autocomplete="off" />
-              <div class="hint">Optional. 1 to 18 chars. Letters numbers underscore only.</div>
-            </div>
-
-            <div class="field">
-              <label for="handle">Handle</label>
-              <input id="handle" type="text" placeholder="@handle" autocomplete="off" spellcheck="false" />
-              <label for="link">Link</label>
-              <input id="link" type="text" placeholder="https://..." autocomplete="off" />
-              <div class="hint">Optional. Either @handle or https URL.</div>
-            </div>
-
-            <div class="field">
-              <label>Note</label>
-              <textarea id="note" placeholder="Short message, keep it clean"></textarea>
-              <div class="hint">Optional. Max 160 chars. No angle brackets.</div>
-            </div>
-
-            <div class="field">
-              <label>Image upload</label>
-              <div class="fileRow">
-                <input id="file" type="file" accept="image/png,image/jpeg,image/webp" />
+              <div class="hint">
+                Ownership is locked automatically to the paying wallet after Xaman verification.
+                Claim the coordinate first. Customize your tile afterward through Owner Mode on the live tile page.
               </div>
-              <div class="hint">Optional. PNG JPG WEBP. Max 2 MB. Base64 included only if 200 KB or smaller.</div>
             </div>
 
             <div class="row">
@@ -340,14 +313,11 @@
                   <span>Claim requirements</span>
                 </div>
                 <ul>
-                  <li>Coordinate must be valid. Primary format is N/S first, then E/W. Examples: N23E11, S4W1, N589, E10, W24, or raw coords like -24,8</li>
+                  <li>Coordinate must be valid. Examples: N23E11, S4W1, N589, E10, W24, or raw coords like -24,8</li>
                   <li>Axis-only coordinates like N1, S2, E10, and W24 are Signature tier</li>
-                  <li>Wallet must be a valid XRPL classic address starting with r</li>
-                  <li>Tag is optional: 1 to 18 characters, letters, numbers, and underscores only</li>
-                  <li>Link is optional: use an @handle or full https URL</li>
-                  <li>Note is optional: max 160 characters, no angle brackets</li>
-                  <li>Image is optional: PNG, JPG, or WEBP only, max 2 MB</li>
+                  <li>Ownership is locked automatically to the wallet that completes the verified $XRP payment through Xaman</li>
                   <li>Reserved tiles stay held, but still show their real launch price</li>
+                  <li>After claiming, open your live tile page and customize it directly through Owner Mode</li>
                 </ul>
 
                 <div class="sectionTitle" style="margin-top:16px">
@@ -373,11 +343,6 @@
 
     const el = {
       tile: document.getElementById("tile"),
-      wallet: document.getElementById("wallet"),
-      tag: document.getElementById("tag"),
-      link: document.getElementById("link"),
-      note: document.getElementById("note"),
-      file: document.getElementById("file"),
       gen: document.getElementById("gen"),
       copy: document.getElementById("copy"),
       clear: document.getElementById("clear"),
@@ -455,36 +420,9 @@ if(m){
 return null;
     }
 
-    function validWallet(w){
-      const s = (w || "").trim();
-      if(!s) return false;
-      return /^r[1-9A-HJ-NP-Za-km-z]{24,34}$/.test(s);
-    }
 
-    function validTag(t){
-      const s = (t || "").trim();
-      if(!s) return true;
-      if(s.length < 1 || s.length > 18) return false;
-      return /^[A-Za-z0-9_]+$/.test(s);
-    }
 
-    function validLink(x){
-      const s = (x || "").trim();
-      if(!s) return true;
-      if(s.startsWith("@")){
-        if(s.length < 2 || s.length > 32) return false;
-        return /^@[A-Za-z0-9_\.]+$/.test(s);
-      }
-      return /^https?:\/\/[^\s<>]{1,200}$/.test(s);
-    }
 
-    function validNote(n){
-      const s = (n || "").trim();
-      if(!s) return true;
-      if(s.length > 160) return false;
-      if(/[<>]/.test(s)) return false;
-      return true;
-    }
 
     function setStatus(msg, isBad){
       const cls = isBad ? "bad" : "ok";
@@ -581,11 +519,12 @@ return null;
     }
 
     function setTakenTileStatus(tile){
-      const cleanTile = String(tile || "").trim().toUpperCase();
-      const editUrl = "/edit/?edit=" + encodeURIComponent(cleanTile);
-      el.statusLine.innerHTML =
-        "<span class='bad'>This tile is already owned.</span> " +
-        "<a class='btn' href='" + editUrl + "'>Edit This Tile</a>";
+      const cleanTile=String(tile||"").trim().toUpperCase();
+      const tileUrl="/tile/"+encodeURIComponent(cleanTile);
+
+      el.statusLine.innerHTML=
+        "<span class='bad'>This tile is already owned.</span> "+
+        "<a class='btn' href='"+tileUrl+"'>Open Tile Page</a>";
     }
 
     async function generatePayload(){
@@ -596,15 +535,6 @@ return null;
 
       el.tile.value = p.tile;
 
-      const tag = (el.tag.value || "").trim();
-      if(!validTag(tag)){ setStatus("Tag invalid", true); showOutput({ error:"tag invalid", input: tag }); return null; }
-
-      const link = (el.link.value || "").trim();
-      if(!validLink(link)){ setStatus("Link invalid", true); showOutput({ error:"link invalid", input: link }); return null; }
-
-      const note = (el.note.value || "").trim();
-      if(!validNote(note)){ setStatus("Note invalid", true); showOutput({ error:"note invalid" }); return null; }
-
       if(Math.abs(p.gx) === 666 || Math.abs(p.gy) === 666){
         setStatus("Tile not available", true);
         showOutput({ error:"tile not available", tile:p.tile });
@@ -613,26 +543,17 @@ return null;
 
       if(state.feedLoaded && state.taken.has(p.tile)){
         setTakenTileStatus(p.tile);
-        showOutput({ error:"tile taken", tile:p.tile, editUrl:"/edit/?edit=" + p.tile });
+        showOutput({
+          error:"tile taken",
+          tile:p.tile,
+          tileUrl:"/tile/" + p.tile
+        });
         return null;
       }
 
-      const file = el.file.files && el.file.files[0] ? el.file.files[0] : null;
-      if(file){
-        const okType = ["image/png","image/jpeg","image/webp"].includes(file.type);
-        if(!okType){ setStatus("Image must be PNG JPG WEBP", true); showOutput({ error:"bad image type" }); return null; }
-        if(file.size > 2 * 1024 * 1024){ setStatus("Image too large. Max 2 MB", true); showOutput({ error:"image too large" }); return null; }
-      }
-
-      const websiteUrl = link && link.startsWith("http") ? link : "";
-      const ownerTag = tag || p.tile;
-
       const fd = new FormData();
       fd.append("coordinate", p.tile);
-      fd.append("ownerTag", ownerTag);
-      if(websiteUrl) fd.append("websiteUrl", websiteUrl);
-      if(note) fd.append("note", note);
-      if(file) fd.append("image", file);
+      fd.append("ownerTag", p.tile);
 
       setStatus("Creating Xaman claim request...", false);
 
@@ -721,6 +642,19 @@ return null;
       html += "Payment TX: <code>" + htmlEscape(verification.txid || "") + "</code>";
       html += "</div>";
 
+      const claimedCoordinate=
+        claim.coordinate||
+        verification.coordinate||
+        "";
+
+      if(claimedCoordinate){
+        html += "<div style='margin:14px 0'><a class='btn' href='/tile/"+
+          encodeURIComponent(claimedCoordinate)+
+          "'>Open Your Tile</a></div>";
+
+        html += "<div class='muted' style='margin-top:8px'>Customize your tile directly from its live page through Owner Mode.</div>";
+      }
+
       if(deed && deed.ok && deedUrl){
         html += "<div style='margin-top:16px'><strong>Coordinate Deed ready</strong></div>";
         html += "<div style='margin:10px 0'><a class='btn' href='" + htmlEscape(deedUrl) + "' target='_blank' rel='noopener'>Accept Your Deed in Xaman</a></div>";
@@ -794,11 +728,6 @@ return null;
 
     function clearAll(){
       el.tile.value = "";
-      el.wallet.value = "";
-      el.tag.value = "";
-      el.link.value = "";
-      el.note.value = "";
-      el.file.value = "";
       state.lastPayload = null;
       state.showErrors = false;
       el.out.classList.remove("show");
