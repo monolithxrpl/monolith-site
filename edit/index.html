@@ -120,7 +120,7 @@
 
     <div class="card" id="loginPanel">
       <h2>Owner Login</h2>
-      <p class="hint">Enter your coordinate and sign with the owner wallet. MONOLITH verifies ownership automatically when you return.</p>
+      <p class="hint">Enter your coordinate and sign with the owner wallet. After verification, MONOLITH opens your live tile page with Owner Mode unlocked.</p>
       <label>Tile Coordinate</label>
       <input id="coordinate" placeholder="N23E11" autocomplete="off" />
       <button id="startAuth">Start owner sign-in</button>
@@ -501,10 +501,46 @@
       }
 
       ownerVerified = true;
+
       localStorage.removeItem("monolith_edit_payload_uuid");
       localStorage.removeItem("monolith_edit_coordinate");
-      await loadTileAfterVerified();
-      setStatus("Owner wallet verified. Editing unlocked.", false);
+
+      localStorage.setItem(
+        "monolith_tile_owner_payload_uuid",
+        payloadUuid
+      );
+
+      localStorage.setItem(
+        "monolith_tile_owner_coordinate",
+        c
+      );
+
+      localStorage.setItem(
+        "monolithOwnerSession",
+        JSON.stringify({
+          sourceCoordinate:c,
+          payloadUuid,
+          signUrl:"",
+          ownerVerified:true,
+          ownerWallet:data.signer||data.ownerWallet||"",
+          createdAt:Date.now(),
+          verifiedAt:Date.now()
+        })
+      );
+
+      setStatus(
+        "Owner wallet verified. Opening your live tile page...",
+        false
+      );
+
+      setTimeout(()=>{
+        location.href=
+          "/tile/"+
+          encodeURIComponent(c)+
+          "?owner=1&cb="+
+          Date.now();
+      },350);
+
       return true;
     }
 
