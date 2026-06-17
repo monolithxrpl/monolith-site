@@ -2579,8 +2579,14 @@ small,
 /* MONOLITH_SUPPORT_LIVE_VALUE_20260617 */
 .supportTileBox .supportValue{
   margin-top:8px;
-  font-size:12px;
-  color:rgba(220,245,255,.82);
+  padding:8px 10px;
+  border:1px solid rgba(0,92,140,.28)!important;
+  border-radius:10px;
+  background:rgba(0,122,190,.12)!important;
+  color:#061b2a!important;
+  font-size:14px;
+  font-weight:800;
+  text-shadow:none!important;
 }
 
 </style>
@@ -3571,7 +3577,7 @@ body.tileWallpaperActive .hero{
           <div class="supportInputs">
             <label>XRP Amount</label>
             <input id="supportAmountXrp" type="text" inputmode="decimal" value="1" placeholder="1.00" />
-            <div class="supportValue" id="supportLiveValue">Live value: loading...</div>
+            <div class="supportValue" id="supportLiveValue">1 XRP ≈ loading USD...</div>
 
             <label>Message</label>
             <input id="supportMessage" type="text" maxlength="240" placeholder="Optional message to the tile owner" />
@@ -3811,14 +3817,19 @@ body.tileWallpaperActive .hero{
       if(!supportLiveValue) return;
       const amount=currentSupportAmount();
       const xrpUsd=Number(rate&&rate.xrpUsd);
+
       if(!Number.isFinite(amount)||amount<=0){
-        supportLiveValue.textContent="Live value: enter an XRP amount.";
+        supportLiveValue.textContent="Enter XRP amount to show USD value.";
         return;
       }
+
       if(!Number.isFinite(xrpUsd)||xrpUsd<=0){
-        supportLiveValue.textContent="Live value unavailable.";
+        supportLiveValue.textContent=
+          amount.toLocaleString(undefined,{maximumFractionDigits:6})+
+          " XRP ≈ USD unavailable";
         return;
       }
+
       supportLiveValue.textContent=
         amount.toLocaleString(undefined,{maximumFractionDigits:6})+
         " XRP ≈ "+
@@ -3859,6 +3870,7 @@ body.tileWallpaperActive .hero{
         supportBox.style.display="none";
       }else{
         setSupportStatus("Payments go directly to "+maskWallet(t.owner_wallet)+".");
+        setTimeout(loadSupportRate,50);
       }
     }
 
