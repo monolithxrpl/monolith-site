@@ -2532,6 +2532,33 @@ small,
   }
 }
 
+
+/* MONOLITH_TILE_SUPPORT_PAYMENT_UI_V1 */
+.supportTileBox .supportQuickActions{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+  gap:8px;
+  margin-top:10px;
+}
+.supportTileBox .supportInputs{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin-top:10px;
+}
+.supportTileBox input{
+  width:100%;
+  box-sizing:border-box;
+}
+.supportTileBox .supportSignLink{
+  display:none;
+  margin-top:10px;
+  justify-content:center;
+}
+.supportTileBox .supportStatus{
+  margin-top:10px;
+}
+
 </style>
 
 <style id="MONOLITH_FIND_ME_SHARE_TAB_20260524">
@@ -3506,6 +3533,33 @@ body.tileWallpaperActive .hero{
           </div>
         </section>
 
+        <!-- MONOLITH_TILE_SUPPORT_PAYMENT_BOX_V1 -->
+        <section class="box supportTileBox" id="supportTileBox">
+          <div class="k">SUPPORT THIS TILE</div>
+          <div class="tabletDesc">Send $XRP directly to this tile owner with Xaman.</div>
+
+          <div class="supportQuickActions">
+            <button class="btn supportPreset" type="button" data-kind="tip" data-amount="1">Tip 1 XRP</button>
+            <button class="btn supportPreset" type="button" data-kind="support" data-amount="5">Support 5 XRP</button>
+            <button class="btn supportPreset" type="button" data-kind="payment" data-amount="">Custom Pay</button>
+          </div>
+
+          <div class="supportInputs">
+            <label>XRP Amount</label>
+            <input id="supportAmountXrp" type="text" inputmode="decimal" placeholder="1.00" />
+
+            <label>Message</label>
+            <input id="supportMessage" type="text" maxlength="240" placeholder="Optional message to the tile owner" />
+          </div>
+
+          <div class="actions" style="margin-top:10px">
+            <button class="btn" id="supportStartPayment" type="button">Open Xaman Payment</button>
+          </div>
+
+          <a class="btn supportSignLink" id="supportSignLink" href="#" target="_blank" rel="noopener">Open in Xaman</a>
+          <div class="write supportStatus" id="supportStatus">Payments go directly to the owner wallet.</div>
+        </section>
+
         <section class="box tabletBox monolithTabletShell">
           <div class="k monolithTabletTitle">THE TABLET</div>
           <div class="tabletDesc monolithTabletIntro">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
@@ -3706,6 +3760,88 @@ body.tileWallpaperActive .hero{
     $("status").textContent=t.status||"None";
     $("claimTx").textContent=t.claim_tx_hash||"None";
     $("deedId").textContent=t.deed_nft_id||"None";
+
+    /* MONOLITH_TILE_SUPPORT_PAYMENT_UI_V1 */
+    const supportBox=$("supportTileBox");
+    const supportAmount=$("supportAmountXrp");
+    const supportMessage=$("supportMessage");
+    const supportStart=$("supportStartPayment");
+    const supportStatus=$("supportStatus");
+    const supportSignLink=$("supportSignLink");
+    let supportKind="tip";
+
+    function setSupportStatus(msg){
+      if(supportStatus) supportStatus.textContent=msg;
+    }
+
+    if(supportBox){
+      if(!t.owner_wallet || t.status!=="claimed"){
+        supportBox.style.display="none";
+      }else{
+        setSupportStatus("Payments go directly to "+maskWallet(t.owner_wallet)+".");
+      }
+    }
+
+    document.querySelectorAll(".supportPreset").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        supportKind=btn.getAttribute("data-kind")||"tip";
+        const amt=btn.getAttribute("data-amount")||"";
+        if(supportAmount) supportAmount.value=amt;
+        setSupportStatus(
+          supportKind==="tip" ? "Tip selected." :
+          supportKind==="support" ? "Support selected." :
+          "Custom payment selected."
+        );
+        if(supportSignLink){
+          supportSignLink.style.display="none";
+          supportSignLink.removeAttribute("href");
+        }
+      });
+    });
+
+    if(supportStart){
+      supportStart.addEventListener("click",async()=>{
+        try{
+          const amountXrp=String(supportAmount&&supportAmount.value||"").trim();
+          const message=String(supportMessage&&supportMessage.value||"").trim();
+
+          if(!amountXrp){
+            setSupportStatus("Enter an XRP amount first.");
+            return;
+          }
+
+          supportStart.disabled=true;
+          setSupportStatus("Creating Xaman payment payload...");
+
+          const res=await fetch("/api/tile/pay/start",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+              coordinate:coord,
+              amountXrp,
+              kind:supportKind||"tip",
+              message
+            })
+          });
+
+          const data=await res.json().catch(()=>({ok:false,error:"bad_response"}));
+          if(!res.ok||!data.ok) throw new Error(data.error||"payment_payload_failed");
+
+          if(supportSignLink&&data.signUrl){
+            supportSignLink.href=data.signUrl;
+            supportSignLink.style.display="inline-flex";
+          }
+
+          setSupportStatus("Xaman payment ready. Review before signing.");
+          if(data.signUrl) window.open(data.signUrl,"_blank","noopener");
+        }catch(e){
+          setSupportStatus("Payment start failed: "+(e&&e.message?e.message:"unknown_error"));
+        }finally{
+          supportStart.disabled=false;
+        }
+      });
+    }
+
     function applyTileVisualsToPage(visuals){
       const v=visuals||{};
       const avatar=$("avatar");
