@@ -2575,6 +2575,14 @@ small,
   }
 }
 
+
+/* MONOLITH_SUPPORT_LIVE_VALUE_20260617 */
+.supportTileBox .supportValue{
+  margin-top:8px;
+  font-size:12px;
+  color:rgba(220,245,255,.82);
+}
+
 </style>
 
 <style id="MONOLITH_FIND_ME_SHARE_TAB_20260524">
@@ -3562,7 +3570,8 @@ body.tileWallpaperActive .hero{
 
           <div class="supportInputs">
             <label>XRP Amount</label>
-            <input id="supportAmountXrp" type="text" inputmode="decimal" placeholder="1.00" />
+            <input id="supportAmountXrp" type="text" inputmode="decimal" value="1" placeholder="1.00" />
+            <div class="supportValue" id="supportLiveValue">Live value: loading...</div>
 
             <label>Message</label>
             <input id="supportMessage" type="text" maxlength="240" placeholder="Optional message to the tile owner" />
@@ -3785,6 +3794,61 @@ body.tileWallpaperActive .hero{
     const supportStatus=$("supportStatus");
     const supportSignLink=$("supportSignLink");
     let supportKind="tip";
+    const supportLiveValue=$("supportLiveValue");
+    const supportRateKey="monolith_xrp_usd_last_known";
+
+    function formatSupportUsd(n){
+      const v=Number(n);
+      if(!Number.isFinite(v)||v<=0) return "";
+      return "$"+v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+
+    function currentSupportAmount(){
+      return Number(String(supportAmount&&supportAmount.value||"").trim());
+    }
+
+    function renderSupportValue(rate,sourceLabel){
+      if(!supportLiveValue) return;
+      const amount=currentSupportAmount();
+      const xrpUsd=Number(rate&&rate.xrpUsd);
+      if(!Number.isFinite(amount)||amount<=0){
+        supportLiveValue.textContent="Live value: enter an XRP amount.";
+        return;
+      }
+      if(!Number.isFinite(xrpUsd)||xrpUsd<=0){
+        supportLiveValue.textContent="Live value unavailable.";
+        return;
+      }
+      supportLiveValue.textContent=
+        amount.toLocaleString(undefined,{maximumFractionDigits:6})+
+        " XRP ≈ "+
+        formatSupportUsd(amount*xrpUsd)+
+        " USD"+
+        (sourceLabel?" · "+sourceLabel:"");
+    }
+
+    async function loadSupportRate(){
+      let fallback=null;
+      try{
+        fallback=JSON.parse(localStorage.getItem(supportRateKey)||"null");
+      }catch(e){}
+
+      try{
+        const res=await fetch("/api/rates/xrp",{cache:"no-store"});
+        const data=await res.json();
+        if(!res.ok||!data.ok||!data.rate||!data.rate.xrpUsd) throw new Error("rate_unavailable");
+
+        localStorage.setItem(supportRateKey,JSON.stringify(data.rate));
+        renderSupportValue(data.rate,"live");
+      }catch(e){
+        if(fallback&&fallback.xrpUsd){
+          renderSupportValue(fallback,"last known");
+        }else if(supportLiveValue){
+          supportLiveValue.textContent="Live value unavailable.";
+        }
+      }
+    }
+
 
     function setSupportStatus(msg){
       if(supportStatus) supportStatus.textContent=msg;
@@ -3812,8 +3876,15 @@ body.tileWallpaperActive .hero{
           supportSignLink.style.display="none";
           supportSignLink.removeAttribute("href");
         }
+        loadSupportRate();
       });
     });
+
+    if(supportAmount){
+      supportAmount.addEventListener("input",loadSupportRate);
+    }
+
+    loadSupportRate();
 
     if(supportStart){
       supportStart.addEventListener("click",async()=>{
