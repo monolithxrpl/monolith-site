@@ -68,10 +68,17 @@
     return hasNumber(gx, gy, PREMIUM_NUMBERS);
   }
 
+  function isMirroredPair(gx, gy) {
+    gx = absInt(gx);
+    gy = absInt(gy);
+    return gx > 0 && gy > 0 && gx === gy;
+  }
+
   function tierFor(gx, gy) {
     if (isUnavailable(gx, gy)) return "na";
     if (isAxisOnly(gx, gy)) return "signature";
     if (isSignature(gx, gy)) return "signature";
+    if (isMirroredPair(gx, gy)) return "premium";
     if (isPremium(gx, gy)) return "premium";
 
     return "regular";
