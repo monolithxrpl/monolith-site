@@ -1222,12 +1222,13 @@ h1{
 
   .leftRail .bio{
     top:365px!important;
-    max-height:135px!important;
+    max-height:145px!important;
     overflow:auto!important;
+    box-sizing:border-box!important;
   }
 
   .leftRail .musicRail{
-    top:525px!important;
+    top:550px!important;
     overflow:hidden!important;
   }
 
@@ -2159,10 +2160,11 @@ h1{
   overflow-wrap:anywhere!important;
   word-break:break-word!important;
 }
-.socialGrid>.box:not(.tabletBox) .write{max-height:90px!important;overflow:auto!important}
+.socialGrid>.box:not(.tabletBox) .write{max-height:none!important;overflow:visible!important}
+#interestsBox{min-height:220px!important;max-height:none!important;overflow:visible!important;white-space:normal!important;line-height:1.55!important}
 .ownerBox .write{max-height:155px!important;overflow:auto!important}
 .tabletBox .write{max-height:300px!important;overflow:auto!important}
-.grid .v{max-height:58px!important;overflow:auto!important}
+.grid .v{max-height:none!important;overflow:visible!important;white-space:normal!important;word-break:normal!important;overflow-wrap:anywhere!important}
 /* MONOLITH_TEXT_OVERFLOW_SAFETY_20260521_END */
 
 
@@ -2589,6 +2591,41 @@ small,
   font-size:14px;
   font-weight:800;
   text-shadow:none!important;
+}
+
+
+/* MONOLITH_DESKTOP_PROFILE_LAYOUT_FINAL_20260623 */
+@media (min-width:900px){
+  .leftRail .bio{
+    top:365px!important;
+    max-height:165px!important;
+    overflow:auto!important;
+    box-sizing:border-box!important;
+  }
+
+  .leftRail .musicRail{
+    top:555px!important;
+    overflow:hidden!important;
+  }
+
+  .leftRail .socialGrid{
+    align-items:start!important;
+  }
+
+  .leftRail .socialGrid > .box:not(.tabletBox){
+    min-height:118px!important;
+    height:auto!important;
+    align-self:start!important;
+  }
+
+  #interestsBox{
+    min-height:220px!important;
+    max-height:none!important;
+    overflow:visible!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    line-height:1.55!important;
+  }
 }
 
 </style>
