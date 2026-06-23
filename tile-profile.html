@@ -3905,8 +3905,19 @@ body.tileWallpaperActive .hero{
     }
 
     if(supportBox){
+      const ownerWalletIsValid=/^r[1-9A-HJ-NP-Za-km-z]{25,34}$/.test(String(t.owner_wallet||""));
       if(!t.owner_wallet || t.status!=="claimed"){
         supportBox.style.display="none";
+      }else if(!ownerWalletIsValid){
+        if(supportStart){
+          supportStart.style.display="inline-flex";
+          supportStart.disabled=true;
+          supportStart.textContent="Payments Not Enabled";
+        }
+        if(supportAmount) supportAmount.disabled=true;
+        if(supportMessage) supportMessage.disabled=true;
+        if(supportSignLink) supportSignLink.style.display="none";
+        setSupportStatus("This tile is not currently accepting tips or payments.");
       }else{
         setSupportStatus("Payments go directly to "+maskWallet(t.owner_wallet)+".");
         setTimeout(loadSupportRate,50);
