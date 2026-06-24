@@ -338,7 +338,9 @@
 
   <script>
     const FEED_URL = "/assets/feed.json?cb=" + Date.now();
-    const DEBUG = new URLSearchParams(location.search).get("debug") === "1";
+    const params = new URLSearchParams(location.search);
+      const DEBUG = params.get("debug") === "1";
+      const PREFILL_TILE = (params.get("tile") || params.get("coord") || params.get("coordinate") || "").trim();
 
     const el = {
       tile: document.getElementById("tile"),
@@ -734,7 +736,7 @@ return null;
       setStatus("Cleared", false);
     }
 
-    el.tile.addEventListener("input", () => {
+      el.tile.addEventListener("input", () => {
       el.tile.value = (el.tile.value || "")
         .replace(/[–—−_]/g, "-")
         .replace(/\s+/g, "")
@@ -752,6 +754,15 @@ return null;
     if(verifyPayBtn) verifyPayBtn.addEventListener("click", () => { verifyPayment(); });
     el.copy.addEventListener("click", () => { copyPayload(); });
     el.clear.addEventListener("click", () => { clearAll(); });
+
+      if(PREFILL_TILE){
+        el.tile.value = PREFILL_TILE
+          .replace(/[–—−_]/g, "-")
+          .replace(/\s+/g, "")
+          .toUpperCase();
+        el.tile.dispatchEvent(new Event("input", { bubbles:true }));
+        setStatus("Ready to claim " + el.tile.value, false);
+      }
 
     if(DEBUG){
       state.showErrors = true;

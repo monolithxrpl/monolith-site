@@ -52,6 +52,7 @@ let CREATOR_LOGO = "";
       vTileUrl: document.getElementById("vTileUrl"),
       copyTileUrl: document.getElementById("copyTileUrl"),
       viewTilePage: document.getElementById("viewTilePage"),
+      claimTilePage: document.getElementById("claimTilePage"),
       reportTilePage: document.getElementById("reportTilePage"),
       vMedia: document.getElementById("vMedia"),
 
@@ -345,13 +346,23 @@ function coordLabelFromG(gx, gy){
       window.location.href = url;
       return true;
     }
-    function setTileUrlUI(url){
+    function setTileUrlUI(url, claimable){
       if(!el.vTileUrl)return;
       el.vTileUrl.textContent=url||"None";
       if(el.copyTileUrl)el.copyTileUrl.style.display=url?"inline-flex":"none";
       if(el.viewTilePage){
         el.viewTilePage.href=url||"#";
-        el.viewTilePage.style.display=url?"inline-flex":"none";
+        el.viewTilePage.style.display=(url && !claimable)?"inline-flex":"none";
+      }
+      if(el.claimTilePage){
+        let claimCoord="";
+        try{
+          const u=new URL(url, window.location.origin);
+          const parts=u.pathname.split("/").filter(Boolean);
+          claimCoord=(parts[0]==="tile" && parts[1]) ? parts[1].toUpperCase() : "";
+        }catch(_){}
+        el.claimTilePage.href=claimCoord?"/claim/?tile="+encodeURIComponent(claimCoord):"#";
+        el.claimTilePage.style.display=(url && claimable)?"inline-flex":"none";
       }
       if(el.reportTilePage){
         let coord="";
@@ -361,7 +372,7 @@ function coordLabelFromG(gx, gy){
           coord=(parts[0]==="tile" && parts[1]) ? parts[1].toUpperCase() : "";
         }catch(_){}
         el.reportTilePage.href=coord?"/report/?tile="+encodeURIComponent(coord):"#";
-        el.reportTilePage.style.display=url?"inline-flex":"none";
+        el.reportTilePage.style.display=(url && !claimable)?"inline-flex":"none";
       }
     }
     async function copyTileUrl(){const url=el.vTileUrl?el.vTileUrl.textContent:"";if(!url||url==="None")return;try{await navigator.clipboard.writeText(url);toastShow("tile url copied","good");}catch(_){toastShow("copy fail","bad");}}
@@ -795,7 +806,7 @@ const isCreator  = hasCreator && (
       el.ptitle.textContent = "Tile " + finalPanelLabel;
       el.vTile.textContent = finalPanelLabel;
       if(el.q) el.q.value = finalPanelLabel;
-      setTileUrlUI(tileUrlFromPanel(tile, gx, gy));
+      setTileUrlUI(tileUrlFromPanel(tile, gx, gy), !taken && (!mark || isPlaceholderTile(tile, gx, gy)));
       el.psub.textContent = "Tap a tile to inspect. Drag to move. Wheel or pinch to zoom.";
 
         // panel media
