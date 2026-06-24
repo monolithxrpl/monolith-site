@@ -820,9 +820,13 @@ const isCreator  = hasCreator && (
 
       const visW = w / state.zoom;
       const visH = h / state.zoom;
+        // MONOLITH_MOBILE_POOL_TRIM_20260624
+        const narrowViewport = w < 700;
+        const extraCols = narrowViewport ? 6 : 10;
+        const extraRows = narrowViewport ? 10 : 22;
 
-        const cols = Math.ceil(visW / STEP) + state.POOL_PAD * 2 + 10;
-        const rows = Math.ceil(visH / STEP) + state.POOL_PAD * 2 + 22;
+          const cols = Math.ceil(visW / STEP) + state.POOL_PAD * 2 + extraCols;
+          const rows = Math.ceil(visH / STEP) + state.POOL_PAD * 2 + extraRows;
 
         if(cols === state.cols && rows === state.rows && state.pool.length && state.lastVW === w && state.lastVH === h){
           return;
