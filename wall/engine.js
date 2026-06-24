@@ -126,7 +126,7 @@ zoom: 0.65,
       }catch(_){}
 
       el.kTaken.textContent = String(all.size);
-      fetch("/api/wall/stats", { cache:"no-store" })
+      fetch("/api/wall/stats", { cache:"default" })
         .then(r => r.ok ? r.json() : null)
         .then(d => {
           if(d && d.ok && d.activeWallLabel && el.kTaken){
@@ -1482,7 +1482,7 @@ function onWheel(e){
 
     async function loadBackendClaimedTiles(){
       try{
-        const res = await fetch("/api/tiles/claimed", { cache: "no-store" });
+        const res = await fetch("/api/tiles/claimed", { cache: "default" });
         if(!res.ok) return;
 
         const data = await res.json().catch(() => ({}));
