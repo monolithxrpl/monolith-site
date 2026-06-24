@@ -2,7 +2,7 @@ window.MONOLITH_ENGINE_CLONE_LOADED = true;
 if (!window.MONOLITH_ENGINE_BOOTED) {
   window.MONOLITH_ENGINE_BOOTED = true;
 (() => {
-const FEED_URL = "/assets/feed.json?cb=" + Date.now();
+const FEED_URL = "/assets/feed.json?v=20260607_194600";
 
     const MONOLITH_TILE = "ORIGIN";
     const MONOLITH_TAG  = "MONOLITH";
@@ -1549,7 +1549,7 @@ function onWheel(e){
 
     async function loadFeed(){
       try{
-        const res = await fetch(FEED_URL, { cache: "no-store" });
+        const res = await fetch(FEED_URL, { cache: "default" });
         if(!res.ok) throw new Error("feed http " + res.status);
         const data = await res.json();
 
