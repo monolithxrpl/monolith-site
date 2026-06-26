@@ -5455,8 +5455,31 @@ body.tileWallpaperActive .hero{
       box.style.color = good ? "#6ee7b7" : "#9fc5dd";
     }
 
+    function lockTrialOwnerControls(){
+      const startBtn = $("ownerModeStart");
+      const verifyBtn = $("ownerModeVerify");
+
+      if(startBtn){
+        startBtn.disabled = false;
+        startBtn.textContent = "Start Trial Owner Sign-In";
+        startBtn.title = "Trial owner editing is available for the signed trial wallet.";
+      }
+
+      if(verifyBtn){
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = "Verify Trial Owner";
+        verifyBtn.title = "Verify with the wallet that started this trial.";
+      }
+
+      setOwnerModeStatus("Trial Preview Active. You can edit this trial page with the wallet that started the trial. Tips, deed, and market stay locked until claimed.", true);
+    }
+
+    if(isTrialTile){
+      lockTrialOwnerControls();
+    }
+
     async function startOwnerMode(){
-      setOwnerModeStatus("Creating owner sign-in...", false);
+      setOwnerModeStatus(isTrialTile ? "Creating trial owner sign-in..." : "Creating owner sign-in...", false);
       const r = await fetch("/api/tile/edit/start", {
         method:"POST",
         headers:{"Content-Type":"application/json"},
