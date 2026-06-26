@@ -3772,11 +3772,38 @@ body.tileWallpaperActive .hero{
   }
 
   Promise.all([
-    fetch("/api/tile/"+encodeURIComponent(coord),{cache:"no-store"}).then(r=>r.json()),
+    fetch("/api/tile/"+encodeURIComponent(coord),{cache:"no-store"}).then(r=>r.json()).catch(()=>({ok:false})),
+    fetch("/api/trial/"+encodeURIComponent(coord),{cache:"no-store"}).then(r=>r.json()).catch(()=>({ok:false})),
     fetch("/assets/feed.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[])
-  ]).then(([d,feed])=>{
-    if(!d||!d.ok||!d.tile)throw new Error("not found");
-    const t=d.tile,m=metaOf(t);
+  ]).then(([d,trialData,feed])=>{
+    const activeTrial=trialData&&trialData.ok&&trialData.trial?trialData.trial:null;
+    if((!d||!d.ok||!d.tile)&&!activeTrial)throw new Error("not found");
+
+    const trialMeta=activeTrial&&activeTrial.metadata?activeTrial.metadata:{};
+    const t=d&&d.ok&&d.tile?d.tile:{
+      coordinate:activeTrial.coordinate||coord,
+      owner_tag:activeTrial.ownerTag||activeTrial.coordinate||coord,
+      image_url:activeTrial.imageUrl||"/assets/RESERVED.webp",
+      website_url:activeTrial.websiteUrl||"",
+      owner_wallet:activeTrial.wallet||"",
+      status:"trial",
+      tier:"3-Day Trial",
+      claimed_at:activeTrial.startedAt||"",
+      created_at:activeTrial.startedAt||"",
+      claim_tx_hash:"",
+      deed_nft_id:"",
+      deed_delivery_status:"",
+      metadata_json:JSON.stringify(Object.assign({},trialMeta,{
+        trial:true,
+        note:trialMeta.note||"This coordinate is running a 3-day MONOLITH trial preview.",
+        statusText:"3-Day Trial Active",
+        displayDate:activeTrial.startedAt||"",
+        trialExpiresAt:activeTrial.expiresAt||""
+      }))
+    };
+
+    const isTrialTile=!!activeTrial&&!(d&&d.ok&&d.tile);
+    const m=metaOf(t);
     const f=Array.isArray(feed)?feed.find(x=>x&&(String(x.tile).toUpperCase()===coord||coordFromFeed(x)===coord)):null;
 
     const tag=t.owner_tag||f?.tag||coord;
@@ -3906,7 +3933,24 @@ body.tileWallpaperActive .hero{
 
     if(supportBox){
       const ownerWalletIsValid=/^r[1-9A-HJ-NP-Za-km-z]{25,34}$/.test(String(t.owner_wallet||""));
-      if(!t.owner_wallet || t.status!=="claimed"){
+      if(isTrialTile){
+        supportBox.style.display="";
+        supportBox.querySelectorAll(".supportPreset").forEach(btn=>{
+          btn.disabled=true;
+          btn.title="Direct $XRP payments are only available for claimed tiles.";
+        });
+        if(supportStart){
+          supportStart.style.display="inline-flex";
+          supportStart.disabled=true;
+          supportStart.textContent="Claim Tile to Unlock Payments";
+          supportStart.title="Direct $XRP payments are only available for claimed tiles.";
+        }
+        if(supportAmount) supportAmount.disabled=true;
+        if(supportMessage) supportMessage.disabled=true;
+        if(supportSignLink) supportSignLink.style.display="none";
+        if(supportLiveValue) supportLiveValue.textContent="Payments unlock after claim.";
+        setSupportStatus("Direct $XRP tips/payments unlock after this tile is claimed. Trials are display previews only.");
+      }else if(!t.owner_wallet || t.status!=="claimed"){
         supportBox.style.display="none";
       }else if(!ownerWalletIsValid){
         if(supportStart){

@@ -293,7 +293,9 @@
 
             <div class="row">
               <button class="btn" id="gen">Start Xaman claim</button>
+              <button class="btn secondary" id="startTrial">Start 3-Day Free Trial</button>
               <button class="btn secondary" id="verifyPay">Verify payment</button>
+              <button class="btn secondary" id="verifyTrial">Verify trial</button>
               <button class="btn secondary" id="copy">Copy last response</button>
               <button class="btn secondary" id="clear">Clear</button>
             </div>
@@ -317,6 +319,7 @@
                   <li>Ownership is locked automatically to the wallet that completes the verified $XRP payment through Xaman</li>
                   <li>Reserved tiles stay held, but still show their real launch price</li>
                   <li>After claiming, open your live tile page and customize it directly through Owner Mode</li>
+                  <li>3-day trials are display previews only. No Coordinate Deed, market access, or direct $XRP tip/payment features until the tile is claimed.</li>
                 </ul>
 
                 <div class="sectionTitle" style="margin-top:16px">
@@ -340,7 +343,9 @@
     const FEED_URL = "/assets/feed.json?cb=" + Date.now();
     const params = new URLSearchParams(location.search);
       const DEBUG = params.get("debug") === "1";
-      const PREFILL_TILE = (params.get("tile") || params.get("coord") || params.get("coordinate") || "").trim();
+      const PREFILL_TILE = (params.get("tile") || params.get("coord") || params.get("coordinate") || params.get("trial") || "").trim();
+      const TRIAL_RETURN_TILE = (params.get("trial") || "").trim();
+      const TRIAL_RETURN_PAYLOAD = (params.get("payload") || "").trim();
 
     const el = {
       tile: document.getElementById("tile"),
@@ -711,6 +716,132 @@ return null;
       }
     }
 
+
+    function getTrialPayloadUuid(payload){
+      return (payload && (payload.payloadUuid || payload.payload_uuid || payload.uuid)) || "";
+    }
+
+    function renderTrialReady(payload){
+      const signUrl = payload && payload.signUrl ? payload.signUrl : "";
+      const uuid = getTrialPayloadUuid(payload);
+
+      el.out.classList.add("show");
+      el.out.innerHTML =
+        "<div><strong>Step 1: Start 3-Day Trial with Xaman</strong></div>" +
+        "<div style='margin:10px 0'><a class='btn' href='" + htmlEscape(signUrl) + "' target='_blank' rel='noopener'>Open Xaman trial sign-in</a></div>" +
+        "<div style='color:var(--muted);line-height:1.45;margin-top:10px'>This is a SignIn only. No XRP moves. After signing, return here and press <strong>Verify trial</strong>. Trials are display previews only. Direct $XRP tips/payments unlock after the tile is claimed.</div>" +
+        (uuid ? "<div style='margin-top:10px;color:var(--muted)'>Trial payload: <code>" + htmlEscape(uuid) + "</code></div>" : "");
+    }
+
+    function renderTrialActive(data){
+      const trial = data && data.trial ? data.trial : data;
+      const coord = trial.coordinate || data.coordinate || "";
+      const expires = trial.expiresAt || data.expiresAt || "";
+
+      state.lastPayload = data;
+      el.out.classList.add("show");
+      el.out.innerHTML =
+        "<div><strong>3-Day Trial Active</strong></div>" +
+        "<div class='muted' style='margin-top:8px'>Your trial tile is active. This is display-only until claimed.</div>" +
+        "<div style='margin-top:8px;color:var(--muted);line-height:1.45'>" +
+        "Coordinate: <strong>" + htmlEscape(coord) + "</strong><br>" +
+        "Expires: <code>" + htmlEscape(expires) + "</code><br>" +
+        "Direct $XRP tips/payments: <strong>Locked until claimed</strong><br>" +
+        "Coordinate Deed: <strong>Not issued during trial</strong>" +
+        "</div>" +
+        (coord ? "<div style='margin:14px 0'><a class='btn' href='/tile/" + encodeURIComponent(coord) + "'>Open Trial Tile</a></div>" : "") +
+        "<div class='muted' style='margin-top:8px'>Claim this coordinate to unlock full ownership, Coordinate Deed delivery, owner controls, tips, and future market access.</div>";
+    }
+
+    async function startTrial(){
+      const p = parseTileOrCoords(el.tile.value);
+      if(!p || !p.tile){
+        setStatus("Enter a coordinate first", true);
+        showOutput({ error:"coordinate required" });
+        return null;
+      }
+
+      el.tile.value = p.tile;
+      setStatus("Creating Xaman trial sign-in...", false);
+
+      try{
+        const r = await fetch("/api/trial/start", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body:JSON.stringify({ coordinate:p.tile, returnUrl: location.origin + location.pathname })
+        });
+        const data = await r.json().catch(() => ({}));
+
+        if(!r.ok || !data.ok){
+          setStatus(data.error || "Trial request failed", true);
+          showOutput(data);
+          return null;
+        }
+
+        const payload = {
+          ok:true,
+          type:"trial",
+          tile:p.tile,
+          coordinate:data.coordinate || p.tile,
+          payloadUuid:data.payloadUuid,
+          signUrl:data.signUrl,
+          qrPng:data.qrPng,
+          websocketStatus:data.websocketStatus,
+          trialIntentId:data.trialIntentId,
+          expiresInHours:data.expiresInHours
+        };
+
+        state.lastPayload = payload;
+        setStatus("Xaman trial sign-in ready. Sign in, return here, then press Verify trial.", false);
+        renderTrialReady(payload);
+        return payload;
+      }catch(e){
+        setStatus("Trial request failed", true);
+        showOutput({ error:"trial request failed", detail:String(e) });
+        return null;
+      }
+    }
+
+    async function verifyTrial(payloadUuidOverride){
+      const payload = state.lastPayload || {};
+      const payloadUuid = payloadUuidOverride || getTrialPayloadUuid(payload);
+
+      if(!payloadUuid){
+        setStatus("No Xaman trial payload to verify yet", true);
+        showOutput({ error:"missing trial payload" });
+        return null;
+      }
+
+      setStatus("Verifying trial SignIn...", false);
+
+      try{
+        const r = await fetch("/api/trial/verify", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body:JSON.stringify({ payloadUuid })
+        });
+        const data = await r.json().catch(() => ({}));
+
+        if(!r.ok || !data.ok){
+          const msg = data.error === "trial_not_signed"
+            ? "Trial SignIn not signed yet. Open Xaman, sign in, then verify again."
+            : (data.error || "Trial verification failed");
+          setStatus(msg, true);
+          showOutput(data);
+          return null;
+        }
+
+        renderTrialActive(data);
+        setStatus("3-day trial is active.", false);
+        return data;
+      }catch(e){
+        setStatus("Trial verification failed", true);
+        showOutput({ error:"trial verification failed", detail:String(e) });
+        return null;
+      }
+    }
+
+
     async function copyPayload(){
       const p = state.lastPayload;
       if(!p){
@@ -752,6 +883,10 @@ return null;
     el.gen.addEventListener("click", () => { generatePayload(); });
     const verifyPayBtn = document.getElementById("verifyPay");
     if(verifyPayBtn) verifyPayBtn.addEventListener("click", () => { verifyPayment(); });
+    const startTrialBtn = document.getElementById("startTrial");
+    if(startTrialBtn) startTrialBtn.addEventListener("click", () => { startTrial(); });
+    const verifyTrialBtn = document.getElementById("verifyTrial");
+    if(verifyTrialBtn) verifyTrialBtn.addEventListener("click", () => { verifyTrial(); });
     el.copy.addEventListener("click", () => { copyPayload(); });
     el.clear.addEventListener("click", () => { clearAll(); });
 
@@ -761,7 +896,18 @@ return null;
           .replace(/\s+/g, "")
           .toUpperCase();
         el.tile.dispatchEvent(new Event("input", { bubbles:true }));
-        setStatus("Ready to claim " + el.tile.value, false);
+        setStatus(TRIAL_RETURN_PAYLOAD ? "Returned from Xaman trial SignIn. Verifying..." : "Ready to claim " + el.tile.value, false);
+      }
+
+      if(TRIAL_RETURN_TILE && TRIAL_RETURN_PAYLOAD){
+        state.lastPayload = {
+          ok:true,
+          type:"trial",
+          tile:TRIAL_RETURN_TILE.toUpperCase(),
+          coordinate:TRIAL_RETURN_TILE.toUpperCase(),
+          payloadUuid:TRIAL_RETURN_PAYLOAD
+        };
+        verifyTrial(TRIAL_RETURN_PAYLOAD);
       }
 
     if(DEBUG){
