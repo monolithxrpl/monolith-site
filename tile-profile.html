@@ -3830,7 +3830,23 @@ body.tileWallpaperActive .hero{
         if(v&&v.ok){
           setTimeout(()=>{ location.replace("/tile/"+encodeURIComponent(coord)); },700);
         }else if(v&&v.error==="wallet_trial_already_active"&&v.coordinate){
-          setTimeout(()=>{ location.replace("/tile/"+encodeURIComponent(v.coordinate)); },700);
+          const msg = "Trial not started. This wallet already has an active trial at " + v.coordinate + ". Open that trial, claim it, or wait for it to expire before starting another.";
+          console.warn("MONOLITH trial already active", v);
+          const titleEl = $("title");
+          const bioEl = $("bio");
+          const statusEl = $("status");
+          const ownerStatusEl = $("ownerModeStatus");
+          const supportStatusEl = $("supportStatus");
+          if(titleEl) titleEl.textContent = "Trial Already Active";
+          if(bioEl) bioEl.textContent = msg;
+          if(statusEl) statusEl.textContent = "Trial Already Active";
+          if(ownerStatusEl){
+            ownerStatusEl.textContent = msg;
+            ownerStatusEl.style.color = "#ffcc66";
+          }
+          if(supportStatusEl){
+            supportStatusEl.textContent = msg;
+          }
         }else if(v&&v.error==="trial_already_verified"){
           setTimeout(()=>{ location.replace("/tile/"+encodeURIComponent(coord)); },700);
         }else{
