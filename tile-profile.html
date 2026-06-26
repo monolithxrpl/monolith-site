@@ -3776,7 +3776,24 @@ body.tileWallpaperActive .hero{
     fetch("/api/trial/"+encodeURIComponent(coord),{cache:"no-store"}).then(r=>r.json()).catch(()=>({ok:false})),
     fetch("/assets/feed.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[])
   ]).then(([d,trialData,feed])=>{
-    const activeTrial=trialData&&trialData.ok&&trialData.trial?trialData.trial:null;
+    const profileParams=new URLSearchParams(location.search);
+    const trialReturnPayload=(profileParams.get("payload")||"").trim();
+    const trialReturnCoord=(profileParams.get("trial")||"").trim().toUpperCase();
+    const pendingTrialReturn=!!trialReturnPayload&&(!trialReturnCoord||trialReturnCoord===coord);
+    const activeTrial=trialData&&trialData.ok&&trialData.trial?trialData.trial:(pendingTrialReturn?{
+      coordinate:coord,
+      ownerTag:coord,
+      imageUrl:"/assets/RESERVED.webp",
+      websiteUrl:"",
+      wallet:"",
+      metadata:{
+        trial:true,
+        trialLabel:"3-Day Free Trial",
+        note:"Verifying 3-day MONOLITH trial preview."
+      },
+      startedAt:"",
+      expiresAt:""
+    }:null);
     if((!d||!d.ok||!d.tile)&&!activeTrial)throw new Error("not found");
 
     const trialMeta=activeTrial&&activeTrial.metadata?activeTrial.metadata:{};
@@ -3803,6 +3820,26 @@ body.tileWallpaperActive .hero{
     };
 
     const isTrialTile=!!activeTrial&&!(d&&d.ok&&d.tile);
+
+    if(pendingTrialReturn){
+      fetch("/api/trial/verify",{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({ payloadUuid:trialReturnPayload })
+      }).then(r=>r.json().catch(()=>({ok:false,error:"bad_json"}))).then(v=>{
+        if(v&&v.ok){
+          setTimeout(()=>{ location.replace("/tile/"+encodeURIComponent(coord)); },700);
+        }else if(v&&v.error==="wallet_trial_already_active"&&v.coordinate){
+          setTimeout(()=>{ location.replace("/tile/"+encodeURIComponent(v.coordinate)); },700);
+        }else if(v&&v.error==="trial_already_verified"){
+          setTimeout(()=>{ location.replace("/tile/"+encodeURIComponent(coord)); },700);
+        }else{
+          console.warn("MONOLITH trial return verify failed",v);
+        }
+      }).catch(e=>{
+        console.warn("MONOLITH trial return verify failed",e);
+      });
+    }
     const m=metaOf(t);
     const f=Array.isArray(feed)?feed.find(x=>x&&(String(x.tile).toUpperCase()===coord||coordFromFeed(x)===coord)):null;
 

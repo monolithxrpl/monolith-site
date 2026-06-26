@@ -229,7 +229,54 @@
       .btns{width:100%;justify-content:flex-start}
       .brand{min-width:0}
     }
-  </style>
+  
+/* MONOLITH_TRIAL_CLAIM_MOBILE_FIX_20260626 */
+#out.show{
+  white-space:normal!important;
+  font-family:inherit!important;
+  line-height:1.45!important;
+  overflow-wrap:anywhere!important;
+}
+#out .trialCard{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+#out .trialTitle{
+  font-weight:900;
+  font-size:18px;
+  line-height:1.2;
+}
+#out .trialCopy{
+  color:var(--muted);
+  line-height:1.45;
+}
+#out .trialPayload{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+#out .trialCta{
+  width:100%;
+  max-width:320px;
+  justify-content:center;
+  text-align:center;
+}
+@media(max-width:620px){
+  #out.show{
+    font-size:14px!important;
+    padding:18px!important;
+  }
+  #out .trialTitle{
+    font-size:16px;
+  }
+  #out .trialCta{
+    max-width:none;
+  }
+}
+
+</style>
 
   <!-- favicon: MONOLITH -->
   <link rel="icon" href="/assets/favicons/monolith/favicon.ico" sizes="any" />
@@ -727,10 +774,13 @@ return null;
 
       el.out.classList.add("show");
       el.out.innerHTML =
-        "<div><strong>Step 1: Start 3-Day Trial with Xaman</strong></div>" +
-        "<div style='margin:10px 0'><a class='btn' href='" + htmlEscape(signUrl) + "' target='_blank' rel='noopener'>Open Xaman trial sign-in</a></div>" +
-        "<div style='color:var(--muted);line-height:1.45;margin-top:10px'>This is a SignIn only. No XRP moves. After signing, return here and press <strong>Verify trial</strong>. Trials are display previews only. Direct $XRP tips/payments unlock after the tile is claimed.</div>" +
-        (uuid ? "<div style='margin-top:10px;color:var(--muted)'>Trial payload: <code>" + htmlEscape(uuid) + "</code></div>" : "");
+        "<div class='trialCard'>" +
+          "<div class='trialTitle'>3-Day Free Trial Ready</div>" +
+          "<div><a class='btn trialCta' href='" + htmlEscape(signUrl) + "' target='_blank' rel='noopener'>Open Xaman Sign-In</a></div>" +
+          "<div class='trialCopy'>No XRP moves. Sign in with Xaman and MONOLITH will return you directly to your trial tile page.</div>" +
+          "<div class='trialCopy'>Trials are display previews only. Direct $XRP tips/payments unlock after the tile is claimed.</div>" +
+          (uuid ? "<div class='trialPayload'>Trial payload: <code>" + htmlEscape(uuid) + "</code></div>" : "") +
+        "</div>";
     }
 
     function renderTrialActive(data){
@@ -768,7 +818,7 @@ return null;
         const r = await fetch("/api/trial/start", {
           method:"POST",
           headers:{ "Content-Type":"application/json" },
-          body:JSON.stringify({ coordinate:p.tile, returnUrl: location.origin + location.pathname })
+          body:JSON.stringify({ coordinate:p.tile, returnUrl: location.origin + "/tile/" + encodeURIComponent(p.tile) })
         });
         const data = await r.json().catch(() => ({}));
 
@@ -792,7 +842,7 @@ return null;
         };
 
         state.lastPayload = payload;
-        setStatus("Xaman trial sign-in ready. Sign in, return here, then press Verify trial.", false);
+        setStatus("Xaman trial sign-in ready. Sign in with Xaman, then MONOLITH will open your trial tile.", false);
         renderTrialReady(payload);
         return payload;
       }catch(e){
