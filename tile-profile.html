@@ -2628,6 +2628,48 @@ small,
   }
 }
 
+
+/* MONOLITH_TRIAL_MODE_POLISH_20260626 */
+.trialModeBox{
+  display:none;
+  border:1px solid rgba(110,231,183,.34)!important;
+  background:linear-gradient(135deg,rgba(110,231,183,.12),rgba(15,23,42,.42))!important;
+}
+.trialModeBadge{
+  display:inline-flex;
+  width:max-content;
+  max-width:100%;
+  border:1px solid rgba(110,231,183,.42);
+  border-radius:999px;
+  padding:7px 12px;
+  color:#6ee7b7;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:.12em;
+  margin-bottom:10px;
+}
+.trialModeTitle{
+  font-size:22px;
+  line-height:1.12;
+  font-weight:950;
+  color:var(--text);
+}
+.trialModeCopy{
+  margin-top:8px;
+  color:var(--muted);
+  line-height:1.45;
+}
+.trialModeActions{
+  margin-top:14px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+@media(max-width:620px){
+  .trialModeTitle{font-size:20px}
+  .trialModeActions .btn{width:100%;justify-content:center}
+}
+
 </style>
 
 <style id="MONOLITH_FIND_ME_SHARE_TAB_20260524">
@@ -3527,6 +3569,16 @@ body.tileWallpaperActive .hero{
         </div>
       </section>
 
+      <section class="box trialModeBox" id="trialModeBox">
+        <div class="trialModeBadge">TRIAL MODE</div>
+        <div class="trialModeTitle">3-Day Free Trial Active</div>
+        <div class="trialModeCopy" id="trialModeCopy">This tile is in trial preview.</div>
+        <div class="trialModeActions">
+          <a class="btn" id="trialClaimCta" href="/claim/">Claim This Tile</a>
+          <button class="btn secondary" id="trialCopyTileUrl" type="button">Copy Trial Page</button>
+        </div>
+      </section>
+
       <div class="grid">
         <div class="card"><div class="k">Wallet Proof</div><div class="v" id="wallet">None</div></div>
         <div class="card"><div class="k">Deed Status</div><div class="v" id="deed">Checking</div><div class="muted" id="deedHelp" style="margin-top:8px;font-size:12px">Checking Coordinate Deed delivery.</div><a id="deedAccept" href="#" target="_blank" rel="noopener" style="display:none;margin-top:10px;text-decoration:none" class="btn">Accept Deed in Xaman</a></div>
@@ -3910,6 +3962,37 @@ body.tileWallpaperActive .hero{
     $("status").textContent=t.status||"None";
     $("claimTx").textContent=t.claim_tx_hash||"None";
     $("deedId").textContent=t.deed_nft_id||"None";
+
+    if(isTrialTile){
+      const trialExpires = m.trialExpiresAt || activeTrial.expiresAt || "";
+      const trialBox = $("trialModeBox");
+      const trialCopy = $("trialModeCopy");
+      const trialClaim = $("trialClaimCta");
+      const trialCopyBtn = $("trialCopyTileUrl");
+
+      if(trialBox) trialBox.style.display = "block";
+      if(trialCopy){
+        trialCopy.textContent = "Build and edit this page during the trial. Tips, Coordinate Deed, and market features unlock after claim." + (trialExpires ? " Expires: " + trialExpires : "");
+      }
+      if(trialClaim){
+        trialClaim.href = "/claim/?tile=" + encodeURIComponent(coord);
+      }
+      if(trialCopyBtn){
+        trialCopyBtn.onclick = async () => {
+          try{
+            await navigator.clipboard.writeText(location.origin + "/tile/" + encodeURIComponent(coord));
+            trialCopyBtn.textContent = "Copied";
+            setTimeout(()=>{ trialCopyBtn.textContent = "Copy Trial Page"; },1200);
+          }catch(e){}
+        };
+      }
+
+      $("deed").textContent = "Locked During Trial";
+      if($("deedHelp")) $("deedHelp").textContent = "No Coordinate Deed is issued until this tile is claimed.";
+      if($("deedAccept")) $("deedAccept").style.display = "none";
+      $("claimTx").textContent = "Trial Sign-In";
+      $("deedId").textContent = "Claim required";
+    }
 
     /* MONOLITH_TILE_SUPPORT_PAYMENT_UI_V1 */
     const supportBox=$("supportTileBox");

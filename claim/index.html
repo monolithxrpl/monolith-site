@@ -230,7 +230,7 @@
       .brand{min-width:0}
     }
   
-/* MONOLITH_TRIAL_CLAIM_MOBILE_FIX_20260626 */
+/* MONOLITH_TRIAL_CLAIM_MOBILE_POLISH_20260626 */
 #out.show{
   white-space:normal!important;
   font-family:inherit!important;
@@ -240,16 +240,37 @@
 #out .trialCard{
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:14px;
+}
+#out .trialEyebrow{
+  display:inline-flex;
+  width:max-content;
+  max-width:100%;
+  border:1px solid rgba(110,231,183,.35);
+  border-radius:999px;
+  padding:7px 12px;
+  color:#6ee7b7;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.12em;
 }
 #out .trialTitle{
-  font-weight:900;
-  font-size:18px;
-  line-height:1.2;
+  font-weight:950;
+  font-size:22px;
+  line-height:1.12;
+  color:var(--text);
 }
 #out .trialCopy{
   color:var(--muted);
+  font-size:15px;
   line-height:1.45;
+}
+#out .trialCta{
+  width:100%;
+  max-width:360px;
+  justify-content:center;
+  text-align:center;
+  padding:16px 18px;
 }
 #out .trialPayload{
   color:var(--muted);
@@ -257,25 +278,27 @@
   line-height:1.35;
   overflow-wrap:anywhere;
 }
-#out .trialCta{
-  width:100%;
-  max-width:320px;
-  justify-content:center;
-  text-align:center;
+#out .trialPayload summary{
+  cursor:pointer;
+  color:#9fc5dd;
+  font-weight:800;
 }
 @media(max-width:620px){
   #out.show{
     font-size:14px!important;
     padding:18px!important;
   }
+  #out .trialCard{
+    gap:12px;
+  }
   #out .trialTitle{
-    font-size:16px;
+    font-size:20px;
   }
   #out .trialCta{
     max-width:none;
+    width:100%;
   }
 }
-
 </style>
 
   <!-- favicon: MONOLITH -->
@@ -775,11 +798,12 @@ return null;
       el.out.classList.add("show");
       el.out.innerHTML =
         "<div class='trialCard'>" +
-          "<div class='trialTitle'>3-Day Free Trial Ready</div>" +
+          "<div class='trialEyebrow'>FREE TRIAL</div>" +
+          "<div class='trialTitle'>Your 3-Day Trial is Ready</div>" +
           "<div><a class='btn trialCta' href='" + htmlEscape(signUrl) + "' target='_blank' rel='noopener'>Open Xaman Sign-In</a></div>" +
-          "<div class='trialCopy'>No XRP moves. Sign in with Xaman and MONOLITH will return you directly to your trial tile page.</div>" +
-          "<div class='trialCopy'>Trials are display previews only. Direct $XRP tips/payments unlock after the tile is claimed.</div>" +
-          (uuid ? "<div class='trialPayload'>Trial payload: <code>" + htmlEscape(uuid) + "</code></div>" : "") +
+          "<div class='trialCopy'>No XRP moves. Sign in with Xaman and MONOLITH will open your trial tile page automatically.</div>" +
+          "<div class='trialCopy'>You can build and edit the page during the trial. Tips, deeds, and market features unlock after claim.</div>" +
+          (uuid ? "<details class='trialPayload'><summary>Show trial payload</summary><code>" + htmlEscape(uuid) + "</code></details>" : "") +
         "</div>";
     }
 
