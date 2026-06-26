@@ -2659,6 +2659,19 @@ small,
   color:var(--muted);
   line-height:1.45;
 }
+.trialModeTimer{
+  margin-top:10px;
+  display:inline-flex;
+  width:max-content;
+  max-width:100%;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  padding:10px 12px;
+  color:#ffcc66;
+  background:rgba(0,0,0,.18);
+  font-weight:900;
+  letter-spacing:.02em;
+}
 .trialModeActions{
   margin-top:14px;
   display:flex;
@@ -3573,6 +3586,7 @@ body.tileWallpaperActive .hero{
         <div class="trialModeBadge">TRIAL MODE</div>
         <div class="trialModeTitle">3-Day Free Trial Active</div>
         <div class="trialModeCopy" id="trialModeCopy">This tile is in trial preview.</div>
+        <div class="trialModeTimer" id="trialModeTimer">Calculating trial time left...</div>
         <div class="trialModeActions">
           <a class="btn" id="trialClaimCta" href="/claim/">Claim This Tile</a>
           <button class="btn secondary" id="trialCopyTileUrl" type="button">Copy Trial Page</button>
@@ -3967,12 +3981,35 @@ body.tileWallpaperActive .hero{
       const trialExpires = m.trialExpiresAt || activeTrial.expiresAt || "";
       const trialBox = $("trialModeBox");
       const trialCopy = $("trialModeCopy");
+      const trialTimer = $("trialModeTimer");
       const trialClaim = $("trialClaimCta");
       const trialCopyBtn = $("trialCopyTileUrl");
 
       if(trialBox) trialBox.style.display = "block";
       if(trialCopy){
-        trialCopy.textContent = "Build and edit this page during the trial. Tips, Coordinate Deed, and market features unlock after claim." + (trialExpires ? " Expires: " + trialExpires : "");
+        trialCopy.textContent = "Build and edit this page during the trial. Tips, Coordinate Deed, and market features unlock after claim.";
+      }
+      if(trialTimer){
+        const updateTrialTimer = () => {
+          const end = trialExpires ? new Date(trialExpires).getTime() : 0;
+          const left = end - Date.now();
+          if(!end || Number.isNaN(end)){
+            trialTimer.textContent = "Trial expiration unavailable";
+            return;
+          }
+          if(left <= 0){
+            trialTimer.textContent = "Trial expired";
+            return;
+          }
+          const totalMinutes = Math.floor(left / 60000);
+          const days = Math.floor(totalMinutes / 1440);
+          const hours = Math.floor((totalMinutes % 1440) / 60);
+          const minutes = totalMinutes % 60;
+          trialTimer.textContent = "Trial time left: " + days + "d " + hours + "h " + minutes + "m";
+        };
+        updateTrialTimer();
+        if(window.monolithTrialTimerInterval) clearInterval(window.monolithTrialTimerInterval);
+        window.monolithTrialTimerInterval = setInterval(updateTrialTimer, 30000);
       }
       if(trialClaim){
         trialClaim.href = "/claim/?tile=" + encodeURIComponent(coord);
