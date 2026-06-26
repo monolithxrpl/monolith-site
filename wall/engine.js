@@ -335,12 +335,20 @@ function coordLabelFromG(gx, gy){
       const tag = (mark && typeof mark.tag === "string") ? mark.tag.trim().toUpperCase() : "";
       return tag === "YOUR BRAND HERE";
     }
-    function isPublicProfileTile(tile){
-      if(isPlaceholderTile(tile, 0, 0)) return false;
-      return !!(state.taken.has(tile) || state.backendMarksByTile.has(tile) || state.marksByTile.has(tile));
+    function isPublicProfileTile(tile,gx,gy){
+      if(isPlaceholderTile(tile, gx, gy)) return false;
+      const mark = markForTile(tile, gx, gy);
+      if(mark) return true;
+      const keys = [
+        tile,
+        backendCoordFromPanel(tile, gx, gy),
+        Number.isFinite(Number(gx)) && Number.isFinite(Number(gy)) ? tileIdFromCoords(Number(gx), Number(gy)) : "",
+        Number.isFinite(Number(gx)) && Number.isFinite(Number(gy)) ? coordLabelFromG(Number(gx), Number(gy)) : ""
+      ].filter(Boolean).map(v => String(v).trim().toUpperCase());
+      return keys.some(k => state.taken.has(k) || state.backendMarksByTile.has(k) || state.marksByTile.has(k));
     }
     function goTileProfileFromWallClick(tile,gx,gy){
-      if(!tile || !isPublicProfileTile(tile)) return false;
+      if(!tile || !isPublicProfileTile(tile,gx,gy)) return false;
       const url = tileUrlFromPanel(tile,gx,gy);
       if(!url) return false;
       window.location.href = url;
@@ -1556,6 +1564,47 @@ function onWheel(e){
           addBackendMark(labelTile, mark);
           if(hasCoords) addBackendMark(backendCoordFromPanel(displayTile, gx, gy), mark);
         }
+
+        try{
+          const trialRes = await fetch("/api/trials/active", { cache:"no-store" });
+          const trialData = await trialRes.json().catch(() => ({}));
+          if(trialRes.ok && trialData && trialData.ok && Array.isArray(trialData.trials)){
+            for(const tr of trialData.trials){
+              if(!tr || !tr.coordinate) continue;
+
+              const backendTile = feedKey(tr.coordinate);
+              const mark = {
+                id: tr.trial_id || null,
+                tile: backendTile,
+                gx: null,
+                gy: null,
+                tag: tr.owner_tag || backendTile,
+                ts: tr.started_at || null,
+                img: tr.image_url || "/assets/RESERVED.webp",
+                wallet: tr.wallet || null,
+                wallet_public: false,
+                wallet_visibility: "trial",
+                visibility: "trial",
+                public_wallet: null,
+                handle: null,
+                link: "/tile/" + encodeURIComponent(backendTile),
+                note: "3-Day Free Trial Active. Build and edit this tile page before claiming.",
+                status: "trial",
+                trial: true,
+                trial_expires_at: tr.expires_at || null,
+                metadata: {
+                  trial: true,
+                  trialLabel: "3-Day Free Trial",
+                  note: "3-Day Free Trial Active. Build and edit this tile page before claiming.",
+                  trialExpiresAt: tr.expires_at || null
+                }
+              };
+
+              addBackendMark(backendTile, mark);
+              addBackendMark(backendCoordFromPanel(backendTile), mark);
+            }
+          }
+        }catch(_){}
 
         state.lastKey = "";
         try{ renderPool(); }catch(_){}
