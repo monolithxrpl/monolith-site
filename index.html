@@ -437,9 +437,82 @@
 </style>
 <!-- MONOLITH_CLAIMS_LIVE_BLUE_GLOW_20260519_END -->
 
+
+
+
+<style id="MONOLITH_ENTRANCE_TILE_MARKET_HIGHLIGHT_20260628">
+/* MONOLITH_ENTRANCE_TILE_MARKET_HIGHLIGHT_20260628 */
+.monolith-market-entrance-highlight{
+  width:min(1120px,calc(100% - 28px));
+  margin:18px auto 4px;
+  position:relative;
+  z-index:20;
+}
+.monolith-market-entrance-highlight a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:17px 18px;
+  border:1px solid rgba(247,201,109,.78);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at top left,rgba(247,201,109,.28),transparent 34%),
+    linear-gradient(135deg,rgba(38,27,8,.96),rgba(6,18,32,.97));
+  box-shadow:0 0 34px rgba(247,201,109,.18),0 18px 46px rgba(0,0,0,.34);
+  color:#fff4cf;
+  text-decoration:none;
+}
+.monolith-market-entrance-highlight strong{
+  display:block;
+  color:#ffe39a;
+  font-size:15px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.monolith-market-entrance-highlight span{
+  display:block;
+  color:#d8ecff;
+  font-size:13px;
+  margin-top:2px;
+}
+.monolith-market-entrance-highlight b{
+  flex:0 0 auto;
+  border:1px solid rgba(247,201,109,.82);
+  border-radius:999px;
+  padding:9px 13px;
+  color:#06111f;
+  background:linear-gradient(180deg,#ffe39a,#d7a943);
+  box-shadow:0 0 22px rgba(247,201,109,.22);
+  font-size:12px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+@media(max-width:760px){
+  .monolith-market-entrance-highlight{width:calc(100% - 20px);margin:12px auto 6px}
+  .monolith-market-entrance-highlight a{display:block;padding:15px 14px}
+  .monolith-market-entrance-highlight b{display:inline-block;margin-top:12px}
+}
+</style>
+
 </head>
 
 <body>
+
+<section class="monolith-market-entrance-highlight" data-monolith-market-entrance-highlight-20260628>
+  <a href="/market/" aria-label="Open MONOLITH Tile Market">
+    <div>
+      <strong>Tile Market is live</strong>
+      <span>Buy listed coordinates. Sell deed-backed tiles. Verified through XRPL and Xaman.</span>
+    </div>
+    <b>Open Market</b>
+  </a>
+</section>
+
+
+
+
+
   <div class="hero" aria-hidden="true"></div>
 
   <div class="wrap">
