@@ -4118,7 +4118,10 @@ body.tileWallpaperActive .hero{
 
     const copy={
       trial:"Trial tiles cannot be listed or sold.",
-      not_listed:"To list this tile, enter an ask, tap Step 1 Sign Listing, approve in Xaman, return here, then tap Step 2 Verify Listing.",
+      /* MONOLITH_MARKET_PUBLIC_OWNER_MEMO_SPLIT_20260628 */
+      not_listed:"This tile is not listed for sale right now.",
+      not_listed_public:"This tile is not listed for sale right now.",
+      not_listed_owner:"To list this tile, enter an ask, tap Step 1 Sign Listing, approve in Xaman, return here, then tap Step 2 Verify Listing.",
       list_verify:"Listing signature saved. Tap Step 2 Verify Listing to activate the listing.",
       seller_deed_pending:"Listing is started, but buyers cannot purchase yet. Tap Step 3 Sign Deed Sale, approve the XRPL sell offer in Xaman, return here, then tap Step 4 Verify Deed Sale.",
       deed_verify:"Deed sale signature saved. Tap Step 4 Verify Deed Sale to make the tile buyable.",
@@ -4204,7 +4207,7 @@ body.tileWallpaperActive .hero{
         setMarketText("tileMarketStatus",pendingList ? "Listing signature saved. Tap Step 2 Verify Listing." : "This coordinate is not currently listed.");
         setMarketText("tileMarketListingStatus",pendingList ? "Verify Listing" : "Not Listed");
         setMarketText("tileMarketAsk",pendingList ? "Pending" : "--");
-        setTileMarketStepMemo(pendingList ? "list_verify" : "not_listed");
+        setTileMarketStepMemo(pendingList ? "list_verify" : (tileMarketOwnerModeActive() ? "not_listed_owner" : "not_listed_public"));
         tileMarketApplyOwnerVisibility(null);
       }
     }catch(e){
@@ -4438,6 +4441,11 @@ body.tileWallpaperActive .hero{
     localStorage.removeItem(marketStoreKey("buy"));
     setMarketAuth("");
     setMarketText("tileMarketStatus","Sale complete. Ownership updated from verified XRPL Deed transfer.");
+    /* MONOLITH_MARKET_BUY_AUTO_REFRESH_20260628 */
+    setMarketText("tileMarketStatus","Sale complete. Ownership updated. Refreshing tile page...");
+    setTimeout(function(){
+      window.location.reload();
+    }, 900);
     await loadTileMarket(false);
   }
 
