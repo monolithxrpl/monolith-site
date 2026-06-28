@@ -2741,6 +2741,22 @@ small,
   font-weight:900;
   word-break:break-word;
 }
+.marketStepMemo,
+.marketReturnMemo{
+  border:1px solid rgba(130,220,255,.32)!important;
+  background:rgba(10,43,72,.46)!important;
+  color:#dff4ff!important;
+  border-radius:14px!important;
+  padding:12px 14px!important;
+  font-weight:900!important;
+  line-height:1.35!important;
+}
+.marketStepMemo{
+  margin-top:10px!important;
+}
+.marketReturnMemo{
+  margin:12px 0 14px!important;
+}
 @media(max-width:620px){
   .marketMiniGrid{grid-template-columns:1fr}
 }
@@ -3645,9 +3661,12 @@ body.tileWallpaperActive .hero{
 
 
       <!-- MONOLITH_TILE_PROFILE_MARKET_MODULE_20260627 -->
+      <!-- MONOLITH_MARKET_STATIC_STEP_GUIDE_20260628 -->
+      <div class="write marketReturnMemo" id="tileMarketReturnMemo" style="display:none"></div>
       <section class="box marketBox" id="tileMarketBox">
         <div class="k">Tile Market</div>
         <div class="write" id="tileMarketStatus">Loading market status...</div>
+        <div class="write marketStepMemo" id="tileMarketStepMemo">Every Xaman signature has a matching MONOLITH verify step. Sign in Xaman, return here, then tap the matching Verify button.</div>
 
         <div class="marketMiniGrid">
           <div class="marketStat">
@@ -3662,13 +3681,13 @@ body.tileWallpaperActive .hero{
 
         <div class="marketAskRow" id="tileMarketListControls">
           <input id="tileMarketAskInput" type="text" inputmode="decimal" placeholder="Ask in XRP">
-          <button class="btn" id="tileMarketListStart" type="button">List Tile</button>
-          <button class="btn" id="tileMarketListVerify" type="button">Verify Listing</button>
+          <button class="btn" id="tileMarketListStart" type="button">Step 1 Sign Listing</button>
+          <button class="btn" id="tileMarketListVerify" type="button">Step 2 Verify Listing</button>
         </div>
 
         <div class="actions" id="tileMarketSellOfferControls" style="display:none">
-          <button class="btn" id="tileMarketSellOfferStart" type="button">Start Deed Sale</button>
-          <button class="btn" id="tileMarketSellOfferVerify" type="button">Verify Deed Sale</button>
+          <button class="btn" id="tileMarketSellOfferStart" type="button">Step 3 Sign Deed Sale</button>
+          <button class="btn" id="tileMarketSellOfferVerify" type="button">Step 4 Verify Deed Sale</button>
         </div>
 
         <div class="actions" id="tileMarketBuyControls" style="display:none">
@@ -3677,7 +3696,7 @@ body.tileWallpaperActive .hero{
         </div>
 
         <div class="actions" id="tileMarketCancelControls" style="display:none">
-          <button class="btn" id="tileMarketCancelStart" type="button">Cancel Listing</button>
+          <button class="btn" id="tileMarketCancelStart" type="button">Sign Cancel Offer</button>
           <button class="btn" id="tileMarketCancelVerify" type="button">Verify Cancel</button>
         </div>
 
@@ -4082,6 +4101,54 @@ body.tileWallpaperActive .hero{
   /* MONOLITH_TILE_MARKET_OWNER_PUBLIC_BUTTONS_20260628_END */
 
 
+
+  /* MONOLITH_MARKET_STATIC_STEP_GUIDE_20260628_JS */
+  function tileMarketSaved(kind){
+    try{
+      if(typeof marketStoreKey !== "function")return {};
+      return JSON.parse(localStorage.getItem(marketStoreKey(kind))||"{}")||{};
+    }catch(e){
+      return {};
+    }
+  }
+
+  function setTileMarketStepMemo(kind){
+    const memo=document.getElementById("tileMarketStepMemo");
+    if(!memo)return;
+
+    const copy={
+      trial:"Trial tiles cannot be listed or sold.",
+      not_listed:"To list this tile, enter an ask, tap Step 1 Sign Listing, approve in Xaman, return here, then tap Step 2 Verify Listing.",
+      list_verify:"Listing signature saved. Tap Step 2 Verify Listing to activate the listing.",
+      seller_deed_pending:"Listing is started, but buyers cannot purchase yet. Tap Step 3 Sign Deed Sale, approve the XRPL sell offer in Xaman, return here, then tap Step 4 Verify Deed Sale.",
+      deed_verify:"Deed sale signature saved. Tap Step 4 Verify Deed Sale to make the tile buyable.",
+      ready_owner:"Deed Sale Ready. Buyers can purchase with Xaman. To cancel, tap Sign Cancel Offer, approve in Xaman, then tap Verify Cancel.",
+      ready_buyer:"Deed Sale Ready. Tap Buy with Xaman, approve with the buyer wallet, return here, then tap Verify Buy.",
+      buy_verify:"Buy signature saved. Tap Verify Buy to complete the ownership transfer.",
+      cancel_verify:"Cancel signature saved. Tap Verify Cancel to close the listing.",
+      unavailable:"Market status is unavailable. Refresh or try again.",
+      general:"Every Xaman signature has a matching MONOLITH verify step. Sign in Xaman, return here, then tap the matching Verify button."
+    };
+
+    memo.textContent=copy[kind]||copy.general;
+  }
+
+  function updateTileMarketReturnMemo(){
+    const banner=document.getElementById("tileMarketReturnMemo");
+    if(!banner)return;
+
+    let msg="";
+    if(tileMarketSaved("list").payloadUuid)msg="Listing signature saved. Finish by tapping Step 2 Verify Listing in Tile Market.";
+    else if(tileMarketSaved("sellOffer").payloadUuid)msg="Deed sale signature saved. Finish by tapping Step 4 Verify Deed Sale in Tile Market.";
+    else if(tileMarketSaved("buy").payloadUuid)msg="Buy signature saved. Finish by tapping Verify Buy in Tile Market.";
+    else if(tileMarketSaved("cancel").payloadUuid)msg="Cancel signature saved. Finish by tapping Verify Cancel in Tile Market.";
+
+    banner.textContent=msg;
+    banner.style.display=msg?"":"none";
+  }
+  /* MONOLITH_MARKET_STATIC_STEP_GUIDE_20260628_JS_END */
+
+
   async function loadTileMarket(isTrialTile){
     const listControls=document.getElementById("tileMarketListControls");
     const cancelControls=document.getElementById("tileMarketCancelControls");
@@ -4090,10 +4157,13 @@ body.tileWallpaperActive .hero{
 
     TILE_MARKET_ACTIVE_LISTING=null;
 
+    updateTileMarketReturnMemo();
+
     if(isTrialTile){
       setMarketText("tileMarketStatus","Trial tiles cannot be listed on the Tile Market.");
       setMarketText("tileMarketListingStatus","Trial");
       setMarketText("tileMarketAsk","Not eligible");
+      setTileMarketStepMemo("trial");
       if(listControls)listControls.style.display="none";
       if(cancelControls)cancelControls.style.display="none";
       if(sellControls)sellControls.style.display="none";
@@ -4112,23 +4182,37 @@ body.tileWallpaperActive .hero{
 
       if(listing){
         const ready=tileMarketListingReady(listing);
+        const pendingSell=tileMarketSaved("sellOffer").payloadUuid;
+
         setMarketText("tileMarketStatus",ready
           ? "This coordinate is live for XRPL Deed NFT purchase."
-          : "This coordinate is listed. Seller must still sign the XRPL Deed sell offer."
+          : (pendingSell ? "Deed sale signature saved. Tap Step 4 Verify Deed Sale." : "This coordinate is listed. Seller must still sign the XRPL Deed sell offer.")
         );
         setMarketText("tileMarketListingStatus",ready?"Deed Sale Ready":"Seller Deed Pending");
         setMarketText("tileMarketAsk",(listing.askXrp||"--")+" $XRP");
+
+        if(ready){
+          setTileMarketStepMemo(tileMarketOwnerModeActive()?"ready_owner":"ready_buyer");
+        }else{
+          setTileMarketStepMemo(pendingSell?"deed_verify":"seller_deed_pending");
+        }
+
         tileMarketApplyOwnerVisibility(listing);
       }else{
-        setMarketText("tileMarketStatus","This coordinate is not currently listed.");
-        setMarketText("tileMarketListingStatus","Not Listed");
-        setMarketText("tileMarketAsk","--");
+        const pendingList=tileMarketSaved("list").payloadUuid;
+
+        setMarketText("tileMarketStatus",pendingList ? "Listing signature saved. Tap Step 2 Verify Listing." : "This coordinate is not currently listed.");
+        setMarketText("tileMarketListingStatus",pendingList ? "Verify Listing" : "Not Listed");
+        setMarketText("tileMarketAsk",pendingList ? "Pending" : "--");
+        setTileMarketStepMemo(pendingList ? "list_verify" : "not_listed");
         tileMarketApplyOwnerVisibility(null);
       }
     }catch(e){
       setMarketText("tileMarketStatus","Market status unavailable.");
       setMarketText("tileMarketListingStatus","Unavailable");
       setMarketText("tileMarketAsk","--");
+      setTileMarketStepMemo("unavailable");
+      updateTileMarketReturnMemo();
       if(sellControls)sellControls.style.display="none";
       if(buyControls)buyControls.style.display="none";
     }
