@@ -3524,6 +3524,21 @@ body.tileWallpaperActive .hero{
   padding:5px 7px!important;
   font-size:10px!important;
 }
+
+/* MONOLITH_MOBILE_MARKET_BELOW_PROFILE_FIX_20260628 */
+/* Mobile law: Tile Market must never appear above the profile picture. */
+@media (max-width:899px){
+  .leftRail .profile{
+    order:1!important;
+  }
+
+  .leftRail #tileMarketBox.marketBox,
+  .leftRail .marketBox{
+    order:7!important;
+  }
+}
+/* MONOLITH_MOBILE_MARKET_BELOW_PROFILE_FIX_20260628_END */
+
 </style>
 
 </head>
