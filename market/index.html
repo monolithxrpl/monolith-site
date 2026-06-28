@@ -468,10 +468,10 @@
         <h1>Tile Market</h1>
         <p>Owner-verified MONOLITH coordinates listed like digital real estate on the $XRP Ledger.</p>
         <div class="hero-row">
-          <span class="pill green">Phase 1 Live</span>
+          <span class="pill green">Deed Flow Live</span>
           <span class="pill">Claimed Tiles Only</span>
           <span class="pill">Owner Verified</span>
-          <span class="pill warn">Buy Flow Disabled</span>
+          <span class="pill warn">Deed NFT Sale Flow Live</span>
         </div>
       </div>
     </section>
@@ -480,7 +480,7 @@
       <div class="stat"><div class="k">Active Listings</div><div class="v" id="statListings">0</div></div>
       <div class="stat"><div class="k">Floor</div><div class="v" id="statFloor">--</div></div>
       <div class="stat"><div class="k">Top Ask</div><div class="v" id="statTop">--</div></div>
-      <div class="stat"><div class="k">Market Mode</div><div class="v">Phase 1</div></div>
+      <div class="stat"><div class="k">Market Mode</div><div class="v">Deed NFT</div></div>
     </section>
 
 
@@ -488,7 +488,7 @@
       <div class="market-head">
         <div>
           <h2>List Your Tile</h2>
-          <p>Enter a claimed coordinate and ask price. MONOLITH will only list it after the owner wallet signs through Xaman.</p>
+          <p>Enter a claimed coordinate and ask price. MONOLITH requires owner Sign-In first, then a real XRPL Coordinate Deed sell offer through Xaman.</p>
         </div>
       </div>
 
@@ -503,6 +503,8 @@
         </div>
         <button class="btn console" id="listStartBtn" type="button">Start Listing</button>
         <button class="btn console" id="listVerifyBtn" type="button">Verify Listing</button>
+        <button class="btn console" id="sellOfferStartBtn" type="button">Start Deed Sale</button>
+        <button class="btn console" id="sellOfferVerifyBtn" type="button">Verify Deed Sale</button>
         <a class="btn console" id="listAuthBtn" href="#" target="_blank" rel="noopener" style="display:none">Open Xaman</a>
       </div>
 
@@ -542,7 +544,7 @@
       </div>
 
       <div class="footer-note">
-        Listing visibility only. Buying is not enabled until the transfer and payment controls are locked.
+        Sales use real XRPL Coordinate Deed NFT sell offers and buyer accept offers. MONOLITH verifies the ledger before ownership changes.
       </div>
     </section>
   </main>
@@ -683,6 +685,216 @@ function setCancelAuth(url){
   }
 }
 
+
+function marketSellOfferStoreKey(coord){
+  return "monolith_market_console_sell_offer_" + String(coord || "").toUpperCase();
+}
+
+function marketBuyStoreKey(listingId){
+  return "monolith_market_buy_" + String(listingId || "").trim();
+}
+
+function listingById(listingId){
+  return MARKET_LISTINGS.find(x => String(x.listingId || "") === String(listingId || "")) || null;
+}
+
+function listingBuyReady(item){
+  return !!(item && (item.buyFlowEnabled || item.xrplOfferIndex));
+}
+
+function routeError(data, fallback){
+  return (data && (data.error || data.message)) || fallback;
+}
+
+async function startConsoleSellOffer(){
+  const coord = cleanCoord(document.getElementById("listCoordinateInput").value);
+  const active = activeConsoleListing();
+
+  if (!coord){
+    setListConsole("Enter a coordinate first.");
+    return;
+  }
+
+  if (!active){
+    setListConsole("Create and verify the listing first.");
+    return;
+  }
+
+  if (listingBuyReady(active)){
+    setListConsole(`${coord} already has an XRPL Deed sell offer locked.`);
+    return;
+  }
+
+  setListAuth("");
+  setListConsole("Creating XRPL Coordinate Deed sell offer...");
+
+  const url = new URL(location.href);
+  url.searchParams.set("coordinate", coord);
+
+  const res = await fetch(`${API}/market/sell-offer/start`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      coordinate: coord,
+      listingId: active.listingId,
+      returnUrl: url.toString()
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.ok){
+    setListConsole(routeError(data, "Deed sell offer start failed."));
+    return;
+  }
+
+  localStorage.setItem(marketSellOfferStoreKey(coord), JSON.stringify({
+    coordinate: coord,
+    listingId: active.listingId,
+    payloadUuid: data.sellOffer && data.sellOffer.payloadUuid,
+    createdAt: Date.now()
+  }));
+
+  setListAuth(data.sellOffer && data.sellOffer.signUrl);
+  setListConsole("Deed sell offer created. Open Xaman, sign the XRPL NFT sell offer, then press Verify Deed Sale.");
+}
+
+async function verifyConsoleSellOffer(){
+  const coord = cleanCoord(document.getElementById("listCoordinateInput").value);
+
+  if (!coord){
+    setListConsole("Enter the coordinate you started the deed sale for.");
+    return;
+  }
+
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(marketSellOfferStoreKey(coord)) || "{}"); } catch(e){ saved = {}; }
+
+  if (!saved.payloadUuid || !saved.listingId){
+    setListConsole("No saved Deed sell offer found. Press Start Deed Sale first.");
+    return;
+  }
+
+  setListConsole("Verifying XRPL Deed sell offer...");
+
+  const res = await fetch(`${API}/market/sell-offer/verify`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      coordinate: coord,
+      listingId: saved.listingId,
+      payloadUuid: saved.payloadUuid
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.ok){
+    setListConsole(routeError(data, "Deed sell offer verification failed."));
+    return;
+  }
+
+  localStorage.removeItem(marketSellOfferStoreKey(coord));
+  setListAuth("");
+  setListConsole(`${coord} is live for Deed NFT purchase.`);
+  await loadMarket();
+}
+
+async function startListingBuy(listingId){
+  const item = listingById(listingId);
+
+  if (!item){
+    setListConsole("Listing not found.");
+    return;
+  }
+
+  if (!listingBuyReady(item)){
+    setListConsole(`${item.coordinate} is listed, but the seller still needs to lock the XRPL Deed sell offer.`);
+    return;
+  }
+
+  const buyerWallet = String(prompt("Enter buyer XRPL wallet address") || "").trim();
+
+  if (!buyerWallet){
+    setListConsole("Buyer wallet required.");
+    return;
+  }
+
+  setListConsole(`Creating buyer accept offer for ${item.coordinate}...`);
+
+  const res = await fetch(`${API}/market/buy/start`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      listingId: item.listingId,
+      coordinate: item.coordinate,
+      buyerWallet,
+      returnUrl: location.href
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.ok){
+    setListConsole(routeError(data, "Buy start failed."));
+    return;
+  }
+
+  localStorage.setItem(marketBuyStoreKey(item.listingId), JSON.stringify({
+    listingId: item.listingId,
+    coordinate: item.coordinate,
+    buyerWallet,
+    payloadUuid: data.buyOffer && data.buyOffer.payloadUuid,
+    createdAt: Date.now()
+  }));
+
+  const signUrl = data.buyOffer && data.buyOffer.signUrl;
+  if (signUrl) window.open(signUrl, "_blank", "noopener");
+
+  setListConsole("Buyer Xaman accept offer created. Sign it, then press Verify Buy on the listing.");
+}
+
+async function verifyListingBuy(listingId){
+  const item = listingById(listingId);
+  let saved = {};
+
+  try { saved = JSON.parse(localStorage.getItem(marketBuyStoreKey(listingId)) || "{}"); } catch(e){ saved = {}; }
+
+  if (!item){
+    setListConsole("Listing not found.");
+    return;
+  }
+
+  if (!saved.payloadUuid){
+    setListConsole("No saved buyer accept offer found for this listing. Press Buy with Xaman first.");
+    return;
+  }
+
+  setListConsole(`Verifying Deed NFT sale for ${item.coordinate}...`);
+
+  const res = await fetch(`${API}/market/buy/verify`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      listingId: item.listingId,
+      coordinate: item.coordinate,
+      payloadUuid: saved.payloadUuid
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.ok){
+    setListConsole(routeError(data, "Buy verification failed."));
+    return;
+  }
+
+  localStorage.removeItem(marketBuyStoreKey(listingId));
+  setListConsole(`${item.coordinate} sale complete. Ownership updated from verified XRPL Deed transfer.`);
+  await loadMarket();
+}
+
+
 function activeConsoleListing(){
   const coord = cleanCoord(document.getElementById("listCoordinateInput").value);
   if (!coord) return null;
@@ -696,19 +908,30 @@ function syncListingConsoleWithMarket(){
   const viewBtn = document.getElementById("consoleViewTileBtn");
   const startBtn = document.getElementById("listStartBtn");
   const verifyBtn = document.getElementById("listVerifyBtn");
+  const sellStartBtn = document.getElementById("sellOfferStartBtn");
+  const sellVerifyBtn = document.getElementById("sellOfferVerifyBtn");
 
   if (viewBtn && coord) viewBtn.href = "/tile/" + encodeURIComponent(coord);
 
   if (active){
-    setListConsole(`${coord} is already listed for ${active.askXrp} $XRP.`);
+    const ready = listingBuyReady(active);
+    setListConsole(ready
+      ? `${coord} is live for Deed NFT purchase at ${active.askXrp} $XRP.`
+      : `${coord} is listed for ${active.askXrp} $XRP. Next step: Start Deed Sale.`
+    );
+
     if (cancelBox) cancelBox.style.display = "grid";
     if (startBtn) startBtn.disabled = true;
     if (verifyBtn) verifyBtn.disabled = true;
+    if (sellStartBtn) sellStartBtn.disabled = ready;
+    if (sellVerifyBtn) sellVerifyBtn.disabled = false;
   }else{
     if (cancelBox) cancelBox.style.display = "none";
     setCancelAuth("");
     if (startBtn) startBtn.disabled = false;
     if (verifyBtn) verifyBtn.disabled = false;
+    if (sellStartBtn) sellStartBtn.disabled = true;
+    if (sellVerifyBtn) sellVerifyBtn.disabled = false;
   }
 }
 
@@ -816,6 +1039,27 @@ function bootListingConsole(){
     verifyConsoleCancel().catch(e => setListConsole(e.message || "Cancel verify failed."));
   });
 
+  document.getElementById("sellOfferStartBtn").addEventListener("click", () => {
+    startConsoleSellOffer().catch(e => setListConsole(e.message || "Deed sale start failed."));
+  });
+
+  document.getElementById("sellOfferVerifyBtn").addEventListener("click", () => {
+    verifyConsoleSellOffer().catch(e => setListConsole(e.message || "Deed sale verify failed."));
+  });
+
+  document.getElementById("listingGrid").addEventListener("click", (ev) => {
+    const buy = ev.target.closest("[data-buy-start]");
+    const verify = ev.target.closest("[data-buy-verify]");
+
+    if (buy){
+      startListingBuy(buy.getAttribute("data-buy-start")).catch(e => setListConsole(e.message || "Buy start failed."));
+    }
+
+    if (verify){
+      verifyListingBuy(verify.getAttribute("data-buy-verify")).catch(e => setListConsole(e.message || "Buy verify failed."));
+    }
+  });
+
   document.getElementById("listCoordinateInput").addEventListener("input", syncListingConsoleWithMarket);
 }
 
@@ -864,12 +1108,14 @@ function listingCard(item){
   const img = tile.imageUrl || meta.imageUrl || meta.bannerUrl || "/assets/RESERVED.webp";
   const date = item.listedAt ? new Date(item.listedAt).toLocaleDateString() : "Listed";
   const ask = item.askXrp || "0";
+  const ready = listingBuyReady(item);
+  const saleBadge = ready ? "Deed Sale Ready" : "Seller Deed Pending";
 
   return `
     <article class="card">
       <a class="thumb-wrap" href="/tile/${encodeURIComponent(item.coordinate)}">
         <img class="tile-img" src="${esc(img)}" alt="${esc(item.coordinate)} tile image">
-        <span class="badge">${esc(item.listingType || "sale")}</span>
+        <span class="badge">${esc(saleBadge)}</span>
         <span class="price-badge">${esc(ask)} $XRP</span>
       </a>
       <div class="body">
@@ -879,9 +1125,14 @@ function listingCard(item){
           <span>${esc(shortWallet(item.sellerWallet))}</span>
           <span>${esc(date)}</span>
         </div>
+        <div class="meta-row">
+          <span>${ready ? "XRPL offer locked" : "Waiting on seller deed offer"}</span>
+          <span>${item.xrplOfferIndex ? "Offer " + esc(shortWallet(item.xrplOfferIndex)) : "No offer yet"}</span>
+        </div>
         <div class="actions">
           <a class="btn" href="/tile/${encodeURIComponent(item.coordinate)}">View</a>
-          <span class="btn disabled">Buy Disabled</span>
+          <button class="btn ${ready ? "" : "disabled"}" data-buy-start="${esc(item.listingId)}" type="button" ${ready ? "" : "disabled"}>Buy with Xaman</button>
+          <button class="btn" data-buy-verify="${esc(item.listingId)}" type="button">Verify Buy</button>
         </div>
       </div>
     </article>
@@ -921,7 +1172,7 @@ function render(){
   const status = document.getElementById("marketStatus");
   const rows = currentList();
 
-  status.textContent = `${MARKET_LISTINGS.length} active listing${MARKET_LISTINGS.length === 1 ? "" : "s"}. Buying disabled during Phase 1.`;
+  status.textContent = `${MARKET_LISTINGS.length} active listing${MARKET_LISTINGS.length === 1 ? "" : "s"}. Deed NFT buying is live only after the seller locks the XRPL sell offer.`;
 
   if (!rows.length){
     grid.innerHTML = `<div class="empty">${MARKET_LISTINGS.length ? "No listings match that search." : "No active listings yet."}</div>`;
@@ -956,6 +1207,8 @@ document.getElementById("sortBox").addEventListener("change", render);
 
 bootListingConsole();
 loadMarket();
+
+<!-- MONOLITH_MARKET_DEED_SALE_FRONTEND_20260628 -->
 </script>
 </body>
 </html>

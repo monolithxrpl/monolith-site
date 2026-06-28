@@ -3624,6 +3624,16 @@ body.tileWallpaperActive .hero{
           <button class="btn" id="tileMarketListVerify" type="button">Verify Listing</button>
         </div>
 
+        <div class="actions" id="tileMarketSellOfferControls" style="display:none">
+          <button class="btn" id="tileMarketSellOfferStart" type="button">Start Deed Sale</button>
+          <button class="btn" id="tileMarketSellOfferVerify" type="button">Verify Deed Sale</button>
+        </div>
+
+        <div class="actions" id="tileMarketBuyControls" style="display:none">
+          <button class="btn" id="tileMarketBuyStart" type="button">Buy with Xaman</button>
+          <button class="btn" id="tileMarketBuyVerify" type="button">Verify Buy</button>
+        </div>
+
         <div class="actions" id="tileMarketCancelControls" style="display:none">
           <button class="btn" id="tileMarketCancelStart" type="button">Cancel Listing</button>
           <button class="btn" id="tileMarketCancelVerify" type="button">Verify Cancel</button>
@@ -3635,7 +3645,7 @@ body.tileWallpaperActive .hero{
           <a class="btn" href="/market/">View Market</a>
         </div>
 
-        <div class="write">Buying is disabled during Phase 1. Listing and canceling require owner wallet verification.</div>
+        <div class="write">Sales use the XRPL Coordinate Deed NFT. MONOLITH verifies the ledger before ownership changes.</div>
       </section>
 
       <!-- MONOLITH_INLINE_OWNER_MODE_SHELL_20260524 -->
@@ -3950,9 +3960,29 @@ body.tileWallpaperActive .hero{
     return "monolith_market_"+kind+"_"+coord;
   }
 
+
+  let TILE_MARKET_ACTIVE_LISTING=null;
+
+  function tileMarketListingReady(listing){
+    return !!(listing && (listing.buyFlowEnabled || listing.xrplOfferIndex));
+  }
+
+  function tileMarketRouteError(d,fallback){
+    return (d && (d.error || d.message)) || fallback;
+  }
+
+  function setTileMarketBox(id,show){
+    const el=document.getElementById(id);
+    if(el)el.style.display=show?"":"none";
+  }
+
   async function loadTileMarket(isTrialTile){
     const listControls=document.getElementById("tileMarketListControls");
     const cancelControls=document.getElementById("tileMarketCancelControls");
+    const sellControls=document.getElementById("tileMarketSellOfferControls");
+    const buyControls=document.getElementById("tileMarketBuyControls");
+
+    TILE_MARKET_ACTIVE_LISTING=null;
 
     if(isTrialTile){
       setMarketText("tileMarketStatus","Trial tiles cannot be listed on the Tile Market.");
@@ -3960,6 +3990,8 @@ body.tileWallpaperActive .hero{
       setMarketText("tileMarketAsk","Not eligible");
       if(listControls)listControls.style.display="none";
       if(cancelControls)cancelControls.style.display="none";
+      if(sellControls)sellControls.style.display="none";
+      if(buyControls)buyControls.style.display="none";
       return;
     }
 
@@ -3970,24 +4002,35 @@ body.tileWallpaperActive .hero{
       if(!d.ok)throw new Error(d.error||"market_status_failed");
 
       const listing=d.activeListing;
+      TILE_MARKET_ACTIVE_LISTING=listing||null;
 
       if(listing){
-        setMarketText("tileMarketStatus","This coordinate is actively listed on the Tile Market.");
-        setMarketText("tileMarketListingStatus","Listed");
+        const ready=tileMarketListingReady(listing);
+        setMarketText("tileMarketStatus",ready
+          ? "This coordinate is live for XRPL Deed NFT purchase."
+          : "This coordinate is listed. Seller must still sign the XRPL Deed sell offer."
+        );
+        setMarketText("tileMarketListingStatus",ready?"Deed Sale Ready":"Seller Deed Pending");
         setMarketText("tileMarketAsk",(listing.askXrp||"--")+" $XRP");
         if(listControls)listControls.style.display="none";
         if(cancelControls)cancelControls.style.display="";
+        if(sellControls)sellControls.style.display=ready?"none":"";
+        if(buyControls)buyControls.style.display=ready?"":"none";
       }else{
         setMarketText("tileMarketStatus","This coordinate is not currently listed.");
         setMarketText("tileMarketListingStatus","Not Listed");
         setMarketText("tileMarketAsk","--");
         if(listControls)listControls.style.display="";
         if(cancelControls)cancelControls.style.display="none";
+        if(sellControls)sellControls.style.display="none";
+        if(buyControls)buyControls.style.display="none";
       }
     }catch(e){
       setMarketText("tileMarketStatus","Market status unavailable.");
       setMarketText("tileMarketListingStatus","Unavailable");
       setMarketText("tileMarketAsk","--");
+      if(sellControls)sellControls.style.display="none";
+      if(buyControls)buyControls.style.display="none";
     }
   }
 
@@ -4036,7 +4079,7 @@ body.tileWallpaperActive .hero{
       return;
     }
 
-    setMarketText("tileMarketStatus","Verifying owner signature and listing tile...");
+    setMarketText("tileMarketStatus","Verifying owner signature and creating listing...");
 
     const r=await fetch("/api/market/list/verify",{
       method:"POST",
@@ -4056,7 +4099,173 @@ body.tileWallpaperActive .hero{
 
     localStorage.removeItem(marketStoreKey("list"));
     setMarketAuth("");
-    setMarketText("tileMarketStatus","Tile listed.");
+    setMarketText("tileMarketStatus","Tile listed. Next step: Start Deed Sale.");
+    await loadTileMarket(false);
+  }
+
+  async function startTileMarketSellOffer(){
+    const listing=TILE_MARKET_ACTIVE_LISTING;
+
+    if(!listing){
+      setMarketText("tileMarketStatus","Create and verify the listing first.");
+      return;
+    }
+
+    if(tileMarketListingReady(listing)){
+      setMarketText("tileMarketStatus","This listing already has an XRPL Deed sell offer.");
+      return;
+    }
+
+    setMarketText("tileMarketStatus","Creating XRPL Coordinate Deed sell offer...");
+    setMarketAuth("");
+
+    const r=await fetch("/api/market/sell-offer/start",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        coordinate:coord,
+        listingId:listing.listingId,
+        returnUrl:location.origin+"/tile/"+encodeURIComponent(coord)
+      })
+    });
+    const d=await r.json();
+
+    if(!d.ok){
+      setMarketText("tileMarketStatus",tileMarketRouteError(d,"Deed sale start failed."));
+      return;
+    }
+
+    localStorage.setItem(marketStoreKey("sell_offer"),JSON.stringify({
+      listingId:listing.listingId,
+      payloadUuid:d.sellOffer&&d.sellOffer.payloadUuid,
+      createdAt:Date.now()
+    }));
+
+    setMarketAuth(d.sellOffer&&d.sellOffer.signUrl,"Open Xaman to Sign Deed Sale");
+    setMarketText("tileMarketStatus","Sign the XRPL Deed NFT sell offer, then return and press Verify Deed Sale.");
+  }
+
+  async function verifyTileMarketSellOffer(){
+    let saved={};
+    try{saved=JSON.parse(localStorage.getItem(marketStoreKey("sell_offer"))||"{}")}catch(e){saved={}}
+
+    if(!saved.payloadUuid||!saved.listingId){
+      setMarketText("tileMarketStatus","Start Deed Sale first.");
+      return;
+    }
+
+    setMarketText("tileMarketStatus","Verifying XRPL Deed sell offer...");
+
+    const r=await fetch("/api/market/sell-offer/verify",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        coordinate:coord,
+        listingId:saved.listingId,
+        payloadUuid:saved.payloadUuid
+      })
+    });
+    const d=await r.json();
+
+    if(!d.ok){
+      setMarketText("tileMarketStatus",tileMarketRouteError(d,"Deed sale verification failed."));
+      return;
+    }
+
+    localStorage.removeItem(marketStoreKey("sell_offer"));
+    setMarketAuth("");
+    setMarketText("tileMarketStatus","Deed sale is live. Buyers can now accept through Xaman.");
+    await loadTileMarket(false);
+  }
+
+  async function startTileMarketBuy(){
+    const listing=TILE_MARKET_ACTIVE_LISTING;
+
+    if(!listing){
+      setMarketText("tileMarketStatus","No active listing found.");
+      return;
+    }
+
+    if(!tileMarketListingReady(listing)){
+      setMarketText("tileMarketStatus","Seller must lock the XRPL Deed sell offer first.");
+      return;
+    }
+
+    const buyerWallet=String(prompt("Enter buyer XRPL wallet address")||"").trim();
+
+    if(!buyerWallet){
+      setMarketText("tileMarketStatus","Buyer wallet required.");
+      return;
+    }
+
+    setMarketText("tileMarketStatus","Creating buyer Xaman accept offer...");
+    setMarketAuth("");
+
+    const r=await fetch("/api/market/buy/start",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        coordinate:coord,
+        listingId:listing.listingId,
+        buyerWallet,
+        returnUrl:location.origin+"/tile/"+encodeURIComponent(coord)
+      })
+    });
+    const d=await r.json();
+
+    if(!d.ok){
+      setMarketText("tileMarketStatus",tileMarketRouteError(d,"Buy start failed."));
+      return;
+    }
+
+    localStorage.setItem(marketStoreKey("buy"),JSON.stringify({
+      listingId:listing.listingId,
+      buyerWallet,
+      payloadUuid:d.buyOffer&&d.buyOffer.payloadUuid,
+      createdAt:Date.now()
+    }));
+
+    setMarketAuth(d.buyOffer&&d.buyOffer.signUrl,"Open Xaman to Buy");
+    setMarketText("tileMarketStatus","Buyer accept offer created. Sign in Xaman, then press Verify Buy.");
+  }
+
+  async function verifyTileMarketBuy(){
+    const listing=TILE_MARKET_ACTIVE_LISTING;
+    let saved={};
+
+    try{saved=JSON.parse(localStorage.getItem(marketStoreKey("buy"))||"{}")}catch(e){saved={}}
+
+    if(!listing){
+      setMarketText("tileMarketStatus","No active listing found.");
+      return;
+    }
+
+    if(!saved.payloadUuid){
+      setMarketText("tileMarketStatus","Start Buy first.");
+      return;
+    }
+
+    setMarketText("tileMarketStatus","Verifying XRPL Deed sale and updating ownership...");
+
+    const r=await fetch("/api/market/buy/verify",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        coordinate:coord,
+        listingId:listing.listingId,
+        payloadUuid:saved.payloadUuid
+      })
+    });
+    const d=await r.json();
+
+    if(!d.ok){
+      setMarketText("tileMarketStatus",tileMarketRouteError(d,"Buy verification failed."));
+      return;
+    }
+
+    localStorage.removeItem(marketStoreKey("buy"));
+    setMarketAuth("");
+    setMarketText("tileMarketStatus","Sale complete. Ownership updated from verified XRPL Deed transfer.");
     await loadTileMarket(false);
   }
 
@@ -4125,12 +4334,22 @@ body.tileWallpaperActive .hero{
     const b=document.getElementById("tileMarketListVerify");
     const c=document.getElementById("tileMarketCancelStart");
     const d=document.getElementById("tileMarketCancelVerify");
+    const e=document.getElementById("tileMarketSellOfferStart");
+    const f=document.getElementById("tileMarketSellOfferVerify");
+    const g=document.getElementById("tileMarketBuyStart");
+    const h=document.getElementById("tileMarketBuyVerify");
 
     if(a)a.onclick=()=>startTileMarketListing().catch(e=>setMarketText("tileMarketStatus",e.message||"Listing start failed."));
     if(b)b.onclick=()=>verifyTileMarketListing().catch(e=>setMarketText("tileMarketStatus",e.message||"Listing verify failed."));
     if(c)c.onclick=()=>startTileMarketCancel().catch(e=>setMarketText("tileMarketStatus",e.message||"Cancel start failed."));
     if(d)d.onclick=()=>verifyTileMarketCancel().catch(e=>setMarketText("tileMarketStatus",e.message||"Cancel verify failed."));
+    if(e)e.onclick=()=>startTileMarketSellOffer().catch(e=>setMarketText("tileMarketStatus",e.message||"Deed sale start failed."));
+    if(f)f.onclick=()=>verifyTileMarketSellOffer().catch(e=>setMarketText("tileMarketStatus",e.message||"Deed sale verify failed."));
+    if(g)g.onclick=()=>startTileMarketBuy().catch(e=>setMarketText("tileMarketStatus",e.message||"Buy start failed."));
+    if(h)h.onclick=()=>verifyTileMarketBuy().catch(e=>setMarketText("tileMarketStatus",e.message||"Buy verify failed."));
   }
+
+  /* MONOLITH_TILE_PROFILE_DEED_MARKET_FLOW_20260628 */
 
   function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
   function maskWallet(w){w=String(w||"");return w.length>12?w.slice(0,6)+"..."+w.slice(-6):w||"None"}
