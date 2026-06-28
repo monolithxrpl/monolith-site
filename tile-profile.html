@@ -3584,98 +3584,83 @@ body.tileWallpaperActive .hero{
 
 </style>
 
-
-<style id="MONOLITH_TILE_MARKET_PROFILE_MOBILE_POLISH_20260628">
-/* MONOLITH_TILE_MARKET_PROFILE_MOBILE_POLISH_20260628 */
-.monolith-tile-market-card-highlight{
-  border-color:rgba(247,201,109,.76)!important;
-  background:
-    radial-gradient(circle at top left,rgba(247,201,109,.18),transparent 36%),
-    linear-gradient(180deg,rgba(40,29,8,.92),rgba(5,17,31,.96))!important;
-  box-shadow:0 0 28px rgba(247,201,109,.13),0 16px 42px rgba(0,0,0,.28)!important;
+<style id="MONOLITH_TILE_MARKET_PROFILE_DIRECT_UNDER_GALLERY_20260628">
+/* MONOLITH_TILE_MARKET_PROFILE_DIRECT_UNDER_GALLERY_20260628 */
+#tileMarketBox.monolith-tile-market-card-highlight{
+  border-color:rgba(247,201,109,.82)!important;
+  background:radial-gradient(circle at top left,rgba(247,201,109,.20),transparent 34%),linear-gradient(180deg,rgba(39,28,8,.96),rgba(5,17,31,.98))!important;
+  box-shadow:0 0 30px rgba(247,201,109,.16),0 16px 42px rgba(0,0,0,.30)!important;
 }
-.monolith-tile-market-card-highlight h2,
-.monolith-tile-market-card-highlight h3,
-.monolith-tile-market-card-highlight .title{
+#tileMarketBox.monolith-tile-market-card-highlight .k,
+#tileMarketBox.monolith-tile-market-card-highlight h2,
+#tileMarketBox.monolith-tile-market-card-highlight h3{
   color:#ffe39a!important;
 }
-@media(max-width:760px){
-  .monolith-mobile-market-list-hidden{
-    display:none!important;
-  }
-  .monolith-tile-market-card-highlight{
-    margin-top:18px!important;
-    margin-bottom:18px!important;
-  }
+#tileMarketBox.monolith-tile-market-card-highlight{
+  width:100%!important;
+  margin-top:8px!important;
+  margin-bottom:0!important;
+  box-sizing:border-box!important;
+}
+.leftRail .centerMediaStack{
+  overflow:visible!important;
+}
+@media(max-width:899px){
+  .monolith-mobile-market-list-hidden{display:none!important}
+  .centerMediaStack #tileMarketBox{order:7!important}
+  .centerMediaStack .galleryBox{order:6!important}
 }
 </style>
-<script id="MONOLITH_TILE_MARKET_PROFILE_MOBILE_POLISH_20260628">
-/* MONOLITH_TILE_MARKET_PROFILE_MOBILE_POLISH_20260628 */
+<script id="MONOLITH_TILE_MARKET_PROFILE_DIRECT_UNDER_GALLERY_20260628">
+/* MONOLITH_TILE_MARKET_PROFILE_DIRECT_UNDER_GALLERY_20260628 */
 (function(){
-  var mq = window.matchMedia("(max-width: 760px)");
-  function cleanText(el){
+  var mq = window.matchMedia("(max-width:899px)");
+
+  function text(el){
     return (el && el.textContent ? el.textContent : "").replace(/\s+/g," ").trim().toLowerCase();
   }
-  function nearestCard(el){
-    var n = el;
-    for(var i=0; n && n !== document.body && i < 9; i++, n = n.parentElement){
-      var cls = String(n.className || "").toLowerCase();
-      if(n.matches && (n.matches("section,article,aside") || /card|panel|module|market|tile-market|tilemarket/.test(cls))){
-        return n;
-      }
-    }
-    return el && el.parentElement ? el.parentElement : el;
-  }
-  function findGallery(){
-    var nodes = Array.prototype.slice.call(document.querySelectorAll("section,article,aside,div"));
-    var hits = nodes.filter(function(el){
-      var t = cleanText(el);
-      if(t.length < 8 || t.length > 6000) return false;
-      return /image gallery|gallery/.test(t);
-    });
-    hits.sort(function(a,b){ return cleanText(a).length - cleanText(b).length; });
-    return hits[0] || null;
-  }
-  function findMarketCard(){
-    var explicit = document.querySelector("[data-tile-market-card],[data-market-card],.tile-market-card,.market-card,#tileMarketCard,#marketCard");
-    if(explicit) return explicit;
-    var nodes = Array.prototype.slice.call(document.querySelectorAll("section,article,aside,div"));
-    var hits = nodes.filter(function(el){
-      var t = cleanText(el);
-      if(t.length < 8 || t.length > 4500) return false;
-      if(/tile market/.test(t)) return true;
-      if(/marketplace|market listing|listed for sale|not listed for sale/.test(t) && !/^list on marketplace$/.test(t)) return true;
-      return false;
-    });
-    hits.sort(function(a,b){ return cleanText(a).length - cleanText(b).length; });
-    return hits.length ? nearestCard(hits[0]) : null;
-  }
-  function polish(){
-    var market = findMarketCard();
-    if(market){
-      market.classList.add("monolith-tile-market-card-highlight");
-      if(mq.matches){
-        var gallery = findGallery();
-        if(gallery && gallery !== market && !market.contains(gallery)){
-          gallery.insertAdjacentElement("afterend", market);
-        }
-      }
-    }
+
+  function hideMobileListButton(){
     Array.prototype.slice.call(document.querySelectorAll("a,button")).forEach(function(el){
-      var t = cleanText(el);
-      if(/\blist on marketplace\b/.test(t)){
+      if(/\blist on marketplace\b/.test(text(el))){
         el.classList.add("monolith-mobile-market-list-hidden");
         el.setAttribute("data-monolith-mobile-market-list-hidden","true");
       }
     });
   }
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", polish);
-  else polish();
-  window.addEventListener("load", polish);
-  setTimeout(polish, 500);
-  setTimeout(polish, 1600);
-  if(mq.addEventListener) mq.addEventListener("change", polish);
-  else if(mq.addListener) mq.addListener(polish);
+
+  function placeMarketDirectlyUnderGallery(){
+    var market = document.getElementById("tileMarketBox");
+    var gallery = document.querySelector(".centerMediaStack .galleryBox");
+    var stack = document.querySelector(".centerMediaStack");
+
+    if(!market) return;
+
+    market.classList.add("monolith-tile-market-card-highlight");
+    market.setAttribute("data-monolith-tile-market-runtime","direct-under-gallery");
+
+    hideMobileListButton();
+
+    if(!gallery || !stack) return;
+
+    if(market.parentElement !== stack || market.previousElementSibling !== gallery){
+      gallery.insertAdjacentElement("afterend", market);
+    }
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", placeMarketDirectlyUnderGallery);
+  }else{
+    placeMarketDirectlyUnderGallery();
+  }
+
+  window.addEventListener("load", placeMarketDirectlyUnderGallery);
+  setTimeout(placeMarketDirectlyUnderGallery,300);
+  setTimeout(placeMarketDirectlyUnderGallery,1000);
+  setTimeout(placeMarketDirectlyUnderGallery,2200);
+
+  if(mq.addEventListener) mq.addEventListener("change", placeMarketDirectlyUnderGallery);
+  else if(mq.addListener) mq.addListener(placeMarketDirectlyUnderGallery);
 })();
 </script>
 

@@ -449,6 +449,63 @@
     }
 
   </style>
+
+<style id="MONOLITH_MARKET_GOLD_THEME_20260628">
+/* MONOLITH_MARKET_GOLD_THEME_20260628 */
+:root{
+  --market-gold:#f7c96d;
+  --market-gold-2:#ffe39a;
+  --market-gold-dark:#2a1b06;
+  --market-gold-panel:#130d05;
+  --market-gold-line:rgba(247,201,109,.42);
+}
+body{
+  background:
+    radial-gradient(circle at top left,rgba(247,201,109,.18),transparent 32%),
+    radial-gradient(circle at bottom right,rgba(247,201,109,.10),transparent 34%),
+    linear-gradient(180deg,#090704,#120d05 48%,#030712)!important;
+}
+.hero,.section,.panel,.card,.box,.marketBox,.listing,.tileCard,.marketCard,main section,article{
+  border-color:var(--market-gold-line)!important;
+  background:
+    radial-gradient(circle at top left,rgba(247,201,109,.11),transparent 36%),
+    linear-gradient(180deg,rgba(38,27,8,.94),rgba(5,14,25,.98))!important;
+  box-shadow:0 18px 54px rgba(0,0,0,.36),0 0 28px rgba(247,201,109,.10)!important;
+}
+h1,h2,h3,.title,.k,.label,.mk,th{
+  color:var(--market-gold-2)!important;
+  text-shadow:0 0 18px rgba(247,201,109,.18)!important;
+}
+p,li,td,.muted,.write,.sub,.meta{
+  color:#f2dfb2!important;
+}
+a,.link{
+  color:#ffe39a!important;
+}
+.btn,button,input[type="submit"],a.btn{
+  border-color:rgba(247,201,109,.70)!important;
+  background:linear-gradient(180deg,#ffe39a,#c9932f)!important;
+  color:#07111f!important;
+  box-shadow:0 0 18px rgba(247,201,109,.16)!important;
+}
+.btn.secondary,button.secondary,a.secondary{
+  background:linear-gradient(180deg,rgba(42,27,6,.95),rgba(15,10,4,.98))!important;
+  color:#ffe39a!important;
+}
+input,select,textarea{
+  border-color:rgba(247,201,109,.48)!important;
+  background:#090704!important;
+  color:#fff4cf!important;
+}
+.marketPriceLive,.price,.ask,.mv,.value,strong{
+  color:#ffe39a!important;
+}
+table{
+  border-color:var(--market-gold-line)!important;
+  background:rgba(19,13,5,.78)!important;
+}
+</style>
+
 </head>
 <body>
   <main class="wrap">
