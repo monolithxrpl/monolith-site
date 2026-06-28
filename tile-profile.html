@@ -2683,6 +2683,68 @@ small,
   .trialModeActions .btn{width:100%;justify-content:center}
 }
 
+
+/* MONOLITH_TILE_PROFILE_MARKET_MODULE_20260627 */
+.marketBox{
+  border-color:rgba(130,220,255,.34)!important;
+  background:linear-gradient(180deg,rgba(6,21,38,.96),rgba(3,10,20,.98))!important;
+}
+.marketMiniGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:10px 0;
+}
+.marketStat{
+  border:1px solid rgba(130,220,255,.20);
+  background:rgba(2,7,17,.55);
+  border-radius:14px;
+  padding:10px;
+}
+.marketStat .mk{
+  font-size:11px;
+  color:#9fc7dd;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:900;
+}
+.marketStat .mv{
+  margin-top:3px;
+  color:#eaf7ff;
+  font-size:18px;
+  font-weight:1000;
+}
+.marketPriceLive{
+  color:#6ee7b7!important;
+}
+.marketAskRow{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin:10px 0;
+}
+.marketAskRow input{
+  min-height:40px;
+  width:150px;
+  border-radius:999px;
+  border:1px solid rgba(130,220,255,.28);
+  background:rgba(2,7,17,.85);
+  color:#eaf7ff;
+  padding:8px 12px;
+  outline:none;
+}
+.marketAuthLink{
+  display:none;
+  margin-top:8px;
+  color:#82dcff;
+  font-weight:900;
+  word-break:break-word;
+}
+@media(max-width:620px){
+  .marketMiniGrid{grid-template-columns:1fr}
+}
+
 </style>
 
 <style id="MONOLITH_FIND_ME_SHARE_TAB_20260524">
@@ -3530,6 +3592,7 @@ body.tileWallpaperActive .hero{
 
       <div class="actions profileActionsMain">
         <a class="btn" id="wallLink" href="#" data-desc="Jump to wall view">View on Wall</a>
+        <a class="btn" id="marketQuickBtn" href="/market/" data-desc="Tile Market">Market Loading...</a>
         <button class="btn" id="wallStartBtn" type="button" data-desc="Open wall here">Set Wall Start</button>
         <button class="btn" id="resetWallStartBtn" type="button" data-desc="Restore default entry">Reset Wall Start</button>
         <button class="btn" id="favoriteBtn" type="button" data-desc="Save to Top 8">♡ Add to Top 8</button>
@@ -3537,6 +3600,43 @@ body.tileWallpaperActive .hero{
         <button class="btn" id="ownerModeBtn" type="button" data-desc="Edit this tile on this page">Owner Mode</button>
         <a class="btn" id="reportTileLink" href="#" data-desc="Flag abuse or content">Report Tile</a>
       </div>
+
+
+      <!-- MONOLITH_TILE_PROFILE_MARKET_MODULE_20260627 -->
+      <section class="box marketBox" id="tileMarketBox">
+        <div class="k">Tile Market</div>
+        <div class="write" id="tileMarketStatus">Loading market status...</div>
+
+        <div class="marketMiniGrid">
+          <div class="marketStat">
+            <div class="mk">Status</div>
+            <div class="mv" id="tileMarketListingStatus">Checking</div>
+          </div>
+          <div class="marketStat">
+            <div class="mk">Ask</div>
+            <div class="mv marketPriceLive" id="tileMarketAsk">--</div>
+          </div>
+        </div>
+
+        <div class="marketAskRow" id="tileMarketListControls">
+          <input id="tileMarketAskInput" type="text" inputmode="decimal" placeholder="Ask in XRP">
+          <button class="btn" id="tileMarketListStart" type="button">List Tile</button>
+          <button class="btn" id="tileMarketListVerify" type="button">Verify Listing</button>
+        </div>
+
+        <div class="actions" id="tileMarketCancelControls" style="display:none">
+          <button class="btn" id="tileMarketCancelStart" type="button">Cancel Listing</button>
+          <button class="btn" id="tileMarketCancelVerify" type="button">Verify Cancel</button>
+        </div>
+
+        <a class="marketAuthLink" id="tileMarketAuthLink" href="#" target="_blank" rel="noopener">Open Xaman Sign-In</a>
+
+        <div class="actions" style="margin-top:10px">
+          <a class="btn" href="/market/">View Market</a>
+        </div>
+
+        <div class="write">Buying is disabled during Phase 1. Listing and canceling require owner wallet verification.</div>
+      </section>
 
       <!-- MONOLITH_INLINE_OWNER_MODE_SHELL_20260524 -->
       <section class="box ownerBox" id="ownerModePanel">
@@ -3826,6 +3926,212 @@ body.tileWallpaperActive .hero{
   }
 
 
+
+  /* MONOLITH_TILE_PROFILE_MARKET_MODULE_20260627 */
+  function setMarketText(id,value){
+    const el=document.getElementById(id);
+    if(el)el.textContent=value;
+  }
+
+  function setMarketAuth(url,label){
+    const a=document.getElementById("tileMarketAuthLink");
+    if(!a)return;
+    if(url){
+      a.href=url;
+      a.textContent=label||"Open Xaman Sign-In";
+      a.style.display="inline-block";
+    }else{
+      a.removeAttribute("href");
+      a.style.display="none";
+    }
+  }
+
+  function marketStoreKey(kind){
+    return "monolith_market_"+kind+"_"+coord;
+  }
+
+  async function loadTileMarket(isTrialTile){
+    const listControls=document.getElementById("tileMarketListControls");
+    const cancelControls=document.getElementById("tileMarketCancelControls");
+
+    if(isTrialTile){
+      setMarketText("tileMarketStatus","Trial tiles cannot be listed on the Tile Market.");
+      setMarketText("tileMarketListingStatus","Trial");
+      setMarketText("tileMarketAsk","Not eligible");
+      if(listControls)listControls.style.display="none";
+      if(cancelControls)cancelControls.style.display="none";
+      return;
+    }
+
+    try{
+      const r=await fetch("/api/market/"+encodeURIComponent(coord)+"?cb="+Date.now(),{cache:"no-store"});
+      const d=await r.json();
+
+      if(!d.ok)throw new Error(d.error||"market_status_failed");
+
+      const listing=d.activeListing;
+
+      if(listing){
+        setMarketText("tileMarketStatus","This coordinate is actively listed on the Tile Market.");
+        setMarketText("tileMarketListingStatus","Listed");
+        setMarketText("tileMarketAsk",(listing.askXrp||"--")+" $XRP");
+        if(listControls)listControls.style.display="none";
+        if(cancelControls)cancelControls.style.display="";
+      }else{
+        setMarketText("tileMarketStatus","This coordinate is not currently listed.");
+        setMarketText("tileMarketListingStatus","Not Listed");
+        setMarketText("tileMarketAsk","--");
+        if(listControls)listControls.style.display="";
+        if(cancelControls)cancelControls.style.display="none";
+      }
+    }catch(e){
+      setMarketText("tileMarketStatus","Market status unavailable.");
+      setMarketText("tileMarketListingStatus","Unavailable");
+      setMarketText("tileMarketAsk","--");
+    }
+  }
+
+  async function startTileMarketListing(){
+    const input=document.getElementById("tileMarketAskInput");
+    const ask=input?String(input.value||"").trim():"";
+    if(!ask){
+      setMarketText("tileMarketStatus","Enter an ask price in XRP first.");
+      return;
+    }
+
+    setMarketText("tileMarketStatus","Creating owner Sign-In...");
+    setMarketAuth("");
+
+    const r=await fetch("/api/market/list/start",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        coordinate:coord,
+        returnUrl:location.origin+"/tile/"+encodeURIComponent(coord)
+      })
+    });
+    const d=await r.json();
+
+    if(!d.ok){
+      setMarketText("tileMarketStatus",d.error||"Listing start failed.");
+      return;
+    }
+
+    localStorage.setItem(marketStoreKey("list"),JSON.stringify({
+      payloadUuid:d.auth.payloadUuid,
+      askXrp:ask,
+      createdAt:Date.now()
+    }));
+
+    setMarketAuth(d.auth.signUrl,"Open Xaman to Sign Listing");
+    setMarketText("tileMarketStatus","Sign in with the owner wallet, then return and press Verify Listing.");
+  }
+
+  async function verifyTileMarketListing(){
+    let saved={};
+    try{saved=JSON.parse(localStorage.getItem(marketStoreKey("list"))||"{}")}catch(e){saved={}}
+
+    if(!saved.payloadUuid){
+      setMarketText("tileMarketStatus","Start listing first.");
+      return;
+    }
+
+    setMarketText("tileMarketStatus","Verifying owner signature and listing tile...");
+
+    const r=await fetch("/api/market/list/verify",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        coordinate:coord,
+        payloadUuid:saved.payloadUuid,
+        askXrp:saved.askXrp
+      })
+    });
+    const d=await r.json();
+
+    if(!d.ok){
+      setMarketText("tileMarketStatus",d.error||"Listing verification failed.");
+      return;
+    }
+
+    localStorage.removeItem(marketStoreKey("list"));
+    setMarketAuth("");
+    setMarketText("tileMarketStatus","Tile listed.");
+    await loadTileMarket(false);
+  }
+
+  async function startTileMarketCancel(){
+    setMarketText("tileMarketStatus","Creating cancel Sign-In...");
+    setMarketAuth("");
+
+    const r=await fetch("/api/market/list/cancel/start",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        coordinate:coord,
+        returnUrl:location.origin+"/tile/"+encodeURIComponent(coord)
+      })
+    });
+    const d=await r.json();
+
+    if(!d.ok){
+      setMarketText("tileMarketStatus",d.error||"Cancel start failed.");
+      return;
+    }
+
+    localStorage.setItem(marketStoreKey("cancel"),JSON.stringify({
+      payloadUuid:d.auth.payloadUuid,
+      createdAt:Date.now()
+    }));
+
+    setMarketAuth(d.auth.signUrl,"Open Xaman to Sign Cancel");
+    setMarketText("tileMarketStatus","Sign in with the owner wallet, then return and press Verify Cancel.");
+  }
+
+  async function verifyTileMarketCancel(){
+    let saved={};
+    try{saved=JSON.parse(localStorage.getItem(marketStoreKey("cancel"))||"{}")}catch(e){saved={}}
+
+    if(!saved.payloadUuid){
+      setMarketText("tileMarketStatus","Start cancel first.");
+      return;
+    }
+
+    setMarketText("tileMarketStatus","Verifying cancel signature...");
+
+    const r=await fetch("/api/market/list/cancel/verify",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        coordinate:coord,
+        payloadUuid:saved.payloadUuid
+      })
+    });
+    const d=await r.json();
+
+    if(!d.ok){
+      setMarketText("tileMarketStatus",d.error||"Cancel verification failed.");
+      return;
+    }
+
+    localStorage.removeItem(marketStoreKey("cancel"));
+    setMarketAuth("");
+    setMarketText("tileMarketStatus","Listing canceled.");
+    await loadTileMarket(false);
+  }
+
+  function bindTileMarketButtons(){
+    const a=document.getElementById("tileMarketListStart");
+    const b=document.getElementById("tileMarketListVerify");
+    const c=document.getElementById("tileMarketCancelStart");
+    const d=document.getElementById("tileMarketCancelVerify");
+
+    if(a)a.onclick=()=>startTileMarketListing().catch(e=>setMarketText("tileMarketStatus",e.message||"Listing start failed."));
+    if(b)b.onclick=()=>verifyTileMarketListing().catch(e=>setMarketText("tileMarketStatus",e.message||"Listing verify failed."));
+    if(c)c.onclick=()=>startTileMarketCancel().catch(e=>setMarketText("tileMarketStatus",e.message||"Cancel start failed."));
+    if(d)d.onclick=()=>verifyTileMarketCancel().catch(e=>setMarketText("tileMarketStatus",e.message||"Cancel verify failed."));
+  }
+
   function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
   function maskWallet(w){w=String(w||"");return w.length>12?w.slice(0,6)+"..."+w.slice(-6):w||"None"}
   function coordFromFeed(x){
@@ -3885,6 +4191,32 @@ body.tileWallpaperActive .hero{
     };
 
     const isTrialTile=!!activeTrial&&!(d&&d.ok&&d.tile);
+
+    const marketQuickBtn=document.getElementById("marketQuickBtn");
+    if(marketQuickBtn){
+      fetch("/api/market/"+encodeURIComponent(coord)+"?cb="+Date.now(),{cache:"no-store"})
+        .then(r=>r.json())
+        .then(m=>{
+          if(m&&m.ok&&m.activeListing&&m.activeListing.status==="active"){
+            marketQuickBtn.textContent="Market: "+m.activeListing.askXrp+" $XRP";
+            marketQuickBtn.href="/market/";
+          }else if(m&&m.ok){
+            marketQuickBtn.textContent="List on Market";
+            marketQuickBtn.href="/market/";
+          }else{
+            marketQuickBtn.textContent="Tile Market";
+            marketQuickBtn.href="/market/";
+          }
+        })
+        .catch(()=>{
+          marketQuickBtn.textContent="Tile Market";
+          marketQuickBtn.href="/market/";
+        });
+    }
+
+
+    bindTileMarketButtons();
+    loadTileMarket(isTrialTile);
 
     if(pendingTrialReturn){
       fetch("/api/trial/verify",{
