@@ -3539,6 +3539,33 @@ body.tileWallpaperActive .hero{
 }
 /* MONOLITH_MOBILE_MARKET_BELOW_PROFILE_FIX_20260628_END */
 
+
+/* MONOLITH_TILE_MARKET_OWNER_PUBLIC_BUTTONS_20260628 */
+/* Public law: buyer controls are public. Listing/cancel/deed controls are owner-only. */
+.marketBox .actions,
+.marketBox .marketAskRow{
+  gap:12px!important;
+  margin-top:14px!important;
+}
+
+.marketBox .actions + .actions{
+  margin-top:12px!important;
+}
+
+.marketBox .btn{
+  justify-content:center!important;
+  min-height:46px!important;
+}
+
+.marketBox .marketAuthLink{
+  margin-top:12px!important;
+}
+
+.marketBox .write:last-child{
+  margin-top:14px!important;
+}
+/* MONOLITH_TILE_MARKET_OWNER_PUBLIC_BUTTONS_20260628_END */
+
 </style>
 
 </head>
@@ -3991,6 +4018,70 @@ body.tileWallpaperActive .hero{
     if(el)el.style.display=show?"":"none";
   }
 
+
+  /* MONOLITH_TILE_MARKET_OWNER_PUBLIC_BUTTONS_20260628 */
+  function tileMarketOwnerModeActive(){
+    const statusEl=document.getElementById("ownerModeStatus");
+    const visuals=document.getElementById("tileVisualsOwnerPanel");
+    const status=String(statusEl&&statusEl.textContent||"").toLowerCase();
+
+    let visualsOpen=false;
+    try{
+      visualsOpen=!!(visuals&&getComputedStyle(visuals).display!=="none");
+    }catch(e){
+      visualsOpen=!!(visuals&&visuals.style.display&&visuals.style.display!=="none");
+    }
+
+    return !!(
+      visualsOpen ||
+      status.includes("owner mode active") ||
+      status.includes("on-page controls unlocked") ||
+      status.includes("owner verified")
+    );
+  }
+
+  function tileMarketApplyOwnerVisibility(listing){
+    const listControls=document.getElementById("tileMarketListControls");
+    const cancelControls=document.getElementById("tileMarketCancelControls");
+    const sellControls=document.getElementById("tileMarketSellOfferControls");
+    const buyControls=document.getElementById("tileMarketBuyControls");
+
+    const ownerActive=tileMarketOwnerModeActive();
+    const ready=tileMarketListingReady(listing);
+
+    if(listing){
+      if(listControls)listControls.style.display="none";
+
+      if(ready){
+        if(buyControls)buyControls.style.display=ownerActive?"none":"";
+        if(sellControls)sellControls.style.display="none";
+        if(cancelControls)cancelControls.style.display=ownerActive?"":"none";
+      }else{
+        if(buyControls)buyControls.style.display="none";
+        if(sellControls)sellControls.style.display=ownerActive?"":"none";
+        if(cancelControls)cancelControls.style.display=ownerActive?"":"none";
+      }
+    }else{
+      if(listControls)listControls.style.display=ownerActive?"":"none";
+      if(cancelControls)cancelControls.style.display="none";
+      if(sellControls)sellControls.style.display="none";
+      if(buyControls)buyControls.style.display="none";
+    }
+  }
+
+  function tileMarketWatchOwnerMode(){
+    const sync=()=>tileMarketApplyOwnerVisibility(TILE_MARKET_ACTIVE_LISTING);
+    ["ownerModeStatus","tileVisualsOwnerPanel","ownerModePanel"].forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      try{
+        new MutationObserver(sync).observe(el,{attributes:true,childList:true,subtree:true,characterData:true});
+      }catch(e){}
+    });
+  }
+  /* MONOLITH_TILE_MARKET_OWNER_PUBLIC_BUTTONS_20260628_END */
+
+
   async function loadTileMarket(isTrialTile){
     const listControls=document.getElementById("tileMarketListControls");
     const cancelControls=document.getElementById("tileMarketCancelControls");
@@ -4027,18 +4118,12 @@ body.tileWallpaperActive .hero{
         );
         setMarketText("tileMarketListingStatus",ready?"Deed Sale Ready":"Seller Deed Pending");
         setMarketText("tileMarketAsk",(listing.askXrp||"--")+" $XRP");
-        if(listControls)listControls.style.display="none";
-        if(cancelControls)cancelControls.style.display="";
-        if(sellControls)sellControls.style.display=ready?"none":"";
-        if(buyControls)buyControls.style.display=ready?"":"none";
+        tileMarketApplyOwnerVisibility(listing);
       }else{
         setMarketText("tileMarketStatus","This coordinate is not currently listed.");
         setMarketText("tileMarketListingStatus","Not Listed");
         setMarketText("tileMarketAsk","--");
-        if(listControls)listControls.style.display="";
-        if(cancelControls)cancelControls.style.display="none";
-        if(sellControls)sellControls.style.display="none";
-        if(buyControls)buyControls.style.display="none";
+        tileMarketApplyOwnerVisibility(null);
       }
     }catch(e){
       setMarketText("tileMarketStatus","Market status unavailable.");
@@ -4438,6 +4523,7 @@ body.tileWallpaperActive .hero{
 
 
     bindTileMarketButtons();
+  tileMarketWatchOwnerMode();
     loadTileMarket(isTrialTile);
 
     if(pendingTrialReturn){
