@@ -4199,16 +4199,6 @@ body.tileWallpaperActive .hero{
     if(!listing){
       setMarketText("tileMarketStatus","No active listing found.");
       return;
-    }
-
-    if(!tileMarketListingReady(listing)){
-      setMarketText("tileMarketStatus","Seller must lock the XRPL Deed sell offer first.");
-      return;
-    }
-
-    const buyerWallet=String(prompt("Enter buyer XRPL wallet address")||"").trim();
-
-    if(!buyerWallet){
       setMarketText("tileMarketStatus","Buyer wallet required.");
       return;
     }
@@ -4222,7 +4212,6 @@ body.tileWallpaperActive .hero{
       body:JSON.stringify({
         coordinate:coord,
         listingId:listing.listingId,
-        buyerWallet,
         returnUrl:location.origin+"/tile/"+encodeURIComponent(coord)
       })
     });
@@ -4235,7 +4224,6 @@ body.tileWallpaperActive .hero{
 
     localStorage.setItem(marketStoreKey("buy"),JSON.stringify({
       listingId:listing.listingId,
-      buyerWallet,
       payloadUuid:d.buyOffer&&d.buyOffer.payloadUuid,
       createdAt:Date.now()
     }));
@@ -6630,5 +6618,6 @@ body.tileWallpaperActive .hero{
 })();
 </script>
 
+<!-- MONOLITH_MARKET_NO_MANUAL_BUYER_PROMPT_20260628 -->
 </body>
 </html>

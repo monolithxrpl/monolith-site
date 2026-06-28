@@ -806,16 +806,6 @@ async function startListingBuy(listingId){
   if (!item){
     setListConsole("Listing not found.");
     return;
-  }
-
-  if (!listingBuyReady(item)){
-    setListConsole(`${item.coordinate} is listed, but the seller still needs to lock the XRPL Deed sell offer.`);
-    return;
-  }
-
-  const buyerWallet = String(prompt("Enter buyer XRPL wallet address") || "").trim();
-
-  if (!buyerWallet){
     setListConsole("Buyer wallet required.");
     return;
   }
@@ -828,7 +818,6 @@ async function startListingBuy(listingId){
     body:JSON.stringify({
       listingId: item.listingId,
       coordinate: item.coordinate,
-      buyerWallet,
       returnUrl: location.href
     })
   });
@@ -843,7 +832,6 @@ async function startListingBuy(listingId){
   localStorage.setItem(marketBuyStoreKey(item.listingId), JSON.stringify({
     listingId: item.listingId,
     coordinate: item.coordinate,
-    buyerWallet,
     payloadUuid: data.buyOffer && data.buyOffer.payloadUuid,
     createdAt: Date.now()
   }));
@@ -1210,5 +1198,6 @@ loadMarket();
 
 <!-- MONOLITH_MARKET_DEED_SALE_FRONTEND_20260628 -->
 </script>
+<!-- MONOLITH_MARKET_NO_MANUAL_BUYER_PROMPT_20260628 -->
 </body>
 </html>
