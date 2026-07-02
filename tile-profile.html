@@ -3676,11 +3676,11 @@ body.tileWallpaperActive .hero{
   <section class="hero">
     <section class="box trialModeBox" id="trialModeBox">
       <div class="trialModeBadge">TRIAL MODE</div>
-      <div class="trialModeTitle">3-Day Free Trial Active</div>
-      <div class="trialModeCopy" id="trialModeCopy">This tile is in trial preview.</div>
+      <div class="trialModeTitle">Temporary Trial Coordinate</div>
+      <div class="trialModeCopy" id="trialModeCopy">You are viewing MONOLITH using a temporary demonstration coordinate. This is not your permanent tile.</div>
       <div class="trialModeTimer" id="trialModeTimer">Calculating trial time left...</div>
       <div class="trialModeActions">
-        <a class="btn" id="trialClaimCta" href="/claim/">Claim This Tile</a>
+        <a class="btn" id="trialClaimCta" href="/monolith.html">Choose My Coordinate</a>
         <button class="btn secondary" id="trialCopyTileUrl" type="button">Copy Trial Page</button>
       </div>
     </section>
@@ -4798,7 +4798,7 @@ body.tileWallpaperActive .hero{
 
       if(trialBox) trialBox.style.display = "block";
       if(trialCopy){
-        trialCopy.textContent = "Build and edit this page during the trial. Tips, Coordinate Deed, and market features unlock after claim.";
+        trialCopy.textContent = "Build and edit this temporary page during the trial. Your permanent coordinate can be any available tile you choose on the Wall.";
       }
       if(trialTimer){
         const updateTrialTimer = () => {
@@ -4809,7 +4809,7 @@ body.tileWallpaperActive .hero{
             return;
           }
           if(left <= 0){
-            trialTimer.textContent = "Trial expired";
+            trialTimer.textContent = "Your trial has ended. Visit the Wall and choose your permanent coordinate.";
             return;
           }
           const totalMinutes = Math.floor(left / 60000);
@@ -4823,7 +4823,7 @@ body.tileWallpaperActive .hero{
         window.monolithTrialTimerInterval = setInterval(updateTrialTimer, 30000);
       }
       if(trialClaim){
-        trialClaim.href = "/claim/?tile=" + encodeURIComponent(coord);
+        trialClaim.href = "/monolith.html";
       }
       if(trialCopyBtn){
         trialCopyBtn.onclick = async () => {

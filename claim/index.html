@@ -343,7 +343,7 @@
           <div>
             <div class="field">
               <label>Coordinate</label>
-              <input id="tile" type="text" placeholder="N23E11" autocomplete="off" />
+              <input id="tile" type="text" placeholder="Choose any available coordinate" autocomplete="off" />
               <div id="pricePreview">
                 <div class="row">
                   <span id="priceBadge" class="badge"></span>
@@ -352,7 +352,7 @@
                 <div id="priceNote">Enter a coordinate to see live USD pricing.</div>
               </div>
 <div id="priceSheet" class="price-sheet"><div><strong>Regular</strong><span>$99 USD</span></div><div><strong>Premium</strong><span>$249 USD</span></div><div><strong>Signature</strong><span>$499 USD</span></div><p>Paid in $XRP through Xaman. Axis-only coordinates are Signature.</p></div>
-<div class="hint">Accepted: N23E11, N23e11, n23e11, N23-E11, N23-e11, n23-e11. Input canonicalizes after action.</div>
+<div class="hint">Accepted examples: N12E8, S4W1, N589, E10, W24, or raw coords like -24,8. Input canonicalizes after action.</div>
             </div>
 
             <div class="field">
@@ -364,7 +364,7 @@
 
             <div class="row">
               <button class="btn" id="gen">Start Xaman claim</button>
-              <button class="btn secondary" id="startTrial">Start 3-Day Free Trial</button>
+              <button class="btn secondary" id="startTrial">Explore MONOLITH Free</button>
               <button class="btn secondary" id="verifyPay">Verify payment</button>
               <button class="btn secondary" id="verifyTrial">Verify trial</button>
               <button class="btn secondary" id="copy">Copy last response</button>
@@ -799,11 +799,11 @@ return null;
       el.out.classList.add("show");
       el.out.innerHTML =
         "<div class='trialCard'>" +
-          "<div class='trialEyebrow'>FREE TRIAL</div>" +
-          "<div class='trialTitle'>Your 3-Day Trial is Ready</div>" +
+          "<div class='trialEyebrow'>TRIAL MODE</div>" +
+          "<div class='trialTitle'>Welcome to the MONOLITH Guided Trial</div>" +
           "<div><a class='btn trialCta' href='" + htmlEscape(signUrl) + "' target='_blank' rel='noopener'>Open Xaman Sign-In</a></div>" +
-          "<div class='trialCopy'>No XRP moves. Sign in with Xaman and MONOLITH will open your trial tile page automatically.</div>" +
-          "<div class='trialCopy'>You can build and edit the page during the trial. Tips, deeds, and market features unlock after claim.</div>" +
+          "<div class='trialCopy'>You will explore MONOLITH using a temporary demonstration coordinate.</div>" +
+          "<div class='trialCopy'>Build and edit the temporary tile during the trial. Your permanent coordinate will be any available tile you choose later.</div>" +
           (uuid ? "<details class='trialPayload'><summary>Show trial payload</summary><code>" + htmlEscape(uuid) + "</code></details>" : "") +
         "</div>";
     }
@@ -816,8 +816,8 @@ return null;
       state.lastPayload = data;
       el.out.classList.add("show");
       el.out.innerHTML =
-        "<div><strong>3-Day Trial Active</strong></div>" +
-        "<div class='muted' style='margin-top:8px'>Your trial tile is active. This is display-only until claimed.</div>" +
+        "<div><strong>Temporary Trial Coordinate</strong></div>" +
+        "<div class='muted' style='margin-top:8px'>This is a demonstration tile. It is not your permanent coordinate.</div>" +
         "<div style='margin-top:8px;color:var(--muted);line-height:1.45'>" +
         "Coordinate: <strong>" + htmlEscape(coord) + "</strong><br>" +
         "Expires: <code>" + htmlEscape(expires) + "</code><br>" +
@@ -825,7 +825,7 @@ return null;
         "Coordinate Deed: <strong>Not issued during trial</strong>" +
         "</div>" +
         (coord ? "<div style='margin:14px 0'><a class='btn' href='/tile/" + encodeURIComponent(coord) + "'>Open Trial Tile</a></div>" : "") +
-        "<div class='muted' style='margin-top:8px'>Claim this coordinate to unlock full ownership, Coordinate Deed delivery, owner controls, tips, and future market access.</div>";
+        "<div class='muted' style='margin-top:8px'>Choose your own permanent coordinate to unlock Coordinate Deed ownership, owner controls, P2P payments, and Tile Market access.</div>";
     }
 
     async function startTrial(){
