@@ -2761,6 +2761,14 @@ small,
   .marketMiniGrid{grid-template-columns:1fr}
 }
 
+/* MONOLITH_LINK_TILE_NAV_20260705 */
+.linksGrid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))!important;gap:10px!important}
+.linksTileCard{border:1px solid rgba(130,220,255,.28);border-radius:16px;padding:14px;background:linear-gradient(180deg,rgba(10,30,53,.88),rgba(4,13,25,.96));box-shadow:0 14px 36px rgba(0,0,0,.22)}
+.linksTileCard a{display:flex!important;flex-direction:column;gap:5px;text-decoration:none}
+.linksTileIcon{font-size:22px;line-height:1}
+.linksTileLabel{color:#eaf7ff;font-weight:900;font-size:13px}
+.linksTileSub{color:#9fc7dd;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 </style>
 
 <style id="MONOLITH_FIND_ME_SHARE_TAB_20260524">
@@ -3498,7 +3506,8 @@ body.tileWallpaperActive .hero{
   gap:8px;
 }
 .linksPublicItem,
-.linksManageItem{
+.linksManageItem,
+.linksTileCard{
   padding:9px;
   border:1px solid rgba(122,211,255,.18);
   border-radius:10px;
@@ -3506,7 +3515,8 @@ body.tileWallpaperActive .hero{
   overflow-wrap:anywhere;
 }
 .linksPublicItem a,
-.linksManageItem a{
+.linksManageItem a,
+.linksTileCard a{
   color:#7ad3ff;
   text-decoration:none;
 }
@@ -6093,13 +6103,21 @@ body.tileWallpaperActive .hero{
         const safeLabel=linksEscape(tileLinkLabel(url));
 
         if(!payloadUuid){
-          return '<div class="linksPublicItem">'
-            +'<a href="'+safeUrl+'" target="_blank" rel="noopener">'+safeLabel+'</a>'
+          return '<div class="linksTileCard">'
+            +'<a href="'+safeUrl+'" target="_blank" rel="noopener">'
++'<span class="linksTileIcon">▣</span>'
++'<span class="linksTileLabel">'+safeLabel+'</span>'
++'<span class="linksTileSub">'+safeUrl+'</span>'
++'</a>'
             +'</div>';
         }
 
         return '<div class="linksManageItem">'
-          +'<a href="'+safeUrl+'" target="_blank" rel="noopener">'+safeLabel+'</a>'
+          +'<a href="'+safeUrl+'" target="_blank" rel="noopener">'
++'<span class="linksTileIcon">▣</span>'
++'<span class="linksTileLabel">'+safeLabel+'</span>'
++'<span class="linksTileSub">'+safeUrl+'</span>'
++'</a>'
           +'<div class="linksManageActions">'
           +'<button class="btn linksMoveUp" type="button" data-index="'+index+'"'+(index===0?' disabled':'')+'>↑</button>'
           +'<button class="btn linksMoveDown" type="button" data-index="'+index+'"'+(index===currentLinks.length-1?' disabled':'')+'>↓</button>'
