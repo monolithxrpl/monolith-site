@@ -5101,7 +5101,7 @@ body.tileWallpaperActive .hero{
     const tabletEntries = (Array.isArray(m.tabletEntries) ? m.tabletEntries : [])
       .filter(entry => entry && entry.visibility !== "hidden")
       .sort((a,b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)))
-      .slice(0,12);
+      .slice(0,64);
     if(tabletEntries.length){
       $("tabletBox").innerHTML = tabletEntries.map((entry, i) => {
         const title = String(entry.title || "Tablet Entry").replace(/</g,"&lt;");

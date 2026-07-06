@@ -201,7 +201,7 @@
 
       <label>Gallery Image URLs</label>
       <textarea id="gallery" placeholder="One image URL per line"></textarea>
-      <p class="hint">Delete a gallery image by removing its URL above and saving. Max 12 gallery images.</p>
+      <p class="hint">Delete a gallery image by removing its URL above and saving. Max 64 gallery images.</p>
 
       <label>Add Gallery Images</label>
       <div class="uploadRow">
@@ -209,7 +209,7 @@
         <button class="secondary" id="uploadGallery" type="button">Upload Gallery Images</button>
       </div>
       <div class="uploadPreview" id="galleryPreview"></div>
-      <p class="hint">Recommended gallery images: 1200x1200 square. WEBP preferred. Max 12 images total, 2 MB each. Convert images to WEBP: <a href="https://pixelied.com/convert/png-converter/png-to-webp" target="_blank" rel="noopener">Pixelied WEBP converter</a>.</p>
+      <p class="hint">Recommended gallery images: 1200x1200 square. WEBP preferred. Max 64 images total, 2 MB each. Convert images to WEBP: <a href="https://pixelied.com/convert/png-converter/png-to-webp" target="_blank" rel="noopener">Pixelied WEBP converter</a>.</p>
 
       <label>Links</label>
       <textarea id="links" placeholder="One URL per line"></textarea>
@@ -548,7 +548,7 @@
       if(!input || !target) return;
       const files = Array.from(input.files || []);
       target.innerHTML = "";
-      files.slice(0,12).forEach(file => {
+      files.slice(0,64).forEach(file => {
         if(!file.type || !file.type.startsWith("image/")) return;
         const img = document.createElement("img");
         img.src = URL.createObjectURL(file);
@@ -616,7 +616,7 @@
 
       const galleryFiles = Array.from(el.galleryFiles.files || []);
       const existingGallery = el.gallery.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
-      if(existingGallery.length + galleryFiles.length > 12){
+      if(existingGallery.length + galleryFiles.length > 64){
         setStatus("Gallery max is 12 images. Remove old URLs first.", true);
         return;
       }
