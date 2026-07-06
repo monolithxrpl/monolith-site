@@ -6948,7 +6948,7 @@ body.tileWallpaperActive .hero{
       grid.innerHTML=enabled.map(m=>`
         <div class="tileModuleCard">
           <b>${labels[m.key]||m.key}</b>
-          <span>${m.config && m.config.status==="coming_soon" ? "Coming soon" : "Enabled"}</span>
+          <span>${m.config && m.config.status==="coming_soon" ? "Coming soon" : "Live"}</span>
         </div>
       `).join("");
 
