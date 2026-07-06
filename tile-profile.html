@@ -3664,6 +3664,17 @@ body.tileWallpaperActive .hero{
 })();
 </script>
 
+
+<style>
+/* MONOLITH_TILE_MODULES_UI_20260705 */
+.tileModulesPanel{margin:18px 0;padding:18px;border:1px solid rgba(247,201,109,.36);border-radius:18px;background:linear-gradient(180deg,rgba(18,27,42,.92),rgba(7,15,28,.96));box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.tileModulesPanel .moduleTitle{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#f7c96d;font-weight:900;margin-bottom:10px}
+.tileModulesGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.tileModuleCard{border:1px solid rgba(130,220,255,.22);border-radius:14px;padding:12px;background:rgba(4,13,25,.78)}
+.tileModuleCard b{display:block;color:#eaf7ff;font-size:14px;margin-bottom:4px}
+.tileModuleCard span{color:#9fc7dd;font-size:12px}
+</style>
+
 </head>
 <body>
 <div id="tileWallpaperLayer" aria-hidden="true"></div>
@@ -6877,5 +6888,65 @@ body.tileWallpaperActive .hero{
 </script>
 
 <!-- MONOLITH_MARKET_NO_MANUAL_BUYER_PROMPT_20260628 -->
+
+<section id="tileModulesPanel" class="tileModulesPanel" style="display:none">
+<div class="moduleTitle">Coordinate Commerce Modules</div>
+<div id="tileModulesGrid" class="tileModulesGrid"></div>
+</section>
+
+<script>
+/* MONOLITH_TILE_MODULES_UI_20260705 */
+(function(){
+  const labels={
+    nft_store:"NFT Store",marketplace:"Marketplace",otc_desk:"OTC Desk",
+    p2p_payments:"P2P Payments",token_info:"Token Info",
+    airdrop_center:"Airdrop Center",dex_widget:"DEX Data",
+    donation_jar:"Donation Jar",ticket_sales:"Ticket Sales",
+    merch_store:"Merch Store",digital_downloads:"Digital Downloads",
+    music:"Music",booking_calendar:"Booking Calendar",gallery:"Gallery"
+  };
+
+  function coordFromUrl(){
+    const path=location.pathname.split("/").filter(Boolean);
+    const i=path.indexOf("tile");
+    if(i>=0 && path[i+1]) return decodeURIComponent(path[i+1]).toUpperCase();
+    return (new URLSearchParams(location.search).get("tile")||"").toUpperCase();
+  }
+
+  async function loadTileModules(){
+    const coord=coordFromUrl();
+    if(!coord) return;
+
+    const panel=document.getElementById("tileModulesPanel");
+    const grid=document.getElementById("tileModulesGrid");
+    if(!panel || !grid) return;
+
+    try{
+      const r=await fetch(`/api/tile/${encodeURIComponent(coord)}/modules`);
+      const j=await r.json();
+      const enabled=(j.modules||[]).filter(m=>m.enabled);
+      if(!enabled.length) return;
+
+      grid.innerHTML=enabled.map(m=>`
+        <div class="tileModuleCard">
+          <b>${labels[m.key]||m.key}</b>
+          <span>${m.config && m.config.status==="coming_soon" ? "Coming soon" : "Enabled"}</span>
+        </div>
+      `).join("");
+
+      panel.style.display="";
+    }catch(e){
+      console.warn("tile modules unavailable",e);
+    }
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",loadTileModules);
+  }else{
+    loadTileModules();
+  }
+})();
+</script>
+
 </body>
 </html>
