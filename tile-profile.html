@@ -6942,13 +6942,13 @@ body.tileWallpaperActive .hero{
     try{
       const r=await fetch(`/api/tile/${encodeURIComponent(coord)}/modules`);
       const j=await r.json();
-      const enabled=(j.modules||[]).filter(m=>m.enabled);
+      const enabled=(j.modules||[]);
       if(!enabled.length) return;
 
       grid.innerHTML=enabled.map(m=>`
         <div class="tileModuleCard">
           <b>${labels[m.key]||m.key}</b>
-          <span>${m.config && m.config.status==="coming_soon" ? "Coming soon" : "Live"}</span>
+          <span>${m.enabled ? "Live" : "Coming soon"}</span>
         </div>
       `).join("");
 
