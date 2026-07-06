@@ -3677,12 +3677,15 @@ body.tileWallpaperActive .hero{
 
 <style>
 /* MONOLITH_TILE_MODULES_UI_20260705 */
-.tileModulesPanel{margin:18px 0;padding:18px;border:1px solid rgba(247,201,109,.36);border-radius:18px;background:linear-gradient(180deg,rgba(18,27,42,.92),rgba(7,15,28,.96));box-shadow:0 18px 44px rgba(0,0,0,.28)}
-.tileModulesPanel .moduleTitle{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#f7c96d;font-weight:900;margin-bottom:10px}
-.tileModulesGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
-.tileModuleCard{border:1px solid rgba(130,220,255,.22);border-radius:14px;padding:12px;background:rgba(4,13,25,.78)}
-.tileModuleCard b{display:block;color:#eaf7ff;font-size:14px;margin-bottom:4px}
-.tileModuleCard span{color:#9fc7dd;font-size:12px}
+.tileModulesPanel{margin:10px 0 12px;padding:10px;border:1px solid rgba(130,220,255,.26);border-radius:12px;background:rgba(4,13,25,.55)}
+.tileModulesPanel .moduleTitle{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#f7c96d;font-weight:900;margin-bottom:8px}
+.tileModulesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-height:170px;overflow:auto;padding-right:3px}
+.tileModuleCard{border:1px solid rgba(130,220,255,.20);border-radius:9px;padding:7px 8px;background:rgba(2,9,18,.72)}
+.tileModuleCard b{display:block;color:#eaf7ff;font-size:10px;line-height:1.15;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tileModuleCard span{display:inline-block;color:#9fc7dd;font-size:9px;line-height:1;border:1px solid rgba(130,220,255,.18);border-radius:999px;padding:3px 5px}
+.tileModuleCard.isLive{border-color:rgba(110,231,183,.65);box-shadow:0 0 10px rgba(110,231,183,.16)}
+.tileModuleCard.isLive span{color:#071423;background:#6ee7b7;border-color:#6ee7b7;font-weight:900}
+.tileModuleCard.isSoon{opacity:.82}
 </style>
 
 </head>
@@ -6946,9 +6949,9 @@ body.tileWallpaperActive .hero{
       if(!enabled.length) return;
 
       grid.innerHTML=enabled.map(m=>`
-        <div class="tileModuleCard">
+        <div class="tileModuleCard ${m.enabled ? "isLive" : "isSoon"}">
           <b>${labels[m.key]||m.key}</b>
-          <span>${m.enabled ? "Live" : "Coming soon"}</span>
+          <span>${m.enabled ? "LIVE" : "SOON"}</span>
         </div>
       `).join("");
 
