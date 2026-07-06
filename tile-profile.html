@@ -3677,12 +3677,12 @@ body.tileWallpaperActive .hero{
 
 <style>
 /* MONOLITH_TILE_MODULES_UI_20260705 */
-.tileModulesPanel{margin:10px 0 12px;padding:10px;border:1px solid rgba(130,220,255,.26);border-radius:12px;background:rgba(4,13,25,.55)}
-.tileModulesPanel .moduleTitle{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#f7c96d;font-weight:900;margin-bottom:8px}
-.tileModulesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-height:170px;overflow:auto;padding-right:3px}
-.tileModuleCard{border:1px solid rgba(130,220,255,.20);border-radius:9px;padding:7px 8px;background:rgba(2,9,18,.72)}
-.tileModuleCard b{display:block;color:#eaf7ff;font-size:10px;line-height:1.15;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tileModuleCard span{display:inline-block;color:#9fc7dd;font-size:9px;line-height:1;border:1px solid rgba(130,220,255,.18);border-radius:999px;padding:3px 5px}
+.tileModulesPanel{margin:12px 0 14px;padding:14px;border:1px solid rgba(130,220,255,.28);border-radius:16px;background:linear-gradient(180deg,rgba(10,30,53,.62),rgba(4,13,25,.86));box-shadow:0 18px 44px rgba(0,0,0,.24)}
+.tileModulesPanel .moduleTitle{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#f7c96d;font-weight:900;margin-bottom:6px}
+.tileModulesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;padding-right:0}
+.tileModuleCard{border:1px solid rgba(130,220,255,.22);border-radius:14px;padding:12px 10px;background:rgba(2,9,18,.72);min-height:72px;display:flex;flex-direction:column;justify-content:space-between}
+.tileModuleCard b{display:block;color:#eaf7ff;font-size:12px;line-height:1.15;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tileModuleCard span{display:inline-block;width:max-content;color:#9fc7dd;font-size:10px;line-height:1;border:1px solid rgba(130,220,255,.18);border-radius:999px;padding:5px 7px}
 .tileModuleCard.isLive{border-color:rgba(110,231,183,.65);box-shadow:0 0 10px rgba(110,231,183,.16)}
 .tileModuleCard.isLive span{color:#071423;background:#6ee7b7;border-color:#6ee7b7;font-weight:900}
 .tileModuleCard.isSoon{opacity:.82}
@@ -6951,7 +6951,7 @@ body.tileWallpaperActive .hero{
       grid.innerHTML=enabled.map(m=>`
         <div class="tileModuleCard ${m.enabled ? "isLive" : "isSoon"}">
           <b>${labels[m.key]||m.key}</b>
-          <span>${m.enabled ? "LIVE" : "SOON"}</span>
+          <span>${m.enabled ? "OPEN →" : "COMING SOON"}</span>
         </div>
       `).join("");
 
