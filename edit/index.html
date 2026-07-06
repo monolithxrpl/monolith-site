@@ -142,8 +142,12 @@
       <div class="uploadPreview" id="imagePreview"></div>
       <p class="hint"><strong>Best share-card image:</strong> square PNG or WebP, at least 800x800. Do not upload a circular-cropped image. MONOLITH creates the circle automatically. Max 2 MB. Convert images to WEBP: <a href="https://pixelied.com/convert/png-converter/png-to-webp" target="_blank" rel="noopener">Pixelied WEBP converter</a>.</p>
 
-      <label>Owner tag</label>
-      <input id="ownerTag" placeholder="Project or owner tag" />
+      <!-- MONOLITH_DISPLAY_NAME_EDIT_20260706 -->
+      <label>Display Name</label>
+      <input id="displayName" maxlength="80" placeholder="Public name shown on your tile page" />
+
+      <label>Owner Tag</label>
+      <input id="ownerTag" placeholder="Wall label, project, or owner tag" />
 
       <label>Website URL</label>
       <input id="websiteUrl" placeholder="https://..." />
@@ -243,6 +247,7 @@
     const el = {
       coordinate: document.getElementById("coordinate"),
       payloadUuid: document.getElementById("payloadUuid"),
+      displayName: document.getElementById("displayName"),
       ownerTag: document.getElementById("ownerTag"),
       websiteUrl: document.getElementById("websiteUrl"),
       xHandle: document.getElementById("xHandle"),
@@ -279,6 +284,7 @@
     let ownerVerified = false;
 
     const EDIT_FIELD_IDS = [
+      "displayName",
       "ownerTag",
       "websiteUrl",
       "xHandle",
@@ -358,12 +364,43 @@
 
       const feed = await getFeedFallback(tile.coordinate || tile.coord || el.coordinate.value);
 
+      el.displayName.value =
+        meta.displayName ||
+        meta.projectName ||
+        tile.displayName ||
+        tile.display_name ||
+        "";
+
       el.ownerTag.value = tile.owner_tag || tile.ownerTag || tile.tag || feed?.tag || "";
 
       el.websiteUrl.value = tile.website_url || tile.websiteUrl || tile.url || meta.feedLink || feed?.link || "";
 
-      el.xHandle.value = meta.xHandle || meta.handle || meta.feedHandle || tile.x_handle || tile.xHandle || feed?.xHandle || feed?.handle || "";
+      const hasSavedXHandle =
 
+        Object.prototype.hasOwnProperty.call(meta, "xHandle");
+
+
+      el.xHandle.value = hasSavedXHandle
+
+        ? (meta.xHandle || "")
+
+        : (
+
+            meta.handle ||
+
+            meta.feedHandle ||
+
+            tile.x_handle ||
+
+            tile.xHandle ||
+
+            feed?.xHandle ||
+
+            feed?.handle ||
+
+            ""
+
+          );
       const currentNote = meta.note || tile.note || meta.about || meta.profileAbout || meta.description || feed?.note || "";
       const currentLink = tile.website_url || tile.websiteUrl || tile.url || meta.feedLink || "";
 
@@ -571,6 +608,7 @@
       const fd = new FormData();
       fd.append("coordinate", c);
       fd.append("payloadUuid", payloadUuid);
+      fd.append("displayName", el.displayName.value);
       fd.append("ownerTag", el.ownerTag.value);
       fd.append("websiteUrl", el.websiteUrl.value);
       fd.append("xHandle", el.xHandle.value);

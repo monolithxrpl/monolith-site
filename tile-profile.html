@@ -3822,6 +3822,29 @@ body.tileWallpaperActive .hero{
           <button class="btn" id="ownerModeVerify" type="button">Verify Owner</button>
         </div>
 
+        <!-- MONOLITH_INLINE_DISPLAY_NAME_EDITOR_20260706 -->
+        <div class="inlineTextEditor" id="displayNameEditor" style="display:none">
+          <label>Display Name</label>
+          <input
+            id="displayNameInput"
+            type="text"
+            maxlength="80"
+            placeholder="Public name shown as the tile-page heading"
+          />
+          <button class="btn" id="displayNameSave" type="button">Save Display Name</button>
+          <div class="write inlineTextStatus" id="displayNameSaveStatus"></div>
+
+          <label>@ Handle</label>
+          <input
+            id="handleInput"
+            type="text"
+            maxlength="40"
+            placeholder="@handle"
+          />
+          <button class="btn" id="handleSave" type="button">Save Handle</button>
+          <div class="write inlineTextStatus" id="handleSaveStatus"></div>
+        </div>
+
         <!-- MONOLITH_INLINE_PAGE_VISUALS_OWNER_PANEL_V1 -->
         <div id="tileVisualsOwnerPanel" style="display:none">
           <div class="k">PAGE VISUALS</div>
@@ -4766,8 +4789,25 @@ body.tileWallpaperActive .hero{
     const f=Array.isArray(feed)?feed.find(x=>x&&(String(x.tile).toUpperCase()===coord||coordFromFeed(x)===coord)):null;
 
     const tag=t.owner_tag||f?.tag||coord;
+    const displayName=
+      m.displayName||
+      m.projectName||
+      t.displayName||
+      t.display_name||
+      tag;
     const img=t.image_url||f?.img||"/assets/RESERVED.webp";
-    const handle=t.handle||t.xHandle||m.handle||m.xHandle||f?.handle||f?.xHandle||"";
+    const hasSavedXHandle=
+      Object.prototype.hasOwnProperty.call(m,"xHandle");
+
+    const rawHandle=hasSavedXHandle
+      ? (m.xHandle||"")
+      : (t.xHandle||t.handle||m.handle||f?.xHandle||f?.handle||"");
+
+    const handle=rawHandle
+      ? (String(rawHandle).trim().startsWith("@")
+          ? String(rawHandle).trim()
+          : "@"+String(rawHandle).trim())
+      : "";
     const note=m.note||t.note||f?.note||"No bio has been added yet.";
     const link=t.website_url||m.feedLink||m.link||f?.link||"";
     const date=m.displayDate||t.displayDate||f?.displayDate||t.claimed_at||t.created_at||"None";
@@ -4786,11 +4826,17 @@ body.tileWallpaperActive .hero{
     const musicUrl=m.musicUrl||"";
     const musicTitle=m.musicTitle||"";
     const gallery=Array.isArray(m.gallery)?m.gallery:[];
-    let currentLinks=Array.isArray(m.links)?m.links.slice(0,10):[];
+    const hasExplicitLinks=
+      Object.prototype.hasOwnProperty.call(m,"links");
+
+    let currentLinks=Array.isArray(m.links)
+      ? m.links.slice(0,10)
+      : [];
 
     const legacyVisitLink=String(link||"").trim();
 
     if(
+      !hasExplicitLinks &&
       legacyVisitLink &&
       !currentLinks.includes(legacyVisitLink)
     ){
@@ -4799,8 +4845,8 @@ body.tileWallpaperActive .hero{
     }
     const favoriteTiles=Array.isArray(m.favoriteTiles)?m.favoriteTiles.slice(0,8):[];
 
-    document.title=tag+" • MONOLITH";
-    $("title").textContent=tag;
+    document.title=displayName+" • MONOLITH";
+    $("title").textContent=displayName;
     $("avatar").src=img;
     $("handle").textContent=handle;
     $("bio").textContent=note;
@@ -5925,6 +5971,8 @@ body.tileWallpaperActive .hero{
 
     function setInlineTextSaveStatus(label,msg,good){
       const map={
+        "Display Name":"displayNameSaveStatus",
+        Handle:"handleSaveStatus",
         About:"aboutSaveStatus",
         Status:"statusSaveStatus",
         Mood:"moodSaveStatus",
@@ -5955,6 +6003,8 @@ body.tileWallpaperActive .hero{
 
       fd.append("coordinate",coord);
       fd.append("payloadUuid",payloadUuid);
+      fd.append("displayName",$("displayNameInput").value);
+      fd.append("xHandle",$("handleInput").value);
       fd.append("about",$("aboutInput").value);
       fd.append("statusText",$("statusInput").value);
       fd.append("mood",$("moodInput").value);
@@ -5998,6 +6048,22 @@ body.tileWallpaperActive .hero{
           return;
         }
 
+        const savedDisplayName=
+          $("displayNameInput").value.trim()||
+          tag;
+
+        $("title").textContent=savedDisplayName;
+        document.title=savedDisplayName+" • MONOLITH";
+        m.displayName=savedDisplayName;
+
+        const savedHandle=$("handleInput").value.trim();
+        const visibleHandle=savedHandle
+          ? (savedHandle.startsWith("@") ? savedHandle : "@"+savedHandle)
+          : "";
+
+        $("handle").textContent=visibleHandle;
+        m.xHandle=savedHandle;
+
         $("aboutBox").textContent=
           $("aboutInput").value.trim()||
           "No about section yet.";
@@ -6031,12 +6097,15 @@ body.tileWallpaperActive .hero{
     }
 
     function unlockInlineTextEditors(payloadUuid){
+      $("displayNameInput").value=displayName||tag||"";
+      $("handleInput").value=rawHandle||"";
       $("aboutInput").value=about||note||"";
       $("statusInput").value=statusText||"";
       $("moodInput").value=moodText||"";
       $("interestsInput").value=interests||"";
 
       [
+        "displayNameEditor",
         "aboutEditor",
         "statusEditor",
         "moodEditor",
@@ -6045,6 +6114,14 @@ body.tileWallpaperActive .hero{
         const el=$(id);
         if(el) el.style.display="block";
       });
+
+      $("displayNameSave").onclick=()=>{
+        saveInlineTextModules(payloadUuid,"Display Name");
+      };
+
+      $("handleSave").onclick=()=>{
+        saveInlineTextModules(payloadUuid,"Handle");
+      };
 
       $("aboutSave").onclick=()=>{
         saveInlineTextModules(payloadUuid,"About");
