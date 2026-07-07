@@ -7028,7 +7028,7 @@ body.tileWallpaperActive .hero{
       const enabled=(j.modules||[]);
       if(!enabled.length) return;
 
-      const displayKeys=new Set(["p2p_payments","marketplace","nft_store","otc_desk","token_info","dex_widget","airdrop_center","booking_calendar"]);
+      const displayKeys=new Set(["p2p_payments","marketplace","nft_store","otc_desk","token_info","dex_widget"]);
       const platformOpen=new Set(["p2p_payments","marketplace"]);
       grid.innerHTML=enabled.filter(m=>displayKeys.has(m.key)).map(m=>{
         const open=!!m.enabled || platformOpen.has(m.key);
