@@ -271,6 +271,36 @@
 .marketGoldBtn{border-color:rgba(247,201,109,.68)!important;background:linear-gradient(180deg,rgba(247,201,109,.16),rgba(247,201,109,.06))!important;color:#fff7d6!important;box-shadow:0 0 16px rgba(247,201,109,.20)!important}
 @media(max-width:720px){.entranceLifecycle{grid-template-columns:1fr}}
 
+
+/* MONOLITH_ENTRANCE_APP_V3_20260706 */
+.appV3HeroLine{font-size:18px;line-height:1.35;color:#eaf7ff;font-weight:900;margin:10px 0 6px}
+.appV3SubLine{font-size:13px;line-height:1.45;color:#9fc7dd;margin:0}
+.appV3Section{margin:20px 0}
+.appV3Title{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#82dcff;font-weight:900;margin:0 0 10px}
+.appV3Grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.appV3IconCard{min-height:118px;border:1px solid rgba(130,220,255,.24);border-radius:20px;padding:14px;background:linear-gradient(180deg,rgba(10,30,53,.74),rgba(3,12,23,.92));box-shadow:0 16px 38px rgba(0,0,0,.24);display:flex;flex-direction:column;justify-content:space-between}
+.appV3IconCard .mark{width:34px;height:34px;border:1px solid rgba(130,220,255,.34);border-radius:12px;display:grid;place-items:center;color:#82dcff;font-weight:900;background:rgba(75,188,255,.08)}
+.appV3IconCard strong{display:block;color:#eaf7ff;font-size:13px;line-height:1.15;margin-top:10px}
+.appV3IconCard span{display:block;color:#9fc7dd;font-size:11px;line-height:1.3;margin-top:5px}
+.appV3Modules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.appV3Module{border:1px solid rgba(130,220,255,.22);border-radius:16px;padding:12px;background:rgba(3,12,23,.72);min-height:82px}
+.appV3Module b{display:block;color:#eaf7ff;font-size:12px;line-height:1.15;margin-bottom:10px}
+.appV3Module em{font-style:normal;font-size:9px;border-radius:999px;padding:5px 7px;color:#9fc7dd;border:1px solid rgba(130,220,255,.18)}
+.appV3Module.open{border-color:rgba(110,231,183,.65);box-shadow:0 0 16px rgba(110,231,183,.14)}
+.appV3Module.open em{background:#6ee7b7;color:#071423;border-color:#6ee7b7;font-weight:900}
+.appV3Lifecycle{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.appV3Step{border:1px solid rgba(130,220,255,.24);border-radius:20px;padding:16px;background:linear-gradient(180deg,rgba(10,30,53,.68),rgba(3,12,23,.9));text-align:center}
+.appV3Step b{display:block;color:#eaf7ff;font-size:15px;margin-bottom:6px}
+.appV3Step span{color:#9fc7dd;font-size:12px;line-height:1.35}
+.appV3Status{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.appV3Status div{border:1px solid rgba(130,220,255,.18);border-radius:13px;padding:9px 10px;background:rgba(3,12,23,.62);color:#cfeeff;font-size:12px}
+.appV3Status .soon{color:#9fc7dd;opacity:.78}
+@media(max-width:760px){
+  .appV3Grid,.appV3Modules,.appV3Status{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .appV3Lifecycle{grid-template-columns:1fr}
+  .appV3IconCard{min-height:108px}
+}
+
 </style>
 
   <!-- favicon: MONOLITH -->
@@ -549,53 +579,8 @@
 
       <section class="hero-panel" aria-label="What is MONOLITH?">
         <div class="hero-head">What is MONOLITH?</div>
-        <p class="hero-text">Own a coordinate on the $XRP Ledger.</p>
-        <p class="hero-text">Every claimed coordinate becomes deed-backed digital real estate with identity, media, commerce, ownership proof, and marketplace utility.</p>
-      </section>
-
-      <section class="entranceV2Block" aria-label="What lives inside a tile">
-        <div class="entranceV2Title">What lives inside a tile?</div>
-        <div class="entranceV2Grid">
-          <div class="entranceV2Card"><strong>Identity</strong><span>Profile, bio, links, wallet proof, ownership history, and direct public tile URL.</span></div>
-          <div class="entranceV2Card"><strong>Media</strong><span>Profile image, banner, music, featured tiles, and up to 64 gallery images.</span></div>
-          <div class="entranceV2Card"><strong>Commerce</strong><span>P2P $XRP payments are live. More modules are being staged for tile owners.</span></div>
-          <div class="entranceV2Card"><strong>Ownership</strong><span>Coordinate Deed NFT, verified owner control, and ledger-backed real estate proof.</span></div>
-        </div>
-      </section>
-
-      <section class="entranceV2Block" aria-label="Commerce modules">
-        <div class="entranceV2Title">Commerce Modules</div>
-        <div class="entranceModules">
-          <div class="entranceModule live"><b>P2P Payments</b><em>LIVE</em></div>
-          <div class="entranceModule"><b>NFT Store</b><em>SOON</em></div>
-          <div class="entranceModule live"><b>Marketplace</b><em>OPEN</em></div>
-          <div class="entranceModule"><b>OTC Desk</b><em>SOON</em></div>
-          <div class="entranceModule"><b>Token Info</b><em>SOON</em></div>
-          <div class="entranceModule"><b>DEX Tools</b><em>SOON</em></div>
-          <div class="entranceModule"><b>Airdrops</b><em>SOON</em></div>
-          <div class="entranceModule"><b>Donations</b><em>SOON</em></div>
-          <div class="entranceModule"><b>Merch</b><em>SOON</em></div>
-          <div class="entranceModule"><b>Downloads</b><em>SOON</em></div>
-          <div class="entranceModule"><b>Booking</b><em>SOON</em></div>
-          <div class="entranceModule"><b>Tickets</b><em>SOON</em></div>
-        </div>
-      </section>
-
-      <section class="entranceV2Block" aria-label="Tile lifecycle">
-        <div class="entranceV2Title">Tile Lifecycle</div>
-        <div class="entranceLifecycle">
-          <div class="entranceV2Card"><strong>Claim</strong><span>Choose a coordinate and claim it through $XRP / Xaman.</span></div>
-          <div class="entranceV2Card"><strong>Build</strong><span>Add identity, media, links, payments, and tile utility.</span></div>
-          <div class="entranceV2Card"><strong>Trade</strong><span>Use the Tile Market and deed-backed ownership layer.</span></div>
-        </div>
-      </section>
-
-      <section class="entranceV2Block" aria-label="Platform status">
-        <div class="entranceV2Title">Platform Status</div>
-        <div class="entranceStatus">
-          <div>✓ Coordinate Claims</div><div>✓ Coordinate Deed NFTs</div><div>✓ Owner Editing</div><div>✓ P2P Payments</div><div>✓ Tile Market</div>
-          <div class="soon">○ NFT Store</div><div class="soon">○ OTC Desk</div><div class="soon">○ Booking</div><div class="soon">○ DEX Tools</div><div class="soon">○ Airdrops</div><div class="soon">○ Rentals</div><div class="soon">○ Advertising</div>
-        </div>
+        <p class="appV3HeroLine">Own a coordinate on the $XRP Ledger.</p>
+        <p class="appV3SubLine">Deed-backed digital real estate with identity, media, commerce, ownership proof, and marketplace utility.</p>
       </section>
 
       <div class="ctaRow" aria-label="Actions">
@@ -605,6 +590,49 @@
         <a class="btn" href="/tile/ORIGIN" aria-label="view example tile">View Example Tile</a>
         <a class="btn warn" href="/rules.html" aria-label="read rules">Rules</a>
       </div>
+
+
+
+      <section class="appV3Section" aria-label="Tile apps">
+        <div class="appV3Title">What lives inside a tile?</div>
+        <div class="appV3Grid">
+          <div class="appV3IconCard"><div class="mark">ID</div><strong>Identity</strong><span>Profile, bio, links, wallet proof, and public URL.</span></div>
+          <div class="appV3IconCard"><div class="mark">MD</div><strong>Media</strong><span>Images, banner, music, featured tiles, and gallery.</span></div>
+          <div class="appV3IconCard"><div class="mark">XP</div><strong>Commerce</strong><span>P2P payments, market access, and future tile apps.</span></div>
+          <div class="appV3IconCard"><div class="mark">NFT</div><strong>Ownership</strong><span>Coordinate Deed NFT and verified owner control.</span></div>
+        </div>
+      </section>
+
+      <section class="appV3Section" aria-label="Commerce modules">
+        <div class="appV3Title">Commerce Modules</div>
+        <div class="appV3Modules">
+          <div class="appV3Module open"><b>P2P Payments</b><em>LIVE</em></div>
+          <div class="appV3Module open"><b>Marketplace</b><em>OPEN</em></div>
+          <div class="appV3Module"><b>NFT Store</b><em>SOON</em></div>
+          <div class="appV3Module"><b>OTC Desk</b><em>SOON</em></div>
+          <div class="appV3Module"><b>Token Info</b><em>SOON</em></div>
+          <div class="appV3Module"><b>DEX Tools</b><em>SOON</em></div>
+          <div class="appV3Module"><b>Airdrops</b><em>SOON</em></div>
+          <div class="appV3Module"><b>Booking</b><em>SOON</em></div>
+        </div>
+      </section>
+
+      <section class="appV3Section" aria-label="Tile lifecycle">
+        <div class="appV3Title">Tile Lifecycle</div>
+        <div class="appV3Lifecycle">
+          <div class="appV3Step"><b>Claim</b><span>Choose a coordinate and claim it through Xaman.</span></div>
+          <div class="appV3Step"><b>Build</b><span>Add identity, media, links, payments, and utility.</span></div>
+          <div class="appV3Step"><b>Trade</b><span>Use the Tile Market and deed-backed ownership layer.</span></div>
+        </div>
+      </section>
+
+      <section class="appV3Section" aria-label="Platform status">
+        <div class="appV3Title">Platform Status</div>
+        <div class="appV3Status">
+          <div>✓ Claims</div><div>✓ Deed NFTs</div><div>✓ Owner Editing</div><div>✓ P2P Payments</div>
+          <div>✓ Tile Market</div><div class="soon">○ NFT Store</div><div class="soon">○ OTC Desk</div><div class="soon">○ DEX Tools</div>
+        </div>
+      </section>
 
       <div class="fine">
         MONOLITH claims are live. The wall, owner editing, claim paths, payment verification, and Coordinate Deed delivery are active.
