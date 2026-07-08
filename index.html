@@ -581,6 +581,144 @@
 }
 </style>
 
+
+<style id="monolith-entrance-v5-os-launcher-20260706">
+.entranceV5Hero{
+  text-align:center;
+  padding:18px 14px 14px;
+  border:1px solid rgba(130,220,255,.24);
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(10,30,53,.72),rgba(3,12,23,.92));
+  box-shadow:0 18px 46px rgba(0,0,0,.30);
+}
+.entranceV5Eyebrow{
+  color:#82dcff;
+  font-size:12px;
+  letter-spacing:.24em;
+  font-weight:950;
+  margin-bottom:8px;
+}
+.entranceV5Hero h1{
+  margin:0;
+  color:#eaf7ff;
+  font-size:24px;
+  line-height:1.1;
+  letter-spacing:-.02em;
+}
+.entranceV5Hero p{
+  max-width:620px;
+  margin:10px auto 0;
+  color:#9fc7dd;
+  font-size:13px;
+  line-height:1.35;
+  font-weight:700;
+}
+.entranceV5Actions{
+  margin:14px 0 18px!important;
+}
+.entranceV5Section{
+  margin:18px 0;
+}
+.entranceV5Title{
+  text-align:center;
+  color:#82dcff;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:950;
+  margin:0 0 10px;
+}
+.entranceV5Launcher{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.entranceV5Launcher > div{
+  min-height:82px;
+  border:1px solid rgba(130,220,255,.24);
+  border-radius:20px;
+  padding:14px 12px;
+  background:linear-gradient(180deg,rgba(10,30,53,.74),rgba(3,12,23,.94));
+  box-shadow:0 14px 34px rgba(0,0,0,.24);
+}
+.entranceV5Launcher b{
+  display:block;
+  color:#eaf7ff;
+  font-size:13px;
+  line-height:1.15;
+  margin-bottom:7px;
+}
+.entranceV5Launcher span{
+  display:block;
+  color:#9fc7dd;
+  font-size:11px;
+  line-height:1.35;
+  font-weight:700;
+}
+.entranceV5Commerce > div{
+  min-height:72px;
+}
+.entranceV5Commerce em{
+  display:inline-block;
+  font-style:normal;
+  font-size:9px;
+  border-radius:999px;
+  padding:5px 7px;
+  color:#9fc7dd;
+  border:1px solid rgba(130,220,255,.18);
+}
+.entranceV5Commerce .open{
+  border-color:rgba(110,231,183,.65);
+  box-shadow:0 0 16px rgba(110,231,183,.14);
+}
+.entranceV5Commerce .open em{
+  background:#6ee7b7;
+  color:#071423;
+  border-color:#6ee7b7;
+  font-weight:950;
+}
+.entranceV5Flow{
+  display:grid;
+  grid-template-columns:1fr 30px 1fr 30px 1fr;
+  gap:8px;
+  align-items:center;
+}
+.entranceV5Flow div:not(.arrow){
+  border:1px solid rgba(130,220,255,.24);
+  border-radius:18px;
+  padding:14px 10px;
+  text-align:center;
+  background:rgba(3,12,23,.78);
+}
+.entranceV5Flow b{
+  display:block;
+  color:#eaf7ff;
+  font-size:13px;
+}
+.entranceV5Flow span{
+  display:block;
+  color:#9fc7dd;
+  font-size:11px;
+  margin-top:4px;
+}
+.entranceV5Flow .arrow{
+  color:#82dcff;
+  font-weight:950;
+  text-align:center;
+}
+.marketGoldBtn{
+  border-color:rgba(247,201,109,.68)!important;
+  background:linear-gradient(180deg,rgba(247,201,109,.16),rgba(247,201,109,.06))!important;
+  color:#fff7d6!important;
+  box-shadow:0 0 16px rgba(247,201,109,.20)!important;
+}
+@media(max-width:720px){
+  .entranceV5Hero h1{font-size:21px}
+  .entranceV5Flow{grid-template-columns:1fr}
+  .entranceV5Flow .arrow{transform:none}
+}
+</style>
+
 </head>
 
 <body>
@@ -609,48 +747,50 @@
         </div>
       </div>
 
-      <section class="hero-panel entranceV4Hero" aria-label="What is MONOLITH?">
-        <div class="hero-head">What is MONOLITH?</div>
-        <p class="entranceV4Big">Own a coordinate on the $XRP Ledger.</p>
-        <p class="entranceV4Sub">Each tile is deed-backed digital real estate with identity, media, commerce, proof, and market utility.</p>
+      <section class="entranceV5Hero" aria-label="MONOLITH">
+        <div class="entranceV5Eyebrow">MONOLITH</div>
+        <h1>Own a coordinate on the $XRP Ledger.</h1>
+        <p>Deed-backed digital real estate with identity, media, commerce, ownership proof, and market utility.</p>
       </section>
 
-      <div class="ctaRow entranceV4Actions" aria-label="Actions">
-        <a class="btn primary" href="/monolith.html" aria-label="view the live wall">Explore the Wall</a>
-        <a class="btn" href="/claim/#trial" aria-label="start a 3-day free tile trial">3-Day Free Tile Trial</a>
-        <a class="btn warn marketGoldBtn" href="/market/" aria-label="open monolith tile market">Open Market</a>
-        <a class="btn" href="/tile/ORIGIN" aria-label="view example tile">View Example Tile</a>
-        <a class="btn warn" href="/rules.html" aria-label="read rules">Rules</a>
+      <div class="ctaRow entranceV5Actions" aria-label="Actions">
+        <a class="btn primary" href="/monolith.html">Explore Wall</a>
+        <a class="btn" href="/claim/#trial">Free Trial</a>
+        <a class="btn warn marketGoldBtn" href="/market/">Open Market</a>
+        <a class="btn" href="/tile/ORIGIN">Example Tile</a>
+        <a class="btn warn" href="/rules.html">Rules</a>
       </div>
 
-      <section class="entranceV4Section" aria-label="Tile apps">
-        <div class="entranceV4Title">Tile Apps</div>
-        <div class="entranceV4Apps">
-          <div class="entranceV4App"><b>Identity</b><span>Profile, bio, links, wallet proof, and public tile URL.</span></div>
-          <div class="entranceV4App"><b>Media</b><span>Images, banner, music, featured tiles, and gallery.</span></div>
-          <div class="entranceV4App"><b>Commerce</b><span>P2P payments, marketplace access, and future modules.</span></div>
-          <div class="entranceV4App"><b>Ownership</b><span>Coordinate Deed NFT and verified owner control.</span></div>
+      <section class="entranceV5Section">
+        <div class="entranceV5Title">Your Tile</div>
+        <div class="entranceV5Launcher">
+          <div><b>Identity</b><span>Profile · Links · Wallet Proof</span></div>
+          <div><b>Media</b><span>Images · Music · Gallery</span></div>
+          <div><b>Commerce</b><span>Payments · Market · Apps</span></div>
+          <div><b>Ownership</b><span>Deed NFT · Verified Control</span></div>
         </div>
       </section>
 
-      <section class="entranceV4Section" aria-label="Commerce modules">
-        <div class="entranceV4Title">Commerce Modules</div>
-        <div class="entranceV4Modules">
-          <div class="entranceV4Module open"><b>P2P Payments</b><em>LIVE</em></div>
-          <div class="entranceV4Module open"><b>Marketplace</b><em>OPEN</em></div>
-          <div class="entranceV4Module"><b>NFT Store</b><em>SOON</em></div>
-          <div class="entranceV4Module"><b>OTC Desk</b><em>SOON</em></div>
-          <div class="entranceV4Module"><b>Token Info</b><em>SOON</em></div>
-          <div class="entranceV4Module"><b>DEX Tools</b><em>SOON</em></div>
+      <section class="entranceV5Section">
+        <div class="entranceV5Title">Commerce Apps</div>
+        <div class="entranceV5Launcher entranceV5Commerce">
+          <div class="open"><b>P2P Payments</b><em>LIVE</em></div>
+          <div class="open"><b>Marketplace</b><em>OPEN</em></div>
+          <div><b>NFT Store</b><em>SOON</em></div>
+          <div><b>OTC Desk</b><em>SOON</em></div>
+          <div><b>Token Info</b><em>SOON</em></div>
+          <div><b>DEX Tools</b><em>SOON</em></div>
         </div>
       </section>
 
-      <section class="entranceV4Section" aria-label="Tile lifecycle">
-        <div class="entranceV4Title">Tile Lifecycle</div>
-        <div class="entranceV4Flow">
-          <div><b>Claim</b><span>Choose a coordinate.</span></div>
-          <div><b>Build</b><span>Add identity, media, payments, and utility.</span></div>
-          <div><b>Trade</b><span>Use the deed-backed marketplace layer.</span></div>
+      <section class="entranceV5Section">
+        <div class="entranceV5Title">How It Works</div>
+        <div class="entranceV5Flow">
+          <div><b>Claim</b><span>Choose a coordinate</span></div>
+          <div class="arrow">↓</div>
+          <div><b>Build</b><span>Add utility</span></div>
+          <div class="arrow">↓</div>
+          <div><b>Trade</b><span>Use the market</span></div>
         </div>
       </section>
 
