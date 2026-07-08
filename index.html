@@ -719,6 +719,66 @@
 }
 </style>
 
+
+<style id="monolith-entrance-v5-app-buttons-claims-glow-20260706">
+.entranceV5Actions{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+
+.entranceV5Actions .btn{
+  min-height:76px!important;
+  border-radius:22px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:12px 8px!important;
+  background:linear-gradient(180deg,rgba(10,30,53,.82),rgba(3,12,23,.96))!important;
+  border:1px solid rgba(130,220,255,.28)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.26)!important;
+  font-size:11px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  letter-spacing:.03em!important;
+  text-transform:uppercase!important;
+}
+
+.entranceV5Actions .btn.primary{
+  border-color:rgba(73,191,255,.75)!important;
+  color:#eaf7ff!important;
+  background:
+    radial-gradient(circle at top,rgba(73,191,255,.28),transparent 48%),
+    linear-gradient(180deg,rgba(10,44,74,.92),rgba(3,12,23,.96))!important;
+  box-shadow:
+    0 0 18px rgba(73,191,255,.42),
+    0 0 34px rgba(73,191,255,.18),
+    0 14px 34px rgba(0,0,0,.30)!important;
+  animation:monolithClaimsPillPulse 2.8s ease-in-out infinite!important;
+}
+
+.entranceV5Actions .marketGoldBtn{
+  border-color:rgba(247,201,109,.68)!important;
+  background:
+    radial-gradient(circle at top,rgba(247,201,109,.22),transparent 50%),
+    linear-gradient(180deg,rgba(80,54,12,.52),rgba(3,12,23,.96))!important;
+  color:#fff7d6!important;
+  box-shadow:0 0 16px rgba(247,201,109,.22),0 14px 34px rgba(0,0,0,.26)!important;
+}
+
+@media(max-width:720px){
+  .entranceV5Actions{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  .entranceV5Actions .btn{
+    min-height:72px!important;
+    border-radius:20px!important;
+    font-size:10px!important;
+  }
+}
+</style>
+
 </head>
 
 <body>
