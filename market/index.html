@@ -506,11 +506,36 @@ table{
 }
 </style>
 
+<style id="MONOLITH_MARKET_PREMIUM_REDESIGN_20260709">
+.wrap{max-width:1480px!important;padding:28px 20px 90px!important}
+.hero{min-height:320px;display:flex;align-items:flex-end;padding:42px!important;border-radius:30px!important;background:linear-gradient(90deg,rgba(3,8,16,.28),rgba(3,8,16,.88)),radial-gradient(circle at 78% 28%,rgba(247,201,109,.22),transparent 26%),linear-gradient(135deg,#241704,#07111f 72%)!important}
+.hero-copy{max-width:880px}.hero p{max-width:740px;font-size:18px;line-height:1.6!important}
+.stats{gap:14px!important;margin:18px 0!important}.stat{min-height:110px;padding:19px!important}.stat .v{font-size:28px!important}
+.panel{padding:24px!important;margin:18px 0!important;border-radius:26px!important}
+.market-head h2{font-size:28px!important}
+.listing-console{grid-template-columns:minmax(220px,1.25fr) minmax(150px,.65fr) repeat(4,minmax(125px,auto))!important;gap:12px!important}
+.field input,.input,.select,.btn.console{min-height:48px!important;border-radius:13px!important}
+.market-grid{grid-template-columns:repeat(auto-fit,minmax(290px,360px))!important;justify-content:center!important;gap:22px!important}
+.card{padding:12px!important;border-radius:24px!important;background:linear-gradient(180deg,rgba(38,27,8,.96),rgba(4,12,22,.99))!important}
+.card:hover{transform:translateY(-7px)!important;border-color:rgba(255,227,154,.75)!important;box-shadow:0 28px 80px rgba(0,0,0,.48),0 0 38px rgba(247,201,109,.16)!important}
+.thumb-wrap{border-radius:18px!important;border-color:rgba(247,201,109,.38)!important}
+.tile-img{aspect-ratio:4/3!important;transition:transform .25s ease}.card:hover .tile-img{transform:scale(1.035)}
+.badge{left:12px!important;top:12px!important;padding:7px 10px!important;background:rgba(3,8,16,.86)!important;color:#ffe39a!important}
+.price-badge{right:12px!important;bottom:12px!important;padding:9px 13px!important;border-radius:12px!important;font-size:17px!important;background:rgba(3,8,16,.92)!important;color:#fff0bf!important}
+.body{padding:15px 5px 5px!important}.coord{font-size:28px!important}.owner{font-size:15px!important}
+.meta-row{padding-top:10px!important;margin-top:10px!important}
+.actions{grid-template-columns:.8fr 1.35fr 1fr!important;gap:9px!important;margin-top:15px!important}
+.actions .btn{min-height:43px!important;border-radius:11px!important}
+.actions .btn:first-child,.actions [data-buy-verify]{background:rgba(247,201,109,.10)!important;color:#ffe39a!important}
+.empty{max-width:none!important;min-height:220px;display:grid;place-items:center;font-size:17px}
+.footer-note{margin-top:18px;border-top:1px solid rgba(247,201,109,.16);padding-top:16px!important}
+@media(max-width:1120px){.listing-console{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:700px){.wrap{padding:18px 12px 72px!important}.hero{min-height:270px;padding:26px!important}.hero p{font-size:15px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.market-grid{grid-template-columns:1fr!important}.listing-console,.actions{grid-template-columns:1fr!important}.card{max-width:520px;width:100%;margin:auto}}
+</style>
 </head>
 <body>
   <main class="wrap">
-<!-- MONOLITH_AMERICA_250_PROMO_20260703 --><div class="monolithAmerica250Promo" data-promo-start="2026-07-03T00:00:00Z" data-promo-end="2026-07-06T00:00:00Z"><strong>🇺🇸 AMERICA 250 WEEKEND · JULY 3–5</strong><br>Regular Tiles $76 · Premium Tiles $199 · Signature unchanged<br><a href="/claim/">Claim your coordinate</a></div><style>.monolithAmerica250Promo{position:relative;z-index:50;margin:0 auto 18px;max-width:980px;border:1px solid rgba(255,255,255,.28);border-radius:18px;padding:14px 16px;text-align:center;background:linear-gradient(135deg,rgba(20,40,90,.96),rgba(120,20,28,.92));color:#fff;box-shadow:0 16px 42px rgba(0,0,0,.35)}.monolithAmerica250Promo a{color:#fff;font-weight:900}</style><script>(function(){var n=Date.now();document.querySelectorAll('.monolithAmerica250Promo').forEach(function(e){var s=Date.parse(e.dataset.promoStart),x=Date.parse(e.dataset.promoEnd);if(!(n>=s&&n<x))e.remove()})})();</script>
-    <div class="topbar">
+<div class="topbar">
       <a class="brand" href="/">
         <img class="brand-logo" src="/assets/monolith_logo.webp" alt="MONOLITH">
       </a>
@@ -525,12 +550,12 @@ table{
     <section class="hero">
       <div class="hero-copy">
         <h1>Tile Market</h1>
-        <p>Owner-verified MONOLITH coordinates listed like digital real estate on the $XRP Ledger.</p>
+        <p>Buy and sell verified MONOLITH coordinate real estate through ledger-backed XRPL Coordinate Deeds.</p>
         <div class="hero-row">
-          <span class="pill green">Deed Flow Live</span>
+          <span class="pill green">XRPL Deed Market</span>
           <span class="pill">Claimed Tiles Only</span>
           <span class="pill">Owner Verified</span>
-          <span class="pill warn">Deed NFT Sale Flow Live</span>
+          
         </div>
       </div>
     </section>
