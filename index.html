@@ -824,6 +824,65 @@ main .row + .entranceV5Hero{
 }
 </style>
 
+
+<style id="monolith-entrance-wall-banner-20260708">
+.entranceV5WallBanner{
+  position:relative;
+  margin:18px 0 22px;
+  border:1px solid rgba(130,220,255,.26);
+  border-radius:26px;
+  overflow:hidden;
+  background:#020711;
+  box-shadow:0 22px 60px rgba(0,0,0,.34),0 0 28px rgba(75,188,255,.10);
+}
+.entranceV5WallBanner img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:16/7;
+  object-fit:cover;
+  filter:saturate(1.08) contrast(1.05);
+}
+.entranceV5WallBanner:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(2,7,17,.05),rgba(2,7,17,.42));
+  pointer-events:none;
+}
+.entranceV5WallCaption{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:14px;
+  z-index:2;
+  padding:12px 14px;
+  border:1px solid rgba(130,220,255,.22);
+  border-radius:18px;
+  background:rgba(3,12,23,.66);
+  backdrop-filter:blur(8px);
+}
+.entranceV5WallCaption b{
+  display:block;
+  color:#eaf7ff;
+  font-size:14px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.entranceV5WallCaption span{
+  display:block;
+  color:#cfeeff;
+  font-size:12px;
+  line-height:1.3;
+  font-weight:700;
+}
+@media(max-width:720px){
+  .entranceV5WallBanner img{aspect-ratio:16/10}
+  .entranceV5WallCaption{position:relative;left:auto;right:auto;bottom:auto;margin:0;border-radius:0;border-left:0;border-right:0;border-bottom:0}
+}
+</style>
+
 </head>
 
 <body>
@@ -857,6 +916,15 @@ main .row + .entranceV5Hero{
         <a class="btn" href="/tile/ORIGIN">Example Tile</a>
         <a class="btn warn" href="/rules.html">Rules</a>
       </div>
+
+      <section class="entranceV5WallBanner" aria-label="MONOLITH wall preview">
+        <img src="/assets/MONOLITH_banner.webp" alt="Massive MONOLITH wall of digital real estate tiles" loading="lazy">
+        <div class="entranceV5WallCaption">
+          <b>The Wall of Record</b>
+          <span>Thousands of coordinates. One permanent $XRP Ledger-powered real estate layer.</span>
+        </div>
+      </section>
+
 
       <section class="entranceV5Section">
         <div class="entranceV5Title">Your Tile</div>
