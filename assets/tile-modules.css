@@ -394,3 +394,33 @@
 .p2pShareStatus{
   color:#ffffff!important;
 }
+
+
+/* MONOLITH_P2P_BANNER_CONTRAST_FIX_20260716 */
+#supportTileBox .p2pShareBanner{
+  background:#071523!important;
+  background-image:none!important;
+  border-color:#d8aa4e!important;
+  color:#ffffff!important;
+  box-shadow:
+    0 16px 34px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.06)!important;
+}
+
+#supportTileBox .p2pShareEyebrow{
+  color:#f7c96d!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.7)!important;
+}
+
+#supportTileBox .p2pShareBanner strong{
+  color:#ffffff!important;
+  opacity:1!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.8)!important;
+}
+
+#supportTileBox .p2pShareUrl{
+  background:#ffffff!important;
+  color:#10263a!important;
+  border-color:#b8c7d3!important;
+  opacity:1!important;
+}
