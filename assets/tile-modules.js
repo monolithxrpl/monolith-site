@@ -286,11 +286,11 @@
 
     if (!urlBox || !copyButton || !shareButton) return;
 
-    const coordinate = getCoordinate();
-    if (!coordinate) return;
+    const tileCoordinate = coordinate();
+    if (!tileCoordinate) return;
 
     const paymentUrl =
-      `${location.origin}/tile/${encodeURIComponent(coordinate)}#supportTileBox`;
+      `${location.origin}/tile/${encodeURIComponent(tileCoordinate)}#supportTileBox`;
 
     urlBox.textContent = paymentUrl;
 
@@ -305,7 +305,7 @@
 
     shareButton.onclick = async () => {
       const shareData = {
-        title: `Pay ${coordinate} on MONOLITH`,
+        title: `Pay ${tileCoordinate} on MONOLITH`,
         text: "Pay this MONOLITH tile directly in XRP.",
         url: paymentUrl
       };
