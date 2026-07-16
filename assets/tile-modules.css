@@ -179,3 +179,17 @@
 #ownerModeStart.ownerSignOutBtn:hover{
   background:#b91c1c!important;
 }
+
+
+/* MONOLITH_P2P_DIRECT_TILE_COPY_20260716 */
+.p2pDirectNote{
+  margin:0 0 16px;
+  padding:12px 14px;
+  border:1px solid rgba(75,188,255,.34);
+  border-radius:12px;
+  background:rgba(75,188,255,.10);
+  color:#dff6ff;
+  font-size:14px;
+  font-weight:800;
+  line-height:1.4;
+}
