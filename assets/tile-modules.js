@@ -117,7 +117,7 @@
 
     if (!panel || !grid) return;
 
-    const enabled = modules.filter(module => module.enabled);
+    const enabled = modules.filter(module => module.enabled && module.key !== "p2p_payments");
 
     if (!enabled.length) {
       panel.style.display = "none";
