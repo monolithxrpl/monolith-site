@@ -105,6 +105,12 @@
     return "";
   }
 
+  function syncPaymentVisibility(modules) {
+    const p2p=modules.find(m=>m.key==="p2p_payments");
+    const show=!!(p2p&&p2p.enabled);
+    [".supportQuickActions",".supportInputs","#supportStartPayment","#supportSignLink","#supportStatus"].forEach(q=>{const e=document.querySelector(q);if(e)e.style.display=show?"":"none";});
+  }
+
   function renderPublic(modules) {
     const panel = document.getElementById("tileModulesPanel");
     const grid = document.getElementById("tileModulesGrid");
@@ -263,6 +269,7 @@
   async function loadCommerceSuite() {
     try {
       const modules = await fetchModules();
+      syncPaymentVisibility(modules);
       renderPublic(modules);
       renderOwnerControls(modules);
     } catch (error) {
