@@ -10,6 +10,10 @@
   };
 
   const MODULE_KEYS = Object.keys(LABELS);
+  const LIVE_MODULES = new Set([
+    "marketplace",
+    "p2p_payments"
+  ]);
 
   function coordinate() {
     const parts = location.pathname.split("/").filter(Boolean);
@@ -131,10 +135,16 @@
         </div>
 
         <div class="commerceModuleDescription">
-          ${module.config?.description || ""}
+          ${module.config?.description || (
+            LIVE_MODULES.has(module.key)
+              ? ""
+              : "COMING SOON"
+          )}
         </div>
 
-        ${publicAction(module)}
+        ${LIVE_MODULES.has(module.key)
+          ? publicAction(module)
+          : ""}
       </section>
     `).join("");
 
