@@ -193,3 +193,204 @@
   font-weight:800;
   line-height:1.4;
 }
+
+
+/* MONOLITH_P2P_SHARE_BANNER_20260716 */
+.p2pShareBanner{
+  margin:0 0 18px;
+  padding:16px;
+  border:1px solid rgba(247,201,109,.45);
+  border-radius:16px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(247,201,109,.13),
+      rgba(75,188,255,.08)
+    );
+  box-shadow:0 14px 32px rgba(0,0,0,.18);
+}
+
+.p2pShareEyebrow{
+  margin-bottom:6px;
+  color:#f7c96d;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+
+.p2pShareBanner strong{
+  display:block;
+  color:#eaf7ff;
+  font-size:15px;
+  line-height:1.35;
+}
+
+.p2pShareUrl{
+  margin:12px 0;
+  padding:10px 12px;
+  border:1px solid rgba(130,220,255,.22);
+  border-radius:10px;
+  background:rgba(2,7,17,.65);
+  color:#82dcff;
+  font-size:12px;
+  overflow-wrap:anywhere;
+}
+
+.p2pShareActions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr)) minmax(0,1.15fr);
+  gap:10px;
+  margin-top:12px;
+}
+
+.p2pShareActions .btn{
+  width:100%;
+  min-height:46px;
+  min-width:0;
+  padding:11px 14px;
+  border:1px solid rgba(130,220,255,.34)!important;
+  border-radius:10px!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(18,48,76,.96),
+      rgba(7,24,41,.98)
+    )!important;
+  color:#eaf7ff!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  letter-spacing:.045em;
+  line-height:1.2;
+  text-transform:uppercase;
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.06)!important;
+  transition:
+    transform .16s ease,
+    border-color .16s ease,
+    background .16s ease;
+}
+
+.p2pShareActions .btn:not(:disabled):hover{
+  transform:translateY(-1px);
+  border-color:rgba(130,220,255,.72)!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(24,65,101,.98),
+      rgba(8,31,54,.98)
+    )!important;
+}
+
+.p2pInvoiceSoon{
+  display:flex!important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-color:rgba(247,201,109,.30)!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(62,49,24,.76),
+      rgba(29,24,15,.92)
+    )!important;
+  color:#f7c96d!important;
+  opacity:.76;
+  cursor:not-allowed!important;
+}
+
+.p2pButtonMain{
+  display:block;
+  color:#f7c96d;
+}
+
+.p2pButtonMeta{
+  display:block;
+  margin-top:4px;
+  color:#bca46f;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.p2pShareStatus{
+  min-height:18px;
+  margin-top:10px;
+}
+
+@media(max-width:720px){
+  .p2pShareActions{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .p2pInvoiceSoon{
+    grid-column:1 / -1;
+  }
+}
+
+
+/* MONOLITH_P2P_ACTION_SPACING_20260716 */
+.p2pShareActions{
+  gap:14px!important;
+  margin-top:16px!important;
+}
+
+.p2pShareActions .btn{
+  min-height:54px!important;
+  padding:14px 18px!important;
+  font-size:12px!important;
+  border-radius:12px!important;
+}
+
+@media(max-width:720px){
+  .p2pShareActions{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+
+  .p2pInvoiceSoon{
+    grid-column:auto!important;
+  }
+}
+
+
+/* MONOLITH_P2P_READABILITY_20260716 */
+.p2pShareBanner{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(8,22,36,.98),
+      rgba(11,31,50,.98)
+    )!important;
+}
+
+.p2pShareEyebrow{
+  color:#ffe29a!important;
+}
+
+.p2pShareBanner strong{
+  color:#ffffff!important;
+}
+
+.p2pShareUrl{
+  background:#f3f6f9!important;
+  color:#10263a!important;
+  border-color:#c7d4df!important;
+  font-weight:800!important;
+}
+
+.p2pShareActions .btn{
+  color:#ffffff!important;
+}
+
+.p2pButtonMain{
+  color:#fff1bd!important;
+}
+
+.p2pButtonMeta{
+  color:#f4d98d!important;
+}
+
+.p2pShareStatus{
+  color:#ffffff!important;
+}

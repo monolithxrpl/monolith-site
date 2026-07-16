@@ -278,11 +278,59 @@
       });
   }
 
+  function setupP2PShareBanner() {
+    const urlBox = document.getElementById("p2pShareUrl");
+    const copyButton = document.getElementById("p2pCopyLink");
+    const shareButton = document.getElementById("p2pShareLink");
+    const status = document.getElementById("p2pShareStatus");
+
+    if (!urlBox || !copyButton || !shareButton) return;
+
+    const coordinate = getCoordinate();
+    if (!coordinate) return;
+
+    const paymentUrl =
+      `${location.origin}/tile/${encodeURIComponent(coordinate)}#supportTileBox`;
+
+    urlBox.textContent = paymentUrl;
+
+    copyButton.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(paymentUrl);
+        if (status) status.textContent = "Payment link copied.";
+      } catch {
+        if (status) status.textContent = "Unable to copy payment link.";
+      }
+    };
+
+    shareButton.onclick = async () => {
+      const shareData = {
+        title: `Pay ${coordinate} on MONOLITH`,
+        text: "Pay this MONOLITH tile directly in XRP.",
+        url: paymentUrl
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(paymentUrl);
+          if (status) status.textContent = "Payment link copied.";
+        }
+      } catch (error) {
+        if (error?.name !== "AbortError" && status) {
+          status.textContent = "Unable to share payment link.";
+        }
+      }
+    };
+  }
+
   async function loadCommerceSuite() {
     try {
       const modules = await fetchModules();
       syncPaymentVisibility(modules);
       renderPublic(modules);
+      setupP2PShareBanner();
       renderOwnerControls(modules);
     } catch (error) {
       console.warn("Commerce Suite unavailable", error);
