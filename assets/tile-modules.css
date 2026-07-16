@@ -1,0 +1,150 @@
+/* MONOLITH_COMMERCE_SUITE_V1_20260716 */
+
+.tileModulesPanel{
+  margin:14px 0 16px;
+  padding:16px;
+  border:1px solid rgba(130,220,255,.28);
+  border-radius:18px;
+  background:linear-gradient(
+    180deg,
+    rgba(10,30,53,.72),
+    rgba(4,13,25,.92)
+  );
+  box-shadow:0 18px 44px rgba(0,0,0,.26);
+}
+
+.tileModulesPanel .moduleTitle{
+  margin-bottom:12px;
+  color:#f7c96d;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.tileModulesGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+
+.commerceModuleCard{
+  min-height:0;
+  padding:14px;
+  border:1px solid rgba(130,220,255,.26);
+  border-radius:15px;
+  background:rgba(2,9,18,.78);
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.commerceModuleTitle{
+  color:#eaf7ff;
+  font-size:14px;
+  font-weight:900;
+}
+
+.commerceModuleDescription{
+  color:#9fc7dd;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.commerceModuleAction{
+  width:100%;
+  margin-top:2px;
+}
+
+.commerceSuiteOwnerControls{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid rgba(130,220,255,.18);
+}
+
+.commerceOwnerTitle{
+  margin-bottom:10px;
+  color:#82dcff;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.commerceOwnerSwitches{
+  display:grid;
+  gap:8px;
+}
+
+.commerceSwitchRow{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:46px;
+  padding:10px 12px;
+  border:1px solid rgba(130,220,255,.18);
+  border-radius:13px;
+  background:rgba(3,12,23,.72);
+  color:#eaf7ff;
+  cursor:pointer;
+}
+
+.commerceSwitchRow > span:first-child{
+  font-size:13px;
+  font-weight:800;
+}
+
+.commerceSwitchRow input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.commerceSwitch{
+  position:relative;
+  width:46px;
+  height:24px;
+  flex:0 0 46px;
+  border-radius:999px;
+  background:#233245;
+  border:1px solid rgba(130,220,255,.22);
+  transition:.2s ease;
+}
+
+.commerceSwitch::after{
+  content:"";
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#9fc7dd;
+  transition:.2s ease;
+}
+
+.commerceSwitchRow input:checked + .commerceSwitch{
+  background:#6ee7b7;
+  border-color:#6ee7b7;
+}
+
+.commerceSwitchRow input:checked + .commerceSwitch::after{
+  left:24px;
+  background:#071423;
+}
+
+.commerceSwitchRow input:disabled + .commerceSwitch{
+  opacity:.55;
+}
+
+#commerceOwnerStatus{
+  margin-top:10px;
+}
+
+@media(min-width:760px){
+  .tileModulesGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}

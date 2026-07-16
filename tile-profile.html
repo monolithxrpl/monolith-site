@@ -3728,6 +3728,7 @@ body.tileWallpaperActive .hero{
 }
 </style>
 
+<link rel="stylesheet" href="/assets/tile-modules.css?v=20260716">
 </head>
 <body>
 <div id="tileWallpaperLayer" aria-hidden="true"></div>
@@ -4010,10 +4011,10 @@ body.tileWallpaperActive .hero{
           <div class="k">COMMERCE HUB</div>
           <div class="commerceHubIntro">
   <strong>Interactive applications for this coordinate.</strong>
-  <span>P2P payments and marketplace access are open. More modules are staged as the platform expands.</span>
+  <span>The owner controls which applications appear on this coordinate.</span>
 </div>
           <div id="tileModulesPanel" class="tileModulesPanel" style="display:none">
-            <div class="moduleTitle">Coordinate Commerce Modules</div>
+            <div class="moduleTitle">Commerce Suite</div>
             <div id="tileModulesGrid" class="tileModulesGrid"></div>
           </div>
 
@@ -7035,64 +7036,9 @@ body.tileWallpaperActive .hero{
 
 <!-- MONOLITH_MARKET_NO_MANUAL_BUYER_PROMPT_20260628 -->
 
-<script>
-/* MONOLITH_TILE_MODULES_UI_20260705 */
-(function(){
-  const labels={
-    nft_store:"NFT Store",marketplace:"Marketplace",otc_desk:"OTC Desk",
-    p2p_payments:"P2P Payments",token_info:"Token Info",
-    airdrop_center:"Airdrop Center",dex_widget:"DEX Data",
-    donation_jar:"Donation Jar",ticket_sales:"Ticket Sales",
-    merch_store:"Merch Store",digital_downloads:"Digital Downloads",
-    music:"Music",booking_calendar:"Booking Calendar",gallery:"Gallery"
-  };
 
-  function coordFromUrl(){
-    const path=location.pathname.split("/").filter(Boolean);
-    const i=path.indexOf("tile");
-    if(i>=0 && path[i+1]) return decodeURIComponent(path[i+1]).toUpperCase();
-    return (new URLSearchParams(location.search).get("tile")||"").toUpperCase();
-  }
 
-  async function loadTileModules(){
-    const coord=coordFromUrl();
-    if(!coord) return;
-
-    const panel=document.getElementById("tileModulesPanel");
-    const grid=document.getElementById("tileModulesGrid");
-    if(!panel || !grid) return;
-
-    try{
-      const r=await fetch(`/api/tile/${encodeURIComponent(coord)}/modules`);
-      const j=await r.json();
-      const enabled=(j.modules||[]);
-      if(!enabled.length) return;
-
-      const displayKeys=new Set(["p2p_payments","marketplace","nft_store","otc_desk","token_info","dex_widget"]);
-      const platformOpen=new Set(["p2p_payments","marketplace"]);
-      grid.innerHTML=enabled.filter(m=>displayKeys.has(m.key)).map(m=>{
-        const open=!!m.enabled || platformOpen.has(m.key);
-        return `
-        <div class="tileModuleCard ${open ? "isLive" : "isSoon"}">
-          <b>${labels[m.key]||m.key}</b>
-          <span>${open ? "OPEN →" : "SOON"}</span>
-        </div>`;
-      }).join("");
-
-      panel.style.display="";
-    }catch(e){
-      console.warn("tile modules unavailable",e);
-    }
-  }
-
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",loadTileModules);
-  }else{
-    loadTileModules();
-  }
-})();
-</script>
-
+<script src="/assets/tile-modules.js?v=20260716"></script>
 </body>
 </html>
 
