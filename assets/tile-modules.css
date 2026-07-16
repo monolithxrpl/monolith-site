@@ -161,3 +161,21 @@
   background:#991b1b!important;
   border-color:#f87171!important;
 }
+
+#ownerModeStart:not(.ownerSignOutBtn){
+  background:#166534!important;
+  border-color:#22c55e!important;
+  color:#fff!important;
+  box-shadow:0 0 18px rgba(34,197,94,.28)!important;
+}
+
+#ownerModeStart.ownerSignOutBtn{
+  background:#dc2626!important;
+  border-color:#f87171!important;
+  color:#fff!important;
+  box-shadow:0 0 22px rgba(239,68,68,.45)!important;
+}
+
+#ownerModeStart.ownerSignOutBtn:hover{
+  background:#b91c1c!important;
+}
