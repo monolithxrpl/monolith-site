@@ -6655,6 +6655,7 @@ body.tileWallpaperActive .hero{
       const start=$("ownerModeStart");
       if(start){
         start.textContent="Sign Out Owner Mode";
+        start.classList.add("ownerSignOutBtn");
         start.onclick=()=>signOutOwnerMode();
       }
 

@@ -148,3 +148,16 @@
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
+
+/* MONOLITH_OWNER_SIGNOUT_VISIBLE_20260716 */
+.ownerSignOutBtn{
+  background:#7f1d1d!important;
+  border-color:#ef4444!important;
+  color:#fff!important;
+  box-shadow:0 0 18px rgba(239,68,68,.28)!important;
+}
+
+.ownerSignOutBtn:hover{
+  background:#991b1b!important;
+  border-color:#f87171!important;
+}
