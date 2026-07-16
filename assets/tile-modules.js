@@ -108,26 +108,24 @@
   function syncPaymentVisibility(modules) {
     const p2p=modules.find(m=>m.key==="p2p_payments");
     const show=!!(p2p&&p2p.enabled);
-    [".supportQuickActions",".supportInputs","#supportStartPayment","#supportSignLink","#supportStatus"].forEach(q=>{const e=document.querySelector(q);if(e)e.style.display=show?"":"none";});
+    const box=document.getElementById("supportTileBox");
+    if(box) box.style.display=show?"":"none";
   }
 
   function renderPublic(modules) {
-    const panel = document.getElementById("tileModulesPanel");
-    const grid = document.getElementById("tileModulesGrid");
+    const publicRoot = document.getElementById("commercePublicModules");
 
-    if (!panel || !grid) return;
+    if (!publicRoot) return;
 
     const enabled = modules.filter(module => module.enabled && module.key !== "p2p_payments");
 
     if (!enabled.length) {
-      panel.style.display = "none";
-      grid.innerHTML = "";
+      publicRoot.innerHTML = "";
       return;
     }
 
-    panel.style.display = "";
-    grid.innerHTML = enabled.map(module => `
-      <article class="tileModuleCard isLive commerceModuleCard">
+    publicRoot.innerHTML = enabled.map(module => `
+      <section class="box commerceModuleCard">
         <div class="commerceModuleTitle">
           ${LABELS[module.key] || module.key}
         </div>
@@ -137,10 +135,10 @@
         </div>
 
         ${publicAction(module)}
-      </article>
+      </section>
     `).join("");
 
-    grid.querySelectorAll(
+    publicRoot.querySelectorAll(
       '[data-commerce-action="payment"]'
     ).forEach(button => {
       button.addEventListener("click", () => {
@@ -160,6 +158,7 @@
 
   function renderOwnerControls(modules) {
     const panel = document.getElementById("tileModulesPanel");
+    const hub = document.getElementById("commerceHubBox");
     if (!panel) return;
 
     let controls = document.getElementById(
@@ -175,11 +174,14 @@
 
     if (!ownerModeActive() || !ownerPayload()) {
       controls.style.display = "none";
+      panel.style.display = "none";
+      if(hub) hub.style.display = "none";
       return;
     }
 
     controls.style.display = "";
     panel.style.display = "";
+    if(hub) hub.style.display = "";
     controls.innerHTML = `
       <div class="commerceOwnerTitle">
         Owner Module Controls
