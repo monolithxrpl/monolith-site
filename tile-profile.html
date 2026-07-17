@@ -7046,6 +7046,55 @@ body.tileWallpaperActive .hero{
 
 
 <script src="/assets/tile-modules.js?v=20260716"></script>
+
+<!-- MONOLITH_TILE_PROFILE_SECTION_ORDER_V1 -->
+<style id="MONOLITH_TILE_PROFILE_SECTION_ORDER_V1">
+@media(min-width:900px){
+  .leftRail .socialGrid > .topTilesBox,
+  .leftRail .socialGrid > .galleryBox,
+  .leftRail .socialGrid > #commerceHubBox,
+  .leftRail .socialGrid > #supportTileBox,
+  .leftRail .socialGrid > #commercePublicModules{
+    grid-column:1 / -1!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+  }
+}
+</style>
+
+<script>
+(function(){
+  function reorderTileProfileSections(){
+    const social = document.querySelector(".leftRail .socialGrid");
+    if(!social) return;
+
+    const ordered = [
+      document.querySelector(".leftRail .topTilesBox"),
+      document.querySelector(".leftRail .galleryBox"),
+      document.querySelector(".leftRail .tabletBox"),
+      document.getElementById("realEstateBox"),
+      document.getElementById("neighboringTilesBox"),
+      document.getElementById("commerceHubBox"),
+      document.getElementById("supportTileBox"),
+      document.getElementById("commercePublicModules")
+    ];
+
+    if(ordered.some(node => !node)) return;
+
+    ordered.forEach(node => social.appendChild(node));
+
+    if(typeof syncDesktopPuzzleLayout === "function"){
+      requestAnimationFrame(syncDesktopPuzzleLayout);
+    }
+  }
+
+  reorderTileProfileSections();
+  window.addEventListener("DOMContentLoaded", reorderTileProfileSections, {once:true});
+  window.addEventListener("load", reorderTileProfileSections, {once:true});
+  setTimeout(reorderTileProfileSections, 250);
+})();
+</script>
+
 </body>
 </html>
 
