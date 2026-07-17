@@ -113,7 +113,24 @@
     const p2p=modules.find(m=>m.key==="p2p_payments");
     const show=!!(p2p&&p2p.enabled);
     const box=document.getElementById("supportTileBox");
+
     if(box) box.style.display=show?"":"none";
+
+    const openPayment=
+      new URLSearchParams(location.search).get("pay")==="1";
+
+    if(show&&box&&openPayment){
+      window.setTimeout(()=>{
+        box.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+        document
+          .getElementById("supportAmountXrp")
+          ?.focus();
+      },350);
+    }
   }
 
   function renderPublic(modules) {
@@ -290,7 +307,7 @@
     if (!tileCoordinate) return;
 
     const paymentUrl =
-      `${location.origin}/tile/${encodeURIComponent(tileCoordinate)}#supportTileBox`;
+      `${location.origin}/pay/${encodeURIComponent(tileCoordinate)}`;
 
     urlBox.textContent = paymentUrl;
 
