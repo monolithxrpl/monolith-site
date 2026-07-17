@@ -3621,58 +3621,7 @@ body.tileWallpaperActive .hero{
   .centerMediaStack .galleryBox{order:6!important}
 }
 </style>
-<script id="MONOLITH_TILE_MARKET_PROFILE_DIRECT_UNDER_GALLERY_20260628">
-/* MONOLITH_TILE_MARKET_PROFILE_DIRECT_UNDER_GALLERY_20260628 */
-(function(){
-  var mq = window.matchMedia("(max-width:899px)");
 
-  function text(el){
-    return (el && el.textContent ? el.textContent : "").replace(/\s+/g," ").trim().toLowerCase();
-  }
-
-  function hideMobileListButton(){
-    Array.prototype.slice.call(document.querySelectorAll("a,button")).forEach(function(el){
-      if(/\blist on marketplace\b/.test(text(el))){
-        el.classList.add("monolith-mobile-market-list-hidden");
-        el.setAttribute("data-monolith-mobile-market-list-hidden","true");
-      }
-    });
-  }
-
-  function placeMarketDirectlyUnderGallery(){
-    var market = document.getElementById("tileMarketBox");
-    var gallery = document.querySelector(".centerMediaStack .galleryBox");
-    var stack = document.querySelector(".centerMediaStack");
-
-    if(!market) return;
-
-    market.classList.add("monolith-tile-market-card-highlight");
-    market.setAttribute("data-monolith-tile-market-runtime","direct-under-gallery");
-
-    hideMobileListButton();
-
-    if(!gallery || !stack) return;
-
-    if(market.parentElement !== stack || market.previousElementSibling !== gallery){
-      gallery.insertAdjacentElement("afterend", market);
-    }
-  }
-
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", placeMarketDirectlyUnderGallery);
-  }else{
-    placeMarketDirectlyUnderGallery();
-  }
-
-  window.addEventListener("load", placeMarketDirectlyUnderGallery);
-  setTimeout(placeMarketDirectlyUnderGallery,300);
-  setTimeout(placeMarketDirectlyUnderGallery,1000);
-  setTimeout(placeMarketDirectlyUnderGallery,2200);
-
-  if(mq.addEventListener) mq.addEventListener("change", placeMarketDirectlyUnderGallery);
-  else if(mq.addListener) mq.addListener(placeMarketDirectlyUnderGallery);
-})();
-</script>
 
 
 <style>
