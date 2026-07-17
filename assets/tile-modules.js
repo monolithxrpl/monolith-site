@@ -1,15 +1,26 @@
 /* MONOLITH_COMMERCE_SUITE_V1_20260716 */
 (() => {
   const LABELS = {
-    marketplace: "Marketplace",
     p2p_payments: "P2P Payments",
     nft_store: "NFT Store",
     otc_desk: "OTC Desk",
     token_info: "Token Info",
-    dex_widget: "DEX Data"
+    dex_widget: "DEX Data",
+    marketplace: "Tile Market"
   };
 
   const MODULE_KEYS = Object.keys(LABELS);
+  const MODULE_ORDER = new Map(
+    MODULE_KEYS.map((key,index)=>[key,index])
+  );
+
+  function orderedModules(modules) {
+    return [...modules].sort(
+      (a,b)=>
+        (MODULE_ORDER.get(a.key) ?? 999) -
+        (MODULE_ORDER.get(b.key) ?? 999)
+    );
+  }
   const LIVE_MODULES = new Set([
     "marketplace",
     "p2p_payments"
@@ -80,7 +91,7 @@
       return `
         <a class="btn commerceModuleAction"
            href="/market/?tile=${encodeURIComponent(coordinate())}">
-          Open Marketplace
+          Open Tile Market
         </a>
       `;
     }
@@ -138,7 +149,7 @@
 
     if (!publicRoot) return;
 
-    const enabled = modules.filter(module => module.enabled && module.key !== "p2p_payments");
+    const enabled = orderedModules(modules).filter(module => module.enabled && module.key !== "p2p_payments");
 
     if (!enabled.length) {
       publicRoot.innerHTML = "";
@@ -215,7 +226,7 @@
       </div>
 
       <div class="commerceOwnerSwitches">
-        ${modules.map(module => `
+        ${orderedModules(modules).map(module => `
           <label class="commerceSwitchRow">
             <span>${LABELS[module.key] || module.key}</span>
 
