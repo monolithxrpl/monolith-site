@@ -14,6 +14,8 @@
     MODULE_KEYS.map((key,index)=>[key,index])
   );
 
+  let marketBoxRef = null;
+
   function orderedModules(modules) {
     return [...modules].sort(
       (a,b)=>
@@ -88,12 +90,7 @@
     const config = module.config || {};
 
     if (module.key === "marketplace") {
-      return `
-        <a class="btn commerceModuleAction"
-           href="/market/?tile=${encodeURIComponent(coordinate())}">
-          Open Tile Market
-        </a>
-      `;
+      return `<div data-commerce-market-slot></div>`;
     }
 
     if (module.key === "p2p_payments") {
@@ -156,25 +153,62 @@
       return;
     }
 
-    publicRoot.innerHTML = enabled.map(module => `
-      <section class="box commerceModuleCard">
-        <div class="commerceModuleTitle">
-          ${LABELS[module.key] || module.key}
-        </div>
+    const preservedMarketBox =
+      marketBoxRef ||
+      document.getElementById("tileMarketBox");
 
-        <div class="commerceModuleDescription">
-          ${module.config?.description || (
-            LIVE_MODULES.has(module.key)
-              ? ""
-              : "COMING SOON"
-          )}
-        </div>
+    if (preservedMarketBox) {
+      marketBoxRef = preservedMarketBox;
+    }
 
-        ${LIVE_MODULES.has(module.key)
-          ? publicAction(module)
-          : ""}
-      </section>
-    `).join("");
+    if (
+      preservedMarketBox &&
+      preservedMarketBox.parentElement === publicRoot
+    ) {
+      preservedMarketBox.remove();
+    }
+
+    publicRoot.innerHTML = enabled.map(module => {
+      if (module.key === "marketplace") {
+        return `<div data-commerce-market-slot></div>`;
+      }
+
+      return `
+        <section class="box commerceModuleCard">
+          <div class="commerceModuleTitle">
+            ${LABELS[module.key] || module.key}
+          </div>
+
+          <div class="commerceModuleDescription">
+            ${module.config?.description || (
+              LIVE_MODULES.has(module.key)
+                ? ""
+                : "COMING SOON"
+            )}
+          </div>
+
+          ${LIVE_MODULES.has(module.key)
+            ? publicAction(module)
+            : ""}
+        </section>
+      `;
+    }).join("");
+
+    const marketSlot = publicRoot.querySelector(
+      "[data-commerce-market-slot]"
+    );
+    const marketBox =
+      preservedMarketBox ||
+      document.getElementById("tileMarketBox");
+
+    if (marketBox) {
+      if (marketSlot) {
+        marketSlot.replaceWith(marketBox);
+        marketBox.style.display = "";
+      } else {
+        marketBox.style.display = "none";
+      }
+    }
 
     publicRoot.querySelectorAll(
       '[data-commerce-action="payment"]'
