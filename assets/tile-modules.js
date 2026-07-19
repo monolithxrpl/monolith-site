@@ -247,7 +247,7 @@
     if (!ownerModeActive() || !ownerPayload()) {
       controls.style.display = "none";
       panel.style.display = "none";
-      if(hub) hub.style.display = "none";
+      if(hub) hub.style.removeProperty("display");
       return;
     }
 

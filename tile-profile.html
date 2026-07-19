@@ -2772,7 +2772,7 @@ small,
 </style>
 
 <style id="MONOLITH_FIND_ME_SHARE_TAB_20260524">
-#findMeMonolithTab{position:fixed;right:14px;bottom:18px;z-index:9998;border:1px solid rgba(130,220,255,.55);background:#06111f;color:#e9f6ff;border-radius:999px;padding:12px 15px;font-weight:900;cursor:pointer;box-shadow:0 0 25px rgba(75,188,255,.22)}
+#findMeMonolithTab{position:fixed;right:14px;bottom:18px;z-index:9998;border:1px solid rgba(130,220,255,.55);background:#06111f;color:#ffffff!important;-webkit-text-fill-color:#ffffff!important;border-radius:999px;padding:12px 15px;font-family:"Arial Black",Arial,sans-serif;font-size:16px;font-weight:900;white-space:nowrap;cursor:pointer;box-shadow:0 0 25px rgba(75,188,255,.22)}
 #findMeMonolithOverlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(0,5,12,.78);backdrop-filter:blur(8px);padding:16px}
 #findMeMonolithOverlay.open{display:flex}
 #findMeMonolithPanel{width:min(720px,100%);background:#071423;border:1px solid rgba(130,220,255,.35);border-radius:22px;padding:18px;color:#e9f6ff}
@@ -3986,7 +3986,7 @@ body.tileWallpaperActive .hero{
 
         <!-- MONOLITH_TILE_SUPPORT_PAYMENT_BOX_V1 -->
         <section class="box commerceHubBox" id="commerceHubBox">
-          <div class="k">COMMERCE HUB</div>
+          <div class="k">COMMERCE SUITE</div>
           <div class="commerceHubIntro">
   <strong>Interactive applications for this coordinate.</strong>
   <span>The owner controls which applications appear on this coordinate.</span>
@@ -7066,34 +7066,871 @@ body.tileWallpaperActive .hero{
 (function(){
   function reorderTileProfileSections(){
     const social = document.querySelector(".leftRail .socialGrid");
-    if(!social) return;
+    const media = document.querySelector(".leftRail .centerMediaStack");
+    const topTiles = document.querySelector(".leftRail .topTilesBox");
+    const gallery = document.querySelector(".leftRail .galleryBox");
+    const tablet = document.querySelector(".leftRail .tabletBox");
+    const realEstate = document.getElementById("realEstateBox");
+    const neighbors = document.getElementById("neighboringTilesBox");
+    const commerceHub = document.getElementById("commerceHubBox");
+    const p2p = document.getElementById("supportTileBox");
+    const publicModules = document.getElementById("commercePublicModules");
 
-    const ordered = [
-      document.querySelector(".leftRail .topTilesBox"),
-      document.querySelector(".leftRail .galleryBox"),
-      document.querySelector(".leftRail .tabletBox"),
-      document.getElementById("realEstateBox"),
-      document.getElementById("neighboringTilesBox"),
-      document.getElementById("commerceHubBox"),
-      document.getElementById("supportTileBox"),
-      document.getElementById("commercePublicModules")
+    const nodes = [
+      social, media, topTiles, gallery, tablet, realEstate,
+      neighbors, commerceHub, p2p, publicModules
     ];
 
-    if(ordered.some(node => !node)) return;
+    if(nodes.some(node => !node)) return;
 
-    ordered.forEach(node => social.appendChild(node));
+    if(window.matchMedia("(min-width:900px)").matches){
+      [
+        topTiles,
+        gallery,
+        tablet,
+        realEstate,
+        neighbors,
+        commerceHub,
+        p2p,
+        publicModules
+      ].forEach(node => social.appendChild(node));
 
-    if(typeof syncDesktopPuzzleLayout === "function"){
-      requestAnimationFrame(syncDesktopPuzzleLayout);
+      if(typeof syncDesktopPuzzleLayout === "function"){
+        requestAnimationFrame(syncDesktopPuzzleLayout);
+      }
+    }else{
+      [
+        topTiles,
+        gallery,
+        tablet,
+        realEstate,
+        neighbors,
+        commerceHub,
+        p2p,
+        publicModules
+      ].forEach(node => media.appendChild(node));
+
+      media.style.removeProperty("top");
     }
   }
 
   reorderTileProfileSections();
   window.addEventListener("DOMContentLoaded", reorderTileProfileSections, {once:true});
   window.addEventListener("load", reorderTileProfileSections, {once:true});
+  window.addEventListener("resize", reorderTileProfileSections);
   setTimeout(reorderTileProfileSections, 250);
 })();
 </script>
+
+
+<style id="MONOLITH_COMMERCE_SUITE_BANNER_V1">
+#commerceHubBox{
+  position:relative!important;
+  overflow:hidden!important;
+  border:1px solid rgba(163,116,255,.88)!important;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(137,77,255,.34),transparent 38%),
+    radial-gradient(circle at 92% 100%,rgba(42,220,255,.18),transparent 38%),
+    linear-gradient(135deg,#24104d 0%,#101d49 52%,#06283b 100%)!important;
+  box-shadow:
+    0 0 0 1px rgba(115,225,255,.12) inset,
+    0 0 28px rgba(130,74,255,.22),
+    0 16px 36px rgba(0,0,0,.28)!important;
+}
+
+#commerceHubBox::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255,255,255,.07) 38%,
+    transparent 62%
+  );
+}
+
+#commerceHubBox > *{
+  position:relative;
+  z-index:1;
+}
+
+#commerceHubBox > .k{
+  color:#ffffff!important;
+  font-size:15px!important;
+  letter-spacing:2.2px!important;
+  text-shadow:
+    0 0 12px rgba(165,111,255,.92),
+    0 0 22px rgba(65,218,255,.48)!important;
+}
+
+#commerceHubBox .commerceHubIntro strong{
+  color:#f1e9ff!important;
+}
+
+#commerceHubBox .commerceHubIntro span{
+  color:#b9dceb!important;
+}
+
+#commerceHubBox .tileModulesPanel{
+  border-color:rgba(115,225,255,.22)!important;
+  background:rgba(2,10,27,.58)!important;
+}
+</style>
+
+
+<!-- MONOLITH_FLOATING_PAY_ME_V1 -->
+<style id="MONOLITH_FLOATING_PAY_ME_V1">
+#payMeMonolithTab{
+  position:fixed;
+  right:14px;
+  bottom:70px;
+  z-index:9998;
+  border:1px solid rgba(77,255,190,.72);
+  background:linear-gradient(135deg,#063b36,#075a4c);
+  color:#eafff8;
+  border-radius:999px;
+  padding:12px 17px;
+  font-weight:1000;
+  letter-spacing:.03em;
+  cursor:pointer;
+  box-shadow:
+    0 0 0 1px rgba(139,255,218,.10) inset,
+    0 0 26px rgba(30,224,164,.28),
+    0 10px 24px rgba(0,0,0,.30);
+}
+
+#payMeMonolithTab:hover{
+  border-color:rgba(139,255,218,.96);
+  transform:translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(139,255,218,.16) inset,
+    0 0 34px rgba(30,224,164,.42),
+    0 12px 28px rgba(0,0,0,.34);
+}
+
+#payMeMonolithOverlay{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,10,12,.82);
+  backdrop-filter:blur(9px);
+  padding:16px;
+}
+
+#payMeMonolithOverlay.open{
+  display:flex;
+}
+
+#payMeMonolithPanel{
+  position:relative;
+  width:min(680px,100%);
+  max-height:calc(100vh - 32px);
+  overflow:auto;
+  border:1px solid rgba(77,255,190,.46);
+  border-radius:22px;
+  padding:18px;
+  color:#eafff8;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(28,215,162,.22),transparent 36%),
+    linear-gradient(145deg,#052b29,#041c24 58%,#03121b);
+  box-shadow:
+    0 0 40px rgba(20,210,155,.20),
+    0 24px 70px rgba(0,0,0,.48);
+}
+
+#payMeMonolithClose{
+  position:absolute;
+  top:12px;
+  right:12px;
+  z-index:3;
+  width:38px;
+  height:38px;
+  border:1px solid rgba(139,255,218,.34);
+  border-radius:999px;
+  background:rgba(1,20,22,.86);
+  color:#eafff8;
+  font-size:20px;
+  font-weight:900;
+  line-height:1;
+  cursor:pointer;
+}
+
+#payMeMonolithContent{
+  padding-top:34px;
+}
+
+/* P2P PAYMENTS MODULE IDENTITY */
+#supportTileBox{
+  position:relative!important;
+  overflow:hidden!important;
+  border:1px solid rgba(77,255,190,.64)!important;
+  background:
+    radial-gradient(circle at 8% 0%,rgba(28,215,162,.22),transparent 34%),
+    radial-gradient(circle at 95% 100%,rgba(35,172,213,.15),transparent 36%),
+    linear-gradient(145deg,#063632 0%,#05252d 56%,#031522 100%)!important;
+  box-shadow:
+    0 0 0 1px rgba(139,255,218,.08) inset,
+    0 0 28px rgba(20,210,155,.16),
+    0 16px 38px rgba(0,0,0,.28)!important;
+}
+
+#supportTileBox::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(139,255,218,.055) 40%,
+    transparent 64%
+  );
+}
+
+#supportTileBox > *{
+  position:relative;
+  z-index:1;
+}
+
+#supportTileBox .p2pModuleTitle{
+  color:#b6ffe6!important;
+  text-shadow:0 0 15px rgba(48,239,180,.48)!important;
+}
+
+#supportTileBox .p2pDirectNote,
+#supportTileBox label,
+#supportTileBox .supportValue,
+#supportTileBox .supportStatus{
+  color:#b8ddd7!important;
+}
+
+#supportTileBox input{
+  border-color:rgba(77,255,190,.30)!important;
+  background:rgba(1,18,23,.78)!important;
+  color:#effffb!important;
+}
+
+#supportTileBox .btn{
+  border-color:rgba(77,255,190,.34)!important;
+  background:linear-gradient(180deg,rgba(11,91,76,.90),rgba(5,49,48,.96))!important;
+  color:#effffb!important;
+}
+
+#supportTileBox #supportStartPayment{
+  border-color:rgba(118,255,209,.72)!important;
+  background:linear-gradient(135deg,#0b8c70,#086052)!important;
+  box-shadow:0 0 22px rgba(30,224,164,.20)!important;
+}
+
+/* MOVED PAY ME PANEL */
+#payMeMonolithContent .p2pShareBanner{
+  margin:0!important;
+  border:1px solid rgba(77,255,190,.48)!important;
+  background:
+    radial-gradient(circle at top left,rgba(38,228,169,.24),transparent 40%),
+    linear-gradient(145deg,rgba(7,73,63,.96),rgba(3,31,39,.98))!important;
+  box-shadow:
+    0 0 24px rgba(30,224,164,.16),
+    0 14px 34px rgba(0,0,0,.28)!important;
+}
+
+#payMeMonolithContent .p2pShareEyebrow{
+  color:#b6ffe6!important;
+  text-shadow:0 0 14px rgba(48,239,180,.50)!important;
+}
+
+#payMeMonolithContent .p2pShareBanner strong{
+  color:#effffb!important;
+}
+
+#payMeMonolithContent .p2pShareUrl{
+  border-color:rgba(77,255,190,.28)!important;
+  background:rgba(1,18,23,.72)!important;
+  color:#b6ffe6!important;
+}
+
+#payMeMonolithContent .btn{
+  border-color:rgba(77,255,190,.36)!important;
+  background:linear-gradient(180deg,rgba(11,91,76,.94),rgba(5,49,48,.98))!important;
+  color:#effffb!important;
+}
+
+@media(max-width:620px){
+  #payMeMonolithTab{
+    right:14px;
+    bottom:70px;
+  }
+
+  #payMeMonolithPanel{
+    padding:14px;
+    border-radius:18px;
+  }
+
+  #payMeMonolithContent{
+    padding-top:38px;
+  }
+}
+</style>
+
+<button
+  id="payMeMonolithTab"
+  type="button"
+  style="border:1px solid rgba(130,220,255,.55)!important;background:linear-gradient(180deg,#168fd0 0%,#0867a8 52%,#064f88 100%)!important;color:#ffffff!important;box-shadow:0 0 25px rgba(75,188,255,.30)!important"
+  aria-controls="payMeMonolithOverlay"
+  aria-expanded="false"
+>
+  Pay Me
+</button>
+
+<div
+  id="payMeMonolithOverlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Pay Me on MONOLITH"
+>
+  <div id="payMeMonolithPanel">
+    <button id="payMeMonolithClose" type="button" aria-label="Close">×</button>
+    <div id="payMeMonolithContent"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const tab = document.getElementById("payMeMonolithTab");
+  const overlay = document.getElementById("payMeMonolithOverlay");
+  const close = document.getElementById("payMeMonolithClose");
+  const content = document.getElementById("payMeMonolithContent");
+  const banner = document.querySelector(".p2pShareBanner");
+
+  if(!tab || !overlay || !close || !content || !banner) return;
+
+  content.appendChild(banner);
+
+  function openPayMe(){
+    overlay.classList.add("open");
+    tab.setAttribute("aria-expanded","true");
+    close.focus();
+  }
+
+  function closePayMe(){
+    overlay.classList.remove("open");
+    tab.setAttribute("aria-expanded","false");
+    tab.focus();
+  }
+
+  tab.addEventListener("click",openPayMe);
+  close.addEventListener("click",closePayMe);
+
+  overlay.addEventListener("click",function(event){
+    if(event.target === overlay) closePayMe();
+  });
+
+  document.addEventListener("keydown",function(event){
+    if(event.key === "Escape" && overlay.classList.contains("open")){
+      closePayMe();
+    }
+  });
+})();
+</script>
+
+
+<style id="MONOLITH_COMMERCE_INDUSTRIAL_THEME_V2">
+/* COMMERCE SUITE: GUNMETAL + BURNT COPPER */
+#commerceHubBox{
+  border-color:rgba(194,126,62,.72)!important;
+  background:
+    radial-gradient(circle at 8% 0%,rgba(153,88,35,.18),transparent 34%),
+    linear-gradient(145deg,#24282d 0%,#151a20 55%,#0a1016 100%)!important;
+  box-shadow:
+    0 0 0 1px rgba(219,151,82,.07) inset,
+    0 0 24px rgba(117,67,29,.12),
+    0 16px 38px rgba(0,0,0,.38)!important;
+}
+
+#commerceHubBox::before{
+  background:linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255,255,255,.035) 42%,
+    transparent 64%
+  )!important;
+}
+
+#commerceHubBox > .k{
+  color:#e0a264!important;
+  text-shadow:0 0 12px rgba(168,95,39,.28)!important;
+}
+
+#commerceHubBox .commerceHubIntro strong{
+  color:#f4f6f8!important;
+}
+
+#commerceHubBox .commerceHubIntro span{
+  color:#b8c0c8!important;
+}
+
+#commerceHubBox .tileModulesPanel{
+  border-color:rgba(194,126,62,.20)!important;
+  background:rgba(5,8,12,.62)!important;
+}
+
+/* P2P PAYMENTS: BLACK + MILITARY GREEN */
+#supportTileBox{
+  border-color:rgba(73,125,89,.78)!important;
+  background:
+    radial-gradient(circle at 8% 0%,rgba(45,92,60,.20),transparent 36%),
+    linear-gradient(145deg,#17231b 0%,#0d1711 54%,#070d09 100%)!important;
+  box-shadow:
+    0 0 0 1px rgba(124,158,132,.06) inset,
+    0 0 22px rgba(30,69,42,.14),
+    0 16px 38px rgba(0,0,0,.38)!important;
+}
+
+#supportTileBox::before{
+  background:linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255,255,255,.025) 42%,
+    transparent 65%
+  )!important;
+}
+
+#supportTileBox .p2pModuleTitle{
+  color:#9fbea7!important;
+  text-shadow:none!important;
+}
+
+#supportTileBox .p2pDirectNote{
+  color:#f1f4f2!important;
+  font-weight:750!important;
+  line-height:1.5!important;
+}
+
+#supportTileBox label{
+  color:#c7d0ca!important;
+}
+
+#supportTileBox .supportValue,
+#supportTileBox .supportStatus{
+  color:#aebbb2!important;
+}
+
+#supportTileBox input{
+  border-color:rgba(112,143,120,.38)!important;
+  background:#080e0a!important;
+  color:#f5f7f5!important;
+}
+
+#supportTileBox input::placeholder{
+  color:#7f8c83!important;
+}
+
+#supportTileBox .btn{
+  border-color:rgba(102,138,111,.42)!important;
+  background:linear-gradient(180deg,#253b2b,#17251b)!important;
+  color:#f4f7f5!important;
+  box-shadow:none!important;
+}
+
+#supportTileBox .btn:hover{
+  border-color:rgba(139,171,147,.68)!important;
+  background:linear-gradient(180deg,#304b37,#1c2dd21)!important;
+}
+
+#supportTileBox #supportStartPayment{
+  border-color:rgba(128,166,137,.72)!important;
+  background:linear-gradient(135deg,#365b40,#233d2b)!important;
+  color:#ffffff!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.26)!important;
+}
+
+/* FLOATING PAY ME BUTTON */
+#payMeMonolithTab{
+  border-color:rgba(107,147,117,.72)!important;
+  background:linear-gradient(135deg,#273d2d,#17261c)!important;
+  color:#f2f5f3!important;
+  box-shadow:
+    0 0 0 1px rgba(145,175,152,.06) inset,
+    0 10px 24px rgba(0,0,0,.34)!important;
+}
+
+#payMeMonolithTab:hover{
+  border-color:rgba(145,175,152,.86)!important;
+  background:linear-gradient(135deg,#324c39,#1c2d22)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.40)!important;
+}
+
+/* PAY ME OVERLAY */
+#payMeMonolithOverlay{
+  background:rgba(0,4,2,.86)!important;
+}
+
+#payMeMonolithPanel{
+  border-color:rgba(83,126,94,.62)!important;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(48,91,59,.18),transparent 36%),
+    linear-gradient(145deg,#17231b,#0c1510 58%,#060a07)!important;
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.58)!important;
+}
+
+#payMeMonolithClose{
+  border-color:rgba(112,143,120,.42)!important;
+  background:#0a110c!important;
+  color:#eef2ef!important;
+}
+
+#payMeMonolithContent .p2pShareBanner{
+  border-color:rgba(83,126,94,.56)!important;
+  background:
+    radial-gradient(circle at top left,rgba(52,96,63,.18),transparent 40%),
+    linear-gradient(145deg,#1b2b20,#0c1710)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.36)!important;
+}
+
+#payMeMonolithContent .p2pShareEyebrow{
+  color:#a8c5af!important;
+  text-shadow:none!important;
+}
+
+#payMeMonolithContent .p2pShareBanner strong{
+  color:#f3f5f3!important;
+}
+
+#payMeMonolithContent .p2pShareUrl{
+  border-color:rgba(112,143,120,.34)!important;
+  background:#080e0a!important;
+  color:#dce5df!important;
+}
+
+#payMeMonolithContent .btn{
+  border-color:rgba(102,138,111,.46)!important;
+  background:linear-gradient(180deg,#293f30,#17251b)!important;
+  color:#f4f7f5!important;
+  box-shadow:none!important;
+}
+</style>
+
+
+<style id="MONOLITH_P2P_DIRECT_NOTE_CONTRAST_FIX_V1">
+#supportTileBox .p2pDirectNote{
+  display:block!important;
+  background:linear-gradient(145deg,#101813,#090f0b)!important;
+  border:1px solid rgba(116,145,123,.48)!important;
+  border-radius:16px!important;
+  padding:16px 18px!important;
+  color:#ffffff!important;
+  font-size:15px!important;
+  font-weight:800!important;
+  line-height:1.55!important;
+  text-shadow:none!important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.025) inset,
+    0 10px 24px rgba(0,0,0,.24)!important;
+}
+</style>
+
+
+<style id="MONOLITH_COMMERCE_SUITE_COMMAND_THEME_V3">
+/* PAY ME BUTTON: MATCH FIND ME */
+#payMeMonolithTab{
+  font-size:16px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+  border:1px solid rgba(130,220,255,.55)!important;
+  background:#06111f!important;
+  color:#e9f6ff!important;
+  box-shadow:0 0 25px rgba(75,188,255,.22)!important;
+}
+
+#payMeMonolithTab:hover{
+  border-color:rgba(130,220,255,.82)!important;
+  background:#0b2035!important;
+  box-shadow:0 0 30px rgba(75,188,255,.32)!important;
+}
+
+/* COMMERCE SUITE: INDUSTRIAL COMMAND CENTER */
+#commerceHubBox{
+  border:1px solid rgba(213,112,42,.82)!important;
+  background:
+    radial-gradient(circle at 92% 0%,rgba(190,76,20,.16),transparent 34%),
+    linear-gradient(145deg,#252a30 0%,#13171c 52%,#080b0f 100%)!important;
+  box-shadow:
+    0 0 0 1px rgba(255,145,70,.07) inset,
+    0 0 28px rgba(166,66,20,.16),
+    0 18px 42px rgba(0,0,0,.42)!important;
+}
+
+#commerceHubBox::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:4px;
+  background:linear-gradient(
+    90deg,
+    #7a2d12 0%,
+    #e46f28 45%,
+    #ff9a52 65%,
+    #7a2d12 100%
+  );
+  box-shadow:0 0 16px rgba(231,103,37,.38);
+}
+
+#commerceHubBox > .k{
+  display:block!important;
+  margin:-10px -10px 16px!important;
+  padding:18px 16px 15px!important;
+  border-bottom:1px solid rgba(213,112,42,.48)!important;
+  background:
+    linear-gradient(90deg,rgba(66,25,11,.72),rgba(20,23,27,.94) 54%,rgba(8,11,15,.98))!important;
+  color:#ff8a3d!important;
+  font-family:Impact,Haettenschweiler,"Arial Narrow Bold",sans-serif!important;
+  font-size:24px!important;
+  font-weight:900!important;
+  letter-spacing:4px!important;
+  line-height:1!important;
+  text-transform:uppercase!important;
+  text-shadow:
+    0 2px 0 #2a0d04,
+    0 0 14px rgba(222,91,29,.30)!important;
+}
+
+#commerceHubBox .commerceHubIntro{
+  border-left:4px solid #c95720!important;
+  padding:4px 0 4px 14px!important;
+}
+
+#commerceHubBox .commerceHubIntro strong{
+  display:block!important;
+  color:#ffffff!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  letter-spacing:.015em!important;
+}
+
+#commerceHubBox .commerceHubIntro span{
+  display:block!important;
+  margin-top:5px!important;
+  color:#bfc5cb!important;
+  font-weight:650!important;
+}
+
+#commerceHubBox .tileModulesPanel{
+  margin-top:16px!important;
+  border:1px solid rgba(213,112,42,.24)!important;
+  background:rgba(4,6,9,.74)!important;
+}
+</style>
+
+
+
+
+
+<style id="MONOLITH_PAY_ME_MATCH_ORIGINAL_FIND_ME_V2">
+#payMeMonolithTab{
+  border:1px solid rgba(130,220,255,.55)!important;
+  background:#06111f!important;
+  color:#ffffff!important;
+  -webkit-text-fill-color:#ffffff!important;
+  border-radius:999px!important;
+  padding:12px 15px!important;
+  font-family:"Arial Black",Arial,sans-serif!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  letter-spacing:normal!important;
+  line-height:normal!important;
+  width:auto!important;
+  min-width:0!important;
+  height:auto!important;
+  cursor:pointer!important;
+  box-shadow:0 0 25px rgba(75,188,255,.22)!important;
+  transform:none!important;
+}
+
+#payMeMonolithTab:hover{
+  border-color:rgba(130,220,255,.55)!important;
+  background:#06111f!important;
+  color:#e9f6ff!important;
+  box-shadow:0 0 25px rgba(75,188,255,.22)!important;
+  transform:none!important;
+}
+</style>
+
+
+<script id="MONOLITH_PAY_ME_EXACT_FIND_ME_SIZE_V1">
+(function(){
+  const findMe = document.getElementById("findMeMonolithTab");
+  const payMe = document.getElementById("payMeMonolithTab");
+
+  if(!findMe || !payMe) return;
+
+  function matchFindMeSize(){
+    const box = findMe.getBoundingClientRect();
+
+    payMe.style.setProperty("width", box.width + "px", "important");
+    payMe.style.setProperty("min-width", box.width + "px", "important");
+    payMe.style.setProperty("height", box.height + "px", "important");
+    payMe.style.setProperty("padding", "0", "important");
+    payMe.style.setProperty("line-height", box.height + "px", "important");
+  }
+
+  matchFindMeSize();
+  window.addEventListener("load", matchFindMeSize);
+  window.addEventListener("resize", matchFindMeSize);
+  setTimeout(matchFindMeSize, 250);
+})();
+</script>
+
+
+<style id="MONOLITH_P2P_EMERALD_NETWORK_THEME_V1">
+/* P2P PAYMENTS MODULE: EMERALD NETWORK */
+#supportTileBox{
+  border:1px solid rgba(50,230,116,.72)!important;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(37,210,104,.22),transparent 38%),
+    radial-gradient(circle at 92% 100%,rgba(13,105,60,.20),transparent 42%),
+    linear-gradient(145deg,#07150d 0%,#040c08 56%,#020604 100%)!important;
+  box-shadow:
+    0 0 0 1px rgba(78,255,143,.06) inset,
+    0 0 30px rgba(30,205,96,.16),
+    0 18px 42px rgba(0,0,0,.42)!important;
+}
+
+#supportTileBox::before{
+  background:
+    linear-gradient(115deg,transparent 0%,rgba(61,238,126,.055) 42%,transparent 66%)!important;
+}
+
+#supportTileBox .p2pModuleTitle{
+  color:#42e978!important;
+  text-shadow:0 0 18px rgba(42,225,108,.34)!important;
+}
+
+#supportTileBox .p2pDirectNote{
+  background:linear-gradient(145deg,#0b1d12,#050c08)!important;
+  border:1px solid rgba(56,218,112,.42)!important;
+  color:#ffffff!important;
+  box-shadow:0 0 20px rgba(31,190,91,.08) inset!important;
+}
+
+#supportTileBox label{
+  color:#b9d9c4!important;
+}
+
+#supportTileBox .supportValue,
+#supportTileBox .supportStatus{
+  color:#8fb99e!important;
+}
+
+#supportTileBox input{
+  border-color:rgba(55,215,111,.38)!important;
+  background:#030a06!important;
+  color:#ffffff!important;
+  box-shadow:0 0 0 1px rgba(41,203,99,.04) inset!important;
+}
+
+#supportTileBox input:focus{
+  border-color:rgba(66,233,120,.78)!important;
+  box-shadow:0 0 0 3px rgba(50,220,112,.11)!important;
+}
+
+#supportTileBox input::placeholder{
+  color:#698775!important;
+}
+
+#supportTileBox .btn{
+  border-color:rgba(54,215,109,.46)!important;
+  background:linear-gradient(180deg,#123d24,#092416)!important;
+  color:#f4fff7!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.26)!important;
+}
+
+#supportTileBox .btn:hover{
+  border-color:rgba(76,239,136,.82)!important;
+  background:linear-gradient(180deg,#17522f,#0b301c)!important;
+}
+
+#supportTileBox #supportStartPayment{
+  border-color:rgba(82,255,143,.86)!important;
+  background:linear-gradient(135deg,#2dce68,#15984a)!important;
+  color:#021107!important;
+  font-weight:900!important;
+  box-shadow:
+    0 0 24px rgba(43,220,105,.24),
+    0 10px 26px rgba(0,0,0,.34)!important;
+}
+
+/* PAY ME POPUP: EMERALD NETWORK */
+#payMeMonolithOverlay{
+  background:rgba(0,7,3,.88)!important;
+}
+
+#payMeMonolithPanel{
+  border:1px solid rgba(50,230,116,.66)!important;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(37,210,104,.20),transparent 38%),
+    radial-gradient(circle at 92% 100%,rgba(13,105,60,.18),transparent 44%),
+    linear-gradient(145deg,#07150d 0%,#040c08 58%,#020604 100%)!important;
+  box-shadow:
+    0 0 34px rgba(30,205,96,.16),
+    0 26px 74px rgba(0,0,0,.64)!important;
+}
+
+#payMeMonolithClose{
+  border-color:rgba(56,218,112,.46)!important;
+  background:#061009!important;
+  color:#ffffff!important;
+}
+
+#payMeMonolithClose:hover{
+  border-color:rgba(76,239,136,.82)!important;
+  background:#0d2415!important;
+}
+
+#payMeMonolithContent .p2pShareBanner{
+  border:1px solid rgba(50,230,116,.58)!important;
+  background:
+    radial-gradient(circle at top left,rgba(39,221,106,.20),transparent 42%),
+    linear-gradient(145deg,#0b2114,#050d08)!important;
+  box-shadow:
+    0 0 24px rgba(30,205,96,.12),
+    0 16px 38px rgba(0,0,0,.42)!important;
+}
+
+#payMeMonolithContent .p2pShareEyebrow{
+  color:#42e978!important;
+  text-shadow:0 0 16px rgba(42,225,108,.34)!important;
+}
+
+#payMeMonolithContent .p2pShareBanner strong{
+  color:#ffffff!important;
+}
+
+#payMeMonolithContent .p2pShareUrl{
+  border-color:rgba(55,215,111,.36)!important;
+  background:#030a06!important;
+  color:#bfffd2!important;
+}
+
+#payMeMonolithContent .btn{
+  border-color:rgba(54,215,109,.48)!important;
+  background:linear-gradient(180deg,#123d24,#092416)!important;
+  color:#ffffff!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.26)!important;
+}
+
+#payMeMonolithContent .btn:hover{
+  border-color:rgba(76,239,136,.82)!important;
+  background:linear-gradient(180deg,#17522f,#0b301c)!important;
+}
+</style>
 
 </body>
 </html>
