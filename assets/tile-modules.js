@@ -25,7 +25,8 @@
   }
   const LIVE_MODULES = new Set([
     "marketplace",
-    "p2p_payments"
+    "p2p_payments",
+    "otc_desk"
   ]);
 
   function coordinate() {
@@ -103,6 +104,7 @@
       `;
     }
 
+    if (module.key === "otc_desk") return `<a class="btn commerceModuleAction" href="/otc/">Open OTC Desk</a>`;
     if (config.url) {
       return `
         <a class="btn commerceModuleAction"
