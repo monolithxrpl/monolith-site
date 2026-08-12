@@ -336,6 +336,45 @@
         padding: 21px;
       }
     }
+
+    .auth-panel.verified { border-color: rgba(56,217,150,.35); }
+    .desk { display:none; margin-top:22px; }
+    .desk.visible { display:block; }
+    .desk-grid { display:grid; grid-template-columns:360px minmax(0,1fr); gap:18px; }
+    .desk-card { padding:24px; }
+    .tabs { display:flex; gap:8px; margin:18px 0; }
+    .tab,.secondary,.danger-button { border:1px solid var(--line); border-radius:11px; padding:11px 14px; color:var(--text); background:rgba(255,255,255,.035); font-weight:800; cursor:pointer; }
+    .tab.active { border-color:rgba(61,140,255,.65); background:rgba(61,140,255,.14); }
+    .secondary { width:100%; margin-top:10px; }
+    .danger-button { width:100%; margin-top:10px; border-color:rgba(255,102,120,.35); color:#ffc1c8; }
+    .form-view { display:none; }
+    .form-view.active { display:block; }
+    .field { margin-top:13px; }
+    .field label { display:block; margin-bottom:6px; color:var(--muted); font-size:11px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+    .field input,.field select { width:100%; min-height:45px; border:1px solid var(--line); border-radius:11px; padding:10px 12px; color:var(--text); background:#080d16; font:inherit; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .issuer { display:none; }
+    .issuer.visible { display:block; }
+    .fee-box { margin:16px 0; padding:13px; border:1px solid rgba(216,173,87,.3); border-radius:12px; color:#efcf8b; background:rgba(216,173,87,.06); font-size:12px; line-height:1.55; }
+    .deal-empty { display:grid; min-height:420px; place-items:center; color:var(--muted); text-align:center; }
+    .deal-head { display:flex; align-items:flex-start; justify-content:space-between; gap:15px; }
+    .deal-id { margin-top:7px; color:var(--muted); font:12px monospace; overflow-wrap:anywhere; }
+    .badge { display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:6px 9px; color:#b9d5ff; background:rgba(61,140,255,.1); font-size:10px; font-weight:900; text-transform:uppercase; }
+    .terms { display:grid; grid-template-columns:1fr auto 1fr; gap:12px; align-items:center; margin:22px 0; }
+    .asset { padding:17px; border:1px solid var(--line); border-radius:14px; background:rgba(255,255,255,.025); }
+    .asset strong { display:block; font-size:23px; overflow-wrap:anywhere; }
+    .asset span { color:var(--muted); font-size:12px; }
+    .swap { color:var(--gold); font-weight:900; }
+    .meta { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .meta div { padding:11px; border-bottom:1px solid var(--line); color:var(--muted); font-size:12px; overflow-wrap:anywhere; }
+    .meta strong { display:block; margin-top:4px; color:var(--text); }
+    .actions { margin-top:20px; padding-top:18px; border-top:1px solid var(--line); }
+    .event { position:relative; margin-top:12px; padding:0 0 12px 18px; border-left:1px solid var(--line); color:var(--muted); font-size:12px; }
+    .event::before { position:absolute; left:-4px; top:3px; width:7px; height:7px; border-radius:50%; background:var(--blue); content:""; }
+    .event strong { display:block; color:var(--text); }
+    .settlement-lock { margin-top:18px; padding:14px; border:1px solid rgba(216,173,87,.28); border-radius:13px; color:#efcf8b; background:rgba(216,173,87,.06); font-size:12px; line-height:1.55; }
+    @media(max-width:900px){.desk-grid{grid-template-columns:1fr}.deal-empty{min-height:180px}}
+    @media(max-width:560px){.field-row,.meta{grid-template-columns:1fr}.terms{grid-template-columns:1fr}.swap{text-align:center}}
   </style>
 </head>
 <body>
@@ -349,218 +388,86 @@
       <a class="back" href="/">Return to entrance</a>
     </header>
 
-    <main>
+<main>
       <section class="hero">
         <div class="eyebrow">XRPL Commerce Infrastructure</div>
         <h1>OTC Desk</h1>
-        <p>
-          Private wallet-to-wallet deal infrastructure for larger token trades
-          without treating the public order book as the primary execution venue.
-        </p>
+        <p>Private, authenticated wallet-to-wallet negotiations with immutable terms and a 0.50% MONOLITH fee on the $XRP leg of completed trades.</p>
       </section>
 
-      <section class="grid">
-        <article class="panel auth-panel">
+      <section class="grid" id="entrance">
+        <article class="panel auth-panel" id="authPanel">
           <div class="panel-label">Secure entrance</div>
           <h2>Verify your XRPL wallet</h2>
+          <p class="panel-copy">Sign in through Xaman to create, review, and negotiate private OTC deals.</p>
+          <div class="notice"><span>✓</span><span><strong>Authentication only.</strong> This signature cannot move $XRP or tokens.</span></div>
+          <button class="button" id="signInButton" type="button">Sign in with Xaman</button>
+          <div class="status" id="authStatus" role="status" aria-live="polite"></div>
+        </article>
+        <aside class="side"><article class="panel side-card locked">
+          <span class="locked-badge">Settlement locked</span>
+          <h3>Negotiate now. Execute later.</h3>
+          <p>Deals can reach agreement, but no assets or fees move until atomic XRPL settlement is verified live.</p>
+          <ul class="facts"><li>$XRP required on one side</li><li>0.50% fee only on completed trades</li><li>Private participant-only access</li><li>Immutable terms and event history</li></ul>
+        </article></aside>
+      </section>
 
-          <p class="panel-copy">
-            Sign in through Xaman to verify control of your XRPL wallet.
-          </p>
-              <div class="notice">
-                <span>✓</span>
-                <span>
-                  <strong>This is authentication only.</strong>
-                  Signing this request doesn’t move $XRP, tokens, or any other asset.
-                </span>
-              </div>
-
-              <button class="button" id="signInButton" type="button">
-                Sign in with Xaman
-              </button>
-
-              <div
-                class="status"
-                id="authStatus"
-                role="status"
-                aria-live="polite"
-              ></div>
-            </article>
-            <aside class="side">
-              <article class="panel side-card">
-                <div class="panel-label">Private by design</div>
-                <h3>Direct deal infrastructure</h3>
-                <p>
-                  Structured OTC terms, authenticated participants, immutable terms
-                  hashes, and an auditable deal event record.
-                </p>
-
-                <ul class="facts">
-                  <li>Verified XRPL wallet control</li>
-                  <li>Private deal visibility</li>
-                  <li>Deterministic terms hashing</li>
-                  <li>MONOLITH coordinate integration</li>
-                </ul>
-              </article>
-            </aside>
-          </section>
-        </main>
+      <section class="desk" id="desk">
+        <div class="desk-grid">
+          <article class="panel desk-card">
+            <div class="panel-label">Deal controls</div><h2>OTC workspace</h2>
+            <div class="tabs"><button class="tab active" data-view="create">New deal</button><button class="tab" data-view="load">Open deal</button></div>
+            <form class="form-view active" id="createForm">
+              <div class="field"><label>MONOLITH coordinate</label><input name="coordinate" required placeholder="N1W1"></div>
+              <div class="field"><label>Your role</label><select name="makerRole"><option value="seller">Seller</option><option value="buyer">Buyer</option></select></div>
+              <div class="field-row"><div class="field"><label>Asset code</label><input name="assetCode" required value="XRP"></div><div class="field"><label>Asset amount</label><input name="assetAmount" required inputmode="decimal" placeholder="10000"></div></div>
+              <div class="field issuer" id="assetIssuerField"><label>Asset issuer</label><input name="assetIssuer" placeholder="r..."></div>
+              <div class="field-row"><div class="field"><label>Payment code</label><input name="considerationCode" required placeholder="ABC"></div><div class="field"><label>Payment amount</label><input name="considerationAmount" required inputmode="decimal" placeholder="1000000"></div></div>
+              <div class="field issuer" id="considerationIssuerField"><label>Payment issuer</label><input name="considerationIssuer" placeholder="r..."></div>
+              <div class="fee-box" id="feePreview">One side must be $XRP. MONOLITH receives 0.50% of the $XRP leg only if atomic settlement completes.</div>
+              <button class="button" type="submit">Create private draft</button>
+            </form>
+            <form class="form-view" id="loadForm"><div class="field"><label>Private deal ID</label><input name="dealId" required placeholder="otcd_..."></div><button class="button" type="submit">Load private deal</button></form>
+            <div class="status" id="deskStatus" role="status"></div>
+          </article>
+          <article class="panel desk-card" id="dealPanel"><div class="deal-empty"><div><h3>No deal loaded</h3><p>Create a private draft or enter a deal ID.</p></div></div></article>
+        </div>
+      </section>
+    </main>
 
         <footer>
           MONOLITH OTC Desk · Authentication doesn’t authorize payment or asset movement.
         </footer>
       </div>
-  <script>
+<script>
     (() => {
       "use strict";
-
-      const STORAGE_KEY = "monolith_otc_auth_payload_uuid";
-      const signInButton = document.getElementById("signInButton");
-      const authStatus = document.getElementById("authStatus");
-
-      function setStatus(message, type = "") {
-        authStatus.className = `status visible ${type}`.trim();
-        authStatus.textContent = message;
-      }
-
-      function setVerified(account) {
-        authStatus.className = "status visible success";
-        authStatus.innerHTML =
-          'Wallet verified.<span class="wallet"></span>';
-
-        authStatus.querySelector(".wallet").textContent = account;
-        signInButton.textContent = "Wallet verified";
-        signInButton.disabled = true;
-      }
-          async function readJson(response) {
-            const data = await response.json().catch(() => null);
-
-            if (!response.ok || !data || data.ok !== true) {
-              throw new Error(
-                data?.error || `Request failed with status ${response.status}`
-              );
-            }
-
-            return data;
-          }
-
-          async function verifyPayload(payloadUuid) {
-            setStatus("Verifying the signed Xaman request…");
-            signInButton.disabled = true;
-
-            try {
-              const response = await fetch("/api/xaman/status", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ payloadUuid })
-              });
-
-              const data = await readJson(response);
-              const status = data.status || {};
-          if (status.cancelled) {
-            localStorage.removeItem(STORAGE_KEY);
-            throw new Error("The Xaman sign-in request was cancelled.");
-          }
-
-          if (status.expired) {
-            localStorage.removeItem(STORAGE_KEY);
-            throw new Error(
-              "The Xaman sign-in request expired. Start again."
-            );
-          }
-
-          if (!status.resolved || !status.signed) {
-            setStatus("The Xaman request hasn’t been signed yet.");
-            signInButton.disabled = false;
-            signInButton.textContent = "Check Xaman status";
-            return;
-          }
-
-          if (!status.account) {
-            throw new Error(
-              "Xaman resolved the request without a signer account."
-            );
-          }
-              localStorage.setItem(STORAGE_KEY, payloadUuid);
-              setVerified(status.account);
-            } catch (error) {
-              setStatus(
-                error.message || "Wallet verification failed.",
-                "error"
-              );
-
-              signInButton.disabled = false;
-              signInButton.textContent = "Sign in with Xaman";
-            }
-          }
-
-          async function startAuthentication() {
-            signInButton.disabled = true;
-            signInButton.textContent = "Creating secure request…";
-            setStatus("Preparing Xaman authentication…");
-        try {
-          const response = await fetch("/api/otc/auth/start", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              returnUrl: `${window.location.origin}/otc/`
-            })
-          });
-
-          const data = await readJson(response);
-          const auth = data.auth || {};
-          const payloadUuid = auth.payloadUuid;
-          const signUrl = auth.signUrl;
-          if (!payloadUuid || !signUrl) {
-            throw new Error(
-              "Xaman didn’t return a valid authentication request."
-            );
-          }
-
-          localStorage.setItem(STORAGE_KEY, payloadUuid);
-          window.location.assign(signUrl);
-        } catch (error) {
-          setStatus(
-            error.message || "Unable to start Xaman authentication.",
-            "error"
-          );
-
-          signInButton.disabled = false;
-          signInButton.textContent = "Sign in with Xaman";
-        }
-      }
-          signInButton.addEventListener("click", () => {
-            const params = new URLSearchParams(window.location.search);
-            const returnedPayload = params.get("payload");
-            const storedPayload = localStorage.getItem(STORAGE_KEY);
-            const payloadUuid = returnedPayload || storedPayload;
-
-            if (payloadUuid) {
-              verifyPayload(payloadUuid);
-              return;
-            }
-
-            startAuthentication();
-          });
-
-          const params = new URLSearchParams(window.location.search);
-          const returnedPayload = params.get("payload");
-          if (returnedPayload) {
-            localStorage.setItem(STORAGE_KEY, returnedPayload);
-
-            history.replaceState(
-              {},
-              document.title,
-              window.location.pathname
-            );
-
-            verifyPayload(returnedPayload);
-          }
-        })();
-      </script>
+      const KEY="monolith_otc_auth_payload_uuid",$=id=>document.getElementById(id);
+      const sign=$('signInButton'),auth=$('authStatus'),desk=$('desk'),deskStatus=$('deskStatus'),dealPanel=$('dealPanel');
+      let payloadUuid=localStorage.getItem(KEY)||"",account="",current=null;
+      function status(el,msg,type=""){el.className=`status visible ${type}`.trim();el.textContent=msg}
+      async function json(response){const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok)throw Object.assign(new Error(data?.error||`Request failed (${response.status})`),{code:data?.code});return data}
+      async function api(path,method="GET",body){const options={method,headers:{"Content-Type":"application/json"}};if(body)options.body=JSON.stringify({...body,payloadUuid});return json(await fetch(path,options))}
+      function verified(wallet){account=wallet;auth.className="status visible success";auth.innerHTML='Wallet verified.<span class="wallet"></span>';auth.querySelector('.wallet').textContent=wallet;sign.textContent="Wallet verified";sign.disabled=true;$('authPanel').classList.add('verified');desk.classList.add('visible')}
+      async function verify(uuid){status(auth,"Verifying signed Xaman request…");sign.disabled=true;try{const data=await json(await fetch('/api/xaman/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({payloadUuid:uuid})}));const s=data.status||{};if(s.cancelled||s.expired){localStorage.removeItem(KEY);throw new Error('Xaman request cancelled or expired.')}if(!s.resolved||!s.signed){status(auth,"Sign the request in Xaman, then check again.");sign.disabled=false;sign.textContent="Check Xaman status";return}if(!s.account)throw new Error('Signer account missing.');payloadUuid=uuid;localStorage.setItem(KEY,uuid);verified(s.account)}catch(e){status(auth,e.message,'error');sign.disabled=false;sign.textContent="Sign in with Xaman"}}
+      async function start(){sign.disabled=true;status(auth,"Preparing Xaman authentication…");try{const data=await json(await fetch('/api/otc/auth/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({returnUrl:`${location.origin}/otc/`})}));payloadUuid=data.auth?.payloadUuid;if(!payloadUuid||!data.auth?.signUrl)throw new Error('Invalid Xaman authentication response.');localStorage.setItem(KEY,payloadUuid);location.assign(data.auth.signUrl)}catch(e){status(auth,e.message,'error');sign.disabled=false}}
+      sign.onclick=()=>payloadUuid?verify(payloadUuid):start();
+      document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));document.querySelectorAll('.form-view').forEach(x=>x.classList.toggle('active',x.id===`${t.dataset.view}Form`))});
+      function code(v){return String(v||'').trim().toUpperCase()}
+      function issuers(){const a=code($('createForm').assetCode.value),c=code($('createForm').considerationCode.value);$('assetIssuerField').classList.toggle('visible',a&&a!=='XRP');$('considerationIssuerField').classList.toggle('visible',c&&c!=='XRP');const amount=a==='XRP'?$('createForm').assetAmount.value:c==='XRP'?$('createForm').considerationAmount.value:'';$('feePreview').textContent=amount?`Estimated MONOLITH fee: ${(Number(amount)*.005).toLocaleString(undefined,{maximumFractionDigits:6})} XRP (collected only on completed atomic settlement).`:'One side must be $XRP. MONOLITH receives 0.50% of the $XRP leg only if settlement completes.'}
+      $('createForm').addEventListener('input',issuers);issuers();
+      function formData(form){return Object.fromEntries(new FormData(form).entries())}
+      $('createForm').onsubmit=async e=>{e.preventDefault();const b=formData(e.target),a=code(b.assetCode),c=code(b.considerationCode);if(a!=='XRP'&&c!=='XRP')return status(deskStatus,'One side of every OTC v1 deal must be XRP.','error');b.assetCode=a;b.considerationCode=c;b.makerWallet=account;try{status(deskStatus,'Creating private draft…');current=(await api('/api/otc/deals','POST',b)).deal;render();status(deskStatus,'Private draft created.','success')}catch(x){status(deskStatus,x.message,'error')}};
+      $('loadForm').onsubmit=async e=>{e.preventDefault();await load(formData(e.target).dealId)};
+      async function load(id){try{status(deskStatus,'Loading private deal…');current=(await api(`/api/otc/deals/${encodeURIComponent(id)}?payloadUuid=${encodeURIComponent(payloadUuid)}`)).deal;render();status(deskStatus,'Private deal loaded.','success')}catch(x){status(deskStatus,x.message,'error')}}
+      async function act(name,body={}){try{status(deskStatus,`${name} in progress…`);current=(await api(`/api/otc/deals/${current.dealId}/${name}`,'POST',body)).deal;await load(current.dealId)}catch(x){status(deskStatus,x.message,'error')}}
+      function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+      function xrpFee(d){return d.feeAmountDrops?(Number(d.feeAmountDrops)/1e6).toLocaleString(undefined,{maximumFractionDigits:6}):'Pending'}
+      function actionHtml(d){const maker=account===d.makerWallet,taker=account===d.takerWallet,active=['open','negotiating'].includes(d.status);if(d.status==='draft'&&maker)return `<div class="field"><label>Counterparty XRPL wallet</label><input id="takerWallet" placeholder="r..."></div><button class="button" id="openDeal">Open private deal</button><button class="danger-button" id="cancelDeal">Cancel draft</button>`;if(active)return `${maker||taker?'<button class="secondary" id="counterDeal">Counter terms</button>':''}${taker?'<button class="button" id="acceptDeal">Accept latest terms</button><button class="danger-button" id="declineDeal">Decline deal</button>':''}${maker?'<button class="button" id="acceptDeal">Accept latest counter</button><button class="danger-button" id="cancelDeal">Cancel deal</button>':''}`;return '<p class="panel-copy">No further negotiation actions are available.</p>'}
+      function render(){const d=current;if(!d)return;dealPanel.innerHTML=`<div class="deal-head"><div><div class="panel-label">${esc(d.coordinate)}</div><h2>Private deal</h2><div class="deal-id">${esc(d.dealId)}</div></div><span class="badge">${esc(d.status)}</span></div><div class="terms"><div class="asset"><strong>${esc(d.asset.amount)} ${esc(d.asset.code)}</strong><span>${esc(d.asset.issuer||'Native XRP')}</span></div><div class="swap">⇄</div><div class="asset"><strong>${esc(d.consideration.amount)} ${esc(d.consideration.code)}</strong><span>${esc(d.consideration.issuer||'Native XRP')}</span></div></div><div class="meta"><div>Maker<strong>${esc(d.makerWallet)}</strong></div><div>Counterparty<strong>${esc(d.takerWallet||'Not assigned')}</strong></div><div>Terms version<strong>${esc(d.termsVersion)}</strong></div><div>MONOLITH fee<strong>${xrpFee(d)} XRP · 0.50%</strong></div></div><div class="settlement-lock"><strong>Atomic settlement disabled.</strong> Agreement does not move assets. The MONOLITH fee is collected only when the complete trade settles atomically.</div><div class="actions">${actionHtml(d)}</div><div class="actions"><div class="panel-label">Immutable history</div>${(d.events||[]).map(e=>`<div class="event"><strong>${esc(e.eventType.replaceAll('_',' '))}</strong>${esc(e.createdAt||'')}</div>`).join('')||'<p class="panel-copy">Reload the deal to view event history.</p>'}</div>`;wire()}
+      function wire(){const d=current;if($('openDeal'))$('openDeal').onclick=()=>act('open',{takerWallet:$('takerWallet').value});if($('acceptDeal'))$('acceptDeal').onclick=()=>act('accept');if($('declineDeal'))$('declineDeal').onclick=()=>act('decline');if($('cancelDeal'))$('cancelDeal').onclick=()=>act('cancel');if($('counterDeal'))$('counterDeal').onclick=()=>{const amount=prompt('New asset amount',d.asset.amount);if(amount===null)return;const payment=prompt('New payment amount',d.consideration.amount);if(payment===null)return;act('counter',{assetCode:d.asset.code,assetIssuer:d.asset.issuer,assetAmount:amount,considerationCode:d.consideration.code,considerationIssuer:d.consideration.issuer,considerationAmount:payment})}}
+      const params=new URLSearchParams(location.search),returned=params.get('payload');if(returned){payloadUuid=returned;localStorage.setItem(KEY,returned);history.replaceState({},document.title,location.pathname);verify(returned)}else if(payloadUuid){verify(payloadUuid)}
+    })();
+  </script>
     </body>
     </html>
