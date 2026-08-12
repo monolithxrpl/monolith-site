@@ -420,10 +420,10 @@
             <form class="form-view active" id="createForm">
               <div class="field"><label>MONOLITH coordinate</label><input name="coordinate" required placeholder="e.g. N1W1"></div>
               <div class="field"><label>Your role</label><select name="makerRole"><option value="seller">Seller</option><option value="buyer">Buyer</option></select></div>
-              <div class="field-row"><div class="field"><label>Asset code</label><input name="assetCode" required value="XRP"></div><div class="field"><label>Asset amount</label><input name="assetAmount" required inputmode="decimal" placeholder="e.g. 10000"></div></div>
-              <div class="field issuer" id="assetIssuerField"><label>Asset issuer</label><input name="assetIssuer" placeholder="r..."></div>
-              <div class="field-row"><div class="field"><label>Payment code</label><input name="considerationCode" required placeholder="e.g. ABC"></div><div class="field"><label>Payment amount</label><input name="considerationAmount" required inputmode="decimal" placeholder="e.g. 1000000"></div></div>
-              <div class="field issuer" id="considerationIssuerField"><label>Payment issuer</label><input name="considerationIssuer" placeholder="r..."></div>
+              <div class="field-row"><div class="field"><label>Token being sold</label><input name="assetCode" required placeholder="e.g. BAG"></div><div class="field"><label>Amount being sold</label><input name="assetAmount" required inputmode="decimal" placeholder="e.g. 10000"></div></div>
+              <div class="field issuer" id="assetIssuerField"><label>Token issuer wallet</label><input name="assetIssuer" placeholder="r..."></div>
+              <div class="field-row"><div class="field"><label>Payment currency</label><input name="considerationCode" required value="XRP" readonly aria-readonly="true"></div><div class="field"><label>Amount buyer pays</label><input name="considerationAmount" required inputmode="decimal" placeholder="e.g. 1000000"></div></div>
+              <div class="field issuer" id="considerationIssuerField"><label>Payment token issuer wallet</label><input name="considerationIssuer" placeholder="r..."></div>
               <div class="fee-box" id="feePreview">One side must be $XRP. MONOLITH receives 0.50% of the $XRP leg only if atomic settlement completes.</div>
               <button class="button" type="submit">Create private draft</button>
             </form>
