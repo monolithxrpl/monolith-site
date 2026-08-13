@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#05070b">
 
-  <title>MONOLITH Public OTC Desk</title>
+  <title>MONOLITH Atomic OTC Desk</title>
   <meta
     name="description"
     content="Public fixed-price MONOLITH token sales with exact XRP quotes and atomic XRPL Batch settlement."
@@ -565,23 +565,22 @@
 
     <main>
       <section class="hero">
-        <div class="eyebrow">Public XRPL Token Sales</div>
-        <h1>MONOLITH OTC Desk</h1>
+        <div class="eyebrow">The Next Generation of XRPL Trading</div>
+        <h1>Atomic OTC Trading Is Coming</h1>
         <p>
-          Create public fixed-price token sales, reserve exact inventory and
-          prepare three-leg atomic XRPL Batch transactions.
+          MONOLITH has built the next generation of public XRPL token trading. The system is ready and will unlock when BatchV1_1 activates on Mainnet.
         </p>
       </section>
 
       <section class="panel settlement">
         <div>
-          <h2>Atomic settlement status</h2>
+          <h2>Built. Live. Waiting on XRPL Mainnet.</h2>
           <p id="settlementText">
             Checking XRPL Mainnet Batch availability…
           </p>
         </div>
 
-        <span class="badge" id="settlementBadge">Checking</span>
+        <span class="badge" id="settlementBadge">Activation Ready</span>
       </section>
 
       <section class="entrance">
@@ -1630,6 +1629,7 @@
         }
       }
 
+      document.querySelectorAll("#desk button:not(.tab),#desk input,#desk select").forEach(e=>{e.disabled=true;e.title="Unlocks when BatchV1_1 activates on XRPL Mainnet"});
       initialize();
     })();
   </script>
