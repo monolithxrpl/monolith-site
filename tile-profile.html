@@ -3940,7 +3940,7 @@ body.tileWallpaperActive .hero{
               <input
                 id="tileProfileImageFile"
                 type="file"
-                accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif"
               />
               <button class="btn" id="tileProfileImageRemove" type="button">Remove Profile Image</button>
             </div>
@@ -3950,7 +3950,7 @@ body.tileWallpaperActive .hero{
               <input
                 id="tileBannerFile"
                 type="file"
-                accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif"
               />
               <button class="btn" id="tileBannerRemove" type="button">Remove Banner</button>
             </div>
@@ -3960,7 +3960,7 @@ body.tileWallpaperActive .hero{
               <input
                 id="tileWallpaperFile"
                 type="file"
-                accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif"
               />
               <button class="btn" id="tileWallpaperRemove" type="button">Return to Default Wallpaper</button>
             </div>
@@ -4179,7 +4179,7 @@ body.tileWallpaperActive .hero{
               id="galleryUploadFiles"
               type="file"
               multiple
-              accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+              accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif"
             />
 
             <div class="actions galleryOwnerActions">
@@ -5964,7 +5964,7 @@ body.tileWallpaperActive .hero{
 
       if(tooLarge){
         setTileVisualsStatus(
-          "Image is too large. Use a PNG, JPG, or WEBP under 5 MB.",
+          "Image is too large. Use a PNG, JPG, WEBP, or GIF under 5 MB.",
           false
         );
         return;

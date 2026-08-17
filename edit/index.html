@@ -136,7 +136,7 @@
 
       <label>Profile / Tile Image</label>
       <div class="uploadRow">
-        <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" />
+        <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
         <button class="secondary" id="uploadTileImage" type="button" style="background:linear-gradient(135deg,#82dcff,#4bbcff);color:#02111f;border-color:#82dcff;font-weight:900;box-shadow:0 0 22px rgba(75,188,255,.28)">Upload Tile Image</button>
       </div>
       <div class="uploadPreview" id="imagePreview"></div>
@@ -165,7 +165,7 @@
 
       <label>Upload Wallpaper / Banner Image</label>
       <div class="uploadRow">
-        <input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp" />
+        <input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
         <button class="secondary" id="uploadBanner" type="button">Upload Banner</button>
       </div>
       <div class="uploadPreview" id="bannerPreview"></div>
@@ -209,7 +209,7 @@
 
       <label>Add Gallery Images</label>
       <div class="uploadRow">
-        <input id="galleryFiles" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+        <input id="galleryFiles" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple />
         <button class="secondary" id="uploadGallery" type="button">Upload Gallery Images</button>
       </div>
       <div class="uploadPreview" id="galleryPreview"></div>
@@ -629,8 +629,8 @@
       fd.append("favoriteTiles", el.favoriteTiles.value);
 
       const validImage = (file) => {
-        if(!["image/png","image/jpeg","image/webp"].includes(file.type)){
-          setStatus("Image must be PNG JPG WEBP", true);
+        if(!["image/png","image/jpeg","image/webp","image/gif"].includes(file.type)){
+          setStatus("Image must be PNG JPG WEBP GIF", true);
           return false;
         }
         if(file.size > 2 * 1024 * 1024){
