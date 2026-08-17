@@ -4969,7 +4969,7 @@ body.tileWallpaperActive .hero{
     $("title").textContent=displayName;
     $("avatar").src=img;
     $("handle").textContent=handle;
-    $("bio").textContent=note;
+    $("bio").textContent=about||note;
     $("wallet").textContent=maskWallet(t.owner_wallet);
     $("date").textContent=date;
     const deedDeliveryStatus=String(t.deed_delivery_status||"").toLowerCase();
@@ -6188,9 +6188,17 @@ body.tileWallpaperActive .hero{
         $("handle").textContent=visibleHandle;
         m.xHandle=savedHandle;
 
+        const savedAbout=$("aboutInput").value.trim();
+
         $("aboutBox").textContent=
-          $("aboutInput").value.trim()||
+          savedAbout||
           "No about section yet.";
+
+        $("bio").textContent=
+          savedAbout||
+          "No bio has been added yet.";
+
+        m.about=savedAbout;
 
         $("statusBox").textContent=
           $("statusInput").value.trim()||
