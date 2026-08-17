@@ -2769,6 +2769,58 @@ small,
 .linksTileLabel{color:#eaf7ff;font-weight:900;font-size:13px}
 .linksTileSub{color:#9fc7dd;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
+
+/* MONOLITH_TOP_DEED_ACCEPT_20260817 */
+#topDeedCompletion{
+  display:none;
+  width:100%;
+  margin:0 0 18px;
+  padding:18px 20px;
+  border:1px solid rgba(130,220,255,.48);
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(25,112,168,.24),rgba(5,19,34,.96));
+  box-shadow:0 0 30px rgba(75,188,255,.12),inset 0 0 22px rgba(75,188,255,.05);
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+#topDeedCompletion .topDeedCopy{min-width:0}
+#topDeedCompletion .topDeedEyebrow{
+  color:#82dcff;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:5px;
+}
+#topDeedCompletion .topDeedTitle{
+  color:#eaf7ff;
+  font-size:20px;
+  font-weight:900;
+  line-height:1.2;
+  margin-bottom:5px;
+}
+#topDeedCompletion .topDeedText{
+  color:#a6c6d9;
+  font-size:13px;
+  line-height:1.45;
+}
+#topDeedAccept{
+  flex:0 0 auto;
+  text-decoration:none;
+  white-space:nowrap;
+}
+@media(max-width:720px){
+  #topDeedCompletion{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  #topDeedAccept{
+    width:100%;
+    justify-content:center;
+  }
+}
+
 </style>
 
 <style id="MONOLITH_FIND_ME_SHARE_TAB_20260524">
@@ -3717,6 +3769,19 @@ body.tileWallpaperActive .hero{
   </div>
 
   <section class="hero">
+    <!-- MONOLITH_TOP_DEED_ACCEPT_20260817 -->
+    <div id="topDeedCompletion">
+      <div class="topDeedCopy">
+        <div class="topDeedEyebrow">Purchase Payment Complete</div>
+        <div class="topDeedTitle">One Final Step: Accept Your Coordinate Deed</div>
+        <div class="topDeedText">Your tile is live. Accept your MONOLITH Coordinate Deed NFT in Xaman to complete the deed delivery.</div>
+      </div>
+      <a id="topDeedAccept"
+         href="#"
+         target="_blank"
+         rel="noopener"
+         class="btn">Accept Deed in Xaman</a>
+    </div>
     <section class="box trialModeBox" id="trialModeBox">
       <div class="trialModeBadge">TRIAL MODE</div>
       <div class="trialModeTitle">Temporary Trial Coordinate</div>
@@ -4913,6 +4978,14 @@ body.tileWallpaperActive .hero{
     $("deed").textContent=!t.deed_nft_id?"No deed linked":(deedDelivered?"Deed Delivered":(deedPendingAccept?"Pending Owner Accept":"Coordinate Deed linked"));
     if($("deedHelp")) $("deedHelp").textContent=!t.deed_nft_id?"No Coordinate Deed is linked yet.":(deedDelivered?"Coordinate Deed accepted and delivered to the owner wallet.":(deedPendingAccept?"Tile is live. Final step: owner must accept the Coordinate Deed NFT in Xaman.":"Coordinate Deed minted and linked."));
     if($("deedAccept")){if(deedPendingAccept){$("deedAccept").href=t.deed_delivery_accept_sign_url;$("deedAccept").style.display="inline-flex";}else{$("deedAccept").style.display="none";}}
+    if($("topDeedCompletion") && $("topDeedAccept")){
+      if(deedPendingAccept){
+        $("topDeedAccept").href=t.deed_delivery_accept_sign_url;
+        $("topDeedCompletion").style.display="flex";
+      }else{
+        $("topDeedCompletion").style.display="none";
+      }
+    }
     $("tier").textContent=t.tier||"None";
     $("status").textContent=t.status||"None";
     $("claimTx").textContent=t.claim_tx_hash||"None";
@@ -4968,6 +5041,7 @@ body.tileWallpaperActive .hero{
       $("deed").textContent = "Locked During Trial";
       if($("deedHelp")) $("deedHelp").textContent = "No Coordinate Deed is issued until this tile is claimed.";
       if($("deedAccept")) $("deedAccept").style.display = "none";
+      if($("topDeedCompletion")) $("topDeedCompletion").style.display = "none";
       $("claimTx").textContent = "Trial Sign-In";
       $("deedId").textContent = "Claim required";
     }
@@ -6962,6 +7036,7 @@ body.tileWallpaperActive .hero{
     $("deed").textContent="No deed";
     if($("deedHelp")) $("deedHelp").textContent="No Coordinate Deed is linked yet.";
     if($("deedAccept")) $("deedAccept").style.display="none";
+    if($("topDeedCompletion")) $("topDeedCompletion").style.display="none";
   });
 })();
 </script>
