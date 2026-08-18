@@ -3549,6 +3549,75 @@ body.tileWallpaperActive .hero{
 .inlineTextEditor .btn{
   width:100%!important;
 }
+
+/* MONOLITH_PROFILE_TOP_ROW_ALIGNMENT_20260817 */
+@media (min-width:900px){
+  .leftRail .profile,
+  .leftRail .socialGrid,
+  .leftRail .bioAboutGroup,
+  .leftRail .socialGrid > .box{
+    align-self:start!important;
+  }
+
+  .leftRail .socialGrid{
+    top:0!important;
+    margin-top:0!important;
+  }
+
+  .leftRail .bioAboutGroup,
+  .leftRail .socialGrid > .box{
+    margin-top:0!important;
+  }
+}
+
+/* MONOLITH_PROFILE_SECTION_STYLE_UNIFIED_20260817 */
+.bioAboutGroup{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:12px!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  align-self:start!important;
+  justify-self:stretch!important;
+  box-sizing:border-box!important;
+}
+
+.bioAboutGroup .profileSubBox{
+  width:100%!important;
+  min-width:0!important;
+  min-height:118px!important;
+  height:auto!important;
+  margin:0!important;
+  padding:12px!important;
+  align-self:stretch!important;
+  box-sizing:border-box!important;
+}
+
+/* All standard profile information sections share one visual law. */
+.socialGrid > .box:not(.tabletBox):not(.commerceHubBox),
+.bioAboutGroup .profileSubBox{
+  border:1px solid var(--line)!important;
+  background:linear-gradient(180deg,var(--paper),var(--pale))!important;
+  color:var(--ink)!important;
+  border-radius:4px!important;
+}
+
+.socialGrid > .box:not(.tabletBox):not(.commerceHubBox) > .k,
+.bioAboutGroup .profileSubBox > .k{
+  background:linear-gradient(180deg,var(--myspace-blue),#14558e)!important;
+  color:#fff!important;
+  margin:-12px -12px 10px!important;
+  padding:6px 8px!important;
+  border-radius:3px 3px 0 0!important;
+  font-size:12px!important;
+  line-height:normal!important;
+  letter-spacing:.08em!important;
+  font-weight:900!important;
+}
 </style>
 
 
@@ -3987,13 +4056,24 @@ body.tileWallpaperActive .hero{
 
 
       <div class="socialGrid">
-        <section class="box">
-          <div class="k">About</div>
-          <div class="write" id="aboutBox">No about section yet.</div>
-          <div class="inlineTextEditor" id="aboutEditor" style="display:none">
-            <textarea id="aboutInput" rows="5"></textarea>
-            <button class="btn" id="aboutSave" type="button">Save About</button>
-            <div class="write inlineTextStatus" id="aboutSaveStatus"></div>
+        <section class="bioAboutGroup">
+          <div class="box profileSubBox">
+            <div class="k">Bio</div>
+            <div class="inlineTextEditor" id="bioEditor" style="display:none">
+              <textarea id="bioInput" rows="4"></textarea>
+              <button class="btn" id="bioSave" type="button">Save Bio</button>
+              <div class="write inlineTextStatus" id="bioSaveStatus"></div>
+            </div>
+          </div>
+
+          <div class="box profileSubBox">
+            <div class="k">About</div>
+            <div class="write" id="aboutBox">No about section yet.</div>
+            <div class="inlineTextEditor" id="aboutEditor" style="display:none">
+              <textarea id="aboutInput" rows="5"></textarea>
+              <button class="btn" id="aboutSave" type="button">Save About</button>
+              <div class="write inlineTextStatus" id="aboutSaveStatus"></div>
+            </div>
           </div>
         </section>
 
@@ -6097,6 +6177,7 @@ body.tileWallpaperActive .hero{
       const map={
         "Display Name":"displayNameSaveStatus",
         Handle:"handleSaveStatus",
+        Bio:"bioSaveStatus",
         About:"aboutSaveStatus",
         Status:"statusSaveStatus",
         Mood:"moodSaveStatus",
@@ -6129,6 +6210,7 @@ body.tileWallpaperActive .hero{
       fd.append("payloadUuid",payloadUuid);
       fd.append("displayName",$("displayNameInput").value);
       fd.append("xHandle",$("handleInput").value);
+      fd.append("note",$("bioInput").value);
       fd.append("about",$("aboutInput").value);
       fd.append("statusText",$("statusInput").value);
       fd.append("mood",$("moodInput").value);
@@ -6188,16 +6270,17 @@ body.tileWallpaperActive .hero{
         $("handle").textContent=visibleHandle;
         m.xHandle=savedHandle;
 
+        const savedBio=$("bioInput").value.trim();
         const savedAbout=$("aboutInput").value.trim();
+
+        $("bio").textContent=
+          savedBio||
+          "No bio has been added yet.";
+        m.note=savedBio;
 
         $("aboutBox").textContent=
           savedAbout||
           "No about section yet.";
-
-        $("bio").textContent=
-          savedAbout||
-          "No bio has been added yet.";
-
         m.about=savedAbout;
 
         $("statusBox").textContent=
@@ -6231,13 +6314,15 @@ body.tileWallpaperActive .hero{
     function unlockInlineTextEditors(payloadUuid){
       $("displayNameInput").value=displayName||tag||"";
       $("handleInput").value=rawHandle||"";
-      $("aboutInput").value=about||note||"";
+      $("bioInput").value=note||"";
+      $("aboutInput").value=about||"";
       $("statusInput").value=statusText||"";
       $("moodInput").value=moodText||"";
       $("interestsInput").value=interests||"";
 
       [
         "displayNameEditor",
+        "bioEditor",
         "aboutEditor",
         "statusEditor",
         "moodEditor",
@@ -6253,6 +6338,10 @@ body.tileWallpaperActive .hero{
 
       $("handleSave").onclick=()=>{
         saveInlineTextModules(payloadUuid,"Handle");
+      };
+
+      $("bioSave").onclick=()=>{
+        saveInlineTextModules(payloadUuid,"Bio");
       };
 
       $("aboutSave").onclick=()=>{
