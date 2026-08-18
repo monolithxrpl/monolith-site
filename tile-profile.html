@@ -5798,6 +5798,44 @@ body.tileWallpaperActive .hero{
         return;
       }
 
+      const invalidType=files.find(file=>
+        !["image/png","image/jpeg","image/webp","image/gif"].includes(file.type)
+      );
+
+      if(invalidType){
+        setGalleryOwnerStatus(
+          "Gallery images must be PNG, JPG, WEBP, or GIF.",
+          false
+        );
+        return;
+      }
+
+      const tooLarge=files.find(file=>{
+        const isGif=
+          file.type==="image/gif"||
+          /\.gif$/i.test(file.name||"");
+
+        const maxBytes=isGif
+          ? 25*1024*1024
+          : 5*1024*1024;
+
+        return file.size>maxBytes;
+      });
+
+      if(tooLarge){
+        const isGif=
+          tooLarge.type==="image/gif"||
+          /\.gif$/i.test(tooLarge.name||"");
+
+        setGalleryOwnerStatus(
+          isGif
+            ? "Animated GIF is too large. Use a GIF under 25 MB."
+            : "Image is too large. Use a PNG, JPG, or WEBP under 5 MB.",
+          false
+        );
+        return;
+      }
+
       const fd=new FormData();
       fd.append("payloadUuid",payloadUuid);
 

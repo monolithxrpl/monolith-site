@@ -630,13 +630,28 @@
 
       const validImage = (file) => {
         if(!["image/png","image/jpeg","image/webp","image/gif"].includes(file.type)){
-          setStatus("Image must be PNG JPG WEBP GIF", true);
+          setStatus("Image must be PNG, JPG, WEBP, or GIF.", true);
           return false;
         }
-        if(file.size > 2 * 1024 * 1024){
-          setStatus("Image too large. Max 2 MB", true);
+
+        const isGif=
+          file.type==="image/gif"||
+          /\.gif$/i.test(file.name||"");
+
+        const maxBytes=isGif
+          ? 25*1024*1024
+          : 5*1024*1024;
+
+        if(file.size > maxBytes){
+          setStatus(
+            isGif
+              ? "Animated GIF is too large. Use a GIF under 25 MB."
+              : "Image is too large. Use a PNG, JPG, or WEBP under 5 MB.",
+            true
+          );
           return false;
         }
+
         return true;
       };
 
@@ -655,7 +670,7 @@
       const galleryFiles = Array.from(el.galleryFiles.files || []);
       const existingGallery = el.gallery.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
       if(existingGallery.length + galleryFiles.length > 64){
-        setStatus("Gallery max is 12 images. Remove old URLs first.", true);
+        setStatus("Gallery max is 64 images. Remove old images first.", true);
         return;
       }
 
