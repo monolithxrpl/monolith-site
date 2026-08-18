@@ -4059,6 +4059,7 @@ body.tileWallpaperActive .hero{
         <section class="bioAboutGroup">
           <div class="box profileSubBox">
             <div class="k">Bio</div>
+            <div class="write" id="bioBox">No bio has been added yet.</div>
             <div class="inlineTextEditor" id="bioEditor" style="display:none">
               <textarea id="bioInput" rows="4"></textarea>
               <button class="btn" id="bioSave" type="button">Save Bio</button>
@@ -5049,7 +5050,8 @@ body.tileWallpaperActive .hero{
     $("title").textContent=displayName;
     $("avatar").src=img;
     $("handle").textContent=handle;
-    $("bio").textContent=about||note;
+    $("bio").textContent=note;
+    $("bioBox").textContent=note;
     $("wallet").textContent=maskWallet(t.owner_wallet);
     $("date").textContent=date;
     const deedDeliveryStatus=String(t.deed_delivery_status||"").toLowerCase();
@@ -6040,11 +6042,27 @@ body.tileWallpaperActive .hero{
         wallpaperFile
       ].filter(Boolean);
 
-      const tooLarge=files.find(file=>file.size>5*1024*1024);
+      const tooLarge=files.find(file=>{
+        const isGif=
+          file.type==="image/gif"||
+          /\.gif$/i.test(file.name||"");
+
+        const maxBytes=isGif
+          ? 25*1024*1024
+          : 5*1024*1024;
+
+        return file.size>maxBytes;
+      });
 
       if(tooLarge){
+        const isGif=
+          tooLarge.type==="image/gif"||
+          /\.gif$/i.test(tooLarge.name||"");
+
         setTileVisualsStatus(
-          "Image is too large. Use a PNG, JPG, WEBP, or GIF under 5 MB.",
+          isGif
+            ? "Animated GIF is too large. Use a GIF under 25 MB."
+            : "Image is too large. Use a PNG, JPG, or WEBP under 5 MB.",
           false
         );
         return;
@@ -6273,9 +6291,12 @@ body.tileWallpaperActive .hero{
         const savedBio=$("bioInput").value.trim();
         const savedAbout=$("aboutInput").value.trim();
 
-        $("bio").textContent=
+        const visibleBio=
           savedBio||
           "No bio has been added yet.";
+
+        $("bio").textContent=visibleBio;
+        $("bioBox").textContent=visibleBio;
         m.note=savedBio;
 
         $("aboutBox").textContent=
