@@ -169,7 +169,7 @@
         <button class="secondary" id="uploadBanner" type="button">Upload Banner</button>
       </div>
       <div class="uploadPreview" id="bannerPreview"></div>
-      <p class="hint">Recommended banner: 1600x450. WEBP preferred. Max 2 MB. Convert images to WEBP: <a href="https://pixelied.com/convert/png-converter/png-to-webp" target="_blank" rel="noopener">Pixelied WEBP converter</a>.</p>
+      <p class="hint">Recommended banner: 1600x450. PNG/JPG/JPEG/WEBP max 5 MB; animated GIF max 25 MB. Convert images to WEBP: <a href="https://pixelied.com/convert/png-converter/png-to-webp" target="_blank" rel="noopener">Pixelied WEBP converter</a>.</p>
 
       <label>About</label>
       <textarea id="about" placeholder="Write your profile about section"></textarea>
@@ -514,7 +514,7 @@
       setStatus("Owner sign-in created. Sign with the tile owner wallet only.", false);
     }
 
-    async function verifyOwner(){
+    async function verifyOwner(redirectAfterVerify=true){
       const c = normCoord(el.coordinate.value);
       const payloadUuid = el.payloadUuid.value.trim();
 
@@ -565,18 +565,25 @@
         })
       );
 
-      setStatus(
-        "Owner wallet verified. Opening your live tile page...",
-        false
-      );
+      if(redirectAfterVerify){
+        setStatus(
+          "Owner wallet verified. Opening your live tile page...",
+          false
+        );
 
-      setTimeout(()=>{
-        location.href=
-          "/tile/"+
-          encodeURIComponent(c)+
-          "?owner=1&cb="+
-          Date.now();
-      },350);
+        setTimeout(()=>{
+          location.href=
+            "/tile/"+
+            encodeURIComponent(c)+
+            "?owner=1&cb="+
+            Date.now();
+        },350);
+      }else{
+        setStatus(
+          "Owner wallet verified. Saving tile...",
+          false
+        );
+      }
 
       return true;
     }
@@ -601,7 +608,7 @@
       if(!c){ setStatus("Coordinate required", true); return; }
       if(!payloadUuid){ setStatus("Owner sign-in required. Start owner sign-in first.", true); return; }
       if(!ownerVerified){
-        const verified = await verifyOwner();
+        const verified = await verifyOwner(false);
         if(!verified) return;
       }
 
