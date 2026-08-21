@@ -6,7 +6,8 @@
     otc_desk: "OTC Desk",
     token_info: "Token Info",
     dex_widget: "DEX Data",
-    marketplace: "Tile Market"
+    marketplace: "Tile Market",
+    merch_store: "Merch Store"
   };
 
   const MODULE_KEYS = Object.keys(LABELS);
@@ -26,7 +27,8 @@
   const LIVE_MODULES = new Set([
     "marketplace",
     "p2p_payments",
-    "otc_desk"
+    "otc_desk",
+    "merch_store"
   ]);
 
   function coordinate() {
@@ -105,6 +107,15 @@
     }
 
     if (module.key === "otc_desk") return `<a class="btn commerceModuleAction" href="/otc/">Open OTC Desk</a>`;
+
+    if (module.key === "merch_store") {
+      return `
+        <a class="btn commerceModuleAction"
+           href="/merch/?tile=${encodeURIComponent(coordinate())}">
+          Open Merch Store
+        </a>
+      `;
+    }
     if (config.url) {
       return `
         <a class="btn commerceModuleAction"
