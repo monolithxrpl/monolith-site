@@ -294,41 +294,59 @@
     .hero{
       position:relative;
       overflow:hidden;
-      min-height:690px;
+      min-height:560px;
       border:1px solid var(--line);
-      background:#050505;
+      background:
+        radial-gradient(
+          circle at 82% 28%,
+          rgba(255,255,255,.07),
+          transparent 28%
+        ),
+        linear-gradient(
+          135deg,
+          #0b0b0b,
+          #050505 52%,
+          #090909
+        );
     }
 
-    .hero img{
+    .hero::before{
+      content:"";
       position:absolute;
       inset:0;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      object-position:center;
-      filter:
-        grayscale(1)
-        contrast(1.06)
-        brightness(.77);
+      opacity:.18;
+      pointer-events:none;
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,.04) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.04) 1px,
+          transparent 1px
+        );
+      background-size:52px 52px;
     }
 
     .hero::after{
       content:"";
       position:absolute;
-      inset:0;
+      right:5%;
+      top:50%;
+      width:clamp(260px,30vw,500px);
+      aspect-ratio:1/1;
+      transform:translateY(-50%);
       background:
-        linear-gradient(
-          90deg,
-          rgba(0,0,0,.82) 0%,
-          rgba(0,0,0,.52) 32%,
-          rgba(0,0,0,.1) 62%,
-          rgba(0,0,0,.05) 100%
-        ),
-        linear-gradient(
-          0deg,
-          rgba(0,0,0,.65),
-          transparent 45%
-        );
+        url("/assets/monolith_icon.webp")
+        center / contain
+        no-repeat;
+      opacity:.055;
+      filter:
+        grayscale(1)
+        contrast(1.3)
+        brightness(1.4);
+      pointer-events:none;
     }
 
     .heroContent{
@@ -337,9 +355,9 @@
       display:flex;
       flex-direction:column;
       justify-content:center;
-      width:min(650px,54%);
-      min-height:690px;
-      padding:58px;
+      width:min(760px,72%);
+      min-height:560px;
+      padding:64px;
     }
 
     .heroEyebrow{
@@ -951,6 +969,408 @@
       cursor:not-allowed;
     }
 
+
+    /* -------------------------------------------------------
+       MONOLITH LEDGER BLUE + GOLD COLOR PASS
+    ------------------------------------------------------- */
+
+    body{
+      background:
+        radial-gradient(
+          circle at 14% 8%,
+          rgba(75,188,255,.10),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 88% 18%,
+          rgba(210,178,110,.08),
+          transparent 28%
+        ),
+        #050505;
+    }
+
+    .previewBanner{
+      border-color:rgba(210,178,110,.48);
+      background:
+        linear-gradient(
+          100deg,
+          rgba(210,178,110,.16),
+          rgba(75,188,255,.08) 58%,
+          rgba(10,10,10,.94)
+        );
+      box-shadow:
+        0 12px 34px rgba(0,0,0,.24),
+        inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .previewMark{
+      border-color:rgba(210,178,110,.75);
+      color:#f1d487;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(210,178,110,.20),
+          rgba(210,178,110,.06)
+        );
+    }
+
+    .previewCopy strong,
+    .previewStatus{
+      color:#e6c97e;
+    }
+
+    .header{
+      border-color:rgba(75,188,255,.18);
+      box-shadow:
+        0 14px 35px rgba(0,0,0,.24),
+        inset 0 -1px 0 rgba(75,188,255,.06);
+    }
+
+    .nav a.active{
+      color:#8fddff;
+    }
+
+    .nav a.active::after{
+      background:
+        linear-gradient(
+          90deg,
+          #4bbcff,
+          #d2b26e
+        );
+    }
+
+    .payBtn{
+      border-color:rgba(75,188,255,.34);
+      color:#c9efff;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(75,188,255,.10),
+          rgba(75,188,255,.035)
+        );
+    }
+
+    .payBtn span{
+      border-color:rgba(75,188,255,.48);
+      color:#79d4ff;
+    }
+
+    .iconBtn:hover{
+      border-color:rgba(210,178,110,.48);
+      color:#f0d28a;
+    }
+
+    .hero{
+      border-color:rgba(75,188,255,.22);
+      background:
+        radial-gradient(
+          circle at 78% 35%,
+          rgba(75,188,255,.11),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 20% 90%,
+          rgba(210,178,110,.07),
+          transparent 31%
+        ),
+        linear-gradient(
+          135deg,
+          #0d1217,
+          #07090c 48%,
+          #0c0a07
+        );
+      box-shadow:
+        0 26px 80px rgba(0,0,0,.34),
+        inset 0 1px 0 rgba(255,255,255,.035);
+    }
+
+    .heroEyebrow{
+      color:#76d1fb;
+    }
+
+    .hero h1{
+      text-shadow:
+        0 3px 22px rgba(0,0,0,.72),
+        0 0 38px rgba(75,188,255,.045);
+    }
+
+    .heroSub{
+      color:#d0d5da;
+    }
+
+    .heroPoint{
+      border-color:rgba(75,188,255,.28);
+      color:#d7edf7;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(75,188,255,.08),
+          rgba(255,255,255,.025)
+        );
+    }
+
+    .heroPoint:nth-child(2){
+      border-color:rgba(210,178,110,.32);
+      color:#ead59f;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(210,178,110,.09),
+          rgba(255,255,255,.02)
+        );
+    }
+
+    .primaryBtn{
+      border-color:#65cafa;
+      color:#031018;
+      background:
+        linear-gradient(
+          180deg,
+          #8bddff,
+          #49b8ed
+        );
+      box-shadow:
+        0 10px 28px rgba(75,188,255,.18);
+    }
+
+    .primaryBtn:hover{
+      filter:brightness(1.07);
+    }
+
+    .secondaryBtn{
+      border-color:rgba(210,178,110,.50);
+      color:#f0d89c;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(210,178,110,.10),
+          rgba(210,178,110,.035)
+        );
+    }
+
+    .trustBar{
+      border-color:rgba(75,188,255,.18);
+      background:
+        linear-gradient(
+          90deg,
+          rgba(75,188,255,.07),
+          rgba(210,178,110,.05)
+        );
+    }
+
+    .trustItem{
+      background:
+        linear-gradient(
+          145deg,
+          #0e1318,
+          #0a0a0a
+        );
+    }
+
+    .trustIcon{
+      border-color:rgba(75,188,255,.34);
+      color:#79d5ff;
+      background:rgba(75,188,255,.07);
+    }
+
+    .trustItem:nth-child(even) .trustIcon{
+      border-color:rgba(210,178,110,.38);
+      color:#e2c579;
+      background:rgba(210,178,110,.07);
+    }
+
+    .sectionHeader{
+      border-bottom-color:rgba(75,188,255,.16);
+    }
+
+    .sectionKicker{
+      color:#6ccdf9;
+    }
+
+    .sectionHeader h2{
+      color:#f3f5f7;
+    }
+
+    .sectionHeader a{
+      color:#d2b26e;
+    }
+
+    .category{
+      border-color:rgba(75,188,255,.15);
+      background:
+        radial-gradient(
+          circle at 50% 35%,
+          rgba(75,188,255,.10),
+          transparent 48%
+        ),
+        linear-gradient(
+          145deg,
+          #111820,
+          #0a0a0a 68%
+        );
+      transition:
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+    }
+
+    .category:nth-child(even){
+      background:
+        radial-gradient(
+          circle at 50% 35%,
+          rgba(210,178,110,.09),
+          transparent 48%
+        ),
+        linear-gradient(
+          145deg,
+          #17140e,
+          #0a0a0a 68%
+        );
+    }
+
+    .category:hover{
+      transform:translateY(-3px);
+      border-color:rgba(75,188,255,.42);
+      box-shadow:0 18px 45px rgba(0,0,0,.32);
+    }
+
+    .category:nth-child(even):hover{
+      border-color:rgba(210,178,110,.48);
+    }
+
+    .categoryIcon{
+      color:#66c9f6;
+    }
+
+    .category:nth-child(even) .categoryIcon{
+      color:#d2b26e;
+    }
+
+    .productCard{
+      border-color:rgba(75,188,255,.14);
+      background:
+        linear-gradient(
+          160deg,
+          #10161b,
+          #0a0a0a 64%
+        );
+    }
+
+    .productCard:hover{
+      border-color:rgba(75,188,255,.46);
+      box-shadow:
+        0 22px 52px rgba(0,0,0,.38),
+        0 0 30px rgba(75,188,255,.035);
+    }
+
+    .productMedia{
+      border-bottom-color:rgba(75,188,255,.15);
+      background:
+        radial-gradient(
+          circle at 50% 35%,
+          rgba(75,188,255,.12),
+          transparent 46%
+        ),
+        #0a0d10;
+    }
+
+    .productBadge{
+      border-color:rgba(210,178,110,.40);
+      color:#e7ce91;
+      background:rgba(18,14,7,.86);
+    }
+
+    .productMeta{
+      color:#70c9ef;
+    }
+
+    .price{
+      color:#e4c77d;
+    }
+
+    .addBtn{
+      border-color:rgba(75,188,255,.40);
+      color:#d6f2ff;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(75,188,255,.13),
+          rgba(75,188,255,.045)
+        );
+    }
+
+    .addBtn:hover{
+      border-color:#63c9f8;
+      background:rgba(75,188,255,.17);
+    }
+
+    .sellerPanel{
+      border-color:rgba(210,178,110,.22);
+      background:
+        radial-gradient(
+          circle at 18% 50%,
+          rgba(210,178,110,.07),
+          transparent 34%
+        ),
+        linear-gradient(
+          135deg,
+          #100e0a,
+          #080b0e
+        );
+    }
+
+    .sellerFacts{
+      border-color:rgba(210,178,110,.22);
+    }
+
+    .sellerFact{
+      border-color:rgba(210,178,110,.18);
+    }
+
+    .sellerFact strong{
+      color:#e4c982;
+    }
+
+    .aboutCard{
+      border-color:rgba(75,188,255,.14);
+      background:
+        linear-gradient(
+          145deg,
+          #0e1418,
+          #090909
+        );
+    }
+
+    .aboutCard:nth-child(2){
+      border-color:rgba(210,178,110,.18);
+      background:
+        linear-gradient(
+          145deg,
+          #15120d,
+          #090909
+        );
+    }
+
+    .aboutCard span{
+      color:#65c7f4;
+    }
+
+    .aboutCard:nth-child(2) span{
+      color:#d2b26e;
+    }
+
+    .footer{
+      border-top-color:rgba(75,188,255,.18);
+    }
+
+    .footerBrand strong{
+      color:#d9f2fd;
+    }
+
+    .footerLinks a:hover{
+      color:#d2b26e;
+    }
+
     /* -------------------------------------------------------
        RESPONSIVE
     ------------------------------------------------------- */
@@ -1019,11 +1439,7 @@
       }
 
       .hero{
-        min-height:640px;
-      }
-
-      .hero img{
-        object-position:60% center;
+        min-height:570px;
       }
 
       .hero::after{
@@ -1039,7 +1455,7 @@
       .heroContent{
         justify-content:flex-end;
         width:100%;
-        min-height:640px;
+        min-height:570px;
         padding:30px 24px 34px;
       }
 
@@ -1211,11 +1627,6 @@
     </header>
 
     <section class="hero" id="store">
-      <img
-        src="/assets/monolith_merch_hero.webp"
-        alt="MONOLITH Merch Store"
-      >
-
       <div class="heroContent">
         <div class="heroEyebrow">
           BUILT ON XRPL • POWERED BY BUILDERS
