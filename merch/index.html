@@ -2781,22 +2781,19 @@
           );
       }
 
-      async function loadCoordinateStore() {
-        if (!coordinate) {
-          marketplaceProducts = [];
-          refreshMarketplace();
-          return;
-        }
-
+      async function loadMarketplace() {
         try {
+          const endpoint =
+            coordinate
+              ? `/api/merch/storefront/${
+                  encodeURIComponent(
+                    coordinate
+                  )
+                }`
+              : "/api/merch/marketplace";
+
           const response =
-            await fetch(
-              `/api/merch/storefront/${
-                encodeURIComponent(
-                  coordinate
-                )
-              }`
-            );
+            await fetch(endpoint);
 
           const data =
             await response.json();
@@ -2807,42 +2804,53 @@
           ) {
             throw new Error(
               data.error ||
-              "storefront_load_failed"
+              "marketplace_load_failed"
             );
           }
 
-          if (!data.seller) {
-            renderProducts([]);
-            return;
-          }
+          if (coordinate) {
+            if (!data.seller) {
+              marketplaceProducts = [];
+              refreshMarketplace();
+              return;
+            }
 
-          document
-            .getElementById(
-              "productsTitle"
-            )
-            .textContent =
-              `${data.seller.displayName} Products`;
-
-          const context =
-            document.getElementById(
-              "storeContext"
-            );
-
-          context.textContent =
-            data.seller.coordinate;
-
-          context.href =
-            `/tile/${
-              encodeURIComponent(
-                data.seller.coordinate
+            document
+              .getElementById(
+                "productsTitle"
               )
-            }`;
+              .textContent =
+                `${data.seller.displayName} Products`;
+
+            const context =
+              document.getElementById(
+                "storeContext"
+              );
+
+            context.textContent =
+              data.seller.coordinate;
+
+            context.href =
+              `/tile/${
+                encodeURIComponent(
+                  data.seller.coordinate
+                )
+              }`;
+          }
 
           marketplaceProducts =
             Array.isArray(
               data.products
             )
-              ? data.products
+              ? data.products.map(
+                  product => ({
+                    ...product,
+                    vendor:
+                      product.sellerDisplayName ||
+                      product.vendor ||
+                      ""
+                  })
+                )
               : [];
 
           refreshMarketplace();
@@ -2853,7 +2861,8 @@
             error
           );
 
-          renderProducts([]);
+          marketplaceProducts = [];
+          refreshMarketplace();
         }
       }
 
@@ -2909,7 +2918,7 @@
           }
         );
 
-      loadCoordinateStore();
+      loadMarketplace();
     })();
   </script>
 </body>
