@@ -12837,6 +12837,184 @@
           </section>
 
           <section class="sellerOrderSection">
+            <strong>Order Actions</strong>
+
+            <div
+              class="sellerOrderActions"
+              id="sellerOrderActions"
+            >
+              ${
+                String(
+                  order.status || ""
+                ).toLowerCase() ===
+                  "pending_payment" &&
+                String(
+                  order.paymentStatus || ""
+                ).toLowerCase() !==
+                  "partial"
+                  ? `
+                    <button
+                      class="sellerOrderDangerBtn"
+                      id="sellerCancelOrderBtn"
+                      type="button"
+                    >
+                      Cancel Unpaid Order
+                    </button>
+                  `
+                  : ""
+              }
+
+              ${
+                String(
+                  order.paymentStatus || ""
+                ).toLowerCase() ===
+                  "paid" &&
+                fulfillments.length === 0 &&
+                ![
+                  "cancelled",
+                  "refunded"
+                ].includes(
+                  String(
+                    order.status || ""
+                  ).toLowerCase()
+                )
+                  ? `
+                    <button
+                      class="sellerPrimaryBtn"
+                      id="sellerStartFulfillmentBtn"
+                      type="button"
+                    >
+                      Start Fulfillment
+                    </button>
+                  `
+                  : ""
+              }
+            </div>
+
+            ${
+              fulfillments.length
+                ? `
+                  <div
+                    class="shippingCreatePanel"
+                    id="sellerFulfillmentEditor"
+                  >
+                    <strong>
+                      Update Fulfillment
+                    </strong>
+
+                    <p>
+                      Update fulfillment status and shipping details for this order.
+                    </p>
+
+                    <div class="productEditorFields">
+                      <label>
+                        <span>Status</span>
+
+                        <select id="sellerFulfillmentStatus">
+                          ${
+                            [
+                              "processing",
+                              "fulfilled",
+                              "shipped",
+                              "delivered"
+                            ].map(
+                              status => `
+                                <option
+                                  value="${status}"
+                                  ${
+                                    String(
+                                      fulfillments[0].status ||
+                                      ""
+                                    ).toLowerCase() ===
+                                    status
+                                      ? "selected"
+                                      : ""
+                                  }
+                                >
+                                  ${status}
+                                </option>
+                              `
+                            ).join("")
+                          }
+                        </select>
+                      </label>
+
+                      <label>
+                        <span>Carrier</span>
+
+                        <input
+                          id="sellerFulfillmentCarrier"
+                          type="text"
+                          maxlength="160"
+                          value="${escapeHtml(
+                            fulfillments[0].carrier ||
+                            ""
+                          )}"
+                          placeholder="UPS, USPS, FedEx..."
+                        >
+                      </label>
+
+                      <label>
+                        <span>Tracking Number</span>
+
+                        <input
+                          id="sellerFulfillmentTracking"
+                          type="text"
+                          maxlength="240"
+                          value="${escapeHtml(
+                            fulfillments[0].trackingNumber ||
+                            ""
+                          )}"
+                          placeholder="Required when shipped"
+                        >
+                      </label>
+
+                      <label class="productWideField">
+                        <span>Tracking URL</span>
+
+                        <input
+                          id="sellerFulfillmentTrackingUrl"
+                          type="url"
+                          maxlength="1000"
+                          value="${escapeHtml(
+                            fulfillments[0].trackingUrl ||
+                            ""
+                          )}"
+                          placeholder="Optional tracking link"
+                        >
+                      </label>
+
+                      <label class="productWideField">
+                        <span>Notes</span>
+
+                        <textarea
+                          id="sellerFulfillmentNotes"
+                          rows="3"
+                          maxlength="4000"
+                          placeholder="Optional fulfillment notes"
+                        >${escapeHtml(
+                          fulfillments[0].notes ||
+                          ""
+                        )}</textarea>
+                      </label>
+                    </div>
+
+                    <div class="sellerOrderActions">
+                      <button
+                        class="sellerPrimaryBtn"
+                        id="sellerUpdateFulfillmentBtn"
+                        type="button"
+                      >
+                        Save Fulfillment
+                      </button>
+                    </div>
+                  </div>
+                `
+                : ""
+            }
+          </section>
+
+          <section class="sellerOrderSection">
             <strong>Order Timeline</strong>
 
             <div class="sellerOrderRows">
@@ -12875,6 +13053,58 @@
             </div>
           </section>
         `;
+
+        const cancelButton =
+          document.getElementById(
+            "sellerCancelOrderBtn"
+          );
+
+        if (cancelButton) {
+          cancelButton.addEventListener(
+            "click",
+            () => {
+              cancelSellerOrderUi(
+                order
+              );
+            }
+          );
+        }
+
+        const startButton =
+          document.getElementById(
+            "sellerStartFulfillmentBtn"
+          );
+
+        if (startButton) {
+          startButton.addEventListener(
+            "click",
+            () => {
+              createSellerFulfillmentUi(
+                order
+              );
+            }
+          );
+        }
+
+        const updateButton =
+          document.getElementById(
+            "sellerUpdateFulfillmentBtn"
+          );
+
+        if (
+          updateButton &&
+          fulfillments.length
+        ) {
+          updateButton.addEventListener(
+            "click",
+            () => {
+              updateSellerFulfillmentUi(
+                order,
+                fulfillments[0]
+              );
+            }
+          );
+        }
       }
 
       function renderSellerOrders() {
@@ -13023,6 +13253,271 @@
         renderSellerOrderDetail(
           selectedSellerOrder
         );
+      }
+
+      async function reloadSelectedSellerOrder(
+        orderId
+      ) {
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/order/${
+                encodeURIComponent(
+                  orderId
+                )
+              }/manage?payloadUuid=${
+                encodeURIComponent(
+                  sellerPayload()
+                )
+              }`
+            );
+
+          if (
+            data &&
+            data.order
+          ) {
+            const index =
+              sellerOrders.findIndex(
+                order =>
+                  order.orderId ===
+                  orderId
+              );
+
+            if (index >= 0) {
+              sellerOrders[index] =
+                data.order;
+            }
+
+            selectedSellerOrder =
+              data.order;
+
+            renderSellerOrders();
+          }
+        } catch (error) {
+          console.error(
+            "[merch:seller-order-reload]",
+            error
+          );
+
+          await loadSellerOrders();
+        }
+      }
+
+      async function cancelSellerOrderUi(
+        order
+      ) {
+        if (
+          !order ||
+          !order.orderId
+        ) {
+          return;
+        }
+
+        const confirmed =
+          window.confirm(
+            "Cancel this unpaid order? Reserved inventory will be released."
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        sellerOrderMessage(
+          "Cancelling unpaid order..."
+        );
+
+        try {
+          await merchJson(
+            `/api/merch/order/${
+              encodeURIComponent(
+                order.orderId
+              )
+            }/cancel`,
+            {
+              method: "POST",
+              body: {
+                payloadUuid:
+                  sellerPayload()
+              }
+            }
+          );
+
+          sellerOrderMessage(
+            "Order cancelled.",
+            "success"
+          );
+
+          await reloadSelectedSellerOrder(
+            order.orderId
+          );
+        } catch (error) {
+          console.error(
+            "[merch:seller-order-cancel]",
+            error
+          );
+
+          sellerOrderMessage(
+            error.message ||
+            "Unable to cancel order.",
+            "error"
+          );
+        }
+      }
+
+      async function createSellerFulfillmentUi(
+        order
+      ) {
+        if (
+          !order ||
+          !order.orderId
+        ) {
+          return;
+        }
+
+        sellerOrderMessage(
+          "Starting fulfillment..."
+        );
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/order/${
+                encodeURIComponent(
+                  order.orderId
+                )
+              }/fulfillment`,
+              {
+                method: "POST",
+                body: {
+                  payloadUuid:
+                    sellerPayload()
+                }
+              }
+            );
+
+          if (
+            data &&
+            data.order
+          ) {
+            selectedSellerOrder =
+              data.order;
+          }
+
+          sellerOrderMessage(
+            "Fulfillment started.",
+            "success"
+          );
+
+          await reloadSelectedSellerOrder(
+            order.orderId
+          );
+        } catch (error) {
+          console.error(
+            "[merch:seller-fulfillment-create]",
+            error
+          );
+
+          sellerOrderMessage(
+            error.message ||
+            "Unable to start fulfillment.",
+            "error"
+          );
+        }
+      }
+
+      async function updateSellerFulfillmentUi(
+        order,
+        fulfillment
+      ) {
+        if (
+          !order ||
+          !fulfillment ||
+          !fulfillment.fulfillmentId
+        ) {
+          return;
+        }
+
+        const status =
+          document.getElementById(
+            "sellerFulfillmentStatus"
+          )?.value || "";
+
+        const carrier =
+          document.getElementById(
+            "sellerFulfillmentCarrier"
+          )?.value || "";
+
+        const trackingNumber =
+          document.getElementById(
+            "sellerFulfillmentTracking"
+          )?.value || "";
+
+        const trackingUrl =
+          document.getElementById(
+            "sellerFulfillmentTrackingUrl"
+          )?.value || "";
+
+        const notes =
+          document.getElementById(
+            "sellerFulfillmentNotes"
+          )?.value || "";
+
+        if (
+          status === "shipped" &&
+          !trackingNumber.trim()
+        ) {
+          sellerOrderMessage(
+            "Tracking number is required before marking an order shipped.",
+            "error"
+          );
+          return;
+        }
+
+        sellerOrderMessage(
+          "Updating fulfillment..."
+        );
+
+        try {
+          await merchJson(
+            `/api/merch/fulfillment/${
+              encodeURIComponent(
+                fulfillment.fulfillmentId
+              )
+            }`,
+            {
+              method: "POST",
+              body: {
+                payloadUuid:
+                  sellerPayload(),
+                status,
+                carrier,
+                trackingNumber,
+                trackingUrl,
+                notes
+              }
+            }
+          );
+
+          sellerOrderMessage(
+            "Fulfillment updated.",
+            "success"
+          );
+
+          await reloadSelectedSellerOrder(
+            order.orderId
+          );
+        } catch (error) {
+          console.error(
+            "[merch:seller-fulfillment-update]",
+            error
+          );
+
+          sellerOrderMessage(
+            error.message ||
+            "Unable to update fulfillment.",
+            "error"
+          );
+        }
       }
 
       async function loadSellerOrders() {
