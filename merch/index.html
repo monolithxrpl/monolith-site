@@ -1372,6 +1372,352 @@
     }
 
 
+
+    /* -------------------------------------------------------
+       SELLER ONBOARDING
+    ------------------------------------------------------- */
+
+    .sellerOnboarding{
+      display:grid;
+      grid-template-columns:minmax(0,.9fr) minmax(520px,1.1fr);
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .sellerIntro,
+    .sellerFlow{
+      border:1px solid rgba(75,188,255,.16);
+      background:
+        linear-gradient(
+          150deg,
+          rgba(15,21,26,.98),
+          rgba(7,7,7,.98) 70%
+        );
+    }
+
+    .sellerIntro{
+      position:relative;
+      overflow:hidden;
+      padding:38px;
+    }
+
+    .sellerIntro::after{
+      content:"";
+      position:absolute;
+      right:-90px;
+      bottom:-110px;
+      width:300px;
+      height:300px;
+      opacity:.055;
+      background:
+        url("/assets/monolith_icon.webp")
+        center/contain no-repeat;
+      pointer-events:none;
+    }
+
+    .sellerIntro h2{
+      max-width:560px;
+      margin:8px 0 16px;
+      font-size:clamp(30px,4vw,50px);
+      line-height:1;
+      letter-spacing:-.05em;
+    }
+
+    .sellerIntro > p{
+      max-width:620px;
+      margin:0;
+      color:#9da9b1;
+      font-size:13px;
+      line-height:1.65;
+    }
+
+    .sellerBenefits{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+      margin-top:28px;
+    }
+
+    .sellerBenefits div{
+      display:grid;
+      grid-template-columns:32px 1fr;
+      align-items:center;
+      gap:10px;
+      min-height:58px;
+      padding:11px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:10px;
+      background:rgba(255,255,255,.025);
+    }
+
+    .sellerBenefits strong{
+      display:grid;
+      width:30px;
+      height:30px;
+      place-items:center;
+      border-radius:50%;
+      color:#08141b;
+      background:#64cafa;
+      font-size:10px;
+      font-weight:1000;
+    }
+
+    .sellerBenefits span{
+      color:#adb6bc;
+      font-size:10px;
+      font-weight:750;
+      line-height:1.35;
+    }
+
+    .sellerFlow{
+      padding:24px;
+    }
+
+    .sellerFlowHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:15px;
+    }
+
+    .sellerFlowHead > div{
+      display:grid;
+      gap:4px;
+    }
+
+    .sellerFlowEyebrow{
+      color:#68ccfa;
+      font-size:8px;
+      font-weight:950;
+      letter-spacing:.16em;
+    }
+
+    .sellerFlowHead strong{
+      font-size:19px;
+      letter-spacing:-.025em;
+    }
+
+    .sellerStateBadge{
+      padding:7px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      color:#8d989f;
+      background:#0b0b0b;
+      font-size:8px;
+      font-weight:950;
+      letter-spacing:.1em;
+      white-space:nowrap;
+    }
+
+    .sellerStateBadge.ready{
+      color:#07161d;
+      border-color:#61cdfd;
+      background:#61cdfd;
+    }
+
+    .sellerStateBadge.pending{
+      color:#ead08d;
+      border-color:rgba(210,178,110,.35);
+      background:rgba(210,178,110,.08);
+    }
+
+    .sellerStateBadge.verified{
+      color:#07170f;
+      border-color:#72dba0;
+      background:#72dba0;
+    }
+
+    .sellerStatus{
+      margin-bottom:17px;
+      padding:11px 12px;
+      border-left:2px solid #4bbcff;
+      color:#8f9ba3;
+      background:rgba(75,188,255,.045);
+      font-size:10px;
+      line-height:1.55;
+    }
+
+    .sellerStatus.error{
+      border-left-color:#f26b6b;
+      color:#e5a2a2;
+      background:rgba(242,107,107,.05);
+    }
+
+    .sellerStatus.success{
+      border-left-color:#69d89b;
+      color:#a9dfbd;
+      background:rgba(105,216,155,.05);
+    }
+
+    .sellerFields{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .sellerFields label{
+      display:grid;
+      gap:7px;
+    }
+
+    .sellerFields label > span{
+      color:#89949b;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .sellerFields input,
+    .sellerFields textarea{
+      width:100%;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:9px;
+      outline:0;
+      color:#f2f5f7;
+      background:#11161a;
+      font:inherit;
+      font-size:12px;
+    }
+
+    .sellerFields input{
+      min-height:43px;
+      padding:0 12px;
+    }
+
+    .sellerFields textarea{
+      resize:vertical;
+      min-height:82px;
+      padding:11px 12px;
+      line-height:1.5;
+    }
+
+    .sellerFields input:focus,
+    .sellerFields textarea:focus{
+      border-color:rgba(75,188,255,.55);
+    }
+
+    .sellerWideField{
+      grid-column:1/-1;
+    }
+
+    .sellerActions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-top:16px;
+    }
+
+    .sellerPrimaryBtn,
+    .sellerSecondaryBtn{
+      display:inline-flex;
+      min-height:42px;
+      align-items:center;
+      justify-content:center;
+      padding:0 16px;
+      border-radius:9px;
+      font-size:10px;
+      font-weight:900;
+      text-align:center;
+    }
+
+    .sellerPrimaryBtn{
+      border:1px solid #5ac8fa;
+      color:#07141b;
+      background:#68cdfb;
+    }
+
+    .sellerPrimaryBtn:hover{
+      background:#8bdcff;
+    }
+
+    .sellerSecondaryBtn{
+      border:1px solid rgba(210,178,110,.28);
+      color:#dbc17d;
+      background:rgba(210,178,110,.06);
+    }
+
+    .sellerPrimaryBtn:disabled,
+    .sellerSecondaryBtn:disabled{
+      cursor:not-allowed;
+      opacity:.45;
+    }
+
+    .sellerVerifiedPanel{
+      grid-template-columns:42px 1fr;
+      gap:12px;
+      align-items:start;
+      margin-top:18px;
+      padding:14px;
+      border:1px solid rgba(105,216,155,.25);
+      border-radius:10px;
+      background:rgba(105,216,155,.055);
+    }
+
+    .sellerVerifiedPanel:not([hidden]){
+      display:grid;
+    }
+
+    .sellerVerifiedPanel > span{
+      display:grid;
+      width:38px;
+      height:38px;
+      place-items:center;
+      border-radius:50%;
+      color:#07170f;
+      background:#72dba0;
+      font-weight:1000;
+    }
+
+    .sellerVerifiedPanel strong{
+      color:#b9e8c9;
+      font-size:12px;
+    }
+
+    .sellerVerifiedPanel p{
+      margin:4px 0 0;
+      color:#7f9a89;
+      font-size:9px;
+      line-height:1.5;
+    }
+
+    @media(max-width:980px){
+      .sellerOnboarding{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:620px){
+      .sellerIntro,
+      .sellerFlow{
+        padding:20px;
+      }
+
+      .sellerBenefits,
+      .sellerFields{
+        grid-template-columns:1fr;
+      }
+
+      .sellerWideField{
+        grid-column:auto;
+      }
+
+      .sellerFlowHead{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .sellerActions{
+        display:grid;
+      }
+
+      .sellerPrimaryBtn,
+      .sellerSecondaryBtn{
+        width:100%;
+      }
+    }
+
     /* -------------------------------------------------------
        MARKETPLACE-FIRST UX
     ------------------------------------------------------- */
@@ -2256,44 +2602,216 @@
       class="section"
       id="sellers"
     >
-      <div class="sellerPanel">
-        <div class="sellerCopy">
+      <div class="sellerOnboarding">
+        <div class="sellerIntro">
           <div class="sectionKicker">
             SELL ON MONOLITH
           </div>
 
           <h2>
-            Open your business on XRPL.
+            Open your XRP storefront.
           </h2>
 
           <p>
-            Verified MONOLITH sellers will be able to publish physical
-            products, manage inventory, configure shipping, fulfill orders
-            and accept XRP directly through their storefront.
+            Your MONOLITH coordinate becomes your verified storefront.
+            Sign in with the wallet that owns the coordinate, create your
+            seller profile, complete verification, then start publishing
+            physical merchandise.
           </p>
 
-          <div class="sellerFacts">
-            <div class="sellerFact">
-              <strong>Verified Identity</strong>
-              <span>
-                Seller verification before marketplace activation
-              </span>
+          <div class="sellerBenefits">
+            <div>
+              <strong>1</strong>
+              <span>Own a MONOLITH coordinate</span>
             </div>
 
-            <div class="sellerFact">
-              <strong>XRP Settlement</strong>
-              <span>
-                Wallet-to-wallet payments through XRPL
-              </span>
+            <div>
+              <strong>2</strong>
+              <span>Verify ownership with Xaman</span>
+            </div>
+
+            <div>
+              <strong>3</strong>
+              <span>Verify seller identity</span>
+            </div>
+
+            <div>
+              <strong>4</strong>
+              <span>Sell physical goods for XRP</span>
             </div>
           </div>
         </div>
 
-        <div class="sellerVisual">
-          <img
-            src="/assets/monolith_merch_hero.webp"
-            alt=""
+        <div class="sellerFlow">
+          <div class="sellerFlowHead">
+            <div>
+              <span class="sellerFlowEyebrow">
+                SELLER SETUP
+              </span>
+
+              <strong id="sellerFlowTitle">
+                Connect your coordinate
+              </strong>
+            </div>
+
+            <span
+              class="sellerStateBadge"
+              id="sellerStateBadge"
+            >
+              NOT CONNECTED
+            </span>
+          </div>
+
+          <div class="sellerStatus" id="sellerStatus">
+            Enter the MONOLITH coordinate you want to use as your store.
+          </div>
+
+          <div class="sellerFields">
+            <label>
+              <span>MONOLITH Coordinate</span>
+              <input
+                id="sellerCoordinate"
+                type="text"
+                placeholder="N3W1"
+                maxlength="20"
+                autocomplete="off"
+              >
+            </label>
+
+            <label>
+              <span>Store Name</span>
+              <input
+                id="sellerDisplayName"
+                type="text"
+                placeholder="My Store"
+                maxlength="120"
+                autocomplete="organization"
+              >
+            </label>
+
+            <label class="sellerWideField">
+              <span>Store Description</span>
+              <textarea
+                id="sellerDescription"
+                placeholder="Tell buyers what you sell."
+                maxlength="4000"
+                rows="3"
+              ></textarea>
+            </label>
+          </div>
+
+          <div class="sellerActions">
+            <button
+              class="sellerPrimaryBtn"
+              id="sellerConnectBtn"
+              type="button"
+            >
+              Connect with Xaman
+            </button>
+
+            <a
+              class="sellerSecondaryBtn"
+              id="sellerOpenXaman"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              hidden
+            >
+              Open Xaman
+            </a>
+
+            <button
+              class="sellerSecondaryBtn"
+              id="sellerVerifySignInBtn"
+              type="button"
+              hidden
+            >
+              Verify Sign-In
+            </button>
+
+            <button
+              class="sellerPrimaryBtn"
+              id="sellerCreateBtn"
+              type="button"
+              hidden
+            >
+              Create Storefront
+            </button>
+
+            <button
+              class="sellerPrimaryBtn"
+              id="sellerFeeBtn"
+              type="button"
+              hidden
+            >
+              Start Seller Verification
+            </button>
+
+            <a
+              class="sellerSecondaryBtn"
+              id="sellerOpenFeeXaman"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              hidden
+            >
+              Pay 10 XRP in Xaman
+            </a>
+
+            <button
+              class="sellerSecondaryBtn"
+              id="sellerVerifyFeeBtn"
+              type="button"
+              hidden
+            >
+              Verify Payment
+            </button>
+
+            <button
+              class="sellerPrimaryBtn"
+              id="sellerIdentityBtn"
+              type="button"
+              hidden
+            >
+              Verify Identity
+            </button>
+
+            <a
+              class="sellerSecondaryBtn"
+              id="sellerOpenIdentity"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              hidden
+            >
+              Open Identity Verification
+            </a>
+
+            <button
+              class="sellerSecondaryBtn"
+              id="sellerSyncIdentityBtn"
+              type="button"
+              hidden
+            >
+              Check Verification
+            </button>
+          </div>
+
+          <div
+            class="sellerVerifiedPanel"
+            id="sellerVerifiedPanel"
+            hidden
           >
+            <span>✓</span>
+
+            <div>
+              <strong>Seller verified</strong>
+              <p>
+                Your storefront is verified. Product publishing and seller
+                management tools are the next step.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -2867,6 +3385,959 @@
           refreshMarketplace();
         }
       }
+
+      const sellerUi = {
+        coordinate:
+          document.getElementById(
+            "sellerCoordinate"
+          ),
+        displayName:
+          document.getElementById(
+            "sellerDisplayName"
+          ),
+        description:
+          document.getElementById(
+            "sellerDescription"
+          ),
+        status:
+          document.getElementById(
+            "sellerStatus"
+          ),
+        badge:
+          document.getElementById(
+            "sellerStateBadge"
+          ),
+        title:
+          document.getElementById(
+            "sellerFlowTitle"
+          ),
+        connect:
+          document.getElementById(
+            "sellerConnectBtn"
+          ),
+        openXaman:
+          document.getElementById(
+            "sellerOpenXaman"
+          ),
+        verifySignIn:
+          document.getElementById(
+            "sellerVerifySignInBtn"
+          ),
+        create:
+          document.getElementById(
+            "sellerCreateBtn"
+          ),
+        fee:
+          document.getElementById(
+            "sellerFeeBtn"
+          ),
+        openFeeXaman:
+          document.getElementById(
+            "sellerOpenFeeXaman"
+          ),
+        verifyFee:
+          document.getElementById(
+            "sellerVerifyFeeBtn"
+          ),
+        identity:
+          document.getElementById(
+            "sellerIdentityBtn"
+          ),
+        openIdentity:
+          document.getElementById(
+            "sellerOpenIdentity"
+          ),
+        syncIdentity:
+          document.getElementById(
+            "sellerSyncIdentityBtn"
+          ),
+        verified:
+          document.getElementById(
+            "sellerVerifiedPanel"
+          )
+      };
+
+      let sellerProfile = null;
+
+      function sellerMessage(
+        message,
+        type = ""
+      ) {
+        sellerUi.status.textContent =
+          message;
+
+        sellerUi.status.className =
+          `sellerStatus ${type}`.trim();
+      }
+
+      function setSellerBadge(
+        text,
+        type = ""
+      ) {
+        sellerUi.badge.textContent =
+          text;
+
+        sellerUi.badge.className =
+          `sellerStateBadge ${type}`.trim();
+      }
+
+      function hideSellerActions() {
+        [
+          sellerUi.openXaman,
+          sellerUi.verifySignIn,
+          sellerUi.create,
+          sellerUi.fee,
+          sellerUi.openFeeXaman,
+          sellerUi.verifyFee,
+          sellerUi.identity,
+          sellerUi.openIdentity,
+          sellerUi.syncIdentity
+        ].forEach(
+          node => {
+            node.hidden = true;
+          }
+        );
+
+        sellerUi.verified.hidden = true;
+      }
+
+      function ownerSession() {
+        return window.MonolithSession
+          ? window.MonolithSession.get()
+          : null;
+      }
+
+      function sellerPayload() {
+        const session =
+          ownerSession();
+
+        return session &&
+          session.payloadUuid
+            ? session.payloadUuid
+            : "";
+      }
+
+      function hydrateSellerInputs() {
+        const session =
+          ownerSession();
+
+        if (
+          session &&
+          session.sourceCoordinate &&
+          !sellerUi.coordinate.value
+        ) {
+          sellerUi.coordinate.value =
+            session.sourceCoordinate;
+        }
+      }
+
+      async function merchJson(
+        url,
+        {
+          method = "GET",
+          body = null
+        } = {}
+      ) {
+        const options = {
+          method,
+          headers: {
+            "Content-Type":
+              "application/json"
+          }
+        };
+
+        if (body !== null) {
+          options.body =
+            JSON.stringify(body);
+        }
+
+        const response =
+          await fetch(
+            url,
+            options
+          );
+
+        const data =
+          await response
+            .json()
+            .catch(() => ({}));
+
+        if (
+          !response.ok ||
+          !data.ok
+        ) {
+          const error =
+            new Error(
+              data.error ||
+              data.code ||
+              "merch_request_failed"
+            );
+
+          error.code =
+            data.code || "";
+
+          error.status =
+            response.status;
+
+          throw error;
+        }
+
+        return data;
+      }
+
+      async function loadSellerProfile() {
+        const session =
+          ownerSession();
+
+        if (
+          !session ||
+          !session.ownerVerified ||
+          !session.payloadUuid ||
+          !session.sourceCoordinate
+        ) {
+          return null;
+        }
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/seller/${
+                encodeURIComponent(
+                  session.sourceCoordinate
+                )
+              }/manage?payloadUuid=${
+                encodeURIComponent(
+                  session.payloadUuid
+                )
+              }`
+            );
+
+          sellerProfile =
+            data.seller || null;
+
+          return sellerProfile;
+        } catch (error) {
+          if (
+            error.status === 404 ||
+            error.code ===
+              "MERCH_SELLER_NOT_FOUND"
+          ) {
+            sellerProfile = null;
+            return null;
+          }
+
+          throw error;
+        }
+      }
+
+      function renderSellerFlow() {
+        hideSellerActions();
+        hydrateSellerInputs();
+
+        const session =
+          ownerSession();
+
+        if (
+          !session ||
+          !session.ownerVerified
+        ) {
+          sellerUi.title.textContent =
+            "Connect your coordinate";
+
+          setSellerBadge(
+            session
+              ? "SIGN-IN PENDING"
+              : "NOT CONNECTED",
+            session
+              ? "pending"
+              : ""
+          );
+
+          sellerUi.connect.hidden =
+            Boolean(session);
+
+          if (session) {
+            sellerUi.verifySignIn.hidden =
+              false;
+
+            if (session.signUrl) {
+              sellerUi.openXaman.hidden =
+                false;
+
+              sellerUi.openXaman.href =
+                session.signUrl;
+            }
+
+            sellerMessage(
+              "Complete the owner Sign-In in Xaman, then verify it here."
+            );
+          } else {
+            sellerMessage(
+              "Enter the MONOLITH coordinate you want to use as your store."
+            );
+          }
+
+          return;
+        }
+
+        if (!sellerProfile) {
+          sellerUi.title.textContent =
+            "Create your storefront";
+
+          setSellerBadge(
+            "OWNER VERIFIED",
+            "ready"
+          );
+
+          sellerUi.create.hidden =
+            false;
+
+          sellerMessage(
+            `Wallet ownership verified for ${session.sourceCoordinate}. Add your store name and create the storefront.`,
+            "success"
+          );
+
+          return;
+        }
+
+        sellerUi.coordinate.value =
+          sellerProfile.coordinate || "";
+
+        sellerUi.displayName.value =
+          sellerProfile.displayName || "";
+
+        sellerUi.description.value =
+          sellerProfile.storeDescription ||
+          "";
+
+        if (
+          sellerProfile.status ===
+            "verified" &&
+          sellerProfile
+            .verificationStatus ===
+            "verified"
+        ) {
+          sellerUi.title.textContent =
+            sellerProfile.displayName;
+
+          setSellerBadge(
+            "VERIFIED SELLER",
+            "verified"
+          );
+
+          sellerUi.verified.hidden =
+            false;
+
+          sellerMessage(
+            `Seller verification complete for ${sellerProfile.coordinate}.`,
+            "success"
+          );
+
+          return;
+        }
+
+        const verification =
+          sellerProfile.verification ||
+          null;
+
+        if (!verification) {
+          sellerUi.title.textContent =
+            "Verify your storefront";
+
+          setSellerBadge(
+            "VERIFICATION REQUIRED",
+            "pending"
+          );
+
+          sellerUi.fee.hidden =
+            false;
+
+          sellerMessage(
+            "Your storefront exists. Start seller verification to continue."
+          );
+
+          return;
+        }
+
+        const verificationStatus =
+          String(
+            verification.status ||
+            sellerProfile
+              .verificationStatus ||
+            ""
+          ).toLowerCase();
+
+        if (
+          verificationStatus ===
+            "verified"
+        ) {
+          sellerUi.title.textContent =
+            sellerProfile.displayName;
+
+          setSellerBadge(
+            "VERIFIED SELLER",
+            "verified"
+          );
+
+          sellerUi.verified.hidden =
+            false;
+
+          sellerMessage(
+            "Seller verification is complete.",
+            "success"
+          );
+
+          return;
+        }
+
+        if (
+          verification.providerStatus
+        ) {
+          sellerUi.title.textContent =
+            "Identity verification";
+
+          setSellerBadge(
+            verificationStatus ===
+              "requires_input"
+              ? "ACTION REQUIRED"
+              : "IDENTITY PENDING",
+            "pending"
+          );
+
+          sellerUi.syncIdentity.hidden =
+            false;
+
+          sellerMessage(
+            verificationStatus ===
+              "requires_input"
+              ? "Stripe needs additional information. Resume identity verification or check the latest status."
+              : "Identity verification is in progress. Check the latest verification status."
+          );
+
+          return;
+        }
+
+        sellerUi.title.textContent =
+          "Seller verification";
+
+        setSellerBadge(
+          "PAYMENT PENDING",
+          "pending"
+        );
+
+        sellerUi.verifyFee.hidden =
+          false;
+
+        sellerMessage(
+          "Complete the 10 XRP seller verification payment in Xaman, then verify the payment here."
+        );
+      }
+
+      async function refreshSellerFlow() {
+        try {
+          const session =
+            ownerSession();
+
+          if (
+            session &&
+            session.ownerVerified
+          ) {
+            await loadSellerProfile();
+          }
+
+          renderSellerFlow();
+        } catch (error) {
+          console.error(
+            "[merch:seller]",
+            error
+          );
+
+          sellerMessage(
+            error.message ||
+            "Unable to load seller setup.",
+            "error"
+          );
+        }
+      }
+
+      sellerUi.connect
+        ?.addEventListener(
+          "click",
+          async () => {
+            const coordinateValue =
+              String(
+                sellerUi.coordinate.value ||
+                ""
+              )
+                .trim()
+                .toUpperCase();
+
+            if (!coordinateValue) {
+              sellerMessage(
+                "Enter your MONOLITH coordinate first.",
+                "error"
+              );
+              return;
+            }
+
+            sellerMessage(
+              "Creating Xaman owner Sign-In…"
+            );
+
+            try {
+              const session =
+                await window
+                  .MonolithSession
+                  .start(
+                    coordinateValue
+                  );
+
+              sellerUi.openXaman.href =
+                session.signUrl || "#";
+
+              sellerUi.openXaman.hidden =
+                !session.signUrl;
+
+              sellerUi.verifySignIn.hidden =
+                false;
+
+              sellerUi.connect.hidden =
+                true;
+
+              setSellerBadge(
+                "SIGN-IN PENDING",
+                "pending"
+              );
+
+              sellerMessage(
+                "Open Xaman, approve the owner Sign-In, then return here and verify it."
+              );
+
+              if (session.signUrl) {
+                window.open(
+                  session.signUrl,
+                  "_blank",
+                  "noopener"
+                );
+              }
+            } catch (error) {
+              sellerMessage(
+                error.message ||
+                "Unable to create Xaman Sign-In.",
+                "error"
+              );
+            }
+          }
+        );
+
+      sellerUi.verifySignIn
+        ?.addEventListener(
+          "click",
+          async () => {
+            sellerMessage(
+              "Verifying Xaman owner Sign-In…"
+            );
+
+            try {
+              const result =
+                await window
+                  .MonolithSession
+                  .verify();
+
+              if (!result.ok) {
+                sellerMessage(
+                  result.error ===
+                    "owner_signin_not_signed"
+                    ? "The Sign-In is still waiting for your approval in Xaman."
+                    : result.error ||
+                      "Owner Sign-In was not verified.",
+                  "error"
+                );
+
+                renderSellerFlow();
+                return;
+              }
+
+              sellerProfile = null;
+
+              await refreshSellerFlow();
+            } catch (error) {
+              sellerMessage(
+                error.message ||
+                "Unable to verify owner Sign-In.",
+                "error"
+              );
+            }
+          }
+        );
+
+      sellerUi.create
+        ?.addEventListener(
+          "click",
+          async () => {
+            const session =
+              ownerSession();
+
+            const displayName =
+              String(
+                sellerUi.displayName.value ||
+                ""
+              ).trim();
+
+            if (
+              !session ||
+              !session.ownerVerified
+            ) {
+              sellerMessage(
+                "Verify coordinate ownership first.",
+                "error"
+              );
+              return;
+            }
+
+            if (!displayName) {
+              sellerMessage(
+                "Enter a store name.",
+                "error"
+              );
+              return;
+            }
+
+            sellerUi.create.disabled =
+              true;
+
+            sellerMessage(
+              "Creating your MONOLITH storefront…"
+            );
+
+            try {
+              const data =
+                await merchJson(
+                  "/api/merch/seller",
+                  {
+                    method: "POST",
+                    body: {
+                      payloadUuid:
+                        session.payloadUuid,
+                      sellerWallet:
+                        session.ownerWallet,
+                      coordinate:
+                        session.sourceCoordinate,
+                      displayName,
+                      storeDescription:
+                        String(
+                          sellerUi
+                            .description
+                            .value ||
+                          ""
+                        ).trim()
+                    }
+                  }
+                );
+
+              sellerProfile =
+                data.seller;
+
+              renderSellerFlow();
+            } catch (error) {
+              sellerMessage(
+                error.message ||
+                "Unable to create storefront.",
+                "error"
+              );
+            } finally {
+              sellerUi.create.disabled =
+                false;
+            }
+          }
+        );
+
+      sellerUi.fee
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!sellerProfile) return;
+
+            sellerUi.fee.disabled =
+              true;
+
+            sellerMessage(
+              "Creating seller verification payment…"
+            );
+
+            try {
+              const data =
+                await merchJson(
+                  `/api/merch/seller/${
+                    encodeURIComponent(
+                      sellerProfile.sellerId
+                    )
+                  }/verification/fee`,
+                  {
+                    method: "POST",
+                    body: {
+                      payloadUuid:
+                        sellerPayload()
+                    }
+                  }
+                );
+
+              const payment =
+                data.payment || {};
+
+              sellerUi.openFeeXaman.href =
+                payment.signUrl || "#";
+
+              sellerUi.openFeeXaman.hidden =
+                !payment.signUrl;
+
+              sellerUi.verifyFee.hidden =
+                false;
+
+              sellerUi.fee.hidden =
+                true;
+
+              setSellerBadge(
+                "PAYMENT PENDING",
+                "pending"
+              );
+
+              sellerMessage(
+                "Pay 10 XRP in Xaman, then return here and verify the payment."
+              );
+
+              if (payment.signUrl) {
+                window.open(
+                  payment.signUrl,
+                  "_blank",
+                  "noopener"
+                );
+              }
+            } catch (error) {
+              sellerMessage(
+                error.message ||
+                "Unable to create verification payment.",
+                "error"
+              );
+            } finally {
+              sellerUi.fee.disabled =
+                false;
+            }
+          }
+        );
+
+      sellerUi.verifyFee
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!sellerProfile) return;
+
+            sellerUi.verifyFee.disabled =
+              true;
+
+            sellerMessage(
+              "Verifying seller payment on XRPL…"
+            );
+
+            try {
+              await merchJson(
+                `/api/merch/seller/${
+                  encodeURIComponent(
+                    sellerProfile.sellerId
+                  )
+                }/verification/fee/verify`,
+                {
+                  method: "POST",
+                  body: {
+                    payloadUuid:
+                      sellerPayload()
+                  }
+                }
+              );
+
+              await loadSellerProfile();
+
+              sellerUi.identity.hidden =
+                false;
+
+              setSellerBadge(
+                "IDENTITY REQUIRED",
+                "pending"
+              );
+
+              sellerMessage(
+                "Payment verified. Complete identity verification to activate your seller account.",
+                "success"
+              );
+            } catch (error) {
+              sellerMessage(
+                error.code ===
+                  "MERCH_VERIFICATION_FEE_NOT_SIGNED"
+                  ? "The 10 XRP payment has not been completed in Xaman yet."
+                  : error.message ||
+                    "Unable to verify seller payment.",
+                "error"
+              );
+            } finally {
+              sellerUi.verifyFee.disabled =
+                false;
+            }
+          }
+        );
+
+      sellerUi.identity
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!sellerProfile) return;
+
+            sellerUi.identity.disabled =
+              true;
+
+            sellerMessage(
+              "Starting seller identity verification…"
+            );
+
+            try {
+              const data =
+                await merchJson(
+                  `/api/merch/seller/${
+                    encodeURIComponent(
+                      sellerProfile.sellerId
+                    )
+                  }/verification/identity/start`,
+                  {
+                    method: "POST",
+                    body: {
+                      payloadUuid:
+                        sellerPayload()
+                    }
+                  }
+                );
+
+              const verification =
+                data.verification || {};
+
+              if (
+                verification.status ===
+                "verified"
+              ) {
+                await refreshSellerFlow();
+                return;
+              }
+
+              sellerUi.openIdentity.href =
+                verification.url || "#";
+
+              sellerUi.openIdentity.hidden =
+                !verification.url;
+
+              sellerUi.syncIdentity.hidden =
+                false;
+
+              sellerUi.identity.hidden =
+                true;
+
+              setSellerBadge(
+                "IDENTITY PENDING",
+                "pending"
+              );
+
+              sellerMessage(
+                verification.url
+                  ? "Complete identity verification, then return here and check the result."
+                  : "Identity verification started. Check the verification status here."
+              );
+
+              if (verification.url) {
+                window.open(
+                  verification.url,
+                  "_blank",
+                  "noopener"
+                );
+              }
+            } catch (error) {
+              sellerMessage(
+                error.code ===
+                  "STRIPE_IDENTITY_NOT_CONFIGURED"
+                  ? "Seller identity verification is being finalized for launch."
+                  : error.message ||
+                    "Unable to start identity verification.",
+                "error"
+              );
+            } finally {
+              sellerUi.identity.disabled =
+                false;
+            }
+          }
+        );
+
+      sellerUi.syncIdentity
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!sellerProfile) return;
+
+            sellerUi.syncIdentity.disabled =
+              true;
+
+            sellerMessage(
+              "Checking identity verification…"
+            );
+
+            try {
+              const data =
+                await merchJson(
+                  `/api/merch/seller/${
+                    encodeURIComponent(
+                      sellerProfile.sellerId
+                    )
+                  }/verification/identity/sync`,
+                  {
+                    method: "POST",
+                    body: {
+                      payloadUuid:
+                        sellerPayload()
+                    }
+                  }
+                );
+
+              const verification =
+                data.verification || {};
+
+              if (verification.url) {
+                sellerUi.openIdentity.href =
+                  verification.url;
+
+                sellerUi.openIdentity.hidden =
+                  false;
+              }
+
+              await refreshSellerFlow();
+            } catch (error) {
+              sellerMessage(
+                error.code ===
+                  "STRIPE_IDENTITY_NOT_CONFIGURED"
+                  ? "Seller identity verification is being finalized for launch."
+                  : error.message ||
+                    "Unable to check identity verification.",
+                "error"
+              );
+            } finally {
+              sellerUi.syncIdentity.disabled =
+                false;
+            }
+          }
+        );
+
+      hydrateSellerInputs();
+
+      setTimeout(
+        () => {
+          refreshSellerFlow();
+        },
+        0
+      );
 
       document
         .getElementById(
