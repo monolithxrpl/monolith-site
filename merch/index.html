@@ -4482,6 +4482,12 @@
         );
 
       const cart = [];
+      const CART_STORAGE_KEY =
+        "monolithMerchCartV1";
+      const CART_STORAGE_VERSION = 1;
+      const CART_MAX_AGE_MS =
+        7 * 24 * 60 * 60 * 1000;
+
       let marketplaceProducts = [];
       let activeFilter = "all";
       let searchTerm = "";
@@ -4519,7 +4525,177 @@
           : "";
       }
 
-      function updateCart() {
+      function saveCart() {
+        try {
+          if (!cart.length) {
+            localStorage.removeItem(
+              CART_STORAGE_KEY
+            );
+            return;
+          }
+
+          localStorage.setItem(
+            CART_STORAGE_KEY,
+            JSON.stringify({
+              version:
+                CART_STORAGE_VERSION,
+              savedAt:
+                Date.now(),
+              items:
+                cart.map(
+                  item => ({
+                    product:
+                      item.product,
+                    quantity:
+                      Math.max(
+                        1,
+                        Math.floor(
+                          Number(
+                            item.quantity ||
+                            1
+                          )
+                        )
+                      )
+                  })
+                )
+            })
+          );
+        } catch (error) {
+          console.warn(
+            "[merch:cart-save]",
+            error
+          );
+        }
+      }
+
+      function restoreCart() {
+        try {
+          const raw =
+            localStorage.getItem(
+              CART_STORAGE_KEY
+            );
+
+          if (!raw) return;
+
+          const saved =
+            JSON.parse(raw);
+
+          if (
+            !saved ||
+            saved.version !==
+              CART_STORAGE_VERSION ||
+            !Number.isFinite(
+              Number(saved.savedAt)
+            ) ||
+            (
+              Date.now() -
+              Number(saved.savedAt)
+            ) >
+              CART_MAX_AGE_MS ||
+            !Array.isArray(
+              saved.items
+            )
+          ) {
+            localStorage.removeItem(
+              CART_STORAGE_KEY
+            );
+            return;
+          }
+
+          cart.length = 0;
+
+          for (const item of saved.items) {
+            const product =
+              item &&
+              item.product &&
+              item.product.productId
+                ? item.product
+                : null;
+
+            const quantity =
+              Math.max(
+                1,
+                Math.floor(
+                  Number(
+                    item?.quantity ||
+                    1
+                  )
+                )
+              );
+
+            if (
+              !product ||
+              !Number.isFinite(
+                quantity
+              )
+            ) {
+              continue;
+            }
+
+            cart.push({
+              product,
+              quantity
+            });
+          }
+        } catch (error) {
+          console.warn(
+            "[merch:cart-restore]",
+            error
+          );
+
+          cart.length = 0;
+
+          try {
+            localStorage.removeItem(
+              CART_STORAGE_KEY
+            );
+          } catch (_) {}
+        }
+      }
+
+      function reconcileCartProducts() {
+        if (!cart.length) return;
+
+        const currentProducts =
+          new Map(
+            marketplaceProducts.map(
+              product => [
+                product.productId,
+                product
+              ]
+            )
+          );
+
+        for (const item of cart) {
+          const current =
+            currentProducts.get(
+              item.product.productId
+            );
+
+          if (current) {
+            item.product =
+              current;
+          }
+
+          item.quantity =
+            Math.max(
+              1,
+              Math.floor(
+                Number(
+                  item.quantity ||
+                  1
+                )
+              )
+            );
+        }
+
+        saveCart();
+        updateCart(false);
+      }
+
+      function updateCart(
+        persist = true
+      ) {
         const count =
           cart.reduce(
             (sum,item) =>
@@ -4572,6 +4748,10 @@
             "show",
             count > 0
           );
+
+        if (persist) {
+          saveCart();
+        }
       }
 
       function addToCart(product) {
@@ -4924,6 +5104,7 @@
                 )
               : [];
 
+          reconcileCartProducts();
           refreshMarketplace();
 
         } catch (error) {
@@ -9078,6 +9259,8 @@
           }
         );
 
+      restoreCart();
+      updateCart(false);
       loadMarketplace();
     })();
   </script>
