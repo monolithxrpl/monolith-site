@@ -2059,6 +2059,308 @@
       object-fit:cover;
     }
 
+
+    .productAdvancedGrid{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .productAdvancedCard{
+      padding:16px;
+      border:1px solid rgba(75,188,255,.12);
+      border-radius:10px;
+      background:rgba(255,255,255,.018);
+    }
+
+    .productAdvancedHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .productAdvancedHead > div{
+      display:grid;
+      gap:3px;
+    }
+
+    .productAdvancedHead strong{
+      color:#dce8ee;
+      font-size:11px;
+    }
+
+    .productAdvancedHead span{
+      color:#74818a;
+      font-size:8px;
+      line-height:1.5;
+    }
+
+    .productAdvancedNotice{
+      padding:12px;
+      border:1px dashed rgba(255,255,255,.08);
+      border-radius:8px;
+      color:#718089;
+      font-size:9px;
+      text-align:center;
+    }
+
+    .productInlineForm{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .productInlineForm input,
+    .variantFields input,
+    .variantOptionSelectors select,
+    .collectionCreateForm input{
+      width:100%;
+      min-height:40px;
+      padding:0 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:8px;
+      outline:0;
+      color:#edf3f6;
+      background:#11171b;
+      font:inherit;
+      font-size:10px;
+    }
+
+    .productOptionsList,
+    .productVariantsList,
+    .sellerCollectionsList{
+      display:grid;
+      gap:8px;
+    }
+
+    .productOptionBlock{
+      padding:12px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      background:#0d1215;
+    }
+
+    .productOptionTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .productOptionTop strong{
+      font-size:10px;
+    }
+
+    .productOptionDelete,
+    .optionValueDelete,
+    .variantDeleteBtn,
+    .collectionDeleteBtn{
+      border:0;
+      color:#c98181;
+      background:transparent;
+      font-size:8px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .optionValues{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:9px;
+    }
+
+    .optionValueChip{
+      display:flex;
+      align-items:center;
+      gap:5px;
+      padding:6px 8px;
+      border:1px solid rgba(75,188,255,.14);
+      border-radius:999px;
+      color:#a9bac4;
+      background:rgba(75,188,255,.04);
+      font-size:8px;
+    }
+
+    .optionValueAdd{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:7px;
+      margin-top:9px;
+    }
+
+    .optionValueAdd input{
+      min-height:34px;
+      padding:0 9px;
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:7px;
+      color:#edf3f6;
+      background:#101519;
+      font:inherit;
+      font-size:9px;
+    }
+
+    .productTinyBtn{
+      min-height:34px;
+      padding:0 10px;
+      border:1px solid rgba(75,188,255,.20);
+      border-radius:7px;
+      color:#78d2fa;
+      background:rgba(75,188,255,.05);
+      font-size:8px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .variantEditor{
+      margin-top:10px;
+      padding:12px;
+      border:1px solid rgba(210,178,110,.16);
+      border-radius:8px;
+      background:rgba(210,178,110,.025);
+    }
+
+    .variantOptionSelectors,
+    .variantFields{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:9px;
+    }
+
+    .variantOptionSelectors{
+      margin-bottom:9px;
+    }
+
+    .variantOptionField,
+    .variantFields label{
+      display:grid;
+      gap:5px;
+    }
+
+    .variantOptionField span,
+    .variantFields label span{
+      color:#7d8b93;
+      font-size:7px;
+      font-weight:900;
+      text-transform:uppercase;
+    }
+
+    .variantEditorActions{
+      display:flex;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .variantRow{
+      display:grid;
+      grid-template-columns:1fr auto auto auto;
+      gap:10px;
+      align-items:center;
+      padding:10px 11px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      background:#0d1215;
+    }
+
+    .variantRowCopy{
+      min-width:0;
+    }
+
+    .variantRowCopy strong{
+      display:block;
+      overflow:hidden;
+      color:#dfe7eb;
+      font-size:10px;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .variantRowCopy span{
+      display:block;
+      margin-top:3px;
+      color:#74818a;
+      font-size:8px;
+    }
+
+    .variantRowPrice{
+      color:#79d3fb;
+      font-size:9px;
+      font-weight:900;
+    }
+
+    .variantEditBtn{
+      border:0;
+      color:#d6bd78;
+      background:transparent;
+      font-size:8px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .productSmallBtn{
+      min-height:34px;
+      padding:0 10px;
+    }
+
+    .collectionCreateForm{
+      display:grid;
+      grid-template-columns:1fr 1fr auto;
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    .collectionCreateForm > div{
+      display:flex;
+      gap:7px;
+    }
+
+    .collectionRow{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:10px;
+      align-items:center;
+      padding:10px 11px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      background:#0d1215;
+    }
+
+    .collectionRow input{
+      accent-color:#68cdfb;
+    }
+
+    .collectionRow strong{
+      display:block;
+      font-size:10px;
+    }
+
+    .collectionRow span{
+      display:block;
+      margin-top:3px;
+      color:#74818a;
+      font-size:8px;
+    }
+
+    @media(max-width:680px){
+      .productInlineForm,
+      .variantOptionSelectors,
+      .variantFields,
+      .collectionCreateForm{
+        grid-template-columns:1fr;
+      }
+
+      .variantRow{
+        grid-template-columns:1fr auto;
+      }
+
+      .variantRowPrice{
+        grid-column:1;
+      }
+    }
+
     .productEditorActions{
       display:flex;
       flex-wrap:wrap;
@@ -3462,10 +3764,215 @@
             </button>
           </div>
 
-          <div
-            class="productMediaGrid"
-            id="productMediaGrid"
-          ></div>
+          <div class="productAdvancedGrid">
+
+            <section class="productAdvancedCard">
+              <div class="productAdvancedHead">
+                <div>
+                  <strong>Options</strong>
+                  <span>
+                    Add choices such as Size or Color.
+                  </span>
+                </div>
+              </div>
+
+              <div
+                class="productAdvancedNotice"
+                id="productOptionsNotice"
+              >
+                Save the product first to add options.
+              </div>
+
+              <div
+                class="productOptionsList"
+                id="productOptionsList"
+              ></div>
+
+              <div
+                class="productInlineForm"
+                id="productOptionCreateForm"
+                hidden
+              >
+                <input
+                  id="productOptionName"
+                  type="text"
+                  maxlength="120"
+                  placeholder="Option name, e.g. Size"
+                >
+
+                <button
+                  class="sellerSecondaryBtn"
+                  id="productAddOptionBtn"
+                  type="button"
+                >
+                  Add Option
+                </button>
+              </div>
+            </section>
+
+            <section class="productAdvancedCard">
+              <div class="productAdvancedHead">
+                <div>
+                  <strong>Variants</strong>
+                  <span>
+                    Create purchasable combinations from your options.
+                  </span>
+                </div>
+              </div>
+
+              <div
+                class="productAdvancedNotice"
+                id="productVariantsNotice"
+              >
+                Add product options before creating variants.
+              </div>
+
+              <div
+                class="productVariantsList"
+                id="productVariantsList"
+              ></div>
+
+              <div
+                class="variantEditor"
+                id="variantEditor"
+                hidden
+              >
+                <div
+                  class="variantOptionSelectors"
+                  id="variantOptionSelectors"
+                ></div>
+
+                <div class="variantFields">
+                  <label>
+                    <span>Variant Title</span>
+                    <input
+                      id="variantTitle"
+                      type="text"
+                      maxlength="240"
+                      placeholder="Optional"
+                    >
+                  </label>
+
+                  <label>
+                    <span>Price XRP</span>
+                    <input
+                      id="variantPrice"
+                      type="text"
+                      inputmode="decimal"
+                      placeholder="Uses product price"
+                    >
+                  </label>
+
+                  <label>
+                    <span>SKU</span>
+                    <input
+                      id="variantSku"
+                      type="text"
+                      maxlength="160"
+                      placeholder="Optional"
+                    >
+                  </label>
+
+                  <label>
+                    <span>Inventory</span>
+                    <input
+                      id="variantInventory"
+                      type="number"
+                      min="0"
+                      step="1"
+                      value="0"
+                    >
+                  </label>
+                </div>
+
+                <div class="variantEditorActions">
+                  <button
+                    class="sellerPrimaryBtn"
+                    id="variantSaveBtn"
+                    type="button"
+                  >
+                    Add Variant
+                  </button>
+
+                  <button
+                    class="sellerSecondaryBtn"
+                    id="variantCancelBtn"
+                    type="button"
+                    hidden
+                  >
+                    Cancel Edit
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <section class="productAdvancedCard productCollectionsCard">
+              <div class="productAdvancedHead">
+                <div>
+                  <strong>Collections</strong>
+                  <span>
+                    Group products for easier marketplace browsing.
+                  </span>
+                </div>
+
+                <button
+                  class="sellerSecondaryBtn productSmallBtn"
+                  id="collectionNewBtn"
+                  type="button"
+                >
+                  + New Collection
+                </button>
+              </div>
+
+              <div
+                class="collectionCreateForm"
+                id="collectionCreateForm"
+                hidden
+              >
+                <input
+                  id="collectionTitle"
+                  type="text"
+                  maxlength="240"
+                  placeholder="Collection name"
+                >
+
+                <input
+                  id="collectionDescription"
+                  type="text"
+                  maxlength="4000"
+                  placeholder="Optional description"
+                >
+
+                <div>
+                  <button
+                    class="sellerPrimaryBtn"
+                    id="collectionCreateBtn"
+                    type="button"
+                  >
+                    Create
+                  </button>
+
+                  <button
+                    class="sellerSecondaryBtn"
+                    id="collectionCreateCancelBtn"
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="sellerCollectionsList"
+                id="sellerCollectionsList"
+              >
+                <div class="productAdvancedNotice">
+                  Save the product first to manage collection membership.
+                </div>
+              </div>
+            </section>
+
+          </div>
 
           <div class="productEditorActions">
             <button
@@ -5132,11 +5639,101 @@
         archive:
           document.getElementById(
             "productArchiveBtn"
+          ),
+        optionsNotice:
+          document.getElementById(
+            "productOptionsNotice"
+          ),
+        optionsList:
+          document.getElementById(
+            "productOptionsList"
+          ),
+        optionCreateForm:
+          document.getElementById(
+            "productOptionCreateForm"
+          ),
+        optionName:
+          document.getElementById(
+            "productOptionName"
+          ),
+        addOption:
+          document.getElementById(
+            "productAddOptionBtn"
+          ),
+        variantsNotice:
+          document.getElementById(
+            "productVariantsNotice"
+          ),
+        variantsList:
+          document.getElementById(
+            "productVariantsList"
+          ),
+        variantEditor:
+          document.getElementById(
+            "variantEditor"
+          ),
+        variantOptionSelectors:
+          document.getElementById(
+            "variantOptionSelectors"
+          ),
+        variantTitle:
+          document.getElementById(
+            "variantTitle"
+          ),
+        variantPrice:
+          document.getElementById(
+            "variantPrice"
+          ),
+        variantSku:
+          document.getElementById(
+            "variantSku"
+          ),
+        variantInventory:
+          document.getElementById(
+            "variantInventory"
+          ),
+        variantSave:
+          document.getElementById(
+            "variantSaveBtn"
+          ),
+        variantCancel:
+          document.getElementById(
+            "variantCancelBtn"
+          ),
+        collectionNew:
+          document.getElementById(
+            "collectionNewBtn"
+          ),
+        collectionForm:
+          document.getElementById(
+            "collectionCreateForm"
+          ),
+        collectionTitle:
+          document.getElementById(
+            "collectionTitle"
+          ),
+        collectionDescription:
+          document.getElementById(
+            "collectionDescription"
+          ),
+        collectionCreate:
+          document.getElementById(
+            "collectionCreateBtn"
+          ),
+        collectionCancel:
+          document.getElementById(
+            "collectionCreateCancelBtn"
+          ),
+        collectionsList:
+          document.getElementById(
+            "sellerCollectionsList"
           )
       };
 
       let sellerProducts = [];
+      let sellerCollections = [];
       let editingProduct = null;
+      let editingVariant = null;
 
       function productMessage(
         message,
@@ -5287,6 +5884,1214 @@
           ).join("");
       }
 
+      function productWithFreshData(
+        productId
+      ) {
+        return sellerProducts.find(
+          item =>
+            item.productId ===
+            productId
+        ) || null;
+      }
+
+      function resetVariantEditor() {
+        editingVariant = null;
+
+        productUi.variantTitle.value = "";
+        productUi.variantPrice.value = "";
+        productUi.variantSku.value = "";
+        productUi.variantInventory.value =
+          "0";
+
+        productUi.variantSave.textContent =
+          "Add Variant";
+
+        productUi.variantCancel.hidden =
+          true;
+
+        renderVariantSelectors();
+      }
+
+      function renderVariantSelectors(
+        variant = null
+      ) {
+        if (!editingProduct) {
+          productUi.variantOptionSelectors
+            .innerHTML = "";
+          return;
+        }
+
+        const options =
+          Array.isArray(
+            editingProduct.options
+          )
+            ? editingProduct.options
+            : [];
+
+        productUi.variantOptionSelectors
+          .innerHTML =
+            options.map(
+              option => {
+                const selected =
+                  variant &&
+                  Array.isArray(
+                    variant.optionValues
+                  )
+                    ? variant.optionValues
+                        .find(
+                          item =>
+                            item.optionId ===
+                            option.optionId
+                        )
+                    : null;
+
+                return `
+                  <label class="variantOptionField">
+                    <span>
+                      ${escapeHtml(option.name)}
+                    </span>
+
+                    <select
+                      data-variant-option="${
+                        escapeHtml(
+                          option.optionId
+                        )
+                      }"
+                    >
+                      <option value="">
+                        Choose ${escapeHtml(option.name)}
+                      </option>
+
+                      ${
+                        option.values.map(
+                          value => `
+                            <option
+                              value="${
+                                escapeHtml(
+                                  value.valueId
+                                )
+                              }"
+                              ${
+                                selected &&
+                                selected.valueId ===
+                                  value.valueId
+                                  ? "selected"
+                                  : ""
+                              }
+                            >
+                              ${escapeHtml(value.value)}
+                            </option>
+                          `
+                        ).join("")
+                      }
+                    </select>
+                  </label>
+                `;
+              }
+            ).join("");
+      }
+
+      function renderProductOptions() {
+        if (!editingProduct) {
+          productUi.optionsNotice.hidden =
+            false;
+          productUi.optionCreateForm.hidden =
+            true;
+          productUi.optionsList.innerHTML =
+            "";
+          return;
+        }
+
+        const options =
+          Array.isArray(
+            editingProduct.options
+          )
+            ? editingProduct.options
+            : [];
+
+        productUi.optionsNotice.hidden =
+          true;
+
+        productUi.optionCreateForm.hidden =
+          false;
+
+        productUi.optionsList.innerHTML =
+          options.map(
+            option => `
+              <div
+                class="productOptionBlock"
+                data-option-id="${
+                  escapeHtml(
+                    option.optionId
+                  )
+                }"
+              >
+                <div class="productOptionTop">
+                  <strong>
+                    ${escapeHtml(option.name)}
+                  </strong>
+
+                  <button
+                    class="productOptionDelete"
+                    type="button"
+                    data-delete-option="${
+                      escapeHtml(
+                        option.optionId
+                      )
+                    }"
+                  >
+                    Delete
+                  </button>
+                </div>
+
+                <div class="optionValues">
+                  ${
+                    option.values.length
+                      ? option.values.map(
+                          value => `
+                            <span class="optionValueChip">
+                              ${escapeHtml(value.value)}
+
+                              <button
+                                class="optionValueDelete"
+                                type="button"
+                                data-delete-option-value="${
+                                  escapeHtml(
+                                    option.optionId
+                                  )
+                                }:${
+                                  escapeHtml(
+                                    value.valueId
+                                  )
+                                }"
+                                aria-label="Delete option value"
+                              >
+                                ×
+                              </button>
+                            </span>
+                          `
+                        ).join("")
+                      : `
+                        <span class="productAdvancedNotice">
+                          No values yet.
+                        </span>
+                      `
+                  }
+                </div>
+
+                <div class="optionValueAdd">
+                  <input
+                    type="text"
+                    maxlength="160"
+                    data-option-value-input="${
+                      escapeHtml(
+                        option.optionId
+                      )
+                    }"
+                    placeholder="Add value"
+                  >
+
+                  <button
+                    class="productTinyBtn"
+                    type="button"
+                    data-add-option-value="${
+                      escapeHtml(
+                        option.optionId
+                      )
+                    }"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            `
+          ).join("");
+
+        productUi.optionsList
+          .querySelectorAll(
+            "[data-add-option-value]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => addOptionValue(
+                  button.dataset
+                    .addOptionValue
+                )
+              );
+            }
+          );
+
+        productUi.optionsList
+          .querySelectorAll(
+            "[data-delete-option-value]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => {
+                  const [
+                    optionId,
+                    valueId
+                  ] =
+                    button.dataset
+                      .deleteOptionValue
+                      .split(":");
+
+                  deleteOptionValue(
+                    optionId,
+                    valueId
+                  );
+                }
+              );
+            }
+          );
+
+        productUi.optionsList
+          .querySelectorAll(
+            "[data-delete-option]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => deleteOption(
+                  button.dataset
+                    .deleteOption
+                )
+              );
+            }
+          );
+      }
+
+      function renderProductVariants() {
+        if (!editingProduct) {
+          productUi.variantsNotice.hidden =
+            false;
+          productUi.variantEditor.hidden =
+            true;
+          productUi.variantsList.innerHTML =
+            "";
+          return;
+        }
+
+        const options =
+          Array.isArray(
+            editingProduct.options
+          )
+            ? editingProduct.options
+            : [];
+
+        const usable =
+          options.length &&
+          options.every(
+            option =>
+              Array.isArray(
+                option.values
+              ) &&
+              option.values.length
+          );
+
+        productUi.variantsNotice.hidden =
+          usable;
+
+        if (!usable) {
+          productUi.variantsNotice.textContent =
+            options.length
+              ? "Every option needs at least one value before variants can be created."
+              : "Add product options before creating variants.";
+
+          productUi.variantEditor.hidden =
+            true;
+        } else {
+          productUi.variantEditor.hidden =
+            false;
+          renderVariantSelectors(
+            editingVariant
+          );
+        }
+
+        const variants =
+          Array.isArray(
+            editingProduct.variants
+          )
+            ? editingProduct.variants
+            : [];
+
+        productUi.variantsList.innerHTML =
+          variants.map(
+            variant => {
+              const combination =
+                Array.isArray(
+                  variant.optionValues
+                )
+                  ? variant.optionValues
+                      .map(
+                        item =>
+                          item.value
+                      )
+                      .join(" / ")
+                  : "";
+
+              return `
+                <div class="variantRow">
+                  <div class="variantRowCopy">
+                    <strong>
+                      ${
+                        escapeHtml(
+                          variant.title ||
+                          combination ||
+                          "Variant"
+                        )
+                      }
+                    </strong>
+
+                    <span>
+                      ${
+                        escapeHtml(
+                          combination
+                        )
+                      }
+                      ${
+                        variant.sku
+                          ? ` · SKU ${escapeHtml(variant.sku)}`
+                          : ""
+                      }
+                      · Qty ${
+                        Number(
+                          variant.inventoryQuantity ||
+                          0
+                        )
+                      }
+                    </span>
+                  </div>
+
+                  <span class="variantRowPrice">
+                    ${escapeHtml(variant.priceXrp)} XRP
+                  </span>
+
+                  <button
+                    class="variantEditBtn"
+                    type="button"
+                    data-edit-variant="${
+                      escapeHtml(
+                        variant.variantId
+                      )
+                    }"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    class="variantDeleteBtn"
+                    type="button"
+                    data-delete-variant="${
+                      escapeHtml(
+                        variant.variantId
+                      )
+                    }"
+                  >
+                    Delete
+                  </button>
+                </div>
+              `;
+            }
+          ).join("");
+
+        productUi.variantsList
+          .querySelectorAll(
+            "[data-edit-variant]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => {
+                  const variant =
+                    variants.find(
+                      item =>
+                        item.variantId ===
+                        button.dataset
+                          .editVariant
+                    );
+
+                  if (!variant) return;
+
+                  editingVariant =
+                    variant;
+
+                  productUi.variantTitle.value =
+                    variant.title || "";
+
+                  productUi.variantPrice.value =
+                    variant.priceXrp || "";
+
+                  productUi.variantSku.value =
+                    variant.sku || "";
+
+                  productUi.variantInventory.value =
+                    Number(
+                      variant.inventoryQuantity ||
+                      0
+                    );
+
+                  productUi.variantSave.textContent =
+                    "Save Variant";
+
+                  productUi.variantCancel.hidden =
+                    false;
+
+                  renderVariantSelectors(
+                    variant
+                  );
+                }
+              );
+            }
+          );
+
+        productUi.variantsList
+          .querySelectorAll(
+            "[data-delete-variant]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => deleteVariant(
+                  button.dataset
+                    .deleteVariant
+                )
+              );
+            }
+          );
+      }
+
+      function renderCollections() {
+        if (!editingProduct) {
+          productUi.collectionsList
+            .innerHTML = `
+              <div class="productAdvancedNotice">
+                Save the product first to manage collection membership.
+              </div>
+            `;
+          return;
+        }
+
+        if (!sellerCollections.length) {
+          productUi.collectionsList
+            .innerHTML = `
+              <div class="productAdvancedNotice">
+                No collections yet.
+              </div>
+            `;
+          return;
+        }
+
+        productUi.collectionsList.innerHTML =
+          sellerCollections.map(
+            collection => {
+              const selected =
+                Array.isArray(
+                  collection.products
+                ) &&
+                collection.products.some(
+                  item =>
+                    item.productId ===
+                    editingProduct.productId
+                );
+
+              return `
+                <div class="collectionRow">
+                  <input
+                    type="checkbox"
+                    data-collection-membership="${
+                      escapeHtml(
+                        collection.collectionId
+                      )
+                    }"
+                    ${
+                      selected
+                        ? "checked"
+                        : ""
+                    }
+                  >
+
+                  <div>
+                    <strong>
+                      ${escapeHtml(collection.title)}
+                    </strong>
+
+                    <span>
+                      ${
+                        Number(
+                          collection.products
+                            ? collection.products.length
+                            : 0
+                        )
+                      } products
+                    </span>
+                  </div>
+
+                  <button
+                    class="collectionDeleteBtn"
+                    type="button"
+                    data-delete-collection="${
+                      escapeHtml(
+                        collection.collectionId
+                      )
+                    }"
+                  >
+                    Delete
+                  </button>
+                </div>
+              `;
+            }
+          ).join("");
+
+        productUi.collectionsList
+          .querySelectorAll(
+            "[data-collection-membership]"
+          )
+          .forEach(
+            checkbox => {
+              checkbox.addEventListener(
+                "change",
+                () => toggleCollectionMembership(
+                  checkbox.dataset
+                    .collectionMembership,
+                  checkbox.checked
+                )
+              );
+            }
+          );
+
+        productUi.collectionsList
+          .querySelectorAll(
+            "[data-delete-collection]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => deleteCollectionById(
+                  button.dataset
+                    .deleteCollection
+                )
+              );
+            }
+          );
+      }
+
+      function renderAdvancedProductTools() {
+        renderProductOptions();
+        renderProductVariants();
+        renderCollections();
+      }
+
+      async function loadSellerCollections() {
+        if (!sellerProfile) return;
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/seller/${
+                encodeURIComponent(
+                  sellerProfile.sellerId
+                )
+              }/collections?payloadUuid=${
+                encodeURIComponent(
+                  sellerPayload()
+                )
+              }`
+            );
+
+          sellerCollections =
+            Array.isArray(
+              data.collections
+            )
+              ? data.collections
+              : [];
+
+          renderCollections();
+        } catch (error) {
+          console.error(
+            "[merch:seller-collections]",
+            error
+          );
+        }
+      }
+
+      async function refreshEditingProduct(
+        product
+      ) {
+        if (!product) return;
+
+        const index =
+          sellerProducts.findIndex(
+            item =>
+              item.productId ===
+              product.productId
+          );
+
+        if (index >= 0) {
+          sellerProducts[index] =
+            product;
+        }
+
+        editingProduct =
+          product;
+
+        renderSellerProducts();
+        fillProductEditor(
+          product
+        );
+      }
+
+      async function createOption() {
+        if (!editingProduct) return;
+
+        const name =
+          String(
+            productUi.optionName.value ||
+            ""
+          ).trim();
+
+        if (!name) {
+          productMessage(
+            "Enter an option name.",
+            "error"
+          );
+          return;
+        }
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/product/${
+                encodeURIComponent(
+                  editingProduct.productId
+                )
+              }/option`,
+              {
+                method:"POST",
+                body:{
+                  payloadUuid:
+                    sellerPayload(),
+                  name
+                }
+              }
+            );
+
+          productUi.optionName.value =
+            "";
+
+          resetVariantEditor();
+
+          await refreshEditingProduct(
+            data.product
+          );
+
+          productMessage(
+            "Product option added.",
+            "success"
+          );
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to add option.",
+            "error"
+          );
+        }
+      }
+
+      async function addOptionValue(
+        optionId
+      ) {
+        if (!editingProduct) return;
+
+        const input =
+          productUi.optionsList
+            .querySelector(
+              `[data-option-value-input="${CSS.escape(optionId)}"]`
+            );
+
+        const value =
+          String(
+            input?.value || ""
+          ).trim();
+
+        if (!value) return;
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/product/${
+                encodeURIComponent(
+                  editingProduct.productId
+                )
+              }/option/${
+                encodeURIComponent(
+                  optionId
+                )
+              }/value`,
+              {
+                method:"POST",
+                body:{
+                  payloadUuid:
+                    sellerPayload(),
+                  value
+                }
+              }
+            );
+
+          resetVariantEditor();
+
+          await refreshEditingProduct(
+            data.product
+          );
+
+          productMessage(
+            "Option value added.",
+            "success"
+          );
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to add option value.",
+            "error"
+          );
+        }
+      }
+
+      async function deleteOption(
+        optionId
+      ) {
+        if (!editingProduct) return;
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/product/${
+                encodeURIComponent(
+                  editingProduct.productId
+                )
+              }/option/${
+                encodeURIComponent(
+                  optionId
+                )
+              }/delete`,
+              {
+                method:"POST",
+                body:{
+                  payloadUuid:
+                    sellerPayload()
+                }
+              }
+            );
+
+          resetVariantEditor();
+
+          await refreshEditingProduct(
+            data.product
+          );
+
+          productMessage(
+            "Product option deleted.",
+            "success"
+          );
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to delete option.",
+            "error"
+          );
+        }
+      }
+
+      async function deleteOptionValue(
+        optionId,
+        valueId
+      ) {
+        if (!editingProduct) return;
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/product/${
+                encodeURIComponent(
+                  editingProduct.productId
+                )
+              }/option/${
+                encodeURIComponent(
+                  optionId
+                )
+              }/value/${
+                encodeURIComponent(
+                  valueId
+                )
+              }/delete`,
+              {
+                method:"POST",
+                body:{
+                  payloadUuid:
+                    sellerPayload()
+                }
+              }
+            );
+
+          resetVariantEditor();
+
+          await refreshEditingProduct(
+            data.product
+          );
+
+          productMessage(
+            "Option value deleted.",
+            "success"
+          );
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to delete option value.",
+            "error"
+          );
+        }
+      }
+
+      function variantPayload() {
+        const selects =
+          Array.from(
+            productUi
+              .variantOptionSelectors
+              .querySelectorAll(
+                "[data-variant-option]"
+              )
+          );
+
+        const optionValues =
+          selects.map(
+            select => ({
+              optionId:
+                select.dataset
+                  .variantOption,
+              valueId:
+                select.value
+            })
+          );
+
+        if (
+          optionValues.some(
+            item => !item.valueId
+          )
+        ) {
+          throw new Error(
+            "Choose one value for every option."
+          );
+        }
+
+        const payload = {
+          payloadUuid:
+            sellerPayload(),
+          optionValues,
+          title:
+            String(
+              productUi.variantTitle
+                .value ||
+              ""
+            ).trim(),
+          sku:
+            String(
+              productUi.variantSku
+                .value ||
+              ""
+            ).trim(),
+          inventoryQuantity:
+            Number(
+              productUi
+                .variantInventory
+                .value ||
+              0
+            ),
+          trackInventory:true,
+          status:"active"
+        };
+
+        const price =
+          String(
+            productUi.variantPrice
+              .value ||
+            ""
+          ).trim();
+
+        if (price) {
+          payload.priceXrp =
+            price;
+        }
+
+        return payload;
+      }
+
+      async function saveVariant() {
+        if (!editingProduct) return;
+
+        let payload;
+
+        try {
+          payload =
+            variantPayload();
+        } catch (error) {
+          productMessage(
+            error.message,
+            "error"
+          );
+          return;
+        }
+
+        productUi.variantSave.disabled =
+          true;
+
+        try {
+          const url =
+            editingVariant
+              ? `/api/merch/product/${
+                  encodeURIComponent(
+                    editingProduct.productId
+                  )
+                }/variant/${
+                  encodeURIComponent(
+                    editingVariant.variantId
+                  )
+                }`
+              : `/api/merch/product/${
+                  encodeURIComponent(
+                    editingProduct.productId
+                  )
+                }/variant`;
+
+          const data =
+            await merchJson(
+              url,
+              {
+                method:"POST",
+                body:payload
+              }
+            );
+
+          resetVariantEditor();
+
+          await refreshEditingProduct(
+            data.product
+          );
+
+          productMessage(
+            editingVariant
+              ? "Variant updated."
+              : "Variant added.",
+            "success"
+          );
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to save variant.",
+            "error"
+          );
+        } finally {
+          productUi.variantSave.disabled =
+            false;
+        }
+      }
+
+      async function deleteVariant(
+        variantId
+      ) {
+        if (!editingProduct) return;
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/product/${
+                encodeURIComponent(
+                  editingProduct.productId
+                )
+              }/variant/${
+                encodeURIComponent(
+                  variantId
+                )
+              }/delete`,
+              {
+                method:"POST",
+                body:{
+                  payloadUuid:
+                    sellerPayload()
+                }
+              }
+            );
+
+          resetVariantEditor();
+
+          await refreshEditingProduct(
+            data.product
+          );
+
+          productMessage(
+            "Variant deleted.",
+            "success"
+          );
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to delete variant.",
+            "error"
+          );
+        }
+      }
+
+      async function createSellerCollection() {
+        if (!sellerProfile) return;
+
+        const title =
+          String(
+            productUi.collectionTitle
+              .value ||
+            ""
+          ).trim();
+
+        if (!title) {
+          productMessage(
+            "Enter a collection name.",
+            "error"
+          );
+          return;
+        }
+
+        try {
+          await merchJson(
+            "/api/merch/collection",
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload(),
+                sellerId:
+                  sellerProfile.sellerId,
+                title,
+                description:
+                  String(
+                    productUi
+                      .collectionDescription
+                      .value ||
+                    ""
+                  ).trim(),
+                status:"active"
+              }
+            }
+          );
+
+          productUi.collectionTitle.value =
+            "";
+
+          productUi.collectionDescription
+            .value = "";
+
+          productUi.collectionForm.hidden =
+            true;
+
+          await loadSellerCollections();
+
+          productMessage(
+            "Collection created.",
+            "success"
+          );
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to create collection.",
+            "error"
+          );
+        }
+      }
+
+      async function toggleCollectionMembership(
+        collectionId,
+        add
+      ) {
+        if (!editingProduct) return;
+
+        try {
+          await merchJson(
+            `/api/merch/collection/${
+              encodeURIComponent(
+                collectionId
+              )
+            }/product/${
+              encodeURIComponent(
+                editingProduct.productId
+              )
+            }${add ? "" : "/remove"}`,
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload()
+              }
+            }
+          );
+
+          await loadSellerCollections();
+
+          productMessage(
+            add
+              ? "Product added to collection."
+              : "Product removed from collection.",
+            "success"
+          );
+        } catch (error) {
+          await loadSellerCollections();
+
+          productMessage(
+            error.message ||
+            "Unable to update collection.",
+            "error"
+          );
+        }
+      }
+
+      async function deleteCollectionById(
+        collectionId
+      ) {
+        try {
+          await merchJson(
+            `/api/merch/collection/${
+              encodeURIComponent(
+                collectionId
+              )
+            }/delete`,
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload()
+              }
+            }
+          );
+
+          await loadSellerCollections();
+
+          productMessage(
+            "Collection deleted.",
+            "success"
+          );
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to delete collection.",
+            "error"
+          );
+        }
+      }
+
       function resetProductEditor() {
         editingProduct = null;
 
@@ -5323,6 +7128,9 @@
         productUi.archive.hidden =
           true;
         productUi.media.innerHTML = "";
+
+        editingVariant = null;
+        renderAdvancedProductTools();
 
         productMessage(
           "Add product details, save as a draft, then publish when ready."
@@ -5426,6 +7234,9 @@
         renderProductMedia(
           product
         );
+
+        editingVariant = null;
+        renderAdvancedProductTools();
 
         productMessage(
           `Editing ${product.title}.`
@@ -5601,7 +7412,11 @@
             fillProductEditor(
               editingProduct
             );
+          } else {
+            renderAdvancedProductTools();
           }
+
+          await loadSellerCollections();
         } catch (error) {
           console.error(
             "[merch:seller-products]",
@@ -5703,6 +7518,64 @@
             false;
         }
       }
+
+      productUi.addOption
+        ?.addEventListener(
+          "click",
+          createOption
+        );
+
+      productUi.optionName
+        ?.addEventListener(
+          "keydown",
+          event => {
+            if (
+              event.key === "Enter"
+            ) {
+              event.preventDefault();
+              createOption();
+            }
+          }
+        );
+
+      productUi.variantSave
+        ?.addEventListener(
+          "click",
+          saveVariant
+        );
+
+      productUi.variantCancel
+        ?.addEventListener(
+          "click",
+          () => {
+            resetVariantEditor();
+          }
+        );
+
+      productUi.collectionNew
+        ?.addEventListener(
+          "click",
+          () => {
+            productUi.collectionForm.hidden =
+              false;
+            productUi.collectionTitle.focus();
+          }
+        );
+
+      productUi.collectionCancel
+        ?.addEventListener(
+          "click",
+          () => {
+            productUi.collectionForm.hidden =
+              true;
+          }
+        );
+
+      productUi.collectionCreate
+        ?.addEventListener(
+          "click",
+          createSellerCollection
+        );
 
       productUi.newBtn
         ?.addEventListener(
