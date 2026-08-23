@@ -2426,6 +2426,281 @@
       }
     }
 
+
+    /* -------------------------------------------------------
+       SELLER SHIPPING MANAGER
+    ------------------------------------------------------- */
+
+    .sellerShippingManager:not([hidden]){
+      display:block;
+    }
+
+    .shippingManagerHead{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:18px;
+      padding:22px;
+      border:1px solid rgba(75,188,255,.16);
+      background:
+        linear-gradient(
+          140deg,
+          rgba(15,21,26,.96),
+          rgba(8,8,8,.98)
+        );
+    }
+
+    .shippingManagerHead h2{
+      margin:4px 0;
+      font-size:30px;
+      letter-spacing:-.04em;
+    }
+
+    .shippingManagerHead p{
+      margin:0;
+      color:#89959d;
+      font-size:10px;
+    }
+
+    .shippingStatus{
+      margin-bottom:12px;
+    }
+
+    .shippingCreatePanel{
+      margin-bottom:12px;
+      padding:16px;
+      border:1px solid rgba(210,178,110,.18);
+      border-radius:10px;
+      background:rgba(210,178,110,.035);
+    }
+
+    .shippingCreatePanel > strong{
+      color:#dcc17e;
+      font-size:11px;
+    }
+
+    .shippingCreatePanel > p{
+      margin:4px 0 12px;
+      color:#807765;
+      font-size:8px;
+    }
+
+    .shippingInlineForm{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto auto;
+      gap:8px;
+    }
+
+    .shippingInlineForm input,
+    .shippingZoneForm input,
+    .shippingRateForm input{
+      width:100%;
+      min-height:40px;
+      padding:0 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:8px;
+      outline:0;
+      color:#edf3f6;
+      background:#11171b;
+      font:inherit;
+      font-size:10px;
+    }
+
+    .shippingProfiles{
+      display:grid;
+      gap:12px;
+    }
+
+    .shippingEmpty{
+      padding:26px;
+      border:1px dashed rgba(255,255,255,.08);
+      border-radius:10px;
+      color:#718089;
+      font-size:10px;
+      text-align:center;
+    }
+
+    .shippingProfileCard{
+      overflow:hidden;
+      border:1px solid rgba(75,188,255,.13);
+      border-radius:10px;
+      background:#0b0f12;
+    }
+
+    .shippingProfileHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:15px 16px;
+      border-bottom:1px solid rgba(255,255,255,.065);
+    }
+
+    .shippingProfileHead > div{
+      display:grid;
+      gap:3px;
+    }
+
+    .shippingProfileHead strong{
+      color:#e1e8ec;
+      font-size:12px;
+    }
+
+    .shippingProfileHead span{
+      color:#738089;
+      font-size:8px;
+    }
+
+    .shippingHeadActions{
+      display:flex;
+      gap:7px;
+    }
+
+    .shippingArchiveBtn{
+      min-height:34px;
+      padding:0 10px;
+      border:1px solid rgba(242,107,107,.20);
+      border-radius:7px;
+      color:#d18d8d;
+      background:rgba(242,107,107,.04);
+      font-size:8px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .shippingProfileBody{
+      display:grid;
+      gap:10px;
+      padding:14px;
+    }
+
+    .shippingZoneCreate,
+    .shippingRateCreate{
+      padding:12px;
+      border:1px solid rgba(255,255,255,.065);
+      border-radius:8px;
+      background:rgba(255,255,255,.018);
+    }
+
+    .shippingZoneCreate strong,
+    .shippingRateCreate strong{
+      display:block;
+      margin-bottom:3px;
+      color:#aab8c0;
+      font-size:9px;
+    }
+
+    .shippingZoneCreate p,
+    .shippingRateCreate p{
+      margin:0 0 9px;
+      color:#6f7c84;
+      font-size:8px;
+      line-height:1.5;
+    }
+
+    .shippingZoneForm{
+      display:grid;
+      grid-template-columns:1fr 1.4fr auto;
+      gap:7px;
+    }
+
+    .shippingZones{
+      display:grid;
+      gap:9px;
+    }
+
+    .shippingZoneCard{
+      padding:12px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      background:#0e1316;
+    }
+
+    .shippingZoneHead{
+      display:flex;
+      align-items:start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:9px;
+    }
+
+    .shippingZoneHead > div{
+      display:grid;
+      gap:3px;
+    }
+
+    .shippingZoneHead strong{
+      color:#dce5e9;
+      font-size:10px;
+    }
+
+    .shippingZoneHead span{
+      color:#76848c;
+      font-size:8px;
+    }
+
+    .shippingRates{
+      display:grid;
+      gap:6px;
+      margin-bottom:9px;
+    }
+
+    .shippingRateRow{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:10px;
+      align-items:center;
+      padding:9px 10px;
+      border:1px solid rgba(75,188,255,.09);
+      border-radius:7px;
+      background:rgba(75,188,255,.025);
+    }
+
+    .shippingRateRow > div{
+      display:grid;
+      gap:2px;
+    }
+
+    .shippingRateRow strong{
+      color:#aabac3;
+      font-size:9px;
+    }
+
+    .shippingRateRow span{
+      color:#6e7c84;
+      font-size:7px;
+    }
+
+    .shippingRatePrice{
+      color:#73d0fa !important;
+      font-size:9px !important;
+      font-weight:950;
+    }
+
+    .shippingRateForm{
+      display:grid;
+      grid-template-columns:1fr .8fr 1fr auto;
+      gap:7px;
+    }
+
+    @media(max-width:760px){
+      .shippingManagerHead{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .shippingInlineForm,
+      .shippingZoneForm,
+      .shippingRateForm{
+        grid-template-columns:1fr;
+      }
+
+      .shippingRateRow{
+        grid-template-columns:1fr auto;
+      }
+    }
+
     /* -------------------------------------------------------
        MARKETPLACE-FIRST UX
     ------------------------------------------------------- */
@@ -3702,6 +3977,13 @@
               </select>
             </label>
 
+            <label>
+              <span>Shipping Profile</span>
+              <select id="productShippingProfile">
+                <option value="">No profile selected</option>
+              </select>
+            </label>
+
             <label class="productWideField">
               <span>Tags</span>
               <input
@@ -4000,6 +4282,87 @@
               Archive
             </button>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="section sellerShippingManager"
+      id="sellerShipping"
+      hidden
+    >
+      <div class="shippingManagerHead">
+        <div>
+          <div class="sectionKicker">
+            SELLER DASHBOARD
+          </div>
+
+          <h2>Shipping</h2>
+
+          <p>
+            Set where you ship and what buyers pay in XRP.
+          </p>
+        </div>
+
+        <button
+          class="sellerPrimaryBtn"
+          id="shippingNewProfileBtn"
+          type="button"
+        >
+          + Shipping Profile
+        </button>
+      </div>
+
+      <div
+        class="shippingStatus sellerStatus"
+        id="shippingStatus"
+      >
+        Create a shipping profile, add destinations, then set XRP shipping rates.
+      </div>
+
+      <div
+        class="shippingCreatePanel"
+        id="shippingProfileCreatePanel"
+        hidden
+      >
+        <strong>New Shipping Profile</strong>
+
+        <p>
+          Use a simple name such as Standard Shipping or Apparel.
+        </p>
+
+        <div class="shippingInlineForm">
+          <input
+            id="shippingProfileName"
+            type="text"
+            maxlength="120"
+            placeholder="Standard Shipping"
+          >
+
+          <button
+            class="sellerPrimaryBtn"
+            id="shippingCreateProfileBtn"
+            type="button"
+          >
+            Create Profile
+          </button>
+
+          <button
+            class="sellerSecondaryBtn"
+            id="shippingCancelProfileBtn"
+            type="button"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="shippingProfiles"
+        id="shippingProfiles"
+      >
+        <div class="shippingEmpty">
+          No shipping profiles yet.
         </div>
       </div>
     </section>
@@ -5600,6 +5963,10 @@
           document.getElementById(
             "productWeightUnit"
           ),
+        shippingProfile:
+          document.getElementById(
+            "productShippingProfile"
+          ),
         tags:
           document.getElementById(
             "productTags"
@@ -5732,8 +6099,44 @@
 
       let sellerProducts = [];
       let sellerCollections = [];
+      let sellerShippingProfiles = [];
       let editingProduct = null;
       let editingVariant = null;
+
+      const shippingUi = {
+        manager:
+          document.getElementById(
+            "sellerShipping"
+          ),
+        status:
+          document.getElementById(
+            "shippingStatus"
+          ),
+        profiles:
+          document.getElementById(
+            "shippingProfiles"
+          ),
+        newProfile:
+          document.getElementById(
+            "shippingNewProfileBtn"
+          ),
+        profilePanel:
+          document.getElementById(
+            "shippingProfileCreatePanel"
+          ),
+        profileName:
+          document.getElementById(
+            "shippingProfileName"
+          ),
+        createProfile:
+          document.getElementById(
+            "shippingCreateProfileBtn"
+          ),
+        cancelProfile:
+          document.getElementById(
+            "shippingCancelProfileBtn"
+          )
+      };
 
       function productMessage(
         message,
@@ -5854,6 +6257,10 @@
           weightUnit:
             productUi
               .weightUnit
+              .value,
+          shippingProfile:
+            productUi
+              .shippingProfile
               .value,
           tags:
             productTagsFromInput(),
@@ -7092,6 +7499,825 @@
         }
       }
 
+      function shippingMessage(
+        message,
+        type = ""
+      ) {
+        shippingUi.status.textContent =
+          message;
+
+        shippingUi.status.className =
+          `shippingStatus sellerStatus ${type}`.trim();
+      }
+
+      function normalizeShippingCountries(
+        value
+      ) {
+        const countries =
+          String(value || "")
+            .split(/[,\s]+/)
+            .map(
+              item =>
+                item.trim()
+                  .toUpperCase()
+            )
+            .filter(Boolean);
+
+        const unique =
+          [...new Set(countries)];
+
+        if (
+          unique.some(
+            country =>
+              !/^[A-Z]{2}$/.test(
+                country
+              )
+          )
+        ) {
+          throw new Error(
+            "Use two-letter country codes such as US, CA or GB."
+          );
+        }
+
+        if (!unique.length) {
+          throw new Error(
+            "Add at least one destination country."
+          );
+        }
+
+        return unique;
+      }
+
+      function renderProductShippingProfiles() {
+        const current =
+          productUi.shippingProfile
+            .value;
+
+        const profiles =
+          sellerShippingProfiles
+            .filter(
+              profile =>
+                profile.status ===
+                "active"
+            );
+
+        productUi.shippingProfile.innerHTML =
+          `
+            <option value="">
+              No profile selected
+            </option>
+          ` +
+          profiles.map(
+            profile => `
+              <option
+                value="${
+                  escapeHtml(
+                    profile.shippingProfileId
+                  )
+                }"
+              >
+                ${escapeHtml(profile.name)}
+              </option>
+            `
+          ).join("");
+
+        if (
+          current &&
+          profiles.some(
+            profile =>
+              profile.shippingProfileId ===
+              current
+          )
+        ) {
+          productUi.shippingProfile.value =
+            current;
+        } else if (
+          editingProduct &&
+          editingProduct.shippingProfile &&
+          profiles.some(
+            profile =>
+              profile.shippingProfileId ===
+              editingProduct.shippingProfile
+          )
+        ) {
+          productUi.shippingProfile.value =
+            editingProduct.shippingProfile;
+        }
+      }
+
+      function renderShippingProfiles() {
+        renderProductShippingProfiles();
+
+        const profiles =
+          sellerShippingProfiles.filter(
+            profile =>
+              profile.status !==
+              "archived"
+          );
+
+        if (!profiles.length) {
+          shippingUi.profiles.innerHTML = `
+            <div class="shippingEmpty">
+              No shipping profiles yet. Create one to begin.
+            </div>
+          `;
+          return;
+        }
+
+        shippingUi.profiles.innerHTML =
+          profiles.map(
+            profile => `
+              <article
+                class="shippingProfileCard"
+                data-shipping-profile="${
+                  escapeHtml(
+                    profile.shippingProfileId
+                  )
+                }"
+              >
+                <div class="shippingProfileHead">
+                  <div>
+                    <strong>
+                      ${escapeHtml(profile.name)}
+                    </strong>
+
+                    <span>
+                      ${
+                        Number(
+                          profile.zones
+                            ? profile.zones.length
+                            : 0
+                        )
+                      } shipping zones
+                    </span>
+                  </div>
+
+                  <div class="shippingHeadActions">
+                    <button
+                      class="shippingArchiveBtn"
+                      type="button"
+                      data-archive-profile="${
+                        escapeHtml(
+                          profile.shippingProfileId
+                        )
+                      }"
+                    >
+                      Archive Profile
+                    </button>
+                  </div>
+                </div>
+
+                <div class="shippingProfileBody">
+                  <div class="shippingZoneCreate">
+                    <strong>Add Destination Zone</strong>
+
+                    <p>
+                      Enter countries using two-letter codes.
+                      Example: US, CA, GB.
+                    </p>
+
+                    <div class="shippingZoneForm">
+                      <input
+                        type="text"
+                        maxlength="120"
+                        placeholder="Zone name, e.g. United States"
+                        data-zone-name="${
+                          escapeHtml(
+                            profile.shippingProfileId
+                          )
+                        }"
+                      >
+
+                      <input
+                        type="text"
+                        placeholder="Countries: US, CA"
+                        data-zone-countries="${
+                          escapeHtml(
+                            profile.shippingProfileId
+                          )
+                        }"
+                      >
+
+                      <button
+                        class="sellerSecondaryBtn"
+                        type="button"
+                        data-add-zone="${
+                          escapeHtml(
+                            profile.shippingProfileId
+                          )
+                        }"
+                      >
+                        Add Zone
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="shippingZones">
+                    ${
+                      (profile.zones || [])
+                        .filter(
+                          zone =>
+                            zone.status !==
+                            "archived"
+                        )
+                        .map(
+                          zone => `
+                            <div
+                              class="shippingZoneCard"
+                              data-shipping-zone="${
+                                escapeHtml(
+                                  zone.shippingZoneId
+                                )
+                              }"
+                            >
+                              <div class="shippingZoneHead">
+                                <div>
+                                  <strong>
+                                    ${escapeHtml(zone.name)}
+                                  </strong>
+
+                                  <span>
+                                    ${
+                                      escapeHtml(
+                                        (zone.countries || [])
+                                          .join(", ")
+                                      )
+                                    }
+                                  </span>
+                                </div>
+
+                                <button
+                                  class="shippingArchiveBtn"
+                                  type="button"
+                                  data-archive-zone="${
+                                    escapeHtml(
+                                      zone.shippingZoneId
+                                    )
+                                  }"
+                                >
+                                  Archive
+                                </button>
+                              </div>
+
+                              <div class="shippingRates">
+                                ${
+                                  (zone.rates || [])
+                                    .filter(
+                                      rate =>
+                                        rate.status !==
+                                        "archived"
+                                    )
+                                    .map(
+                                      rate => `
+                                        <div class="shippingRateRow">
+                                          <div>
+                                            <strong>
+                                              ${escapeHtml(rate.name)}
+                                            </strong>
+
+                                            <span>
+                                              ${
+                                                rate.freeOverXrp
+                                                  ? `Free over ${escapeHtml(rate.freeOverXrp)} XRP`
+                                                  : "No free-shipping threshold"
+                                              }
+                                            </span>
+                                          </div>
+
+                                          <span class="shippingRatePrice">
+                                            ${escapeHtml(rate.rateXrp)} XRP
+                                          </span>
+
+                                          <button
+                                            class="shippingArchiveBtn"
+                                            type="button"
+                                            data-archive-rate="${
+                                              escapeHtml(
+                                                rate.shippingRateId
+                                              )
+                                            }"
+                                          >
+                                            Archive
+                                          </button>
+                                        </div>
+                                      `
+                                    ).join("")
+                                }
+                              </div>
+
+                              <div class="shippingRateCreate">
+                                <strong>Add Shipping Rate</strong>
+
+                                <p>
+                                  Set the shipping charge in XRP.
+                                  Free-over threshold is optional.
+                                </p>
+
+                                <div class="shippingRateForm">
+                                  <input
+                                    type="text"
+                                    maxlength="120"
+                                    placeholder="Standard"
+                                    data-rate-name="${
+                                      escapeHtml(
+                                        zone.shippingZoneId
+                                      )
+                                    }"
+                                  >
+
+                                  <input
+                                    type="text"
+                                    inputmode="decimal"
+                                    placeholder="Rate XRP"
+                                    data-rate-xrp="${
+                                      escapeHtml(
+                                        zone.shippingZoneId
+                                      )
+                                    }"
+                                  >
+
+                                  <input
+                                    type="text"
+                                    inputmode="decimal"
+                                    placeholder="Free over XRP (optional)"
+                                    data-rate-free-over="${
+                                      escapeHtml(
+                                        zone.shippingZoneId
+                                      )
+                                    }"
+                                  >
+
+                                  <button
+                                    class="sellerSecondaryBtn"
+                                    type="button"
+                                    data-add-rate="${
+                                      escapeHtml(
+                                        zone.shippingZoneId
+                                      )
+                                    }"
+                                  >
+                                    Add Rate
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          `
+                        ).join("")
+                    }
+                  </div>
+                </div>
+              </article>
+            `
+          ).join("");
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-add-zone]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => createShippingZoneUi(
+                  button.dataset.addZone
+                )
+              );
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-add-rate]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => createShippingRateUi(
+                  button.dataset.addRate
+                )
+              );
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-archive-profile]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => archiveShippingProfileUi(
+                  button.dataset
+                    .archiveProfile
+                )
+              );
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-archive-zone]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => archiveShippingZoneUi(
+                  button.dataset
+                    .archiveZone
+                )
+              );
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-archive-rate]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => archiveShippingRateUi(
+                  button.dataset
+                    .archiveRate
+                )
+              );
+            }
+          );
+      }
+
+      async function loadSellerShipping() {
+        if (
+          !sellerProfile ||
+          sellerProfile.status !==
+            "verified" ||
+          sellerProfile
+            .verificationStatus !==
+            "verified"
+        ) {
+          shippingUi.manager.hidden =
+            true;
+          return;
+        }
+
+        shippingUi.manager.hidden =
+          false;
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/seller/${
+                encodeURIComponent(
+                  sellerProfile.sellerId
+                )
+              }/shipping?payloadUuid=${
+                encodeURIComponent(
+                  sellerPayload()
+                )
+              }`
+            );
+
+          sellerShippingProfiles =
+            Array.isArray(
+              data.shippingProfiles
+            )
+              ? data.shippingProfiles
+              : [];
+
+          renderShippingProfiles();
+        } catch (error) {
+          console.error(
+            "[merch:seller-shipping]",
+            error
+          );
+
+          shippingMessage(
+            error.message ||
+            "Unable to load shipping settings.",
+            "error"
+          );
+        }
+      }
+
+      async function createShippingProfileUi() {
+        if (!sellerProfile) return;
+
+        const name =
+          String(
+            shippingUi.profileName
+              .value ||
+            ""
+          ).trim();
+
+        if (!name) {
+          shippingMessage(
+            "Enter a shipping profile name.",
+            "error"
+          );
+          return;
+        }
+
+        shippingUi.createProfile.disabled =
+          true;
+
+        try {
+          await merchJson(
+            "/api/merch/shipping/profile",
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload(),
+                sellerId:
+                  sellerProfile.sellerId,
+                name
+              }
+            }
+          );
+
+          shippingUi.profileName.value =
+            "";
+
+          shippingUi.profilePanel.hidden =
+            true;
+
+          await loadSellerShipping();
+
+          shippingMessage(
+            "Shipping profile created.",
+            "success"
+          );
+        } catch (error) {
+          shippingMessage(
+            error.message ||
+            "Unable to create shipping profile.",
+            "error"
+          );
+        } finally {
+          shippingUi.createProfile.disabled =
+            false;
+        }
+      }
+
+      async function createShippingZoneUi(
+        profileId
+      ) {
+        const card =
+          shippingUi.profiles
+            .querySelector(
+              `[data-shipping-profile="${CSS.escape(profileId)}"]`
+            );
+
+        const name =
+          String(
+            card?.querySelector(
+              `[data-zone-name="${CSS.escape(profileId)}"]`
+            )?.value ||
+            ""
+          ).trim();
+
+        const countriesRaw =
+          card?.querySelector(
+            `[data-zone-countries="${CSS.escape(profileId)}"]`
+          )?.value || "";
+
+        if (!name) {
+          shippingMessage(
+            "Enter a shipping zone name.",
+            "error"
+          );
+          return;
+        }
+
+        let countries;
+
+        try {
+          countries =
+            normalizeShippingCountries(
+              countriesRaw
+            );
+        } catch (error) {
+          shippingMessage(
+            error.message,
+            "error"
+          );
+          return;
+        }
+
+        try {
+          await merchJson(
+            `/api/merch/shipping/profile/${
+              encodeURIComponent(
+                profileId
+              )
+            }/zone`,
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload(),
+                name,
+                countries
+              }
+            }
+          );
+
+          await loadSellerShipping();
+
+          shippingMessage(
+            "Shipping zone added.",
+            "success"
+          );
+        } catch (error) {
+          shippingMessage(
+            error.message ||
+            "Unable to add shipping zone.",
+            "error"
+          );
+        }
+      }
+
+      async function createShippingRateUi(
+        zoneId
+      ) {
+        const card =
+          shippingUi.profiles
+            .querySelector(
+              `[data-shipping-zone="${CSS.escape(zoneId)}"]`
+            );
+
+        const name =
+          String(
+            card?.querySelector(
+              `[data-rate-name="${CSS.escape(zoneId)}"]`
+            )?.value ||
+            ""
+          ).trim();
+
+        const rateXrp =
+          String(
+            card?.querySelector(
+              `[data-rate-xrp="${CSS.escape(zoneId)}"]`
+            )?.value ||
+            ""
+          ).trim();
+
+        const freeOverXrp =
+          String(
+            card?.querySelector(
+              `[data-rate-free-over="${CSS.escape(zoneId)}"]`
+            )?.value ||
+            ""
+          ).trim();
+
+        if (!name || rateXrp === "") {
+          shippingMessage(
+            "Enter a rate name and XRP shipping amount.",
+            "error"
+          );
+          return;
+        }
+
+        try {
+          await merchJson(
+            `/api/merch/shipping/zone/${
+              encodeURIComponent(
+                zoneId
+              )
+            }/rate`,
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload(),
+                name,
+                rateXrp,
+                freeOverXrp:
+                  freeOverXrp || null
+              }
+            }
+          );
+
+          await loadSellerShipping();
+
+          shippingMessage(
+            "Shipping rate added.",
+            "success"
+          );
+        } catch (error) {
+          shippingMessage(
+            error.message ||
+            "Unable to add shipping rate.",
+            "error"
+          );
+        }
+      }
+
+      async function archiveShippingProfileUi(
+        profileId
+      ) {
+        try {
+          await merchJson(
+            `/api/merch/shipping/profile/${
+              encodeURIComponent(
+                profileId
+              )
+            }/archive`,
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload()
+              }
+            }
+          );
+
+          await loadSellerShipping();
+
+          shippingMessage(
+            "Shipping profile archived.",
+            "success"
+          );
+        } catch (error) {
+          shippingMessage(
+            error.message ||
+            "Unable to archive shipping profile.",
+            "error"
+          );
+        }
+      }
+
+      async function archiveShippingZoneUi(
+        zoneId
+      ) {
+        try {
+          await merchJson(
+            `/api/merch/shipping/zone/${
+              encodeURIComponent(
+                zoneId
+              )
+            }/archive`,
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload()
+              }
+            }
+          );
+
+          await loadSellerShipping();
+
+          shippingMessage(
+            "Shipping zone archived.",
+            "success"
+          );
+        } catch (error) {
+          shippingMessage(
+            error.message ||
+            "Unable to archive shipping zone.",
+            "error"
+          );
+        }
+      }
+
+      async function archiveShippingRateUi(
+        rateId
+      ) {
+        try {
+          await merchJson(
+            `/api/merch/shipping/rate/${
+              encodeURIComponent(
+                rateId
+              )
+            }/archive`,
+            {
+              method:"POST",
+              body:{
+                payloadUuid:
+                  sellerPayload()
+              }
+            }
+          );
+
+          await loadSellerShipping();
+
+          shippingMessage(
+            "Shipping rate archived.",
+            "success"
+          );
+        } catch (error) {
+          shippingMessage(
+            error.message ||
+            "Unable to archive shipping rate.",
+            "error"
+          );
+        }
+      }
+
       function resetProductEditor() {
         editingProduct = null;
 
@@ -7115,6 +8341,7 @@
         productUi.inventory.value = "0";
         productUi.weight.value = "";
         productUi.weightUnit.value = "";
+        productUi.shippingProfile.value = "";
         productUi.tags.value = "";
         productUi.trackInventory.checked =
           true;
@@ -7203,6 +8430,9 @@
 
         productUi.weightUnit.value =
           product.weightUnit || "";
+
+        productUi.shippingProfile.value =
+          product.shippingProfile || "";
 
         productUi.tags.value =
           Array.isArray(product.tags)
@@ -7417,6 +8647,7 @@
           }
 
           await loadSellerCollections();
+          await loadSellerShipping();
         } catch (error) {
           console.error(
             "[merch:seller-products]",
@@ -7518,6 +8749,43 @@
             false;
         }
       }
+
+      shippingUi.newProfile
+        ?.addEventListener(
+          "click",
+          () => {
+            shippingUi.profilePanel.hidden =
+              false;
+
+            shippingUi.profileName.focus();
+          }
+        );
+
+      shippingUi.cancelProfile
+        ?.addEventListener(
+          "click",
+          () => {
+            shippingUi.profilePanel.hidden =
+              true;
+          }
+        );
+
+      shippingUi.createProfile
+        ?.addEventListener(
+          "click",
+          createShippingProfileUi
+        );
+
+      shippingUi.profileName
+        ?.addEventListener(
+          "keydown",
+          event => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              createShippingProfileUi();
+            }
+          }
+        );
 
       productUi.addOption
         ?.addEventListener(
