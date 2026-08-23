@@ -6656,6 +6656,155 @@ body.merchLaunchSoon .sellerCenterShell{
 
 </style>
 
+
+<style id="monolith-merch-marketplace-energy-20260823">
+
+/* ===========================================================
+   MARKETPLACE ENERGY + TYPOGRAPHY
+   =========================================================== */
+
+.marketHero h1{
+  font-size:clamp(38px,4.8vw,64px)!important;
+  font-weight:950!important;
+  letter-spacing:-.055em!important;
+}
+
+.marketHero p{
+  max-width:700px!important;
+  font-size:15px!important;
+  font-weight:550!important;
+}
+
+.marketHero .heroEyebrow{
+  font-size:10px!important;
+  font-weight:950!important;
+}
+
+.marketTopbar h2{
+  font-size:34px!important;
+  font-weight:950!important;
+  letter-spacing:-.045em!important;
+}
+
+.marketTopbar .sectionKicker{
+  font-size:10px!important;
+  font-weight:950!important;
+  letter-spacing:.16em!important;
+}
+
+.sidebarTitle{
+  font-size:24px!important;
+  font-weight:950!important;
+}
+
+.marketSearch input{
+  font-size:16px!important;
+  font-weight:650!important;
+}
+
+.marketSearch input::placeholder{
+  font-size:16px!important;
+}
+
+.marketNavItem{
+  min-height:50px!important;
+  font-size:13px!important;
+  font-weight:850!important;
+}
+
+.marketNavIcon{
+  width:34px!important;
+  height:34px!important;
+  font-size:8px!important;
+}
+
+.resultCount{
+  font-size:10px!important;
+  font-weight:900!important;
+}
+
+.marketplaceProducts .productBody h3{
+  font-size:17px!important;
+  font-weight:900!important;
+  line-height:1.18!important;
+}
+
+.marketplaceProducts .price{
+  font-size:22px!important;
+  font-weight:1000!important;
+  letter-spacing:-.025em!important;
+}
+
+.marketplaceProducts .productMeta{
+  font-size:9px!important;
+  font-weight:900!important;
+}
+
+.marketplaceProducts .sellerLine{
+  font-size:10px!important;
+}
+
+.emptyProducts strong{
+  display:block;
+  margin-bottom:5px;
+  color:#304c59!important;
+  font-size:18px!important;
+  font-weight:900!important;
+}
+
+
+/* -----------------------------------------------------------
+   MOBILE
+   ----------------------------------------------------------- */
+
+@media(max-width:620px){
+
+  .marketHero h1{
+    font-size:30px!important;
+  }
+
+  .marketHero p{
+    font-size:12px!important;
+  }
+
+  .marketHero .heroEyebrow{
+    font-size:8px!important;
+  }
+
+  .marketTopbar h2{
+    font-size:30px!important;
+  }
+
+  .marketTopbar .sectionKicker{
+    font-size:9px!important;
+  }
+
+  .marketSearch input,
+  .marketSearch input::placeholder{
+    font-size:16px!important;
+  }
+
+  .marketNavItem{
+    min-height:42px!important;
+    padding:0 15px!important;
+    font-size:11px!important;
+  }
+
+  .marketplaceProducts .productBody h3{
+    font-size:15px!important;
+  }
+
+  .marketplaceProducts .price{
+    font-size:19px!important;
+  }
+
+  .emptyProducts strong{
+    font-size:16px!important;
+  }
+}
+
+</style>
+
 </head>
 
 <body class="merchLaunchSoon">
@@ -6771,49 +6920,69 @@ body.merchLaunchSoon .sellerCenterShell{
           class="marketNav"
           aria-label="Marketplace categories"
         >
-          <button
-            class="marketNavItem active"
-            type="button"
-            data-filter="all"
-          >
+          <button class="marketNavItem active" type="button" data-filter="all">
             <span class="marketNavIcon">⌂</span>
             Browse All
           </button>
 
-          <button
-            class="marketNavItem"
-            type="button"
-            data-filter="apparel"
-          >
+          <button class="marketNavItem" type="button" data-filter="apparel">
             <span class="marketNavIcon">A</span>
             Apparel
           </button>
 
-          <button
-            class="marketNavItem"
-            type="button"
-            data-filter="headwear"
-          >
+          <button class="marketNavItem" type="button" data-filter="accessories">
+            <span class="marketNavIcon">AC</span>
+            Accessories
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="art_collectibles">
+            <span class="marketNavIcon">ART</span>
+            Art &amp; Collectibles
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="home_living">
             <span class="marketNavIcon">H</span>
-            Headwear
+            Home &amp; Living
           </button>
 
-          <button
-            class="marketNavItem"
-            type="button"
-            data-filter="collectibles"
-          >
-            <span class="marketNavIcon">C</span>
-            Collectibles
+          <button class="marketNavItem" type="button" data-filter="electronics">
+            <span class="marketNavIcon">E</span>
+            Electronics
           </button>
 
-          <button
-            class="marketNavItem"
-            type="button"
-            data-filter="gear"
-          >
-            <span class="marketNavIcon">G</span>
-            Gear
+          <button class="marketNavItem" type="button" data-filter="toys_games">
+            <span class="marketNavIcon">TG</span>
+            Toys &amp; Games
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="books_media">
+            <span class="marketNavIcon">B</span>
+            Books &amp; Media
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="sports_outdoors">
+            <span class="marketNavIcon">S</span>
+            Sports &amp; Outdoors
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="auto_tools">
+            <span class="marketNavIcon">AT</span>
+            Auto &amp; Tools
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="beauty">
+            <span class="marketNavIcon">B</span>
+            Beauty
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="food_specialty">
+            <span class="marketNavIcon">F</span>
+            Food &amp; Specialty
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="other">
+            <span class="marketNavIcon">+</span>
+            Other
           </button>
         </nav>
 
@@ -7286,9 +7455,17 @@ body.merchLaunchSoon .sellerCenterShell{
               <span>Category</span>
               <select id="productCategory">
                 <option value="apparel">Apparel</option>
-                <option value="headwear">Headwear</option>
-                <option value="gear">Gear</option>
-                <option value="collectibles">Collectibles</option>
+                <option value="accessories">Accessories</option>
+                <option value="art_collectibles">Art &amp; Collectibles</option>
+                <option value="home_living">Home &amp; Living</option>
+                <option value="electronics">Electronics</option>
+                <option value="toys_games">Toys &amp; Games</option>
+                <option value="books_media">Books &amp; Media</option>
+                <option value="sports_outdoors">Sports &amp; Outdoors</option>
+                <option value="auto_tools">Auto &amp; Tools</option>
+                <option value="beauty">Beauty &amp; Personal Care</option>
+                <option value="food_specialty">Food &amp; Specialty</option>
+                <option value="other">Other</option>
               </select>
             </label>
 
@@ -10777,44 +10954,238 @@ body.merchLaunchSoon .sellerCenterShell{
       }
 
       function productCategory(product) {
+        const explicit =
+          String(
+            product.category || ""
+          )
+            .trim()
+            .toLowerCase();
+
+        const directMap = {
+          apparel: "apparel",
+          headwear: "accessories",
+          accessories: "accessories",
+          collectibles: "art_collectibles",
+          art_collectibles: "art_collectibles",
+          home_living: "home_living",
+          electronics: "electronics",
+          toys_games: "toys_games",
+          books_media: "books_media",
+          sports_outdoors: "sports_outdoors",
+          auto_tools: "auto_tools",
+          beauty: "beauty",
+          food_specialty: "food_specialty",
+          other: "other"
+        };
+
+        if (directMap[explicit]) {
+          return directMap[explicit];
+        }
+
         const text =
           [
             product.productType,
             product.category,
             product.vendor,
-            product.title
+            product.title,
+            product.description,
+            Array.isArray(product.tags)
+              ? product.tags.join(" ")
+              : product.tags
           ]
             .filter(Boolean)
             .join(" ")
             .toLowerCase();
 
-        if (
-          text.includes("hat") ||
-          text.includes("cap") ||
-          text.includes("headwear")
-        ) {
-          return "headwear";
-        }
+        const includesAny = words =>
+          words.some(
+            word => text.includes(word)
+          );
 
         if (
-          text.includes("shirt") ||
-          text.includes("tee") ||
-          text.includes("hoodie") ||
-          text.includes("apparel") ||
-          text.includes("jacket")
+          includesAny([
+            "shirt",
+            "tee",
+            "hoodie",
+            "jacket",
+            "sweater",
+            "pants",
+            "shorts",
+            "dress",
+            "apparel",
+            "clothing"
+          ])
         ) {
           return "apparel";
         }
 
         if (
-          text.includes("collect") ||
-          text.includes("limited") ||
-          text.includes("figure")
+          includesAny([
+            "hat",
+            "cap",
+            "headwear",
+            "bag",
+            "wallet",
+            "belt",
+            "jewelry",
+            "watch",
+            "sunglasses",
+            "accessory",
+            "accessories"
+          ])
         ) {
-          return "collectibles";
+          return "accessories";
         }
 
-        return "gear";
+        if (
+          includesAny([
+            "art",
+            "print",
+            "poster",
+            "painting",
+            "collect",
+            "figure",
+            "figurine",
+            "limited edition",
+            "sculpture",
+            "photograph"
+          ])
+        ) {
+          return "art_collectibles";
+        }
+
+        if (
+          includesAny([
+            "home",
+            "kitchen",
+            "furniture",
+            "decor",
+            "lamp",
+            "desk",
+            "chair",
+            "mug",
+            "cup",
+            "blanket",
+            "pillow"
+          ])
+        ) {
+          return "home_living";
+        }
+
+        if (
+          includesAny([
+            "electronic",
+            "computer",
+            "phone",
+            "tablet",
+            "audio",
+            "speaker",
+            "headphone",
+            "keyboard",
+            "mouse",
+            "camera",
+            "charger",
+            "cable"
+          ])
+        ) {
+          return "electronics";
+        }
+
+        if (
+          includesAny([
+            "toy",
+            "game",
+            "puzzle",
+            "board game",
+            "card game",
+            "plush",
+            "doll"
+          ])
+        ) {
+          return "toys_games";
+        }
+
+        if (
+          includesAny([
+            "book",
+            "magazine",
+            "comic",
+            "movie",
+            "music",
+            "vinyl",
+            "record",
+            "cd",
+            "dvd",
+            "media"
+          ])
+        ) {
+          return "books_media";
+        }
+
+        if (
+          includesAny([
+            "sport",
+            "fitness",
+            "outdoor",
+            "camping",
+            "hiking",
+            "cycling",
+            "bike",
+            "gym",
+            "training",
+            "golf"
+          ])
+        ) {
+          return "sports_outdoors";
+        }
+
+        if (
+          includesAny([
+            "auto",
+            "automotive",
+            "car",
+            "truck",
+            "motorcycle",
+            "tool",
+            "wrench",
+            "drill",
+            "garage"
+          ])
+        ) {
+          return "auto_tools";
+        }
+
+        if (
+          includesAny([
+            "beauty",
+            "skin",
+            "skincare",
+            "soap",
+            "lotion",
+            "cosmetic",
+            "grooming",
+            "personal care"
+          ])
+        ) {
+          return "beauty";
+        }
+
+        if (
+          includesAny([
+            "food",
+            "coffee",
+            "tea",
+            "snack",
+            "candy",
+            "sauce",
+            "spice",
+            "specialty food"
+          ])
+        ) {
+          return "food_specialty";
+        }
+
+        return "other";
       }
 
       function filteredProducts() {
