@@ -5303,16 +5303,24 @@ body.merchLaunchSoon .footerBrand strong{
   }
 
   body.merchLaunchSoon .marketSidebar{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
     margin-bottom:12px;
     padding:10px!important;
     border-radius:14px;
+    overflow:hidden!important;
   }
 
   body.merchLaunchSoon .marketNav{
-    display:flex!important;
-    gap:7px;
-    overflow-x:auto;
-    padding-bottom:3px;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:visible!important;
+    padding:0!important;
     scrollbar-width:none;
   }
 
@@ -5321,14 +5329,30 @@ body.merchLaunchSoon .footerBrand strong{
   }
 
   body.merchLaunchSoon .marketNav button{
-    flex:0 0 auto;
-    min-height:42px;
-    padding:0 12px!important;
-    font-size:9px;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:54px!important;
+    padding:9px 11px!important;
+    border-radius:12px!important;
+    font-size:12px!important;
+    font-weight:900!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+    text-align:left!important;
   }
 
   body.merchLaunchSoon .marketNavIcon{
-    display:none!important;
+    display:grid!important;
+    width:30px!important;
+    height:30px!important;
+    flex:0 0 30px!important;
+    place-items:center!important;
+    margin-right:8px!important;
+    border-radius:9px!important;
+    font-size:7px!important;
   }
 
   body.merchLaunchSoon .sidebarRule{
