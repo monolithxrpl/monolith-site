@@ -8690,8 +8690,39 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
       const LAST_ORDER_STORAGE_KEY =
         "monolithMerchLastOrderV1";
 
+      const MARKETPLACE_CATEGORIES = {
+        all: "Browse All",
+        apparel: "Apparel",
+        accessories: "Accessories",
+        art_collectibles: "Art & Collectibles",
+        home_living: "Home & Living",
+        electronics: "Electronics",
+        toys_games: "Toys & Games",
+        books_media: "Books & Media",
+        sports_outdoors: "Sports & Outdoors",
+        auto_tools: "Auto & Tools",
+        beauty: "Beauty & Personal Care",
+        food_specialty: "Food & Specialty",
+        other: "Other"
+      };
+
+      const requestedCategory =
+        String(
+          params.get("category") ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
       let marketplaceProducts = [];
-      let activeFilter = "all";
+      let activeFilter =
+        Object.prototype.hasOwnProperty.call(
+          MARKETPLACE_CATEGORIES,
+          requestedCategory
+        )
+          ? requestedCategory
+          : "all";
+
       let searchTerm = "";
       let checkoutSellerId = "";
       let checkoutShippingQuote = null;
@@ -11387,6 +11418,111 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
         }
 
         return "other";
+      }
+
+      function marketplaceCategoryLabel(
+        category
+      ) {
+        return (
+          MARKETPLACE_CATEGORIES[
+            category
+          ] ||
+          MARKETPLACE_CATEGORIES.all
+        );
+      }
+
+      function syncCategoryControls() {
+        document
+          .querySelectorAll(
+            "[data-filter]"
+          )
+          .forEach(
+            item => {
+              item.classList.toggle(
+                "active",
+                item.dataset.filter ===
+                  activeFilter
+              );
+            }
+          );
+      }
+
+      function syncCategoryTitle() {
+        if (coordinate) return;
+
+        const title =
+          document.getElementById(
+            "productsTitle"
+          );
+
+        if (!title) return;
+
+        title.textContent =
+          activeFilter === "all"
+            ? "Marketplace"
+            : marketplaceCategoryLabel(
+                activeFilter
+              );
+      }
+
+      function syncCategoryUrl() {
+        const next =
+          new URL(
+            window.location.href
+          );
+
+        if (
+          activeFilter === "all"
+        ) {
+          next.searchParams.delete(
+            "category"
+          );
+        } else {
+          next.searchParams.set(
+            "category",
+            activeFilter
+          );
+        }
+
+        window.history.replaceState(
+          {},
+          "",
+          `${next.pathname}${
+            next.search
+          }${next.hash}`
+        );
+      }
+
+      function applyMarketplaceCategory(
+        category,
+        {
+          updateUrl = true
+        } = {}
+      ) {
+        const normalized =
+          String(
+            category ||
+            ""
+          )
+            .trim()
+            .toLowerCase();
+
+        activeFilter =
+          Object.prototype.hasOwnProperty.call(
+            MARKETPLACE_CATEGORIES,
+            normalized
+          )
+            ? normalized
+            : "all";
+
+        syncCategoryControls();
+        syncCategoryTitle();
+
+        if (updateUrl) {
+          syncCategoryUrl();
+        }
+
+        refreshMarketplace();
       }
 
       function filteredProducts() {
@@ -17413,29 +17549,27 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
             control.addEventListener(
               "click",
               () => {
-                activeFilter =
+                applyMarketplaceCategory(
                   control.dataset.filter ||
-                  "all";
-
-                document
-                  .querySelectorAll(
-                    "[data-filter]"
-                  )
-                  .forEach(
-                    item => {
-                      item.classList.toggle(
-                        "active",
-                        item.dataset.filter ===
-                          activeFilter
-                      );
-                    }
-                  );
-
-                refreshMarketplace();
+                  "all"
+                );
               }
             );
           }
         );
+
+      syncCategoryControls();
+      syncCategoryTitle();
+
+      if (
+        requestedCategory &&
+        !Object.prototype.hasOwnProperty.call(
+          MARKETPLACE_CATEGORIES,
+          requestedCategory
+        )
+      ) {
+        syncCategoryUrl();
+      }
 
       restoreCart();
       updateCart(false);
