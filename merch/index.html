@@ -3689,202 +3689,246 @@
 
     /* -------------------------------------------------------
        MARKETPLACE-FIRST UX
+       MOBILE-FIRST RETAIL SYSTEM
     ------------------------------------------------------- */
 
     .marketHero{
       position:relative;
       display:grid;
-      grid-template-columns:1fr auto;
+      grid-template-columns:minmax(0,1fr) auto;
       align-items:center;
-      min-height:230px;
-      margin-bottom:18px;
-      padding:38px 42px;
+      min-height:148px;
+      margin-bottom:14px;
+      padding:24px 28px;
       overflow:hidden;
-      border:1px solid rgba(75,188,255,.22);
+      border:1px solid #d8e6ec;
+      border-radius:18px;
       background:
         radial-gradient(
-          circle at 82% 35%,
-          rgba(75,188,255,.13),
+          circle at 88% 50%,
+          rgba(22,143,209,.11),
           transparent 30%
-        ),
-        radial-gradient(
-          circle at 15% 100%,
-          rgba(210,178,110,.08),
-          transparent 32%
         ),
         linear-gradient(
           135deg,
-          #0c1217,
-          #080808 58%,
-          #100d08
+          #ffffff,
+          #f1f8fb
         );
+      box-shadow:0 4px 18px rgba(35,68,85,.045);
     }
 
     .marketHeroCopy{
       position:relative;
       z-index:2;
-      max-width:760px;
+      max-width:720px;
+    }
+
+    .marketHero .heroEyebrow{
+      margin-bottom:7px;
+      color:#168fd1;
+      font-size:9px;
+      font-weight:950;
+      letter-spacing:.17em;
+      text-transform:uppercase;
     }
 
     .marketHero h1{
       margin:0;
-      max-width:760px;
-      font-size:clamp(38px,5vw,66px);
-      line-height:.96;
-      letter-spacing:-.055em;
+      max-width:680px;
+      color:#173847;
+      font-size:clamp(28px,3vw,42px);
+      line-height:1;
+      letter-spacing:-.045em;
+      text-shadow:none;
     }
 
     .marketHero p{
-      max-width:680px;
-      margin:17px 0 0;
-      color:#aeb8c1;
-      font-size:15px;
-      line-height:1.6;
+      max-width:650px;
+      margin:10px 0 0;
+      color:#687f8a;
+      font-size:13px;
+      line-height:1.5;
     }
 
     .marketHeroMark{
       display:grid;
-      width:190px;
-      height:190px;
+      width:118px;
+      height:118px;
       place-items:center;
-      opacity:.11;
     }
 
     .marketHeroMark img{
       width:100%;
       height:100%;
       object-fit:contain;
-      filter:
-        grayscale(1)
-        brightness(1.5);
+      opacity:1;
+      filter:none;
     }
+
+
+    /* -------------------------------------------------------
+       MARKETPLACE FRAME
+    ------------------------------------------------------- */
 
     .marketplaceShell{
       display:grid;
-      grid-template-columns:280px minmax(0,1fr);
-      gap:18px;
+      grid-template-columns:250px minmax(0,1fr);
+      gap:16px;
       align-items:start;
     }
 
     .marketSidebar{
       position:sticky;
-      top:90px;
-      padding:18px;
-      border:1px solid rgba(75,188,255,.16);
-      background:
-        linear-gradient(
-          160deg,
-          #0f151a,
-          #090909 68%
-        );
+      top:86px;
+      padding:16px;
+      border:1px solid #d8e6ec;
+      border-radius:16px;
+      background:#ffffff;
+      box-shadow:0 4px 18px rgba(35,68,85,.04);
     }
 
     .sidebarTitle{
-      margin-bottom:14px;
-      color:#fff;
-      font-size:22px;
+      margin-bottom:12px;
+      color:#173847;
+      font-size:19px;
       font-weight:950;
       letter-spacing:-.03em;
     }
+
+
+    /* -------------------------------------------------------
+       SEARCH
+    ------------------------------------------------------- */
 
     .marketSearch{
       display:grid;
       grid-template-columns:auto 1fr;
       align-items:center;
       gap:10px;
-      min-height:44px;
-      margin-bottom:16px;
-      padding:0 12px;
-      border:1px solid rgba(75,188,255,.22);
-      border-radius:10px;
-      background:#151a1f;
+      min-height:48px;
+      margin-bottom:14px;
+      padding:0 13px;
+      border:1px solid #b9dce9;
+      border-radius:12px;
+      background:#f8fbfc;
+      transition:
+        border-color .16s ease,
+        box-shadow .16s ease,
+        background .16s ease;
+    }
+
+    .marketSearch:focus-within{
+      border-color:#168fd1;
+      background:#ffffff;
+      box-shadow:0 0 0 3px rgba(22,143,209,.09);
     }
 
     .marketSearch span{
-      color:#70cffa;
-      font-size:16px;
+      color:#168fd1;
+      font-size:17px;
     }
 
     .marketSearch input{
       width:100%;
       border:0;
       outline:0;
-      color:#f2f5f7;
+      color:#173847;
       background:transparent;
-      font-size:13px;
+      font-size:14px;
     }
 
     .marketSearch input::placeholder{
-      color:#76818b;
+      color:#8ca1ab;
     }
+
+
+    /* -------------------------------------------------------
+       SIDEBAR CATEGORY NAV
+    ------------------------------------------------------- */
 
     .marketNav{
       display:grid;
-      gap:5px;
+      gap:4px;
     }
 
     .marketNavItem{
       display:grid;
-      grid-template-columns:36px 1fr;
+      grid-template-columns:34px 1fr;
       align-items:center;
       gap:9px;
-      min-height:46px;
-      padding:5px 10px;
-      border:0;
-      border-radius:9px;
-      color:#aeb7be;
+      min-height:44px;
+      padding:5px 9px;
+      border:1px solid transparent;
+      border-radius:10px;
+      color:#5e7580;
       background:transparent;
       text-align:left;
       font-size:12px;
       font-weight:800;
+      cursor:pointer;
     }
 
-    .marketNavItem:hover,
+    .marketNavItem:hover{
+      color:#087ab6;
+      background:#f0f8fc;
+    }
+
     .marketNavItem.active{
-      color:#fff;
-      background:rgba(75,188,255,.10);
+      border-color:#b9dce9;
+      color:#076b9e;
+      background:#e8f5fb;
     }
 
     .marketNavIcon{
       display:grid;
-      width:32px;
-      height:32px;
+      width:30px;
+      height:30px;
       place-items:center;
-      border:1px solid rgba(75,188,255,.20);
+      border:1px solid #cae3ee;
       border-radius:50%;
-      color:#71d2fc;
-      background:rgba(75,188,255,.07);
-      font-size:10px;
+      color:#168fd1;
+      background:#f3fafe;
+      font-size:9px;
       font-weight:1000;
+    }
+
+    .marketNavItem.active .marketNavIcon{
+      border-color:#a9d7ea;
+      background:#ffffff;
     }
 
     .sidebarRule{
       height:1px;
-      margin:17px 0;
-      background:rgba(255,255,255,.07);
+      margin:15px 0;
+      background:#e2eaee;
     }
 
     .sellShortcut{
       display:block;
-      padding:14px;
-      border:1px solid rgba(210,178,110,.28);
-      border-radius:10px;
-      background:rgba(210,178,110,.055);
+      padding:13px;
+      border:1px solid #b9dce9;
+      border-radius:11px;
+      background:#eef8fd;
     }
 
     .sellShortcut strong{
       display:block;
-      color:#e5ca87;
+      color:#087ab6;
       font-size:11px;
     }
 
     .sellShortcut span{
       display:block;
-      margin-top:5px;
-      color:#817864;
+      margin-top:4px;
+      color:#6c838d;
       font-size:9px;
-      line-height:1.45;
+      line-height:1.4;
     }
+
+
+    /* -------------------------------------------------------
+       MARKET CONTENT
+    ------------------------------------------------------- */
 
     .marketContent{
       min-width:0;
@@ -3892,30 +3936,32 @@
 
     .marketTopbar{
       display:flex;
-      align-items:end;
+      align-items:center;
       justify-content:space-between;
-      gap:18px;
-      margin-bottom:14px;
-      padding:18px;
-      border:1px solid rgba(75,188,255,.14);
-      background:
-        linear-gradient(
-          140deg,
-          rgba(14,20,25,.94),
-          rgba(8,8,8,.96)
-        );
+      gap:16px;
+      margin-bottom:10px;
+      padding:5px 1px 12px;
+      border:0;
+      border-bottom:1px solid #dce7ec;
+      background:transparent;
+    }
+
+    .marketTopbar .sectionKicker{
+      margin-bottom:4px;
+      color:#168fd1;
     }
 
     .marketTopbar h2{
       margin:0;
-      font-size:27px;
+      color:#173847;
+      font-size:26px;
       letter-spacing:-.035em;
     }
 
     .marketTopActions{
       display:flex;
       align-items:center;
-      gap:10px;
+      gap:8px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
@@ -3923,26 +3969,32 @@
     .resultCount,
     .marketContext{
       padding:7px 10px;
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid #d8e6ec;
       border-radius:999px;
-      color:#8b969f;
-      background:#0b0b0b;
+      color:#687e89;
+      background:#ffffff;
       font-size:9px;
       font-weight:850;
-      letter-spacing:.05em;
+      letter-spacing:.04em;
     }
 
     .marketContext{
-      color:#d5b96f;
-      border-color:rgba(210,178,110,.20);
+      border-color:#b9dce9;
+      color:#087ab6;
+      background:#eef8fd;
     }
+
+
+    /* -------------------------------------------------------
+       QUICK CATEGORY CHIPS
+    ------------------------------------------------------- */
 
     .categoryChips{
       display:flex;
-      gap:8px;
+      gap:7px;
       overflow-x:auto;
-      margin-bottom:14px;
-      padding-bottom:2px;
+      margin-bottom:12px;
+      padding:1px 0 3px;
       scrollbar-width:none;
     }
 
@@ -3952,52 +4004,87 @@
 
     .categoryChip{
       flex:0 0 auto;
-      min-height:36px;
+      min-height:38px;
       padding:0 14px;
-      border:1px solid rgba(75,188,255,.17);
+      border:1px solid #d8e6ec;
       border-radius:999px;
-      color:#9aa6af;
-      background:#0e1114;
+      color:#607782;
+      background:#ffffff;
       font-size:10px;
       font-weight:850;
+      cursor:pointer;
     }
 
-    .categoryChip:hover,
-    .categoryChip.active{
-      color:#06131a;
-      border-color:#62caf8;
-      background:#72d3ff;
+    .categoryChip:hover{
+      border-color:#abd8eb;
+      color:#087ab6;
+      background:#f1f9fd;
     }
+
+    .categoryChip.active{
+      border-color:#168fd1;
+      color:#ffffff;
+      background:#168fd1;
+    }
+
+
+    /* -------------------------------------------------------
+       PRODUCT FEED
+    ------------------------------------------------------- */
 
     .marketplaceProducts{
       grid-template-columns:
         repeat(4,minmax(0,1fr));
+      gap:14px;
     }
 
     .marketplaceProducts .productCard{
-      border-radius:12px;
       overflow:hidden;
+      border:0;
+      border-radius:12px;
+      background:#ffffff;
+      box-shadow:none;
+    }
+
+    .marketplaceProducts .productCard:hover{
+      transform:none;
     }
 
     .marketplaceProducts .productMedia{
       aspect-ratio:1/1;
+      overflow:hidden;
+      border:1px solid #dfe7eb;
+      border-radius:12px;
+      background:#f1f4f6;
+    }
+
+    .marketplaceProducts .productMedia img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter:none;
     }
 
     .marketplaceProducts .productBody{
-      padding:13px;
-    }
-
-    .marketplaceProducts .productBody h3{
-      margin:4px 0 3px;
-      font-size:14px;
-      font-weight:800;
-      line-height:1.25;
+      padding:9px 2px 12px;
+      background:transparent;
     }
 
     .marketplaceProducts .productMeta{
       min-height:0;
-      color:#79858d;
+      color:#7b9099;
       font-size:8px;
+      font-weight:800;
+      letter-spacing:.04em;
+    }
+
+    .marketplaceProducts .productBody h3{
+      margin:4px 0 2px;
+      color:#1c303a;
+      font-size:14px;
+      font-weight:750;
+      line-height:1.25;
+      letter-spacing:-.01em;
     }
 
     .marketplaceProducts .productDesc{
@@ -4006,34 +4093,62 @@
 
     .marketplaceProducts .productFooter{
       display:block;
-      margin-top:7px;
+      margin-top:5px;
     }
 
     .marketplaceProducts .price{
-      color:#fff;
-      font-size:18px;
+      color:#087ab6;
+      font-size:17px;
       font-weight:950;
     }
 
     .marketplaceProducts .price small{
-      margin-top:3px;
-      color:#d1b66f;
+      margin-top:2px;
+      color:#7b9099;
     }
 
     .marketplaceProducts .addBtn{
       width:100%;
-      margin-top:11px;
+      min-height:36px;
+      margin-top:9px;
+      border:1px solid #168fd1;
       border-radius:8px;
+      color:#ffffff;
+      background:#168fd1;
+    }
+
+    .marketplaceProducts .addBtn:hover{
+      background:#087ab6;
     }
 
     .sellerLine{
-      margin-top:7px;
-      color:#6f7c85;
+      margin-top:5px;
+      color:#748993;
       font-size:9px;
       line-height:1.35;
     }
 
+    .emptyProducts{
+      grid-column:1/-1;
+      min-height:180px;
+      display:grid;
+      place-items:center;
+      padding:34px 20px;
+      border:1px solid #dce7ec;
+      border-radius:14px;
+      color:#738892;
+      background:#ffffff;
+      text-align:center;
+      line-height:1.6;
+    }
+
+
+    /* -------------------------------------------------------
+       DESKTOP / TABLET
+    ------------------------------------------------------- */
+
     @media(max-width:1180px){
+
       .marketplaceProducts{
         grid-template-columns:
           repeat(3,minmax(0,1fr));
@@ -4041,19 +4156,29 @@
     }
 
     @media(max-width:930px){
+
       .marketplaceShell{
         grid-template-columns:1fr;
       }
 
       .marketSidebar{
         position:static;
+        padding:12px;
+      }
+
+      .sidebarTitle{
+        display:none;
+      }
+
+      .marketSearch{
+        margin-bottom:10px;
       }
 
       .marketNav{
         display:flex;
         gap:7px;
         overflow-x:auto;
-        padding-bottom:3px;
+        padding-bottom:2px;
         scrollbar-width:none;
       }
 
@@ -4066,8 +4191,9 @@
         grid-template-columns:auto;
         min-height:38px;
         padding:0 13px;
-        border:1px solid rgba(75,188,255,.14);
+        border:1px solid #d8e6ec;
         border-radius:999px;
+        background:#ffffff;
       }
 
       .marketNavIcon{
@@ -4085,43 +4211,108 @@
       }
     }
 
+
+    /* -------------------------------------------------------
+       MOBILE
+    ------------------------------------------------------- */
+
     @media(max-width:620px){
+
       .marketHero{
-        grid-template-columns:1fr;
-        min-height:0;
-        padding:26px 20px;
+        grid-template-columns:minmax(0,1fr) 76px;
+        min-height:108px;
+        margin-bottom:10px;
+        padding:16px;
+        border-radius:14px;
       }
 
-      .marketHeroMark{
-        position:absolute;
-        right:-30px;
-        bottom:-40px;
-        width:190px;
-        height:190px;
+      .marketHero .heroEyebrow{
+        margin-bottom:5px;
+        font-size:7px;
       }
 
       .marketHero h1{
-        max-width:88%;
-        font-size:clamp(38px,12vw,54px);
+        max-width:none;
+        font-size:26px;
+        line-height:1.02;
+      }
+
+      .marketHero p{
+        margin-top:7px;
+        font-size:11px;
+        line-height:1.4;
+      }
+
+      .marketHeroMark{
+        width:70px;
+        height:70px;
+      }
+
+      .marketSidebar{
+        margin-bottom:3px;
+        padding:10px;
+        border-radius:13px;
+        box-shadow:none;
+      }
+
+      .marketSearch{
+        min-height:46px;
+        margin-bottom:9px;
+      }
+
+      .marketNavItem{
+        min-height:36px;
+        padding:0 12px;
+        font-size:9px;
       }
 
       .marketTopbar{
         align-items:flex-start;
         flex-direction:column;
+        gap:7px;
+        margin-bottom:8px;
+        padding:7px 1px 10px;
+      }
+
+      .marketTopbar h2{
+        font-size:23px;
       }
 
       .marketTopActions{
+        width:100%;
         justify-content:flex-start;
+      }
+
+      .marketContext{
+        display:none;
+      }
+
+      .categoryChips{
+        margin-bottom:10px;
+      }
+
+      .categoryChip{
+        min-height:35px;
+        padding:0 12px;
+        font-size:9px;
       }
 
       .marketplaceProducts{
         grid-template-columns:
           repeat(2,minmax(0,1fr));
-        gap:9px;
+        gap:10px;
+      }
+
+      .marketplaceProducts .productMedia{
+        border-radius:10px;
       }
 
       .marketplaceProducts .productBody{
-        padding:10px;
+        padding:7px 1px 10px;
+      }
+
+      .marketplaceProducts .productBody h3{
+        font-size:13px;
       }
 
       .marketplaceProducts .price{
@@ -4130,7 +4321,13 @@
 
       .marketplaceProducts .addBtn{
         min-width:0;
-        min-height:36px;
+        min-height:34px;
+        margin-top:7px;
+      }
+
+      .emptyProducts{
+        min-height:140px;
+        padding:28px 16px;
       }
     }
 
@@ -6232,23 +6429,23 @@ body.merchLaunchSoon .marketHeroMark img{
     <section class="marketHero" id="store">
       <div class="marketHeroCopy">
         <div class="heroEyebrow">
-          XRP-NATIVE COMMERCE ON MONOLITH
+          XRP-NATIVE MARKETPLACE
         </div>
 
         <h1>
-          Find something worth owning.
+          Shop MONOLITH.
         </h1>
 
         <p>
-          Browse physical merchandise from verified MONOLITH sellers
-          and pay with XRP.
+          Physical merchandise from verified MONOLITH sellers.
+          Pay with XRP.
         </p>
       </div>
 
       <div class="marketHeroMark">
         <img
           src="/assets/monolith_icon.webp"
-          alt=""
+          alt="MONOLITH"
         >
       </div>
     </section>
@@ -6264,12 +6461,15 @@ body.merchLaunchSoon .marketHeroMark img{
           <input
             id="marketSearch"
             type="search"
-            placeholder="Search Marketplace"
+            placeholder="What are you looking for?"
             autocomplete="off"
           >
         </label>
 
-        <nav class="marketNav">
+        <nav
+          class="marketNav"
+          aria-label="Marketplace categories"
+        >
           <button
             class="marketNavItem active"
             type="button"
@@ -6300,19 +6500,19 @@ body.merchLaunchSoon .marketHeroMark img{
           <button
             class="marketNavItem"
             type="button"
-            data-filter="gear"
+            data-filter="collectibles"
           >
-            <span class="marketNavIcon">G</span>
-            Gear
+            <span class="marketNavIcon">C</span>
+            Collectibles
           </button>
 
           <button
             class="marketNavItem"
             type="button"
-            data-filter="collectibles"
+            data-filter="gear"
           >
-            <span class="marketNavIcon">C</span>
-            Collectibles
+            <span class="marketNavIcon">G</span>
+            Gear
           </button>
         </nav>
 
@@ -6320,7 +6520,7 @@ body.merchLaunchSoon .marketHeroMark img{
 
         <a class="sellShortcut" href="#sellers">
           <strong>Sell on MONOLITH</strong>
-          <span>Open a verified XRP storefront</span>
+          <span>Manage your XRP storefront</span>
         </a>
       </aside>
 
@@ -6332,7 +6532,7 @@ body.merchLaunchSoon .marketHeroMark img{
             </div>
 
             <h2 id="productsTitle">
-              Today’s Picks
+              Today's Picks
             </h2>
           </div>
 
@@ -6354,7 +6554,10 @@ body.merchLaunchSoon .marketHeroMark img{
           </div>
         </div>
 
-        <div class="categoryChips">
+        <div
+          class="categoryChips"
+          aria-label="Quick categories"
+        >
           <button
             class="categoryChip active"
             type="button"
@@ -6382,17 +6585,17 @@ body.merchLaunchSoon .marketHeroMark img{
           <button
             class="categoryChip"
             type="button"
-            data-filter="gear"
+            data-filter="collectibles"
           >
-            Gear
+            Collectibles
           </button>
 
           <button
             class="categoryChip"
             type="button"
-            data-filter="collectibles"
+            data-filter="gear"
           >
-            Collectibles
+            Gear
           </button>
         </div>
 
