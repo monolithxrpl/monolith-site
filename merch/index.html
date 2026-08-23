@@ -12892,6 +12892,131 @@
             </div>
 
             ${
+              (() => {
+                const sellerPayment =
+                  payments.find(
+                    payment =>
+                      String(
+                        payment.paymentRole || ""
+                      ).toLowerCase() ===
+                        "seller" &&
+                      payment.validated
+                  );
+
+                if (
+                  !sellerPayment ||
+                  String(
+                    sellerPayment.status || ""
+                  ).toLowerCase() ===
+                    "refunded" ||
+                  [
+                    "cancelled",
+                    "refunded"
+                  ].includes(
+                    String(
+                      order.status || ""
+                    ).toLowerCase()
+                  )
+                ) {
+                  return "";
+                }
+
+                return `
+                  <div
+                    class="shippingCreatePanel"
+                    id="sellerRefundPanel"
+                  >
+                    <strong>
+                      Refund Seller Payment
+                    </strong>
+
+                    <p>
+                      Return the exact seller payment from the original receiving wallet to the original payer, then paste the validated XRPL transaction hash below.
+                    </p>
+
+                    <div class="sellerOrderRows">
+                      <div class="sellerOrderRow">
+                        <span>Refund Amount</span>
+
+                        <strong>
+                          ${escapeHtml(
+                            sellerDropsToXrp(
+                              sellerPayment.amountDrops
+                            )
+                          )} XRP
+                        </strong>
+                      </div>
+
+                      <div class="sellerOrderRow">
+                        <span>Send From</span>
+
+                        <strong>
+                          ${escapeHtml(
+                            sellerPayment.destinationWallet ||
+                            "—"
+                          )}
+                        </strong>
+                      </div>
+
+                      <div class="sellerOrderRow">
+                        <span>Send To</span>
+
+                        <strong>
+                          ${escapeHtml(
+                            sellerPayment.payerWallet ||
+                            "—"
+                          )}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div
+                      class="productEditorFields"
+                      style="margin-top:12px"
+                    >
+                      <label class="productWideField">
+                        <span>Refund Transaction Hash</span>
+
+                        <input
+                          id="sellerRefundTxid"
+                          type="text"
+                          maxlength="128"
+                          autocomplete="off"
+                          placeholder="Paste the validated XRPL transaction hash"
+                        >
+                      </label>
+
+                      <label class="productWideField">
+                        <span>Reason</span>
+
+                        <textarea
+                          id="sellerRefundReason"
+                          rows="3"
+                          maxlength="4000"
+                          placeholder="Optional refund note"
+                        ></textarea>
+                      </label>
+                    </div>
+
+                    <div class="sellerOrderActions">
+                      <button
+                        class="sellerOrderDangerBtn"
+                        id="sellerVerifyRefundBtn"
+                        type="button"
+                      >
+                        Verify Seller Refund
+                      </button>
+                    </div>
+
+                    <p>
+                      MONOLITH's payment leg is handled separately and is not controlled by the seller wallet.
+                    </p>
+                  </div>
+                `;
+              })()
+            }
+
+            ${
               fulfillments.length
                 ? `
                   <div
@@ -13104,6 +13229,35 @@
               );
             }
           );
+        }
+
+        const refundButton =
+          document.getElementById(
+            "sellerVerifyRefundBtn"
+          );
+
+        if (refundButton) {
+          const sellerPayment =
+            payments.find(
+              payment =>
+                String(
+                  payment.paymentRole || ""
+                ).toLowerCase() ===
+                  "seller" &&
+                payment.validated
+            );
+
+          if (sellerPayment) {
+            refundButton.addEventListener(
+              "click",
+              () => {
+                verifySellerRefundUi(
+                  order,
+                  sellerPayment
+                );
+              }
+            );
+          }
         }
       }
 
@@ -13515,6 +13669,105 @@
           sellerOrderMessage(
             error.message ||
             "Unable to update fulfillment.",
+            "error"
+          );
+        }
+      }
+
+      async function verifySellerRefundUi(
+        order,
+        payment
+      ) {
+        if (
+          !order ||
+          !order.orderId ||
+          !payment ||
+          !payment.paymentId
+        ) {
+          return;
+        }
+
+        const txid =
+          document.getElementById(
+            "sellerRefundTxid"
+          )?.value.trim() || "";
+
+        const reason =
+          document.getElementById(
+            "sellerRefundReason"
+          )?.value.trim() || "";
+
+        if (!txid) {
+          sellerOrderMessage(
+            "Enter the validated XRPL refund transaction hash.",
+            "error"
+          );
+          return;
+        }
+
+        const confirmed =
+          window.confirm(
+            `Verify this seller refund on the XRP Ledger?\n\nAmount: ${
+              sellerDropsToXrp(
+                payment.amountDrops
+              )
+            } XRP\nDestination: ${
+              payment.payerWallet || ""
+            }`
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        sellerOrderMessage(
+          "Verifying seller refund on the XRP Ledger..."
+        );
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/order/${
+                encodeURIComponent(
+                  order.orderId
+                )
+              }/refund/verify`,
+              {
+                method: "POST",
+                body: {
+                  payloadUuid:
+                    sellerPayload(),
+                  paymentRole:
+                    "seller",
+                  txid,
+                  reason
+                }
+              }
+            );
+
+          const refund =
+            data.refund || null;
+
+          sellerOrderMessage(
+            refund &&
+            refund.alreadyRefunded
+              ? "Seller refund was already verified."
+              : "Seller refund verified on the XRP Ledger.",
+            "success"
+          );
+
+          await reloadSelectedSellerOrder(
+            order.orderId
+          );
+        } catch (error) {
+          console.error(
+            "[merch:seller-refund-verify]",
+            error
+          );
+
+          sellerOrderMessage(
+            error.message ||
+            "Unable to verify seller refund.",
             "error"
           );
         }
