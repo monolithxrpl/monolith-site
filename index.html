@@ -883,6 +883,63 @@ main .row + .entranceV5Hero{
 }
 </style>
 
+
+<style id="monolith-entrance-merch-store-launch-20260822">
+.entranceV5Actions{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+}
+
+.entranceV5Actions .merchStoreLaunchBtn{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(120,225,255,.82)!important;
+  color:#ffffff!important;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(120,225,255,.34),transparent 48%),
+    linear-gradient(155deg,rgba(7,55,78,.98),rgba(6,20,34,.98) 58%,rgba(22,12,35,.98))!important;
+  box-shadow:
+    0 0 18px rgba(73,191,255,.32),
+    0 0 34px rgba(122,211,255,.12),
+    0 14px 34px rgba(0,0,0,.28)!important;
+}
+
+.entranceV5Actions .merchStoreLaunchBtn:after{
+  content:"COMING SOON";
+  position:absolute;
+  right:7px;
+  top:7px;
+  padding:3px 5px;
+  border:1px solid rgba(255,227,154,.52);
+  border-radius:999px;
+  color:#ffe39a;
+  background:rgba(20,15,5,.68);
+  font-size:6px;
+  line-height:1;
+  letter-spacing:.08em;
+  font-weight:950;
+}
+
+.entranceV5Actions .merchStoreLaunchBtn:hover{
+  border-color:rgba(190,238,255,.95)!important;
+  box-shadow:
+    0 0 24px rgba(73,191,255,.48),
+    0 0 44px rgba(122,211,255,.18),
+    0 16px 36px rgba(0,0,0,.30)!important;
+}
+
+@media(max-width:900px){
+  .entranceV5Actions{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+
+@media(max-width:520px){
+  .entranceV5Actions{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -912,6 +969,7 @@ main .row + .entranceV5Hero{
         <a class="btn primary" href="/monolith.html">Explore Wall</a>
         <a class="btn" href="/claim/#trial">Free Trial</a>
         <a class="btn warn marketGoldBtn" href="/market/">Open Market</a>
+        <a class="btn merchStoreLaunchBtn" href="/merch/">Merch Store</a>
         <a class="btn" href="/tile/ORIGIN">Example Tile</a>
         <a class="btn warn" href="/rules.html">Rules</a>
       </div>

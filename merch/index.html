@@ -4318,24 +4318,65 @@
       }
     }
   </style>
+
+<style id="monolith-merch-launch-soon-gate-20260822">
+.previewBanner{
+  border-color:rgba(247,201,109,.48)!important;
+  background:
+    radial-gradient(circle at top left,rgba(247,201,109,.13),transparent 38%),
+    linear-gradient(135deg,rgba(20,16,8,.96),rgba(7,13,18,.98))!important;
+  box-shadow:
+    0 0 26px rgba(247,201,109,.10),
+    0 16px 38px rgba(0,0,0,.26)!important;
+}
+
+.previewBanner .previewCopy strong{
+  color:#ffe39a!important;
+}
+
+.previewStatus{
+  border-color:rgba(247,201,109,.46)!important;
+  color:#ffe39a!important;
+  background:rgba(247,201,109,.07)!important;
+}
+
+body.merchLaunchSoon button,
+body.merchLaunchSoon input,
+body.merchLaunchSoon select,
+body.merchLaunchSoon textarea{
+  cursor:not-allowed!important;
+}
+
+body.merchLaunchSoon button:disabled,
+body.merchLaunchSoon input:disabled,
+body.merchLaunchSoon select:disabled,
+body.merchLaunchSoon textarea:disabled{
+  opacity:.46!important;
+  filter:saturate(.55)!important;
+}
+
+body.merchLaunchSoon .cartBar{
+  display:none!important;
+}
+</style>
+
 </head>
 
-<body>
+<body class="merchLaunchSoon">
   <main class="shell">
 
     <section class="previewBanner">
       <div class="previewMark">M</div>
 
       <div class="previewCopy">
-        <strong>MONOLITH MERCH STORE — PUBLIC PREVIEW</strong>
+        <strong>MONOLITH MERCH STORE — LAUNCH COMING SOON</strong>
         <span>
-          The marketplace is public while seller onboarding and XRP checkout
-          are being finalized. Browsing is open. Purchasing is not yet enabled.
+          Explore the Merch Store now. Buying and seller tools activate at launch.
         </span>
       </div>
 
       <div class="previewStatus">
-        MARKETPLACE PREVIEW
+        LAUNCH COMING SOON
       </div>
     </section>
 
@@ -14476,5 +14517,94 @@
       }
     })();
   </script>
+
+<script id="monolith-merch-launch-soon-gate-script-20260822">
+(() => {
+  const launchGate = true;
+
+  if (!launchGate) return;
+
+  function applyLaunchGate() {
+    document
+      .querySelectorAll(
+        "button, input, select, textarea"
+      )
+      .forEach(node => {
+        node.disabled = true;
+        node.setAttribute("aria-disabled", "true");
+      });
+
+    document
+      .querySelectorAll(
+        "a.sellerPrimaryBtn, a.sellerSecondaryBtn"
+      )
+      .forEach(node => {
+        node.setAttribute("aria-disabled", "true");
+        node.dataset.launchLocked = "true";
+      });
+  }
+
+  document.addEventListener(
+    "click",
+    event => {
+      const locked =
+        event.target.closest(
+          "button, input, select, textarea, a[data-launch-locked='true']"
+        );
+
+      if (!locked) return;
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    },
+    true
+  );
+
+  document.addEventListener(
+    "submit",
+    event => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    },
+    true
+  );
+
+  if (
+    document.readyState === "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      applyLaunchGate,
+      {
+        once: true
+      }
+    );
+  } else {
+    applyLaunchGate();
+  }
+
+  window.addEventListener(
+    "load",
+    applyLaunchGate,
+    {
+      once: true
+    }
+  );
+
+  const observer =
+    new MutationObserver(
+      () => applyLaunchGate()
+    );
+
+  observer.observe(
+    document.documentElement,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+})();
+</script>
+
 </body>
 </html>
