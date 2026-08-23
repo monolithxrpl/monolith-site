@@ -4544,10 +4544,7 @@
   background:rgba(247,201,109,.07)!important;
 }
 
-body.merchLaunchSoon button,
-body.merchLaunchSoon input,
-body.merchLaunchSoon select,
-body.merchLaunchSoon textarea{
+body.merchLaunchSoon [data-launch-locked="true"]{
   cursor:not-allowed!important;
 }
 
@@ -4559,9 +4556,8 @@ body.merchLaunchSoon textarea:disabled{
   filter:saturate(.55)!important;
 }
 
-body.merchLaunchSoon .cartBar{
-  display:none!important;
-}
+/* Existing cartBar visibility is controlled by updateCart().
+   Checkout itself remains launch-locked. */
 </style>
 
 
@@ -4707,15 +4703,12 @@ body.merchLaunchSoon .nav a.active::after{
 }
 
 
-/* Launch showcase: operational navigation is hidden. */
+/* Launch showcase: seller entry and owner sign-in remain visible.
+   Operational seller management stays hidden until launch. */
 
-body.merchLaunchSoon .nav a[href="#sellers"],
-body.merchLaunchSoon .sellShortcut,
-body.merchLaunchSoon #sellers,
 body.merchLaunchSoon #sellerProducts,
 body.merchLaunchSoon #sellerShipping,
-body.merchLaunchSoon #sellerOrders,
-body.merchLaunchSoon #orderStatusBtn{
+body.merchLaunchSoon #sellerOrders{
   display:none!important;
 }
 
@@ -5169,7 +5162,16 @@ body.merchLaunchSoon .footerBrand strong{
   }
 
   body.merchLaunchSoon .headerActions{
-    display:none!important;
+    display:flex!important;
+    align-items:center;
+    gap:8px;
+    width:100%;
+    min-width:0;
+    flex-wrap:wrap;
+  }
+
+  body.merchLaunchSoon .headerActions .payBtn{
+    flex:1 1 auto;
   }
 
   body.merchLaunchSoon .nav{
@@ -6613,6 +6615,12 @@ body.merchLaunchSoon .marketHeroMark img{
    ----------------------------------------------------------- */
 
 body.merchLaunchSoon .sellerCenterShell{
+  display:block!important;
+}
+
+body.merchLaunchSoon .sellerCenterNav a[href="#sellerProducts"],
+body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"],
+body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
   display:none!important;
 }
 
@@ -7028,6 +7036,16 @@ body.merchLaunchSoon .sellerCenterShell{
       <div class="headerActions">
         <button
           class="payBtn"
+          id="ownerSignInBtn"
+          type="button"
+          title="Sign in as a MONOLITH coordinate owner"
+        >
+          <span>◆</span>
+          Owner Sign In
+        </button>
+
+        <button
+          class="payBtn"
           id="orderStatusBtn"
           type="button"
           title="Check a MONOLITH merch order"
@@ -7038,17 +7056,20 @@ body.merchLaunchSoon .sellerCenterShell{
 
         <button
           class="iconBtn"
+          id="headerSearchBtn"
           type="button"
-          aria-label="Search"
-          title="Search coming soon"
+          aria-label="Search marketplace"
+          title="Search marketplace"
         >
           ⌕
         </button>
 
         <button
           class="iconBtn"
+          id="headerCartBtn"
           type="button"
           aria-label="Cart"
+          aria-controls="cartBar"
           title="Cart"
         >
           🛒
@@ -17425,14 +17446,56 @@ body.merchLaunchSoon .sellerCenterShell{
 
   if (!launchGate) return;
 
+  const allowedControlSelector = [
+    "#marketSearch",
+    ".marketNav button",
+    ".categoryChip",
+    "#ownerSignInBtn",
+    "#headerSearchBtn",
+    "#headerCartBtn",
+    "#sellerCoordinate",
+    "#sellerConnectBtn",
+    "#sellerVerifySignInBtn",
+    "#orderStatusBtn",
+    "[id^='orderStatus']"
+  ].join(",");
+
+  function controlAllowed(node) {
+    return Boolean(
+      node &&
+      node.matches &&
+      node.matches(allowedControlSelector)
+    );
+  }
+
   function applyLaunchGate() {
     document
       .querySelectorAll(
         "button, input, select, textarea"
       )
       .forEach(node => {
+        if (controlAllowed(node)) {
+          if (
+            node.dataset.launchLocked ===
+            "true"
+          ) {
+            node.disabled = false;
+            node.removeAttribute(
+              "aria-disabled"
+            );
+            delete node.dataset.launchLocked;
+          }
+
+          return;
+        }
+
         node.disabled = true;
-        node.setAttribute("aria-disabled", "true");
+        node.setAttribute(
+          "aria-disabled",
+          "true"
+        );
+        node.dataset.launchLocked =
+          "true";
       });
 
     document
@@ -17440,17 +17503,130 @@ body.merchLaunchSoon .sellerCenterShell{
         "a.sellerPrimaryBtn, a.sellerSecondaryBtn"
       )
       .forEach(node => {
-        node.setAttribute("aria-disabled", "true");
-        node.dataset.launchLocked = "true";
+        if (
+          node.id ===
+          "sellerOpenXaman"
+        ) {
+          node.removeAttribute(
+            "aria-disabled"
+          );
+          delete node.dataset.launchLocked;
+          return;
+        }
+
+        node.setAttribute(
+          "aria-disabled",
+          "true"
+        );
+        node.dataset.launchLocked =
+          "true";
       });
   }
+
+  document
+    .getElementById(
+      "headerSearchBtn"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        const search =
+          document.getElementById(
+            "marketSearch"
+          );
+
+        search?.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+        window.setTimeout(
+          () => search?.focus(),
+          300
+        );
+      }
+    );
+
+  document
+    .getElementById(
+      "headerCartBtn"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        const cartBar =
+          document.getElementById(
+            "cartBar"
+          );
+
+        const countText =
+          String(
+            document
+              .getElementById(
+                "cartCount"
+              )
+              ?.textContent ||
+            ""
+          );
+
+        const hasItems =
+          !countText.startsWith("0 ");
+
+        if (hasItems) {
+          cartBar?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+          return;
+        }
+
+        document
+          .getElementById(
+            "products"
+          )
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+      }
+    );
+
+  document
+    .getElementById(
+      "ownerSignInBtn"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        const sellers =
+          document.getElementById(
+            "sellers"
+          );
+
+        sellers?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+        window.setTimeout(
+          () => {
+            document
+              .getElementById(
+                "sellerCoordinate"
+              )
+              ?.focus();
+          },
+          350
+        );
+      }
+    );
 
   document.addEventListener(
     "click",
     event => {
       const locked =
         event.target.closest(
-          "button, input, select, textarea, a[data-launch-locked='true']"
+          "[data-launch-locked='true']"
         );
 
       if (!locked) return;
@@ -17464,6 +17640,19 @@ body.merchLaunchSoon .sellerCenterShell{
   document.addEventListener(
     "submit",
     event => {
+      const form =
+        event.target;
+
+      if (
+        form &&
+        form.querySelector &&
+        form.querySelector(
+          "[id^='orderStatus']"
+        )
+      ) {
+        return;
+      }
+
       event.preventDefault();
       event.stopImmediatePropagation();
     },
@@ -17471,7 +17660,8 @@ body.merchLaunchSoon .sellerCenterShell{
   );
 
   if (
-    document.readyState === "loading"
+    document.readyState ===
+    "loading"
   ) {
     document.addEventListener(
       "DOMContentLoaded",
