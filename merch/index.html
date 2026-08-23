@@ -3129,6 +3129,291 @@
 
 
     /* -------------------------------------------------------
+       SELLER ORDERS MANAGER
+    ------------------------------------------------------- */
+
+    .sellerOrdersManager:not([hidden]){
+      display:block;
+    }
+
+    .sellerOrdersHead{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:18px;
+      padding:22px;
+      border:1px solid rgba(75,188,255,.16);
+      background:
+        linear-gradient(
+          140deg,
+          rgba(15,21,26,.96),
+          rgba(8,8,8,.98)
+        );
+    }
+
+    .sellerOrdersHead h2{
+      margin:4px 0;
+      font-size:30px;
+      letter-spacing:-.04em;
+    }
+
+    .sellerOrdersHead p{
+      margin:0;
+      color:#89959d;
+      font-size:10px;
+    }
+
+    .sellerOrdersGrid{
+      display:grid;
+      grid-template-columns:minmax(260px,.72fr) minmax(0,1.6fr);
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .sellerOrderListPanel,
+    .sellerOrderDetail{
+      border:1px solid rgba(75,188,255,.12);
+      border-radius:10px;
+      background:#0b0f12;
+    }
+
+    .sellerOrderList{
+      display:grid;
+      max-height:680px;
+      overflow:auto;
+      padding:8px;
+      gap:7px;
+    }
+
+    .sellerOrderListItem{
+      display:grid;
+      gap:7px;
+      width:100%;
+      padding:11px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      color:inherit;
+      background:#0f1417;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .sellerOrderListItem:hover,
+    .sellerOrderListItem.active{
+      border-color:rgba(75,188,255,.36);
+      background:rgba(75,188,255,.045);
+    }
+
+    .sellerOrderListTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .sellerOrderListTop strong{
+      overflow:hidden;
+      color:#dce6eb;
+      font-size:9px;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .sellerOrderBadge{
+      padding:4px 7px;
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:999px;
+      color:#8c999f;
+      background:#101619;
+      font-size:7px;
+      font-weight:900;
+      text-transform:uppercase;
+    }
+
+    .sellerOrderBadge.paid,
+    .sellerOrderBadge.fulfilled,
+    .sellerOrderBadge.shipped,
+    .sellerOrderBadge.delivered{
+      border-color:rgba(105,216,155,.22);
+      color:#9bddb2;
+      background:rgba(105,216,155,.04);
+    }
+
+    .sellerOrderBadge.partial,
+    .sellerOrderBadge.pending,
+    .sellerOrderBadge.pending_payment,
+    .sellerOrderBadge.unpaid{
+      border-color:rgba(210,178,110,.22);
+      color:#dbc27d;
+      background:rgba(210,178,110,.04);
+    }
+
+    .sellerOrderBadge.cancelled,
+    .sellerOrderBadge.refunded{
+      border-color:rgba(242,107,107,.20);
+      color:#d89494;
+      background:rgba(242,107,107,.04);
+    }
+
+    .sellerOrderListMeta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      color:#75828a;
+      font-size:7px;
+    }
+
+    .sellerOrderEmpty{
+      padding:28px;
+      color:#718089;
+      font-size:10px;
+      line-height:1.6;
+      text-align:center;
+    }
+
+    .sellerOrderDetail{
+      min-width:0;
+      padding:16px;
+    }
+
+    .sellerOrderDetailHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      padding-bottom:13px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+
+    .sellerOrderDetailHead strong{
+      display:block;
+      color:#e3ebef;
+      font-size:13px;
+    }
+
+    .sellerOrderDetailHead span{
+      display:block;
+      margin-top:4px;
+      color:#6e7b83;
+      font-size:8px;
+      word-break:break-all;
+    }
+
+    .sellerOrderMetrics{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .sellerOrderMetric{
+      padding:10px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      background:#0e1417;
+    }
+
+    .sellerOrderMetric span{
+      display:block;
+      color:#6f7d85;
+      font-size:7px;
+      font-weight:850;
+      text-transform:uppercase;
+    }
+
+    .sellerOrderMetric strong{
+      display:block;
+      margin-top:5px;
+      color:#dce5ea;
+      font-size:10px;
+    }
+
+    .sellerOrderSection{
+      margin-top:12px;
+      padding:13px;
+      border:1px solid rgba(255,255,255,.065);
+      border-radius:8px;
+      background:#0d1215;
+    }
+
+    .sellerOrderSection > strong{
+      display:block;
+      margin-bottom:8px;
+      color:#b9c6cd;
+      font-size:9px;
+      text-transform:uppercase;
+    }
+
+    .sellerOrderRows{
+      display:grid;
+      gap:7px;
+    }
+
+    .sellerOrderRow{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      color:#77858d;
+      font-size:8px;
+    }
+
+    .sellerOrderRow strong{
+      color:#d2dce1;
+      text-align:right;
+      word-break:break-word;
+    }
+
+    .sellerOrderActions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .sellerOrderDangerBtn{
+      min-height:38px;
+      padding:0 12px;
+      border:1px solid rgba(242,107,107,.22);
+      border-radius:8px;
+      color:#d89292;
+      background:rgba(242,107,107,.045);
+      font-size:8px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    @media(max-width:900px){
+      .sellerOrdersGrid{
+        grid-template-columns:1fr;
+      }
+
+      .sellerOrderList{
+        max-height:320px;
+      }
+    }
+
+    @media(max-width:680px){
+      .sellerOrdersHead{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .sellerOrderMetrics{
+        grid-template-columns:1fr;
+      }
+
+      .sellerOrderActions{
+        display:grid;
+      }
+
+      .sellerOrderActions button{
+        width:100%;
+      }
+    }
+
+
+    /* -------------------------------------------------------
        SELLER SHIPPING MANAGER
     ------------------------------------------------------- */
 
@@ -5065,6 +5350,71 @@
       >
         <div class="shippingEmpty">
           No shipping profiles yet.
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="section sellerOrdersManager"
+      id="sellerOrders"
+      hidden
+    >
+      <div class="sellerOrdersHead">
+        <div>
+          <div class="sectionKicker">
+            SELLER DASHBOARD
+          </div>
+
+          <h2>Orders</h2>
+
+          <p>
+            Manage XRP orders, fulfillment, shipping and refunds.
+          </p>
+        </div>
+
+        <button
+          class="sellerSecondaryBtn"
+          id="sellerOrdersRefreshBtn"
+          type="button"
+        >
+          Refresh Orders
+        </button>
+      </div>
+
+      <div
+        class="sellerStatus"
+        id="sellerOrdersStatus"
+      >
+        Your storefront orders will appear here.
+      </div>
+
+      <div class="sellerOrdersGrid">
+        <aside class="sellerOrderListPanel">
+          <div class="sellerCatalogToolbar">
+            <strong>Your Orders</strong>
+
+            <span id="sellerOrderCount">
+              0
+            </span>
+          </div>
+
+          <div
+            class="sellerOrderList"
+            id="sellerOrderList"
+          >
+            <div class="sellerOrderEmpty">
+              No orders yet.
+            </div>
+          </div>
+        </aside>
+
+        <div
+          class="sellerOrderDetail"
+          id="sellerOrderDetail"
+        >
+          <div class="sellerOrderEmpty">
+            Select an order to view buyer, payment and fulfillment details.
+          </div>
         </div>
       </div>
     </section>
@@ -9542,8 +9892,37 @@
       let sellerProducts = [];
       let sellerCollections = [];
       let sellerShippingProfiles = [];
+      let sellerOrders = [];
+      let selectedSellerOrder = null;
       let editingProduct = null;
       let editingVariant = null;
+
+      const sellerOrdersUi = {
+        manager:
+          document.getElementById(
+            "sellerOrders"
+          ),
+        status:
+          document.getElementById(
+            "sellerOrdersStatus"
+          ),
+        count:
+          document.getElementById(
+            "sellerOrderCount"
+          ),
+        list:
+          document.getElementById(
+            "sellerOrderList"
+          ),
+        detail:
+          document.getElementById(
+            "sellerOrderDetail"
+          ),
+        refresh:
+          document.getElementById(
+            "sellerOrdersRefreshBtn"
+          )
+      };
 
       const shippingUi = {
         manager:
@@ -12031,6 +12410,694 @@
           );
       }
 
+      function sellerDropsToXrp(
+        drops
+      ) {
+        const value =
+          Number(drops);
+
+        if (
+          !Number.isFinite(value)
+        ) {
+          return "0";
+        }
+
+        return (
+          value / 1000000
+        ).toLocaleString(
+          undefined,
+          {
+            maximumFractionDigits: 6
+          }
+        );
+      }
+
+      function sellerOrderDate(
+        value
+      ) {
+        if (!value) {
+          return "—";
+        }
+
+        const date =
+          new Date(value);
+
+        if (
+          Number.isNaN(
+            date.getTime()
+          )
+        ) {
+          return String(value);
+        }
+
+        return date.toLocaleString();
+      }
+
+      function sellerOrderState(
+        value
+      ) {
+        return String(
+          value || ""
+        )
+          .trim()
+          .toLowerCase()
+          .replaceAll(
+            " ",
+            "_"
+          );
+      }
+
+      function sellerOrderMessage(
+        message,
+        type = ""
+      ) {
+        if (
+          !sellerOrdersUi.status
+        ) {
+          return;
+        }
+
+        sellerOrdersUi.status.textContent =
+          message;
+
+        sellerOrdersUi.status.className =
+          `sellerStatus${
+            type
+              ? ` ${type}`
+              : ""
+          }`;
+      }
+
+      function renderSellerOrderDetail(
+        order
+      ) {
+        if (
+          !sellerOrdersUi.detail
+        ) {
+          return;
+        }
+
+        if (!order) {
+          sellerOrdersUi.detail.innerHTML = `
+            <div class="sellerOrderEmpty">
+              Select an order to view buyer, payment and fulfillment details.
+            </div>
+          `;
+          return;
+        }
+
+        const items =
+          Array.isArray(
+            order.items
+          )
+            ? order.items
+            : [];
+
+        const payments =
+          Array.isArray(
+            order.payments
+          )
+            ? order.payments
+            : [];
+
+        const fulfillments =
+          Array.isArray(
+            order.fulfillments
+          )
+            ? order.fulfillments
+            : [];
+
+        const shipping =
+          order.shipping || {};
+
+        sellerOrdersUi.detail.innerHTML = `
+          <div class="sellerOrderDetailHead">
+            <div>
+              <strong>
+                ${escapeHtml(
+                  order.buyerName ||
+                  "Merch Order"
+                )}
+              </strong>
+
+              <span>
+                ${escapeHtml(
+                  order.orderId
+                )}
+              </span>
+            </div>
+
+            <span
+              class="sellerOrderBadge ${
+                escapeHtml(
+                  sellerOrderState(
+                    order.status
+                  )
+                )
+              }"
+            >
+              ${escapeHtml(
+                order.status ||
+                "Unknown"
+              )}
+            </span>
+          </div>
+
+          <div class="sellerOrderMetrics">
+            <div class="sellerOrderMetric">
+              <span>Payment</span>
+              <strong>
+                ${escapeHtml(
+                  order.paymentStatus ||
+                  "Unknown"
+                )}
+              </strong>
+            </div>
+
+            <div class="sellerOrderMetric">
+              <span>Fulfillment</span>
+              <strong>
+                ${escapeHtml(
+                  order.fulfillmentStatus ||
+                  "Unfulfilled"
+                )}
+              </strong>
+            </div>
+
+            <div class="sellerOrderMetric">
+              <span>Total</span>
+              <strong>
+                ${escapeHtml(
+                  sellerDropsToXrp(
+                    order.totalDrops
+                  )
+                )} XRP
+              </strong>
+            </div>
+          </div>
+
+          <section class="sellerOrderSection">
+            <strong>Buyer</strong>
+
+            <div class="sellerOrderRows">
+              <div class="sellerOrderRow">
+                <span>Name</span>
+                <strong>
+                  ${escapeHtml(
+                    order.buyerName ||
+                    "—"
+                  )}
+                </strong>
+              </div>
+
+              <div class="sellerOrderRow">
+                <span>Email</span>
+                <strong>
+                  ${escapeHtml(
+                    order.buyerEmail ||
+                    "—"
+                  )}
+                </strong>
+              </div>
+
+              <div class="sellerOrderRow">
+                <span>XRP Wallet</span>
+                <strong>
+                  ${escapeHtml(
+                    order.buyerWallet ||
+                    "—"
+                  )}
+                </strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="sellerOrderSection">
+            <strong>Ship To</strong>
+
+            <div class="sellerOrderRows">
+              <div class="sellerOrderRow">
+                <span>Recipient</span>
+                <strong>
+                  ${escapeHtml(
+                    shipping.name ||
+                    order.buyerName ||
+                    "—"
+                  )}
+                </strong>
+              </div>
+
+              <div class="sellerOrderRow">
+                <span>Address</span>
+                <strong>
+                  ${escapeHtml(
+                    [
+                      shipping.address1,
+                      shipping.address2
+                    ]
+                      .filter(Boolean)
+                      .join(", ") ||
+                    "—"
+                  )}
+                </strong>
+              </div>
+
+              <div class="sellerOrderRow">
+                <span>Location</span>
+                <strong>
+                  ${escapeHtml(
+                    [
+                      shipping.city,
+                      shipping.region,
+                      shipping.postalCode,
+                      shipping.country
+                    ]
+                      .filter(Boolean)
+                      .join(", ") ||
+                    "—"
+                  )}
+                </strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="sellerOrderSection">
+            <strong>Items</strong>
+
+            <div class="sellerOrderRows">
+              ${
+                items.length
+                  ? items.map(
+                      item => `
+                        <div class="sellerOrderRow">
+                          <span>
+                            ${
+                              escapeHtml(
+                                item.productTitle ||
+                                "Merchandise"
+                              )
+                            }
+                            ${
+                              item.variantTitle
+                                ? ` · ${escapeHtml(
+                                    item.variantTitle
+                                  )}`
+                                : ""
+                            }
+                            · Qty ${
+                              escapeHtml(
+                                item.quantity
+                              )
+                            }
+                          </span>
+
+                          <strong>
+                            ${
+                              escapeHtml(
+                                sellerDropsToXrp(
+                                  item.lineTotalDrops
+                                )
+                              )
+                            } XRP
+                          </strong>
+                        </div>
+                      `
+                    ).join("")
+                  : `
+                    <div class="sellerOrderRow">
+                      <span>Items</span>
+                      <strong>—</strong>
+                    </div>
+                  `
+              }
+            </div>
+          </section>
+
+          <section class="sellerOrderSection">
+            <strong>Payments</strong>
+
+            <div class="sellerOrderRows">
+              ${
+                payments.length
+                  ? payments.map(
+                      payment => `
+                        <div class="sellerOrderRow">
+                          <span>
+                            ${
+                              escapeHtml(
+                                payment.paymentRole ||
+                                "payment"
+                              )
+                            }
+                            · ${
+                              escapeHtml(
+                                payment.status ||
+                                (
+                                  payment.validated
+                                    ? "validated"
+                                    : "pending"
+                                )
+                              )
+                            }
+                          </span>
+
+                          <strong>
+                            ${
+                              escapeHtml(
+                                sellerDropsToXrp(
+                                  payment.amountDrops
+                                )
+                              )
+                            } XRP
+                          </strong>
+                        </div>
+                      `
+                    ).join("")
+                  : `
+                    <div class="sellerOrderRow">
+                      <span>Payment records</span>
+                      <strong>None yet</strong>
+                    </div>
+                  `
+              }
+            </div>
+          </section>
+
+          <section class="sellerOrderSection">
+            <strong>Fulfillment</strong>
+
+            <div class="sellerOrderRows">
+              ${
+                fulfillments.length
+                  ? fulfillments.map(
+                      fulfillment => `
+                        <div class="sellerOrderRow">
+                          <span>
+                            ${
+                              escapeHtml(
+                                fulfillment.status ||
+                                "processing"
+                              )
+                            }
+                            ${
+                              fulfillment.carrier
+                                ? ` · ${escapeHtml(
+                                    fulfillment.carrier
+                                  )}`
+                                : ""
+                            }
+                          </span>
+
+                          <strong>
+                            ${
+                              escapeHtml(
+                                fulfillment.trackingNumber ||
+                                "No tracking yet"
+                              )
+                            }
+                          </strong>
+                        </div>
+                      `
+                    ).join("")
+                  : `
+                    <div class="sellerOrderRow">
+                      <span>Status</span>
+                      <strong>
+                        ${
+                          escapeHtml(
+                            order.fulfillmentStatus ||
+                            "Unfulfilled"
+                          )
+                        }
+                      </strong>
+                    </div>
+                  `
+              }
+            </div>
+          </section>
+
+          <section class="sellerOrderSection">
+            <strong>Order Timeline</strong>
+
+            <div class="sellerOrderRows">
+              <div class="sellerOrderRow">
+                <span>Created</span>
+                <strong>
+                  ${escapeHtml(
+                    sellerOrderDate(
+                      order.createdAt
+                    )
+                  )}
+                </strong>
+              </div>
+
+              <div class="sellerOrderRow">
+                <span>Paid</span>
+                <strong>
+                  ${escapeHtml(
+                    sellerOrderDate(
+                      order.paidAt
+                    )
+                  )}
+                </strong>
+              </div>
+
+              <div class="sellerOrderRow">
+                <span>Updated</span>
+                <strong>
+                  ${escapeHtml(
+                    sellerOrderDate(
+                      order.updatedAt
+                    )
+                  )}
+                </strong>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function renderSellerOrders() {
+        if (
+          !sellerOrdersUi.list ||
+          !sellerOrdersUi.count
+        ) {
+          return;
+        }
+
+        sellerOrdersUi.count.textContent =
+          String(
+            sellerOrders.length
+          );
+
+        if (
+          !sellerOrders.length
+        ) {
+          sellerOrdersUi.list.innerHTML = `
+            <div class="sellerOrderEmpty">
+              No orders yet.
+            </div>
+          `;
+
+          selectedSellerOrder = null;
+          renderSellerOrderDetail(
+            null
+          );
+
+          return;
+        }
+
+        if (
+          !selectedSellerOrder ||
+          !sellerOrders.some(
+            order =>
+              order.orderId ===
+              selectedSellerOrder.orderId
+          )
+        ) {
+          selectedSellerOrder =
+            sellerOrders[0];
+        } else {
+          selectedSellerOrder =
+            sellerOrders.find(
+              order =>
+                order.orderId ===
+                selectedSellerOrder.orderId
+            ) ||
+            sellerOrders[0];
+        }
+
+        sellerOrdersUi.list.innerHTML =
+          sellerOrders.map(
+            order => `
+              <button
+                class="sellerOrderListItem ${
+                  selectedSellerOrder &&
+                  selectedSellerOrder.orderId ===
+                    order.orderId
+                    ? "active"
+                    : ""
+                }"
+                type="button"
+                data-seller-order="${
+                  escapeHtml(
+                    order.orderId
+                  )
+                }"
+              >
+                <div class="sellerOrderListTop">
+                  <strong>
+                    ${escapeHtml(
+                      order.buyerName ||
+                      order.orderId
+                    )}
+                  </strong>
+
+                  <span
+                    class="sellerOrderBadge ${
+                      escapeHtml(
+                        sellerOrderState(
+                          order.status
+                        )
+                      )
+                    }"
+                  >
+                    ${escapeHtml(
+                      order.status ||
+                      "Unknown"
+                    )}
+                  </span>
+                </div>
+
+                <div class="sellerOrderListMeta">
+                  <span>
+                    ${escapeHtml(
+                      sellerDropsToXrp(
+                        order.totalDrops
+                      )
+                    )} XRP
+                  </span>
+
+                  <span>
+                    ${escapeHtml(
+                      order.paymentStatus ||
+                      "Unknown payment"
+                    )}
+                  </span>
+
+                  <span>
+                    ${escapeHtml(
+                      sellerOrderDate(
+                        order.createdAt
+                      )
+                    )}
+                  </span>
+                </div>
+              </button>
+            `
+          ).join("");
+
+        sellerOrdersUi.list
+          .querySelectorAll(
+            "[data-seller-order]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => {
+                  selectedSellerOrder =
+                    sellerOrders.find(
+                      order =>
+                        order.orderId ===
+                        button.dataset
+                          .sellerOrder
+                    ) || null;
+
+                  renderSellerOrders();
+                }
+              );
+            }
+          );
+
+        renderSellerOrderDetail(
+          selectedSellerOrder
+        );
+      }
+
+      async function loadSellerOrders() {
+        if (
+          !sellerProfile ||
+          sellerProfile.status !==
+            "verified" ||
+          sellerProfile
+            .verificationStatus !==
+            "verified"
+        ) {
+          sellerOrdersUi.manager.hidden =
+            true;
+          return;
+        }
+
+        sellerOrdersUi.manager.hidden =
+          false;
+
+        sellerOrderMessage(
+          "Loading storefront orders..."
+        );
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/seller/${
+                encodeURIComponent(
+                  sellerProfile.coordinate
+                )
+              }/orders?payloadUuid=${
+                encodeURIComponent(
+                  sellerPayload()
+                )
+              }`
+            );
+
+          sellerOrders =
+            Array.isArray(
+              data.orders
+            )
+              ? data.orders
+              : [];
+
+          renderSellerOrders();
+
+          sellerOrderMessage(
+            sellerOrders.length
+              ? `${sellerOrders.length} order${
+                  sellerOrders.length === 1
+                    ? ""
+                    : "s"
+                } loaded.`
+              : "No storefront orders yet.",
+            sellerOrders.length
+              ? "success"
+              : ""
+          );
+        } catch (error) {
+          console.error(
+            "[merch:seller-orders]",
+            error
+          );
+
+          sellerOrders = [];
+          renderSellerOrders();
+
+          sellerOrderMessage(
+            error.message ||
+            "Unable to load seller orders.",
+            "error"
+          );
+        }
+      }
+
       async function loadSellerProducts() {
         if (
           !sellerProfile ||
@@ -12090,6 +13157,7 @@
 
           await loadSellerCollections();
           await loadSellerShipping();
+          await loadSellerOrders();
         } catch (error) {
           console.error(
             "[merch:seller-products]",
@@ -12102,6 +13170,17 @@
             "error"
           );
         }
+      }
+
+      if (
+        sellerOrdersUi.refresh
+      ) {
+        sellerOrdersUi.refresh.addEventListener(
+          "click",
+          () => {
+            loadSellerOrders();
+          }
+        );
       }
 
       async function saveProduct(
