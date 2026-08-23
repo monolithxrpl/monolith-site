@@ -1364,6 +1364,118 @@
       word-break:break-all;
     }
 
+    .checkoutPaymentStage{
+      margin-top:14px;
+      padding:15px;
+      border:1px solid rgba(75,188,255,.18);
+      border-radius:9px;
+      background:#0b1115;
+    }
+
+    .checkoutPaymentStage:not([hidden]){
+      display:block;
+    }
+
+    .checkoutPaymentLegs{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .checkoutPaymentLeg{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:center;
+      padding:13px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:9px;
+      background:#101619;
+    }
+
+    .checkoutPaymentLegCopy strong{
+      display:block;
+      color:#dce7ec;
+      font-size:10px;
+    }
+
+    .checkoutPaymentLegCopy span{
+      display:block;
+      margin-top:4px;
+      color:#74828a;
+      font-size:8px;
+      line-height:1.5;
+    }
+
+    .checkoutPaymentLegCopy code{
+      display:block;
+      margin-top:5px;
+      color:#60717a;
+      font-size:7px;
+      word-break:break-all;
+    }
+
+    .checkoutPaymentLegActions{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:7px;
+    }
+
+    .checkoutPaymentLegActions button,
+    .checkoutPaymentLegActions a{
+      display:inline-grid;
+      min-height:36px;
+      padding:0 11px;
+      place-items:center;
+      border:1px solid rgba(75,188,255,.25);
+      border-radius:7px;
+      color:#a9e4ff;
+      background:#111a1f;
+      font-size:8px;
+      font-weight:900;
+      text-decoration:none;
+      cursor:pointer;
+    }
+
+    .checkoutPaymentLegActions button:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+
+    .checkoutPaymentLeg.paid{
+      border-color:rgba(105,216,155,.24);
+      background:rgba(105,216,155,.035);
+    }
+
+    .checkoutPaymentLeg.paid
+      .checkoutPaymentLegCopy strong{
+      color:#9de1b8;
+    }
+
+    .checkoutPaidNotice{
+      margin-top:12px;
+      padding:12px;
+      border:1px solid rgba(105,216,155,.26);
+      border-radius:8px;
+      background:rgba(105,216,155,.05);
+    }
+
+    .checkoutPaidNotice:not([hidden]){
+      display:grid;
+      gap:3px;
+    }
+
+    .checkoutPaidNotice strong{
+      color:#a8e4bd;
+      font-size:10px;
+    }
+
+    .checkoutPaidNotice span{
+      color:#779487;
+      font-size:8px;
+    }
+
     @media(max-width:760px){
       .checkoutOverlay{
         padding:0;
@@ -5156,6 +5268,41 @@
             <code id="checkoutOrderId"></code>
           </div>
         </section>
+
+        <section
+          class="checkoutPaymentStage"
+          id="checkoutPaymentStage"
+          hidden
+        >
+          <div class="checkoutCardHead">
+            <strong>
+              Pay with XRP
+            </strong>
+
+            <span>
+              Complete each required Xaman payment below.
+            </span>
+          </div>
+
+          <div
+            class="checkoutPaymentLegs"
+            id="checkoutPaymentLegs"
+          ></div>
+
+          <div
+            class="checkoutPaidNotice"
+            id="checkoutPaidNotice"
+            hidden
+          >
+            <strong>
+              Payment Complete
+            </strong>
+
+            <span>
+              Your MONOLITH order is fully paid.
+            </span>
+          </div>
+        </section>
       </section>
     </div>
   </main>
@@ -5197,6 +5344,11 @@
       let checkoutShippingQuote = null;
       let checkoutShippingRateId = "";
       let createdCheckoutOrder = null;
+      let checkoutPurchasedItems = [];
+      let checkoutPayments = {
+        seller:null,
+        platform:null
+      };
 
       const checkoutUi = {
         button:
@@ -5310,6 +5462,18 @@
         orderId:
           document.getElementById(
             "checkoutOrderId"
+          ),
+        paymentStage:
+          document.getElementById(
+            "checkoutPaymentStage"
+          ),
+        paymentLegs:
+          document.getElementById(
+            "checkoutPaymentLegs"
+          ),
+        paidNotice:
+          document.getElementById(
+            "checkoutPaidNotice"
           )
       };
 
@@ -6225,6 +6389,18 @@
         checkoutShippingQuote = null;
         checkoutShippingRateId = "";
         createdCheckoutOrder = null;
+        checkoutPurchasedItems = [];
+        checkoutPayments = {
+          seller:null,
+          platform:null
+        };
+
+        checkoutUi.paymentStage.hidden =
+          true;
+        checkoutUi.paidNotice.hidden =
+          true;
+        checkoutUi.paymentLegs.innerHTML =
+          "";
 
         checkoutUi.overlay.hidden =
           false;
@@ -6621,6 +6797,486 @@
         return payload;
       }
 
+      function paymentRoleLabel(role) {
+        return role === "seller"
+          ? "Seller Payment"
+          : "MONOLITH Payment";
+      }
+
+      function orderPaymentAmount(role) {
+        if (!createdCheckoutOrder) {
+          return "0";
+        }
+
+        return role === "seller"
+          ? createdCheckoutOrder
+              .sellerProceedsXrp
+          : createdCheckoutOrder
+              .platformFeeXrp;
+      }
+
+      function paymentLegRequired(role) {
+        return Number(
+          orderPaymentAmount(role) || 0
+        ) > 0;
+      }
+
+      function paymentLegState(role) {
+        return checkoutPayments[role] ||
+          {
+            role,
+            payment:null,
+            verified:false,
+            busy:false,
+            message:"Ready"
+          };
+      }
+
+      function renderCheckoutPayments() {
+        if (!createdCheckoutOrder) {
+          checkoutUi.paymentStage.hidden =
+            true;
+          return;
+        }
+
+        checkoutUi.paymentStage.hidden =
+          false;
+
+        const roles =
+          ["seller","platform"]
+            .filter(
+              paymentLegRequired
+            );
+
+        checkoutUi.paymentLegs.innerHTML =
+          roles.map(
+            role => {
+              const state =
+                paymentLegState(role);
+
+              const payment =
+                state.payment;
+
+              return `
+                <article
+                  class="checkoutPaymentLeg ${
+                    state.verified
+                      ? "paid"
+                      : ""
+                  }"
+                  data-payment-role="${
+                    role
+                  }"
+                >
+                  <div class="checkoutPaymentLegCopy">
+                    <strong>
+                      ${
+                        escapeHtml(
+                          paymentRoleLabel(role)
+                        )
+                      }
+                      · ${
+                        escapeHtml(
+                          orderPaymentAmount(role)
+                        )
+                      } XRP
+                    </strong>
+
+                    <span>
+                      ${
+                        state.verified
+                          ? "Validated on the XRP Ledger."
+                          : (
+                              state.message ||
+                              "Open Xaman to complete this payment."
+                            )
+                      }
+                    </span>
+
+                    ${
+                      payment?.paymentId
+                        ? `
+                          <code>
+                            ${
+                              escapeHtml(
+                                payment.paymentId
+                              )
+                            }
+                          </code>
+                        `
+                        : ""
+                    }
+                  </div>
+
+                  <div class="checkoutPaymentLegActions">
+                    ${
+                      state.verified
+                        ? `
+                          <button
+                            type="button"
+                            disabled
+                          >
+                            Paid ✓
+                          </button>
+                        `
+                        : payment?.signUrl
+                          ? `
+                            <a
+                              href="${
+                                escapeHtml(
+                                  payment.signUrl
+                                )
+                              }"
+                              target="_blank"
+                              rel="noopener"
+                            >
+                              Open Xaman
+                            </a>
+
+                            <button
+                              type="button"
+                              data-verify-payment="${
+                                role
+                              }"
+                              ${
+                                state.busy
+                                  ? "disabled"
+                                  : ""
+                              }
+                            >
+                              Verify Payment
+                            </button>
+                          `
+                          : `
+                            <button
+                              type="button"
+                              data-start-payment="${
+                                role
+                              }"
+                              ${
+                                state.busy
+                                  ? "disabled"
+                                  : ""
+                              }
+                            >
+                              Pay with Xaman
+                            </button>
+                          `
+                    }
+                  </div>
+                </article>
+              `;
+            }
+          ).join("");
+
+        checkoutUi.paymentLegs
+          .querySelectorAll(
+            "[data-start-payment]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () =>
+                  startCheckoutPayment(
+                    button.dataset
+                      .startPayment
+                  )
+              );
+            }
+          );
+
+        checkoutUi.paymentLegs
+          .querySelectorAll(
+            "[data-verify-payment]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () =>
+                  verifyCheckoutPayment(
+                    button.dataset
+                      .verifyPayment
+                  )
+              );
+            }
+          );
+
+        const requiredRoles =
+          roles;
+
+        const fullyPaid =
+          requiredRoles.length > 0 &&
+          requiredRoles.every(
+            role =>
+              checkoutPayments[role]
+                ?.verified === true
+          );
+
+        checkoutUi.paidNotice.hidden =
+          !fullyPaid;
+      }
+
+      async function startCheckoutPayment(
+        role
+      ) {
+        if (
+          !createdCheckoutOrder ||
+          !paymentLegRequired(role)
+        ) {
+          return;
+        }
+
+        checkoutPayments[role] = {
+          ...paymentLegState(role),
+          busy:true,
+          message:
+            "Creating Xaman payment…"
+        };
+
+        renderCheckoutPayments();
+
+        try {
+          const response =
+            await fetch(
+              `/api/merch/order/${
+                encodeURIComponent(
+                  createdCheckoutOrder
+                    .orderId
+                )
+              }/payment/${
+                encodeURIComponent(role)
+              }`,
+              {
+                method:"POST",
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+                body:"{}"
+              }
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (
+            !response.ok ||
+            !data.ok ||
+            !data.payment
+          ) {
+            throw new Error(
+              data.error ||
+              data.code ||
+              "payment_payload_failed"
+            );
+          }
+
+          checkoutPayments[role] = {
+            role,
+            payment:
+              data.payment,
+            verified:false,
+            busy:false,
+            message:
+              "Xaman payment is ready."
+          };
+
+          renderCheckoutPayments();
+
+          if (data.payment.signUrl) {
+            window.open(
+              data.payment.signUrl,
+              "_blank",
+              "noopener"
+            );
+          }
+        } catch (error) {
+          checkoutPayments[role] = {
+            ...paymentLegState(role),
+            busy:false,
+            message:
+              error.message ||
+              "Unable to create Xaman payment."
+          };
+
+          renderCheckoutPayments();
+
+          checkoutMessage(
+            checkoutPayments[role]
+              .message,
+            "error"
+          );
+        }
+      }
+
+      async function verifyCheckoutPayment(
+        role
+      ) {
+        const state =
+          paymentLegState(role);
+
+        const payment =
+          state.payment;
+
+        if (
+          !payment?.paymentId ||
+          !payment?.payloadUuid
+        ) {
+          checkoutMessage(
+            "Open the Xaman payment first.",
+            "error"
+          );
+          return;
+        }
+
+        checkoutPayments[role] = {
+          ...state,
+          busy:true,
+          message:
+            "Checking the XRP Ledger…"
+        };
+
+        renderCheckoutPayments();
+
+        try {
+          const response =
+            await fetch(
+              `/api/merch/payment/${
+                encodeURIComponent(
+                  payment.paymentId
+                )
+              }/verify`,
+              {
+                method:"POST",
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+                body:JSON.stringify({
+                  payloadUuid:
+                    payment.payloadUuid
+                })
+              }
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (
+            !response.ok ||
+            !data.ok ||
+            !data.payment
+          ) {
+            throw new Error(
+              data.error ||
+              data.code ||
+              "payment_verify_failed"
+            );
+          }
+
+          checkoutPayments[role] = {
+            ...state,
+            payment,
+            verified:true,
+            busy:false,
+            message:
+              "Validated on the XRP Ledger."
+          };
+
+          renderCheckoutPayments();
+
+          if (data.payment.fullyPaid) {
+            finalizePaidCheckout(
+              data.payment
+            );
+          } else {
+            const nextRole =
+              role === "seller"
+                ? "platform"
+                : "seller";
+
+            if (
+              paymentLegRequired(
+                nextRole
+              ) &&
+              !checkoutPayments[
+                nextRole
+              ]?.verified
+            ) {
+              checkoutMessage(
+                `${paymentRoleLabel(role)} confirmed. Complete the remaining XRP payment.`,
+                "success"
+              );
+            }
+          }
+        } catch (error) {
+          checkoutPayments[role] = {
+            ...state,
+            payment,
+            busy:false,
+            message:
+              error.message ||
+              "Payment has not been validated yet."
+          };
+
+          renderCheckoutPayments();
+
+          checkoutMessage(
+            checkoutPayments[role]
+              .message,
+            "error"
+          );
+        }
+      }
+
+      function finalizePaidCheckout(
+        paymentResult
+      ) {
+        const purchased =
+          new Set(
+            checkoutPurchasedItems
+          );
+
+        for (
+          let index =
+            cart.length - 1;
+          index >= 0;
+          index -= 1
+        ) {
+          if (
+            purchased.has(
+              cart[index]
+            )
+          ) {
+            cart.splice(
+              index,
+              1
+            );
+          }
+        }
+
+        saveCart();
+        updateCart(false);
+
+        checkoutUi.paidNotice.hidden =
+          false;
+
+        checkoutUi.confirmationText
+          .textContent =
+            `Paid in full. Total: ${createdCheckoutOrder.totalXrp} XRP.`;
+
+        checkoutMessage(
+          "Payment confirmed on the XRP Ledger. Your order is paid.",
+          "success"
+        );
+      }
+
       async function createCheckoutOrder() {
         let payload;
 
@@ -6681,33 +7337,15 @@
           const purchasedGroup =
             activeCheckoutGroup();
 
-          const purchasedItems =
-            new Set(
-              purchasedGroup
-                ? purchasedGroup.items
-                : []
-            );
+          checkoutPurchasedItems =
+            purchasedGroup
+              ? [...purchasedGroup.items]
+              : [];
 
-          for (
-            let index =
-              cart.length - 1;
-            index >= 0;
-            index -= 1
-          ) {
-            if (
-              purchasedItems.has(
-                cart[index]
-              )
-            ) {
-              cart.splice(
-                index,
-                1
-              );
-            }
-          }
-
-          saveCart();
-          updateCart(false);
+          checkoutPayments = {
+            seller:null,
+            platform:null
+          };
 
           checkoutUi.confirmation.hidden =
             false;
@@ -6722,8 +7360,10 @@
           checkoutUi.orderId.textContent =
             data.order.orderId;
 
+          renderCheckoutPayments();
+
           checkoutMessage(
-            "Order created successfully. XRP payment is the next step.",
+            "Order created. Complete the required XRP payments in Xaman.",
             "success"
           );
         } catch (error) {
