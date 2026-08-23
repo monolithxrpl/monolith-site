@@ -3990,12 +3990,7 @@
     ------------------------------------------------------- */
 
     .categoryChips{
-      display:flex;
-      gap:7px;
-      overflow-x:auto;
-      margin-bottom:12px;
-      padding:1px 0 3px;
-      scrollbar-width:none;
+      display:none;
     }
 
     .categoryChips::-webkit-scrollbar{
@@ -4130,16 +4125,17 @@
 
     .emptyProducts{
       grid-column:1/-1;
-      min-height:180px;
+      min-height:112px;
       display:grid;
       place-items:center;
-      padding:34px 20px;
-      border:1px solid #dce7ec;
-      border-radius:14px;
+      padding:22px 18px;
+      border:0;
+      border-top:1px solid #dce7ec;
+      border-radius:0;
       color:#738892;
-      background:#ffffff;
+      background:transparent;
       text-align:center;
-      line-height:1.6;
+      line-height:1.55;
     }
 
 
@@ -4219,11 +4215,11 @@
     @media(max-width:620px){
 
       .marketHero{
-        grid-template-columns:minmax(0,1fr) 76px;
-        min-height:108px;
-        margin-bottom:10px;
-        padding:16px;
-        border-radius:14px;
+        grid-template-columns:minmax(0,1fr) 68px;
+        min-height:92px;
+        margin-bottom:8px;
+        padding:13px 14px;
+        border-radius:13px;
       }
 
       .marketHero .heroEyebrow{
@@ -4233,31 +4229,35 @@
 
       .marketHero h1{
         max-width:none;
-        font-size:26px;
+        font-size:23px;
         line-height:1.02;
       }
 
       .marketHero p{
-        margin-top:7px;
-        font-size:11px;
-        line-height:1.4;
+        margin-top:5px;
+        font-size:10px;
+        line-height:1.35;
       }
 
       .marketHeroMark{
-        width:70px;
-        height:70px;
+        width:62px;
+        height:62px;
       }
 
       .marketSidebar{
-        margin-bottom:3px;
-        padding:10px;
-        border-radius:13px;
+        margin-bottom:5px;
+        padding:0;
+        border:0;
+        border-radius:0;
+        background:transparent;
         box-shadow:none;
       }
 
       .marketSearch{
-        min-height:46px;
-        margin-bottom:9px;
+        min-height:48px;
+        margin-bottom:8px;
+        border-radius:999px;
+        background:#ffffff;
       }
 
       .marketNavItem{
@@ -4267,11 +4267,11 @@
       }
 
       .marketTopbar{
-        align-items:flex-start;
-        flex-direction:column;
-        gap:7px;
-        margin-bottom:8px;
-        padding:7px 1px 10px;
+        align-items:center;
+        flex-direction:row;
+        gap:10px;
+        margin-bottom:6px;
+        padding:9px 1px 8px;
       }
 
       .marketTopbar h2{
@@ -4279,8 +4279,9 @@
       }
 
       .marketTopActions{
-        width:100%;
-        justify-content:flex-start;
+        width:auto;
+        margin-left:auto;
+        justify-content:flex-end;
       }
 
       .marketContext{
@@ -4326,9 +4327,15 @@
       }
 
       .emptyProducts{
-        min-height:140px;
-        padding:28px 16px;
+        min-height:96px;
+        padding:19px 10px;
+        font-size:11px;
       }
+    }
+
+    /* Public marketplace stays commerce-first. */
+    #about{
+      display:none;
     }
 
     /* -------------------------------------------------------
