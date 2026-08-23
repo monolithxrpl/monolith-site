@@ -1718,6 +1718,412 @@
       }
     }
 
+
+    /* -------------------------------------------------------
+       SELLER PRODUCT MANAGER
+    ------------------------------------------------------- */
+
+    .sellerProductManager:not([hidden]){
+      display:block;
+    }
+
+    .productManagerHead{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:18px;
+      padding:22px;
+      border:1px solid rgba(75,188,255,.16);
+      background:
+        linear-gradient(
+          140deg,
+          rgba(15,21,26,.96),
+          rgba(8,8,8,.98)
+        );
+    }
+
+    .productManagerHead h2{
+      margin:4px 0 4px;
+      font-size:30px;
+      letter-spacing:-.04em;
+    }
+
+    .productManagerHead p{
+      margin:0;
+      color:#89959d;
+      font-size:10px;
+    }
+
+    .productManagerGrid{
+      display:grid;
+      grid-template-columns:330px minmax(0,1fr);
+      gap:18px;
+      align-items:start;
+    }
+
+    .sellerCatalogPanel,
+    .productEditorPanel{
+      border:1px solid rgba(75,188,255,.14);
+      background:#0b0f12;
+    }
+
+    .sellerCatalogPanel{
+      position:sticky;
+      top:90px;
+    }
+
+    .sellerCatalogToolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+
+    .sellerCatalogToolbar strong{
+      font-size:12px;
+    }
+
+    .sellerCatalogToolbar span{
+      min-width:28px;
+      padding:4px 7px;
+      border-radius:999px;
+      color:#07141b;
+      background:#68cdfb;
+      font-size:8px;
+      font-weight:950;
+      text-align:center;
+    }
+
+    .sellerProductList{
+      display:grid;
+      max-height:720px;
+      overflow:auto;
+    }
+
+    .sellerProductEmpty{
+      padding:26px 16px;
+      color:#6f7b83;
+      font-size:10px;
+      text-align:center;
+    }
+
+    .sellerProductRow{
+      display:grid;
+      grid-template-columns:54px 1fr auto;
+      gap:11px;
+      align-items:center;
+      padding:11px;
+      border:0;
+      border-bottom:1px solid rgba(255,255,255,.055);
+      color:#dce4e9;
+      background:transparent;
+      text-align:left;
+    }
+
+    .sellerProductRow:hover,
+    .sellerProductRow.active{
+      background:rgba(75,188,255,.075);
+    }
+
+    .sellerProductThumb{
+      display:grid;
+      width:54px;
+      height:54px;
+      place-items:center;
+      overflow:hidden;
+      border-radius:8px;
+      background:#151a1e;
+    }
+
+    .sellerProductThumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .sellerProductThumb img.placeholder{
+      width:28px;
+      height:28px;
+      object-fit:contain;
+      opacity:.32;
+    }
+
+    .sellerProductRowCopy{
+      min-width:0;
+    }
+
+    .sellerProductRowCopy strong{
+      display:block;
+      overflow:hidden;
+      color:#e8edf0;
+      font-size:11px;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .sellerProductRowCopy span{
+      display:block;
+      margin-top:4px;
+      color:#74818a;
+      font-size:8px;
+    }
+
+    .sellerProductState{
+      padding:5px 7px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:999px;
+      color:#8d989f;
+      font-size:7px;
+      font-weight:950;
+      text-transform:uppercase;
+    }
+
+    .sellerProductState.active{
+      color:#8fe3af;
+      border-color:rgba(105,216,155,.25);
+    }
+
+    .sellerProductState.draft{
+      color:#e1c77f;
+      border-color:rgba(210,178,110,.25);
+    }
+
+    .productEditorPanel{
+      padding:22px;
+    }
+
+    .productEditorHead{
+      display:flex;
+      align-items:start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:14px;
+    }
+
+    .productEditorHead > div{
+      display:grid;
+      gap:4px;
+    }
+
+    .productEditorHead span{
+      color:#6fcdf8;
+      font-size:8px;
+      font-weight:950;
+      letter-spacing:.14em;
+    }
+
+    .productEditorHead strong{
+      font-size:20px;
+    }
+
+    .productEditorStatus{
+      padding:7px 10px;
+      border:1px solid rgba(210,178,110,.25);
+      border-radius:999px;
+      color:#dec47f !important;
+      background:rgba(210,178,110,.06);
+      font-size:8px !important;
+    }
+
+    .productEditorStatus.active{
+      color:#08160e !important;
+      border-color:#72dba0;
+      background:#72dba0;
+    }
+
+    .productEditorFields{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .productEditorFields label{
+      display:grid;
+      gap:7px;
+    }
+
+    .productEditorFields label > span{
+      color:#859199;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .productEditorFields input,
+    .productEditorFields select,
+    .productEditorFields textarea{
+      width:100%;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:9px;
+      outline:0;
+      color:#eef3f6;
+      background:#11171b;
+      font:inherit;
+      font-size:11px;
+    }
+
+    .productEditorFields input,
+    .productEditorFields select{
+      min-height:42px;
+      padding:0 11px;
+    }
+
+    .productEditorFields textarea{
+      resize:vertical;
+      padding:11px;
+      line-height:1.5;
+    }
+
+    .productEditorFields input:focus,
+    .productEditorFields select:focus,
+    .productEditorFields textarea:focus{
+      border-color:rgba(75,188,255,.55);
+    }
+
+    .productWideField{
+      grid-column:1/-1;
+    }
+
+    .productChecks{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:15px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:9px;
+      background:rgba(255,255,255,.02);
+    }
+
+    .productChecks label{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      color:#9aa5ac;
+      font-size:9px;
+    }
+
+    .productImagePanel{
+      display:grid;
+      grid-template-columns:1fr minmax(220px,auto) auto;
+      gap:12px;
+      align-items:center;
+      margin-top:15px;
+      padding:14px;
+      border:1px solid rgba(210,178,110,.18);
+      border-radius:9px;
+      background:rgba(210,178,110,.035);
+    }
+
+    .productImagePanel > div{
+      display:grid;
+      gap:3px;
+    }
+
+    .productImagePanel strong{
+      color:#dcc17e;
+      font-size:10px;
+    }
+
+    .productImagePanel span{
+      color:#756e5c;
+      font-size:8px;
+    }
+
+    .productImagePanel input{
+      color:#8d979d;
+      font-size:9px;
+    }
+
+    .productMediaGrid{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .productMediaItem{
+      aspect-ratio:1/1;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:9px;
+      background:#111;
+    }
+
+    .productMediaItem img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .productEditorActions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-top:18px;
+    }
+
+    .productArchiveBtn{
+      min-height:42px;
+      margin-left:auto;
+      padding:0 15px;
+      border:1px solid rgba(242,107,107,.24);
+      border-radius:9px;
+      color:#e39898;
+      background:rgba(242,107,107,.055);
+      font-size:9px;
+      font-weight:900;
+    }
+
+    @media(max-width:1040px){
+      .productManagerGrid{
+        grid-template-columns:1fr;
+      }
+
+      .sellerCatalogPanel{
+        position:static;
+      }
+
+      .sellerProductList{
+        max-height:320px;
+      }
+    }
+
+    @media(max-width:680px){
+      .productManagerHead{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .productEditorFields{
+        grid-template-columns:1fr;
+      }
+
+      .productWideField{
+        grid-column:auto;
+      }
+
+      .productImagePanel{
+        grid-template-columns:1fr;
+      }
+
+      .productMediaGrid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+
+      .productEditorActions{
+        display:grid;
+      }
+
+      .productArchiveBtn{
+        width:100%;
+        margin-left:0;
+      }
+    }
+
     /* -------------------------------------------------------
        MARKETPLACE-FIRST UX
     ------------------------------------------------------- */
@@ -2817,6 +3223,281 @@
     </section>
 
     <section
+      class="section sellerProductManager"
+      id="sellerProducts"
+      hidden
+    >
+      <div class="productManagerHead">
+        <div>
+          <div class="sectionKicker">
+            SELLER DASHBOARD
+          </div>
+
+          <h2>
+            Products
+          </h2>
+
+          <p>
+            Create, edit and publish merchandise for your MONOLITH storefront.
+          </p>
+        </div>
+
+        <button
+          class="sellerPrimaryBtn"
+          id="productNewBtn"
+          type="button"
+        >
+          + Add Product
+        </button>
+      </div>
+
+      <div class="productManagerGrid">
+        <aside class="sellerCatalogPanel">
+          <div class="sellerCatalogToolbar">
+            <strong>Your Products</strong>
+
+            <span id="sellerProductCount">
+              0
+            </span>
+          </div>
+
+          <div
+            class="sellerProductList"
+            id="sellerProductList"
+          >
+            <div class="sellerProductEmpty">
+              No products yet.
+            </div>
+          </div>
+        </aside>
+
+        <div class="productEditorPanel">
+          <div class="productEditorHead">
+            <div>
+              <span>
+                PRODUCT EDITOR
+              </span>
+
+              <strong id="productEditorTitle">
+                New Product
+              </strong>
+            </div>
+
+            <span
+              class="productEditorStatus"
+              id="productEditorStatus"
+            >
+              DRAFT
+            </span>
+          </div>
+
+          <div
+            class="sellerStatus"
+            id="productStatusMessage"
+          >
+            Add product details, save as a draft, then publish when ready.
+          </div>
+
+          <div class="productEditorFields">
+            <label class="productWideField">
+              <span>Product Title</span>
+              <input
+                id="productTitle"
+                type="text"
+                maxlength="240"
+                placeholder="MONOLITH T-Shirt"
+              >
+            </label>
+
+            <label>
+              <span>Price in XRP</span>
+              <input
+                id="productPrice"
+                type="text"
+                inputmode="decimal"
+                placeholder="25"
+              >
+            </label>
+
+            <label>
+              <span>Compare at Price</span>
+              <input
+                id="productComparePrice"
+                type="text"
+                inputmode="decimal"
+                placeholder="Optional"
+              >
+            </label>
+
+            <label>
+              <span>Category</span>
+              <select id="productCategory">
+                <option value="apparel">Apparel</option>
+                <option value="headwear">Headwear</option>
+                <option value="gear">Gear</option>
+                <option value="collectibles">Collectibles</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Product Type</span>
+              <input
+                id="productType"
+                type="text"
+                maxlength="240"
+                placeholder="T-Shirt"
+              >
+            </label>
+
+            <label class="productWideField">
+              <span>Description</span>
+              <textarea
+                id="productDescription"
+                rows="5"
+                maxlength="50000"
+                placeholder="Describe the product, materials, sizing and anything buyers should know."
+              ></textarea>
+            </label>
+
+            <label>
+              <span>SKU</span>
+              <input
+                id="productSku"
+                type="text"
+                maxlength="160"
+                placeholder="Optional"
+              >
+            </label>
+
+            <label>
+              <span>Inventory</span>
+              <input
+                id="productInventory"
+                type="number"
+                min="0"
+                step="1"
+                value="0"
+              >
+            </label>
+
+            <label>
+              <span>Weight</span>
+              <input
+                id="productWeight"
+                type="text"
+                placeholder="Optional"
+              >
+            </label>
+
+            <label>
+              <span>Weight Unit</span>
+              <select id="productWeightUnit">
+                <option value="">None</option>
+                <option value="oz">oz</option>
+                <option value="lb">lb</option>
+                <option value="g">g</option>
+                <option value="kg">kg</option>
+              </select>
+            </label>
+
+            <label class="productWideField">
+              <span>Tags</span>
+              <input
+                id="productTags"
+                type="text"
+                placeholder="shirt, monolith, limited"
+              >
+            </label>
+          </div>
+
+          <div class="productChecks">
+            <label>
+              <input
+                id="productTrackInventory"
+                type="checkbox"
+                checked
+              >
+              Track inventory
+            </label>
+
+            <label>
+              <input
+                id="productContinueSelling"
+                type="checkbox"
+              >
+              Continue selling when sold out
+            </label>
+
+            <label>
+              <input
+                id="productRequiresShipping"
+                type="checkbox"
+                checked
+              >
+              Requires shipping
+            </label>
+          </div>
+
+          <div class="productImagePanel">
+            <div>
+              <strong>Product Image</strong>
+              <span>
+                PNG, JPG, JPEG or WEBP up to 5 MB. GIF up to 25 MB.
+              </span>
+            </div>
+
+            <input
+              id="productImage"
+              type="file"
+              accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif"
+            >
+
+            <button
+              class="sellerSecondaryBtn"
+              id="productUploadImageBtn"
+              type="button"
+              disabled
+            >
+              Upload Image
+            </button>
+          </div>
+
+          <div
+            class="productMediaGrid"
+            id="productMediaGrid"
+          ></div>
+
+          <div class="productEditorActions">
+            <button
+              class="sellerSecondaryBtn"
+              id="productSaveDraftBtn"
+              type="button"
+            >
+              Save Draft
+            </button>
+
+            <button
+              class="sellerPrimaryBtn"
+              id="productPublishBtn"
+              type="button"
+            >
+              Publish Product
+            </button>
+
+            <button
+              class="productArchiveBtn"
+              id="productArchiveBtn"
+              type="button"
+              hidden
+            >
+              Archive
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
       class="section"
       id="about"
     >
@@ -3733,6 +4414,8 @@
             "success"
           );
 
+          loadSellerProducts();
+
           return;
         }
 
@@ -3786,6 +4469,8 @@
             "Seller verification is complete.",
             "success"
           );
+
+          loadSellerProducts();
 
           return;
         }
@@ -4338,6 +5023,867 @@
         },
         0
       );
+
+      const productUi = {
+        manager:
+          document.getElementById(
+            "sellerProducts"
+          ),
+        list:
+          document.getElementById(
+            "sellerProductList"
+          ),
+        count:
+          document.getElementById(
+            "sellerProductCount"
+          ),
+        newBtn:
+          document.getElementById(
+            "productNewBtn"
+          ),
+        editorTitle:
+          document.getElementById(
+            "productEditorTitle"
+          ),
+        editorStatus:
+          document.getElementById(
+            "productEditorStatus"
+          ),
+        message:
+          document.getElementById(
+            "productStatusMessage"
+          ),
+        title:
+          document.getElementById(
+            "productTitle"
+          ),
+        price:
+          document.getElementById(
+            "productPrice"
+          ),
+        comparePrice:
+          document.getElementById(
+            "productComparePrice"
+          ),
+        category:
+          document.getElementById(
+            "productCategory"
+          ),
+        productType:
+          document.getElementById(
+            "productType"
+          ),
+        description:
+          document.getElementById(
+            "productDescription"
+          ),
+        sku:
+          document.getElementById(
+            "productSku"
+          ),
+        inventory:
+          document.getElementById(
+            "productInventory"
+          ),
+        weight:
+          document.getElementById(
+            "productWeight"
+          ),
+        weightUnit:
+          document.getElementById(
+            "productWeightUnit"
+          ),
+        tags:
+          document.getElementById(
+            "productTags"
+          ),
+        trackInventory:
+          document.getElementById(
+            "productTrackInventory"
+          ),
+        continueSelling:
+          document.getElementById(
+            "productContinueSelling"
+          ),
+        requiresShipping:
+          document.getElementById(
+            "productRequiresShipping"
+          ),
+        image:
+          document.getElementById(
+            "productImage"
+          ),
+        uploadImage:
+          document.getElementById(
+            "productUploadImageBtn"
+          ),
+        media:
+          document.getElementById(
+            "productMediaGrid"
+          ),
+        saveDraft:
+          document.getElementById(
+            "productSaveDraftBtn"
+          ),
+        publish:
+          document.getElementById(
+            "productPublishBtn"
+          ),
+        archive:
+          document.getElementById(
+            "productArchiveBtn"
+          )
+      };
+
+      let sellerProducts = [];
+      let editingProduct = null;
+
+      function productMessage(
+        message,
+        type = ""
+      ) {
+        productUi.message.textContent =
+          message;
+
+        productUi.message.className =
+          `sellerStatus ${type}`.trim();
+      }
+
+      function productTagsFromInput() {
+        return String(
+          productUi.tags.value || ""
+        )
+          .split(",")
+          .map(
+            value =>
+              value.trim()
+          )
+          .filter(Boolean);
+      }
+
+      function productPayload(
+        status
+      ) {
+        const price =
+          String(
+            productUi.price.value ||
+            ""
+          ).trim();
+
+        if (!price) {
+          throw new Error(
+            "Enter a product price in XRP."
+          );
+        }
+
+        return {
+          payloadUuid:
+            sellerPayload(),
+          sellerId:
+            sellerProfile
+              ? sellerProfile.sellerId
+              : "",
+          title:
+            String(
+              productUi.title.value ||
+              ""
+            ).trim(),
+          descriptionHtml:
+            escapeHtml(
+              String(
+                productUi
+                  .description
+                  .value ||
+                ""
+              ).trim()
+            ),
+          priceXrp:
+            price,
+          compareAtPriceXrp:
+            String(
+              productUi
+                .comparePrice
+                .value ||
+              ""
+            ).trim(),
+          category:
+            productUi.category.value,
+          productType:
+            String(
+              productUi
+                .productType
+                .value ||
+              ""
+            ).trim(),
+          vendor:
+            sellerProfile
+              ? sellerProfile.displayName
+              : "",
+          sku:
+            String(
+              productUi.sku.value ||
+              ""
+            ).trim(),
+          trackInventory:
+            Boolean(
+              productUi
+                .trackInventory
+                .checked
+            ),
+          inventoryQuantity:
+            Number(
+              productUi
+                .inventory
+                .value ||
+              0
+            ),
+          continueSellingWhenOutOfStock:
+            Boolean(
+              productUi
+                .continueSelling
+                .checked
+            ),
+          requiresShipping:
+            Boolean(
+              productUi
+                .requiresShipping
+                .checked
+            ),
+          weightValue:
+            String(
+              productUi.weight.value ||
+              ""
+            ).trim(),
+          weightUnit:
+            productUi
+              .weightUnit
+              .value,
+          tags:
+            productTagsFromInput(),
+          status
+        };
+      }
+
+      function renderProductMedia(
+        product
+      ) {
+        const media =
+          product &&
+          Array.isArray(product.media)
+            ? product.media
+            : [];
+
+        productUi.media.innerHTML =
+          media.map(
+            item => `
+              <div class="productMediaItem">
+                <img
+                  src="${escapeHtml(item.url)}"
+                  alt="${escapeHtml(item.altText || product.title || "")}"
+                  loading="lazy"
+                >
+              </div>
+            `
+          ).join("");
+      }
+
+      function resetProductEditor() {
+        editingProduct = null;
+
+        productUi.editorTitle.textContent =
+          "New Product";
+
+        productUi.editorStatus.textContent =
+          "DRAFT";
+
+        productUi.editorStatus.className =
+          "productEditorStatus";
+
+        productUi.title.value = "";
+        productUi.price.value = "";
+        productUi.comparePrice.value = "";
+        productUi.category.value =
+          "apparel";
+        productUi.productType.value = "";
+        productUi.description.value = "";
+        productUi.sku.value = "";
+        productUi.inventory.value = "0";
+        productUi.weight.value = "";
+        productUi.weightUnit.value = "";
+        productUi.tags.value = "";
+        productUi.trackInventory.checked =
+          true;
+        productUi.continueSelling.checked =
+          false;
+        productUi.requiresShipping.checked =
+          true;
+        productUi.image.value = "";
+        productUi.uploadImage.disabled =
+          true;
+        productUi.archive.hidden =
+          true;
+        productUi.media.innerHTML = "";
+
+        productMessage(
+          "Add product details, save as a draft, then publish when ready."
+        );
+
+        document
+          .querySelectorAll(
+            ".sellerProductRow"
+          )
+          .forEach(
+            row =>
+              row.classList.remove(
+                "active"
+              )
+          );
+      }
+
+      function fillProductEditor(
+        product
+      ) {
+        editingProduct = product;
+
+        productUi.editorTitle.textContent =
+          product.title ||
+          "Product";
+
+        productUi.editorStatus.textContent =
+          String(
+            product.status ||
+            "draft"
+          ).toUpperCase();
+
+        productUi.editorStatus.className =
+          `productEditorStatus ${
+            product.status === "active"
+              ? "active"
+              : ""
+          }`.trim();
+
+        productUi.title.value =
+          product.title || "";
+
+        productUi.price.value =
+          product.priceXrp || "";
+
+        productUi.comparePrice.value =
+          product.compareAtPriceXrp || "";
+
+        productUi.category.value =
+          product.category ||
+          "apparel";
+
+        productUi.productType.value =
+          product.productType || "";
+
+        productUi.description.value =
+          product.description || "";
+
+        productUi.sku.value =
+          product.sku || "";
+
+        productUi.inventory.value =
+          Number(
+            product.inventoryQuantity ||
+            0
+          );
+
+        productUi.weight.value =
+          product.weightValue || "";
+
+        productUi.weightUnit.value =
+          product.weightUnit || "";
+
+        productUi.tags.value =
+          Array.isArray(product.tags)
+            ? product.tags.join(", ")
+            : "";
+
+        productUi.trackInventory.checked =
+          Boolean(
+            product.trackInventory
+          );
+
+        productUi.continueSelling.checked =
+          Boolean(
+            product
+              .continueSellingWhenOutOfStock
+          );
+
+        productUi.requiresShipping.checked =
+          product.requiresShipping !==
+          false;
+
+        productUi.uploadImage.disabled =
+          false;
+
+        productUi.archive.hidden =
+          product.status ===
+          "archived";
+
+        renderProductMedia(
+          product
+        );
+
+        productMessage(
+          `Editing ${product.title}.`
+        );
+      }
+
+      function renderSellerProducts() {
+        productUi.count.textContent =
+          String(
+            sellerProducts.length
+          );
+
+        if (!sellerProducts.length) {
+          productUi.list.innerHTML = `
+            <div class="sellerProductEmpty">
+              No products yet. Add your first product.
+            </div>
+          `;
+          return;
+        }
+
+        productUi.list.innerHTML =
+          sellerProducts.map(
+            product => {
+              const image =
+                firstImage(product);
+
+              return `
+                <button
+                  class="sellerProductRow ${
+                    editingProduct &&
+                    editingProduct.productId ===
+                      product.productId
+                      ? "active"
+                      : ""
+                  }"
+                  type="button"
+                  data-seller-product="${
+                    escapeHtml(
+                      product.productId
+                    )
+                  }"
+                >
+                  <span class="sellerProductThumb">
+                    <img
+                      class="${
+                        image
+                          ? ""
+                          : "placeholder"
+                      }"
+                      src="${
+                        escapeHtml(
+                          image ||
+                          "/assets/monolith_icon.webp"
+                        )
+                      }"
+                      alt=""
+                    >
+                  </span>
+
+                  <span class="sellerProductRowCopy">
+                    <strong>
+                      ${escapeHtml(product.title)}
+                    </strong>
+
+                    <span>
+                      ${
+                        escapeHtml(
+                          product.priceXrp
+                        )
+                      } XRP
+                    </span>
+                  </span>
+
+                  <span
+                    class="sellerProductState ${
+                      escapeHtml(
+                        product.status
+                      )
+                    }"
+                  >
+                    ${
+                      escapeHtml(
+                        product.status
+                      )
+                    }
+                  </span>
+                </button>
+              `;
+            }
+          ).join("");
+
+        productUi.list
+          .querySelectorAll(
+            "[data-seller-product]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => {
+                  const product =
+                    sellerProducts.find(
+                      item =>
+                        item.productId ===
+                        button.dataset
+                          .sellerProduct
+                    );
+
+                  if (!product) return;
+
+                  fillProductEditor(
+                    product
+                  );
+
+                  renderSellerProducts();
+                }
+              );
+            }
+          );
+      }
+
+      async function loadSellerProducts() {
+        if (
+          !sellerProfile ||
+          sellerProfile.status !==
+            "verified" ||
+          sellerProfile
+            .verificationStatus !==
+            "verified"
+        ) {
+          productUi.manager.hidden =
+            true;
+          return;
+        }
+
+        productUi.manager.hidden =
+          false;
+
+        try {
+          const data =
+            await merchJson(
+              `/api/merch/seller/${
+                encodeURIComponent(
+                  sellerProfile.sellerId
+                )
+              }/products?payloadUuid=${
+                encodeURIComponent(
+                  sellerPayload()
+                )
+              }`
+            );
+
+          sellerProducts =
+            Array.isArray(
+              data.products
+            )
+              ? data.products
+              : [];
+
+          if (editingProduct) {
+            editingProduct =
+              sellerProducts.find(
+                item =>
+                  item.productId ===
+                  editingProduct.productId
+              ) || null;
+          }
+
+          renderSellerProducts();
+
+          if (editingProduct) {
+            fillProductEditor(
+              editingProduct
+            );
+          }
+        } catch (error) {
+          console.error(
+            "[merch:seller-products]",
+            error
+          );
+
+          productMessage(
+            error.message ||
+            "Unable to load seller products.",
+            "error"
+          );
+        }
+      }
+
+      async function saveProduct(
+        status
+      ) {
+        if (!sellerProfile) return;
+
+        let payload;
+
+        try {
+          payload =
+            productPayload(
+              status
+            );
+        } catch (error) {
+          productMessage(
+            error.message,
+            "error"
+          );
+          return;
+        }
+
+        if (!payload.title) {
+          productMessage(
+            "Enter a product title.",
+            "error"
+          );
+          return;
+        }
+
+        productUi.saveDraft.disabled =
+          true;
+        productUi.publish.disabled =
+          true;
+
+        productMessage(
+          status === "active"
+            ? "Publishing product…"
+            : "Saving draft…"
+        );
+
+        try {
+          const endpoint =
+            editingProduct
+              ? `/api/merch/product/${
+                  encodeURIComponent(
+                    editingProduct.productId
+                  )
+                }`
+              : "/api/merch/product";
+
+          const data =
+            await merchJson(
+              endpoint,
+              {
+                method:"POST",
+                body:payload
+              }
+            );
+
+          editingProduct =
+            data.product;
+
+          await loadSellerProducts();
+
+          productUi.uploadImage.disabled =
+            false;
+
+          productMessage(
+            status === "active"
+              ? "Product published to the MONOLITH marketplace."
+              : "Draft saved.",
+            "success"
+          );
+
+          loadMarketplace();
+        } catch (error) {
+          productMessage(
+            error.message ||
+            "Unable to save product.",
+            "error"
+          );
+        } finally {
+          productUi.saveDraft.disabled =
+            false;
+          productUi.publish.disabled =
+            false;
+        }
+      }
+
+      productUi.newBtn
+        ?.addEventListener(
+          "click",
+          () => {
+            resetProductEditor();
+            productUi.title.focus();
+          }
+        );
+
+      productUi.saveDraft
+        ?.addEventListener(
+          "click",
+          () => saveProduct(
+            "draft"
+          )
+        );
+
+      productUi.publish
+        ?.addEventListener(
+          "click",
+          () => saveProduct(
+            "active"
+          )
+        );
+
+      productUi.image
+        ?.addEventListener(
+          "change",
+          () => {
+            productUi.uploadImage.disabled =
+              !editingProduct ||
+              !productUi.image.files ||
+              !productUi.image.files[0];
+          }
+        );
+
+      productUi.uploadImage
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (
+              !editingProduct ||
+              !productUi.image.files ||
+              !productUi.image.files[0]
+            ) {
+              return;
+            }
+
+            productUi.uploadImage.disabled =
+              true;
+
+            productMessage(
+              "Uploading product image…"
+            );
+
+            try {
+              const form =
+                new FormData();
+
+              form.append(
+                "image",
+                productUi.image.files[0]
+              );
+
+              form.append(
+                "payloadUuid",
+                sellerPayload()
+              );
+
+              form.append(
+                "altText",
+                productUi.title.value ||
+                editingProduct.title ||
+                ""
+              );
+
+              const response =
+                await fetch(
+                  `/api/merch/product/${
+                    encodeURIComponent(
+                      editingProduct.productId
+                    )
+                  }/media`,
+                  {
+                    method:"POST",
+                    body:form
+                  }
+                );
+
+              const data =
+                await response
+                  .json()
+                  .catch(() => ({}));
+
+              if (
+                !response.ok ||
+                !data.ok
+              ) {
+                throw new Error(
+                  data.error ||
+                  "image_upload_failed"
+                );
+              }
+
+              productUi.image.value = "";
+
+              await loadSellerProducts();
+
+              productMessage(
+                "Product image uploaded.",
+                "success"
+              );
+
+              loadMarketplace();
+            } catch (error) {
+              productMessage(
+                error.message ||
+                "Unable to upload image.",
+                "error"
+              );
+            } finally {
+              productUi.uploadImage.disabled =
+                !editingProduct;
+            }
+          }
+        );
+
+      productUi.archive
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!editingProduct) return;
+
+            productUi.archive.disabled =
+              true;
+
+            productMessage(
+              "Archiving product…"
+            );
+
+            try {
+              await merchJson(
+                `/api/merch/product/${
+                  encodeURIComponent(
+                    editingProduct.productId
+                  )
+                }/archive`,
+                {
+                  method:"POST",
+                  body:{
+                    payloadUuid:
+                      sellerPayload()
+                  }
+                }
+              );
+
+              editingProduct = null;
+
+              resetProductEditor();
+
+              await loadSellerProducts();
+
+              productMessage(
+                "Product archived.",
+                "success"
+              );
+
+              loadMarketplace();
+            } catch (error) {
+              productMessage(
+                error.message ||
+                "Unable to archive product.",
+                "error"
+              );
+            } finally {
+              productUi.archive.disabled =
+                false;
+            }
+          }
+        );
 
       document
         .getElementById(
