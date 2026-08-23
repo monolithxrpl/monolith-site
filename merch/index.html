@@ -6084,6 +6084,79 @@ body.merchLaunchSoon .marketNavItem.active{
 
 </style>
 
+
+<style id="monolith-merch-market-hero-fix-20260822">
+
+/* ===========================================================
+   ACTUAL LIVE MARKET HERO FIX
+   =========================================================== */
+
+body.merchLaunchSoon .marketHero{
+  border:1px solid #d7e5ec!important;
+  color:#173847!important;
+  background:
+    radial-gradient(
+      circle at 82% 42%,
+      rgba(22,143,209,.10),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f6fafc 58%,
+      #eef7fa 100%
+    )!important;
+  box-shadow:0 6px 22px rgba(42,75,92,.05)!important;
+}
+
+body.merchLaunchSoon .marketHeroCopy{
+  color:#173847!important;
+}
+
+body.merchLaunchSoon .marketHeroCopy .heroEyebrow{
+  color:#168fd1!important;
+}
+
+body.merchLaunchSoon .marketHeroCopy h1{
+  color:#173847!important;
+  text-shadow:none!important;
+}
+
+body.merchLaunchSoon .marketHeroCopy p{
+  color:#667c87!important;
+}
+
+body.merchLaunchSoon .marketHeroMark{
+  background:transparent!important;
+}
+
+body.merchLaunchSoon .marketHeroMark img{
+  opacity:.12!important;
+  filter:none!important;
+}
+
+
+/* MOBILE */
+
+@media(max-width:680px){
+
+  body.merchLaunchSoon .marketHero{
+    background:
+      linear-gradient(
+        145deg,
+        #ffffff,
+        #eef7fa
+      )!important;
+    box-shadow:none!important;
+  }
+
+  body.merchLaunchSoon .marketHeroMark img{
+    opacity:.08!important;
+  }
+}
+
+</style>
+
 </head>
 
 <body class="merchLaunchSoon">
