@@ -5796,6 +5796,294 @@ body.merchLaunchSoon .footerBrand strong{
 
 </style>
 
+
+<style id="monolith-merch-visible-dark-kill-20260822">
+
+/* ===========================================================
+   VISIBLE DARK UI KILL PASS
+   Exact overrides for legacy dark marketplace components.
+   =========================================================== */
+
+/* HERO */
+
+body.merchLaunchSoon .hero{
+  border:1px solid #d7e5ec!important;
+  background:
+    radial-gradient(
+      circle at 82% 38%,
+      rgba(22,143,209,.11),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f5f9fb 58%,
+      #edf6fa 100%
+    )!important;
+}
+
+body.merchLaunchSoon .hero::before{
+  opacity:.28!important;
+  background-image:
+    linear-gradient(
+      rgba(22,143,209,.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(22,143,209,.045) 1px,
+      transparent 1px
+    )!important;
+}
+
+body.merchLaunchSoon .hero::after{
+  opacity:.08!important;
+  filter:none!important;
+}
+
+body.merchLaunchSoon .hero h1{
+  color:#173847!important;
+  text-shadow:none!important;
+}
+
+body.merchLaunchSoon .heroEyebrow{
+  color:#168fd1!important;
+}
+
+body.merchLaunchSoon .heroSub{
+  color:#667c87!important;
+}
+
+body.merchLaunchSoon .heroSub strong{
+  color:#173847!important;
+}
+
+body.merchLaunchSoon .heroPoint{
+  border:1px solid #bdddea!important;
+  color:#086f9f!important;
+  background:#edf8fd!important;
+}
+
+
+/* SEARCH */
+
+body.merchLaunchSoon .marketSearch{
+  border:1px solid #b9dce9!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+}
+
+body.merchLaunchSoon .marketSearch span{
+  color:#168fd1!important;
+}
+
+body.merchLaunchSoon .marketSearch input{
+  color:#1f3641!important;
+  background:#ffffff!important;
+}
+
+body.merchLaunchSoon .marketSearch input::placeholder{
+  color:#91a5af!important;
+}
+
+
+/* CATEGORY CARDS */
+
+body.merchLaunchSoon .category{
+  border:1px solid #d7e5ec!important;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f0f7fa
+    )!important;
+}
+
+body.merchLaunchSoon .category::before{
+  opacity:.22!important;
+  background-image:
+    linear-gradient(
+      rgba(22,143,209,.05) 1px,
+      transparent 1px
+    )!important;
+}
+
+body.merchLaunchSoon .categoryContent{
+  background:
+    linear-gradient(
+      transparent,
+      rgba(255,255,255,.96)
+    )!important;
+}
+
+body.merchLaunchSoon .categoryIcon{
+  color:#168fd1!important;
+  opacity:.20!important;
+}
+
+body.merchLaunchSoon .category strong{
+  color:#173847!important;
+}
+
+body.merchLaunchSoon .category span{
+  color:#6d828c!important;
+}
+
+
+/* PRODUCT CARDS */
+
+body.merchLaunchSoon .productCard{
+  border:1px solid #d7e5ec!important;
+  background:#ffffff!important;
+}
+
+body.merchLaunchSoon .productMedia{
+  border-color:#d7e5ec!important;
+  background:
+    radial-gradient(
+      circle at 50% 36%,
+      #ffffff,
+      #edf4f7 72%
+    )!important;
+}
+
+body.merchLaunchSoon .productMedia img{
+  filter:none!important;
+}
+
+body.merchLaunchSoon .productPlaceholder{
+  opacity:.26!important;
+  filter:none!important;
+}
+
+body.merchLaunchSoon .productBadge{
+  border:1px solid #b9dce9!important;
+  color:#086f9f!important;
+  background:#edf8fd!important;
+}
+
+body.merchLaunchSoon .productBody{
+  background:#ffffff!important;
+}
+
+body.merchLaunchSoon .price{
+  color:#0879b5!important;
+}
+
+body.merchLaunchSoon .price small{
+  color:#78909b!important;
+}
+
+body.merchLaunchSoon .addBtn{
+  border:1px solid #168fd1!important;
+  color:#ffffff!important;
+  background:#168fd1!important;
+}
+
+body.merchLaunchSoon .addBtn:hover{
+  background:#0879b5!important;
+}
+
+
+/* EMPTY MARKETPLACE STATE — THIS WAS STILL BLACK */
+
+body.merchLaunchSoon .emptyProducts{
+  border:1px solid #d7e5ec!important;
+  color:#6b808a!important;
+  background:#ffffff!important;
+  box-shadow:none!important;
+}
+
+
+/* MARKET TOPBAR */
+
+body.merchLaunchSoon .marketTopbar{
+  border:1px solid #d7e5ec!important;
+  background:#ffffff!important;
+}
+
+body.merchLaunchSoon .resultCount{
+  border:1px solid #d7e5ec!important;
+  color:#667c87!important;
+  background:#f5f8fa!important;
+}
+
+body.merchLaunchSoon .marketContext{
+  border:1px solid #b9dce9!important;
+  color:#0879b5!important;
+  background:#edf8fd!important;
+}
+
+
+/* CATEGORY FILTER PILLS */
+
+body.merchLaunchSoon .categoryChip{
+  border:1px solid #d7e5ec!important;
+  color:#607782!important;
+  background:#ffffff!important;
+}
+
+body.merchLaunchSoon .categoryChip:hover{
+  border-color:#9fd0e5!important;
+  color:#0879b5!important;
+  background:#f0f9fd!important;
+}
+
+body.merchLaunchSoon .categoryChip.active{
+  border-color:#9fd0e5!important;
+  color:#086f9f!important;
+  background:#dff2fa!important;
+}
+
+
+/* SIDEBAR NAV */
+
+body.merchLaunchSoon .marketNavItem{
+  border:1px solid transparent!important;
+  color:#607782!important;
+  background:transparent!important;
+}
+
+body.merchLaunchSoon .marketNavItem:hover{
+  border-color:#c7e2ed!important;
+  color:#0879b5!important;
+  background:#f2f9fc!important;
+}
+
+body.merchLaunchSoon .marketNavItem.active{
+  border-color:#a9d5e7!important;
+  color:#086f9f!important;
+  background:#e5f4fa!important;
+}
+
+
+/* MOBILE */
+
+@media(max-width:680px){
+
+  body.merchLaunchSoon .hero{
+    background:
+      linear-gradient(
+        145deg,
+        #ffffff,
+        #eef7fa
+      )!important;
+  }
+
+  body.merchLaunchSoon .emptyProducts{
+    padding:34px 18px!important;
+  }
+
+  body.merchLaunchSoon .marketSearch,
+  body.merchLaunchSoon .marketTopbar,
+  body.merchLaunchSoon .productCard,
+  body.merchLaunchSoon .category{
+    box-shadow:none!important;
+  }
+}
+
+</style>
+
 </head>
 
 <body class="merchLaunchSoon">
