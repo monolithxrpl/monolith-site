@@ -6355,6 +6355,300 @@ body.merchLaunchSoon .marketHeroMark img{
 
 </style>
 
+
+<style id="monolith-merch-seller-center-20260823">
+
+/* ===========================================================
+   MONOLITH SELLER CENTER
+   =========================================================== */
+
+.sellerCenterShell{
+  margin-top:54px;
+  padding:22px;
+  border:1px solid #d7e5ec;
+  border-radius:20px;
+  background:#f7fafb;
+}
+
+.sellerCenterHeader{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:24px;
+  padding:4px 4px 19px;
+  border-bottom:1px solid #dce7ec;
+}
+
+.sellerCenterHeader h2{
+  margin:0;
+  color:#173847;
+  font-size:32px;
+  letter-spacing:-.04em;
+}
+
+.sellerCenterHeader p{
+  max-width:620px;
+  margin:7px 0 0;
+  color:#6a808b;
+  font-size:12px;
+  line-height:1.55;
+}
+
+.sellerCenterBadge{
+  flex:0 0 auto;
+  padding:8px 11px;
+  border:1px solid #acd6e9;
+  border-radius:999px;
+  color:#087ab6;
+  background:#edf8fd;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+.sellerCenterNav{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
+  margin:15px 0 4px;
+}
+
+.sellerCenterNav a{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-height:48px;
+  padding:0 13px;
+  border:1px solid #d9e6eb;
+  border-radius:11px;
+  color:#516b77;
+  background:#ffffff;
+  font-size:11px;
+  font-weight:850;
+  transition:
+    border-color .16s ease,
+    background .16s ease,
+    color .16s ease;
+}
+
+.sellerCenterNav a:hover{
+  border-color:#a8d4e8;
+  color:#087ab6;
+  background:#eef8fd;
+}
+
+.sellerCenterNav a span{
+  display:grid;
+  width:25px;
+  height:25px;
+  place-items:center;
+  border-radius:50%;
+  color:#168fd1;
+  background:#edf8fd;
+  font-size:8px;
+  font-weight:950;
+}
+
+
+/* -----------------------------------------------------------
+   EXISTING SELLER SECTIONS INSIDE CENTER
+   ----------------------------------------------------------- */
+
+.sellerCenterShell > .section{
+  margin-top:18px;
+}
+
+.sellerCenterShell .sellerOnboarding,
+.sellerCenterShell .sellerProductManager,
+.sellerCenterShell .sellerShippingManager,
+.sellerCenterShell .sellerOrdersManager{
+  border-radius:16px;
+}
+
+.sellerCenterShell .sellerOnboarding{
+  overflow:hidden;
+  border:1px solid #d8e6ec;
+  background:#ffffff;
+}
+
+.sellerCenterShell .sellerIntro{
+  background:
+    linear-gradient(
+      145deg,
+      #f5fafc,
+      #edf7fb
+    );
+}
+
+.sellerCenterShell .sellerIntro h2,
+.sellerCenterShell .productManagerHead h2,
+.sellerCenterShell .shippingManagerHead h2,
+.sellerCenterShell .sellerOrdersHead h2{
+  color:#173847;
+}
+
+.sellerCenterShell .sellerIntro p,
+.sellerCenterShell .productManagerHead p,
+.sellerCenterShell .shippingManagerHead p,
+.sellerCenterShell .sellerOrdersHead p{
+  color:#687e89;
+}
+
+.sellerCenterShell .sellerFlow,
+.sellerCenterShell .sellerCatalogPanel,
+.sellerCenterShell .productEditorPanel,
+.sellerCenterShell .shippingCreatePanel,
+.sellerCenterShell .shippingProfiles,
+.sellerCenterShell .sellerOrderListPanel,
+.sellerCenterShell .sellerOrderDetail{
+  border-color:#d8e6ec;
+  background:#ffffff;
+}
+
+
+/* -----------------------------------------------------------
+   BUTTON LANGUAGE
+   ----------------------------------------------------------- */
+
+.sellerCenterShell .sellerPrimaryBtn{
+  border-color:#168fd1;
+  color:#ffffff;
+  background:#168fd1;
+}
+
+.sellerCenterShell .sellerPrimaryBtn:hover{
+  background:#087ab6;
+}
+
+.sellerCenterShell .sellerSecondaryBtn{
+  border-color:#bfdce8;
+  color:#087ab6;
+  background:#ffffff;
+}
+
+.sellerCenterShell .sellerSecondaryBtn:hover{
+  background:#eef8fd;
+}
+
+
+/* -----------------------------------------------------------
+   INPUTS
+   ----------------------------------------------------------- */
+
+.sellerCenterShell input,
+.sellerCenterShell textarea,
+.sellerCenterShell select{
+  border-color:#d4e3e9;
+  color:#213843;
+  background:#ffffff;
+}
+
+.sellerCenterShell input:focus,
+.sellerCenterShell textarea:focus,
+.sellerCenterShell select:focus{
+  border-color:#168fd1;
+  outline:none;
+  box-shadow:0 0 0 3px rgba(22,143,209,.08);
+}
+
+
+/* -----------------------------------------------------------
+   STATUS / CARDS
+   ----------------------------------------------------------- */
+
+.sellerCenterShell .sellerStatus{
+  border-color:#d9e6eb;
+  color:#667c87;
+  background:#f7fafb;
+}
+
+.sellerCenterShell .sellerStateBadge,
+.sellerCenterShell .productEditorStatus{
+  border-color:#b9dce9;
+  color:#087ab6;
+  background:#edf8fd;
+}
+
+.sellerCenterShell .productAdvancedCard,
+.sellerCenterShell .sellerOrderMetric,
+.sellerCenterShell .sellerOrderSection{
+  border-color:#dce7ec;
+  background:#ffffff;
+}
+
+
+/* -----------------------------------------------------------
+   LAUNCH GATE
+   ----------------------------------------------------------- */
+
+body.merchLaunchSoon .sellerCenterShell{
+  display:none!important;
+}
+
+
+/* -----------------------------------------------------------
+   MOBILE
+   ----------------------------------------------------------- */
+
+@media(max-width:680px){
+
+  .sellerCenterShell{
+    margin-top:34px;
+    padding:12px;
+    border-radius:15px;
+  }
+
+  .sellerCenterHeader{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:10px;
+    padding:3px 2px 14px;
+  }
+
+  .sellerCenterHeader h2{
+    font-size:27px;
+  }
+
+  .sellerCenterBadge{
+    align-self:flex-start;
+  }
+
+  .sellerCenterNav{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    margin:11px 0 2px;
+    padding-bottom:3px;
+    scrollbar-width:none;
+  }
+
+  .sellerCenterNav::-webkit-scrollbar{
+    display:none;
+  }
+
+  .sellerCenterNav a{
+    flex:0 0 auto;
+    min-height:42px;
+    padding:0 12px;
+    font-size:10px;
+  }
+
+  .sellerCenterNav a span{
+    width:22px;
+    height:22px;
+  }
+
+  .sellerCenterShell > .section{
+    margin-top:12px;
+  }
+
+  .sellerCenterShell .sellerOnboarding{
+    border-radius:13px;
+  }
+}
+
+</style>
+
 </head>
 
 <body class="merchLaunchSoon">
@@ -6610,6 +6904,52 @@ body.merchLaunchSoon .marketHeroMark img{
       </section>
     </section>
 
+    <section class="sellerCenterShell" id="sellerCenter">
+      <div class="sellerCenterHeader">
+        <div>
+          <div class="sectionKicker">
+            MONOLITH COMMERCE
+          </div>
+
+          <h2>
+            Seller Center
+          </h2>
+
+          <p>
+            Manage your storefront, merchandise, shipping and XRP orders.
+          </p>
+        </div>
+
+        <div class="sellerCenterBadge">
+          MONOLITH SELLER
+        </div>
+      </div>
+
+      <nav
+        class="sellerCenterNav"
+        aria-label="Seller Center"
+      >
+        <a href="#sellers">
+          <span>01</span>
+          Setup
+        </a>
+
+        <a href="#sellerProducts">
+          <span>02</span>
+          Products
+        </a>
+
+        <a href="#sellerShipping">
+          <span>03</span>
+          Shipping
+        </a>
+
+        <a href="#sellerOrders">
+          <span>04</span>
+          Orders
+        </a>
+      </nav>
+
     <section
       class="section"
       id="sellers"
@@ -6836,7 +7176,7 @@ body.merchLaunchSoon .marketHeroMark img{
       <div class="productManagerHead">
         <div>
           <div class="sectionKicker">
-            SELLER DASHBOARD
+            SELLER CENTER
           </div>
 
           <h2>
@@ -7323,7 +7663,7 @@ body.merchLaunchSoon .marketHeroMark img{
       <div class="shippingManagerHead">
         <div>
           <div class="sectionKicker">
-            SELLER DASHBOARD
+            SELLER CENTER
           </div>
 
           <h2>Shipping</h2>
@@ -7404,7 +7744,7 @@ body.merchLaunchSoon .marketHeroMark img{
       <div class="sellerOrdersHead">
         <div>
           <div class="sectionKicker">
-            SELLER DASHBOARD
+            SELLER CENTER
           </div>
 
           <h2>Orders</h2>
@@ -7459,6 +7799,8 @@ body.merchLaunchSoon .marketHeroMark img{
           </div>
         </div>
       </div>
+    </section>
+
     </section>
 
     <section
