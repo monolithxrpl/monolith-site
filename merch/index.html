@@ -1476,6 +1476,167 @@
       font-size:8px;
     }
 
+    .orderStatusOverlay{
+      position:fixed;
+      inset:0;
+      z-index:1100;
+      overflow:auto;
+      padding:28px;
+      background:rgba(0,0,0,.84);
+      backdrop-filter:blur(10px);
+    }
+
+    .orderStatusOverlay:not([hidden]){
+      display:block;
+    }
+
+    .orderStatusPanel{
+      width:min(760px,100%);
+      margin:0 auto 80px;
+      padding:22px;
+      border:1px solid rgba(75,188,255,.22);
+      background:#080b0d;
+      box-shadow:0 30px 100px rgba(0,0,0,.72);
+    }
+
+    .orderStatusLookup{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:9px;
+      margin:14px 0 10px;
+    }
+
+    .orderStatusLookup label{
+      display:grid;
+      gap:5px;
+    }
+
+    .orderStatusLookup label span{
+      color:#7d8990;
+      font-size:7px;
+      font-weight:900;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+    }
+
+    .orderStatusLookup input{
+      width:100%;
+      min-height:42px;
+      padding:0 11px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:8px;
+      outline:0;
+      color:#e7eef2;
+      background:#11171b;
+      font:inherit;
+      font-size:9px;
+    }
+
+    .orderStatusLookup input:focus{
+      border-color:rgba(75,188,255,.50);
+    }
+
+    .orderStatusResult{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .orderStatusResult[hidden]{
+      display:none;
+    }
+
+    .orderStatusOverview{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+
+    .orderStatusMetric{
+      padding:11px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      background:#0e1417;
+    }
+
+    .orderStatusMetric span{
+      display:block;
+      color:#6f7d85;
+      font-size:7px;
+      font-weight:850;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+    }
+
+    .orderStatusMetric strong{
+      display:block;
+      margin-top:5px;
+      color:#dce5ea;
+      font-size:10px;
+    }
+
+    .orderStatusMetric strong.good{
+      color:#98dfb2;
+    }
+
+    .orderStatusMetric strong.warn{
+      color:#dfc077;
+    }
+
+    .orderStatusItems{
+      display:grid;
+      gap:7px;
+    }
+
+    .orderStatusItem{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      padding:10px;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:8px;
+      background:#0c1114;
+    }
+
+    .orderStatusItem strong{
+      display:block;
+      color:#cfd9de;
+      font-size:9px;
+    }
+
+    .orderStatusItem span{
+      display:block;
+      margin-top:3px;
+      color:#6e7b83;
+      font-size:7px;
+    }
+
+    .orderStatusItemPrice{
+      color:#78d4fb !important;
+      font-size:9px !important;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .orderStatusTotal{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      padding:13px;
+      border:1px solid rgba(210,178,110,.17);
+      border-radius:8px;
+      color:#d5bb78;
+      background:rgba(210,178,110,.035);
+      font-size:10px;
+      font-weight:950;
+    }
+
+    .orderStatusActions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+    }
+
     @media(max-width:760px){
       .checkoutOverlay{
         padding:0;
@@ -3916,11 +4077,12 @@
       <div class="headerActions">
         <button
           class="payBtn"
+          id="orderStatusBtn"
           type="button"
-          title="XRP checkout is being finalized"
+          title="Check a MONOLITH merch order"
         >
-          <span>X</span>
-          Pay with XRP
+          <span>✓</span>
+          Check Order
         </button>
 
         <button
@@ -5305,6 +5467,75 @@
         </section>
       </section>
     </div>
+    <div
+      class="orderStatusOverlay"
+      id="orderStatusOverlay"
+      hidden
+    >
+      <section
+        class="orderStatusPanel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="orderStatusTitle"
+      >
+        <div class="checkoutHead">
+          <div>
+            <div class="sectionKicker">
+              YOUR ORDER
+            </div>
+
+            <h2 id="orderStatusTitle">
+              Check Order
+            </h2>
+          </div>
+
+          <button
+            class="checkoutClose"
+            id="orderStatusCloseBtn"
+            type="button"
+            aria-label="Close order status"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="orderStatusLookup">
+          <label>
+            <span>Order ID</span>
+
+            <input
+              id="orderStatusInput"
+              type="text"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="mercho_..."
+            >
+          </label>
+
+          <button
+            class="sellerPrimaryBtn"
+            id="orderStatusLookupBtn"
+            type="button"
+          >
+            Check Status
+          </button>
+        </div>
+
+        <div
+          class="checkoutStatus sellerStatus"
+          id="orderStatusMessage"
+        >
+          Enter your MONOLITH merch order ID.
+        </div>
+
+        <section
+          class="orderStatusResult"
+          id="orderStatusResult"
+          hidden
+        ></section>
+      </section>
+    </div>
+
   </main>
 
   <script src="/monolith-session.js"></script>
@@ -5336,6 +5567,9 @@
       const CART_STORAGE_VERSION = 1;
       const CART_MAX_AGE_MS =
         7 * 24 * 60 * 60 * 1000;
+
+      const LAST_ORDER_STORAGE_KEY =
+        "monolithMerchLastOrderV1";
 
       let marketplaceProducts = [];
       let activeFilter = "all";
@@ -5474,6 +5708,37 @@
         paidNotice:
           document.getElementById(
             "checkoutPaidNotice"
+          )
+      };
+
+      const orderStatusUi = {
+        button:
+          document.getElementById(
+            "orderStatusBtn"
+          ),
+        overlay:
+          document.getElementById(
+            "orderStatusOverlay"
+          ),
+        close:
+          document.getElementById(
+            "orderStatusCloseBtn"
+          ),
+        input:
+          document.getElementById(
+            "orderStatusInput"
+          ),
+        lookup:
+          document.getElementById(
+            "orderStatusLookupBtn"
+          ),
+        message:
+          document.getElementById(
+            "orderStatusMessage"
+          ),
+        result:
+          document.getElementById(
+            "orderStatusResult"
           )
       };
 
@@ -7334,6 +7599,10 @@
           createdCheckoutOrder =
             data.order;
 
+          rememberOrderId(
+            data.order.orderId
+          );
+
           const purchasedGroup =
             activeCheckoutGroup();
 
@@ -7374,6 +7643,394 @@
           );
         } finally {
           checkoutUi.create.disabled =
+            false;
+        }
+      }
+
+      function validMerchOrderId(
+        value
+      ) {
+        return /^mercho_[a-f0-9]{32}$/.test(
+          String(
+            value || ""
+          ).trim()
+        );
+      }
+
+      function rememberOrderId(
+        orderId
+      ) {
+        if (
+          !validMerchOrderId(
+            orderId
+          )
+        ) {
+          return;
+        }
+
+        try {
+          localStorage.setItem(
+            LAST_ORDER_STORAGE_KEY,
+            orderId
+          );
+        } catch (_) {}
+      }
+
+      function rememberedOrderId() {
+        try {
+          const orderId =
+            localStorage.getItem(
+              LAST_ORDER_STORAGE_KEY
+            ) || "";
+
+          return validMerchOrderId(
+            orderId
+          )
+            ? orderId
+            : "";
+        } catch (_) {
+          return "";
+        }
+      }
+
+      function orderStatusMessage(
+        message,
+        type = ""
+      ) {
+        orderStatusUi.message.textContent =
+          message;
+
+        orderStatusUi.message.className =
+          `checkoutStatus sellerStatus ${type}`.trim();
+      }
+
+      function openOrderStatus(
+        orderId = ""
+      ) {
+        const resolved =
+          validMerchOrderId(orderId)
+            ? orderId
+            : rememberedOrderId();
+
+        orderStatusUi.overlay.hidden =
+          false;
+
+        document.body.style.overflow =
+          "hidden";
+
+        orderStatusUi.result.hidden =
+          true;
+
+        orderStatusUi.input.value =
+          resolved;
+
+        if (resolved) {
+          loadPublicOrderStatus(
+            resolved
+          );
+        } else {
+          orderStatusMessage(
+            "Enter your MONOLITH merch order ID."
+          );
+
+          orderStatusUi.input.focus();
+        }
+      }
+
+      function closeOrderStatus() {
+        orderStatusUi.overlay.hidden =
+          true;
+
+        document.body.style.overflow =
+          "";
+      }
+
+      function orderStateClass(
+        value
+      ) {
+        const text =
+          String(
+            value || ""
+          ).toLowerCase();
+
+        if (
+          [
+            "paid",
+            "fulfilled",
+            "complete",
+            "completed"
+          ].includes(text)
+        ) {
+          return "good";
+        }
+
+        if (
+          [
+            "partial",
+            "pending",
+            "pending_payment",
+            "unpaid"
+          ].includes(text)
+        ) {
+          return "warn";
+        }
+
+        return "";
+      }
+
+      function renderPublicOrderStatus(
+        order
+      ) {
+        const items =
+          Array.isArray(
+            order.items
+          )
+            ? order.items
+            : [];
+
+        orderStatusUi.result.innerHTML = `
+          <div class="orderStatusOverview">
+            <div class="orderStatusMetric">
+              <span>Payment</span>
+              <strong class="${
+                orderStateClass(
+                  order.paymentProgress
+                )
+              }">
+                ${
+                  escapeHtml(
+                    order.paymentProgress ||
+                    order.paymentStatus ||
+                    "Unknown"
+                  )
+                }
+              </strong>
+            </div>
+
+            <div class="orderStatusMetric">
+              <span>Order</span>
+              <strong class="${
+                orderStateClass(
+                  order.status
+                )
+              }">
+                ${
+                  escapeHtml(
+                    order.status ||
+                    "Unknown"
+                  )
+                }
+              </strong>
+            </div>
+
+            <div class="orderStatusMetric">
+              <span>Fulfillment</span>
+              <strong class="${
+                orderStateClass(
+                  order.fulfillmentStatus
+                )
+              }">
+                ${
+                  escapeHtml(
+                    order.fulfillmentStatus ||
+                    "Unfulfilled"
+                  )
+                }
+              </strong>
+            </div>
+          </div>
+
+          <section class="checkoutCard">
+            <div class="checkoutCardHead">
+              <strong>
+                ${
+                  escapeHtml(
+                    order.coordinate ||
+                    "MONOLITH"
+                  )
+                }
+              </strong>
+
+              <span>
+                ${escapeHtml(order.orderId)}
+              </span>
+            </div>
+
+            <div class="orderStatusItems">
+              ${
+                items.map(
+                  item => `
+                    <div class="orderStatusItem">
+                      <div>
+                        <strong>
+                          ${
+                            escapeHtml(
+                              item.productTitle ||
+                              "Merchandise"
+                            )
+                          }
+                        </strong>
+
+                        <span>
+                          ${
+                            item.variantTitle
+                              ? `${escapeHtml(
+                                  item.variantTitle
+                                )} · `
+                              : ""
+                          }
+                          Qty ${
+                            escapeHtml(
+                              item.quantity
+                            )
+                          }
+                        </span>
+                      </div>
+
+                      <span class="orderStatusItemPrice">
+                        ${
+                          escapeHtml(
+                            item.lineTotalXrp
+                          )
+                        } XRP
+                      </span>
+                    </div>
+                  `
+                ).join("")
+              }
+            </div>
+          </section>
+
+          <div class="orderStatusTotal">
+            <span>Total</span>
+            <strong>
+              ${
+                escapeHtml(
+                  order.totalXrp
+                )
+              } XRP
+            </strong>
+          </div>
+
+          <div class="orderStatusActions">
+            <button
+              class="sellerSecondaryBtn"
+              id="refreshOrderStatusBtn"
+              type="button"
+            >
+              Refresh Status
+            </button>
+          </div>
+        `;
+
+        orderStatusUi.result.hidden =
+          false;
+
+        document
+          .getElementById(
+            "refreshOrderStatusBtn"
+          )
+          ?.addEventListener(
+            "click",
+            () =>
+              loadPublicOrderStatus(
+                order.orderId
+              )
+          );
+      }
+
+      async function loadPublicOrderStatus(
+        orderIdValue = ""
+      ) {
+        const orderId =
+          String(
+            orderIdValue ||
+            orderStatusUi.input.value ||
+            ""
+          ).trim();
+
+        if (
+          !validMerchOrderId(
+            orderId
+          )
+        ) {
+          orderStatusUi.result.hidden =
+            true;
+
+          orderStatusMessage(
+            "Enter a valid MONOLITH merch order ID.",
+            "error"
+          );
+
+          return;
+        }
+
+        orderStatusUi.lookup.disabled =
+          true;
+
+        orderStatusMessage(
+          "Checking your order…"
+        );
+
+        try {
+          const response =
+            await fetch(
+              `/api/merch/order/${
+                encodeURIComponent(
+                  orderId
+                )
+              }/status`
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (
+            !response.ok ||
+            !data.ok ||
+            !data.order
+          ) {
+            throw new Error(
+              data.error ||
+              data.code ||
+              "order_status_failed"
+            );
+          }
+
+          rememberOrderId(
+            data.order.orderId
+          );
+
+          orderStatusUi.input.value =
+            data.order.orderId;
+
+          renderPublicOrderStatus(
+            data.order
+          );
+
+          orderStatusMessage(
+            data.order.paymentProgress ===
+              "paid"
+              ? "Payment confirmed on the XRP Ledger."
+              : "Order status loaded.",
+            data.order.paymentProgress ===
+              "paid"
+              ? "success"
+              : ""
+          );
+        } catch (error) {
+          orderStatusUi.result.hidden =
+            true;
+
+          orderStatusMessage(
+            error.message ||
+            "Unable to load order status.",
+            "error"
+          );
+        } finally {
+          orderStatusUi.lookup.disabled =
             false;
         }
       }
@@ -11811,6 +12468,51 @@
           }
         );
 
+      orderStatusUi.button
+        ?.addEventListener(
+          "click",
+          () =>
+            openOrderStatus()
+        );
+
+      orderStatusUi.close
+        ?.addEventListener(
+          "click",
+          closeOrderStatus
+        );
+
+      orderStatusUi.lookup
+        ?.addEventListener(
+          "click",
+          () =>
+            loadPublicOrderStatus()
+        );
+
+      orderStatusUi.input
+        ?.addEventListener(
+          "keydown",
+          event => {
+            if (
+              event.key === "Enter"
+            ) {
+              loadPublicOrderStatus();
+            }
+          }
+        );
+
+      orderStatusUi.overlay
+        ?.addEventListener(
+          "click",
+          event => {
+            if (
+              event.target ===
+              orderStatusUi.overlay
+            ) {
+              closeOrderStatus();
+            }
+          }
+        );
+
       checkoutUi.button
         ?.addEventListener(
           "click",
@@ -11929,6 +12631,22 @@
       restoreCart();
       updateCart(false);
       loadMarketplace();
+
+      const requestedOrderId =
+        String(
+          params.get("order") ||
+          ""
+        ).trim();
+
+      if (
+        validMerchOrderId(
+          requestedOrderId
+        )
+      ) {
+        openOrderStatus(
+          requestedOrderId
+        );
+      }
     })();
   </script>
 </body>
