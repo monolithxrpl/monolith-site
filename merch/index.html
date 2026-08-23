@@ -7473,7 +7473,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
               type="button"
               hidden
             >
-              Start Seller Verification
+              Start Identity Verification
             </button>
 
             <a
@@ -7484,7 +7484,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
               rel="noopener"
               hidden
             >
-              Pay 10 XRP in Xaman
+              Pay in XRP with Xaman
             </a>
 
             <button
@@ -12139,7 +12139,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
           false;
 
         sellerMessage(
-          "Complete the 10 XRP seller verification payment in Xaman, then verify the payment here."
+          "Complete the $1.50 USD-equivalent identity verification cost in XRP through Xaman, then verify the payment here."
         );
       }
 
@@ -12372,7 +12372,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
               true;
 
             sellerMessage(
-              "Creating seller verification payment…"
+              "Creating your $1.50 identity verification XRP quote…"
             );
 
             try {
@@ -12395,11 +12395,28 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
               const payment =
                 data.payment || {};
 
+              const quotedXrp =
+                String(
+                  payment.amountXrp ||
+                  ""
+                ).trim();
+
+              const quotedUsd =
+                Number(
+                  payment.usdCents ||
+                  150
+                ) / 100;
+
               sellerUi.openFeeXaman.href =
                 payment.signUrl || "#";
 
               sellerUi.openFeeXaman.hidden =
                 !payment.signUrl;
+
+              sellerUi.openFeeXaman.textContent =
+                quotedXrp
+                  ? `Pay ${quotedXrp} XRP in Xaman`
+                  : "Pay in XRP with Xaman";
 
               sellerUi.verifyFee.hidden =
                 false;
@@ -12413,7 +12430,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
               );
 
               sellerMessage(
-                "Pay 10 XRP in Xaman, then return here and verify the payment."
+                quotedXrp
+                  ? `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent. Pay ${quotedXrp} XRP in Xaman at the quoted rate, then return here and verify the payment.`
+                  : `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent, paid in XRP through Xaman. Complete the payment, then return here and verify it.`
               );
 
               if (payment.signUrl) {
@@ -12446,7 +12465,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
               true;
 
             sellerMessage(
-              "Verifying seller payment on XRPL…"
+              "Verifying identity verification payment on XRPL…"
             );
 
             try {
@@ -12476,14 +12495,14 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
               );
 
               sellerMessage(
-                "Payment verified. Complete identity verification to activate your seller account.",
+                "Identity verification cost confirmed on XRPL. Complete Stripe identity verification to activate your seller account.",
                 "success"
               );
             } catch (error) {
               sellerMessage(
                 error.code ===
                   "MERCH_VERIFICATION_FEE_NOT_SIGNED"
-                  ? "The 10 XRP payment has not been completed in Xaman yet."
+                  ? "The identity verification payment has not been completed in Xaman yet."
                   : error.message ||
                     "Unable to verify seller payment.",
                 "error"
