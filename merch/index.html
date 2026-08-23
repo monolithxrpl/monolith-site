@@ -959,14 +959,442 @@
     .checkoutBtn{
       min-height:42px;
       padding:0 16px;
-      border:1px solid #4e4e4e;
-      color:#858585;
-      background:#111;
+      border:1px solid rgba(75,188,255,.45);
+      color:#06131a;
+      background:#68cdfb;
       font-size:9px;
       font-weight:950;
       letter-spacing:.08em;
       text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .checkoutBtn:disabled{
+      border-color:#4e4e4e;
+      color:#858585;
+      background:#111;
       cursor:not-allowed;
+      opacity:.55;
+    }
+
+    .checkoutOverlay{
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      overflow:auto;
+      padding:28px;
+      background:rgba(0,0,0,.82);
+      backdrop-filter:blur(10px);
+    }
+
+    .checkoutOverlay:not([hidden]){
+      display:block;
+    }
+
+    .checkoutPanel{
+      width:min(980px,100%);
+      margin:0 auto 80px;
+      padding:22px;
+      border:1px solid rgba(75,188,255,.22);
+      background:#080b0d;
+      box-shadow:0 30px 100px rgba(0,0,0,.72);
+    }
+
+    .checkoutHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:14px;
+    }
+
+    .checkoutHead h2{
+      margin:4px 0 0;
+      font-size:30px;
+      letter-spacing:-.04em;
+    }
+
+    .checkoutClose{
+      display:grid;
+      width:38px;
+      height:38px;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:50%;
+      color:#aab5bb;
+      background:#101519;
+      font-size:22px;
+      cursor:pointer;
+    }
+
+    .checkoutSellerPicker{
+      margin:12px 0;
+      padding:14px;
+      border:1px solid rgba(210,178,110,.18);
+      border-radius:9px;
+      background:rgba(210,178,110,.035);
+    }
+
+    .checkoutSellerPicker strong{
+      color:#dec47f;
+      font-size:10px;
+    }
+
+    .checkoutSellerPicker p{
+      margin:3px 0 10px;
+      color:#817866;
+      font-size:8px;
+    }
+
+    .checkoutSellerChoices{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+    }
+
+    .checkoutSellerChoice{
+      min-height:34px;
+      padding:0 11px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      color:#9ba7ad;
+      background:#101519;
+      font-size:8px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .checkoutSellerChoice.active{
+      border-color:#68cdfb;
+      color:#07141b;
+      background:#68cdfb;
+    }
+
+    .checkoutItems{
+      display:grid;
+      gap:8px;
+      margin:12px 0;
+    }
+
+    .checkoutItem{
+      display:grid;
+      grid-template-columns:58px 1fr auto;
+      gap:12px;
+      align-items:center;
+      padding:10px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:9px;
+      background:#0d1215;
+    }
+
+    .checkoutItemImage{
+      width:58px;
+      height:58px;
+      overflow:hidden;
+      border-radius:8px;
+      background:#14191c;
+    }
+
+    .checkoutItemImage img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .checkoutItemCopy{
+      min-width:0;
+    }
+
+    .checkoutItemCopy strong{
+      display:block;
+      color:#e1e8ec;
+      font-size:10px;
+    }
+
+    .checkoutItemCopy span{
+      display:block;
+      margin-top:3px;
+      color:#74818a;
+      font-size:8px;
+    }
+
+    .checkoutVariantSelect{
+      width:100%;
+      max-width:280px;
+      min-height:34px;
+      margin-top:7px;
+      padding:0 9px;
+      border:1px solid rgba(75,188,255,.16);
+      border-radius:7px;
+      color:#dfe8ed;
+      background:#11171b;
+      font:inherit;
+      font-size:9px;
+    }
+
+    .checkoutQty{
+      display:flex;
+      align-items:center;
+      gap:7px;
+    }
+
+    .checkoutQty button{
+      display:grid;
+      width:28px;
+      height:28px;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:6px;
+      color:#c0cbd1;
+      background:#11171b;
+      cursor:pointer;
+    }
+
+    .checkoutQty span{
+      min-width:24px;
+      color:#e5edf1;
+      font-size:10px;
+      font-weight:900;
+      text-align:center;
+    }
+
+    .checkoutColumns{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .checkoutCard{
+      padding:15px;
+      border:1px solid rgba(75,188,255,.11);
+      border-radius:9px;
+      background:#0c1114;
+    }
+
+    .checkoutCardHead{
+      display:grid;
+      gap:3px;
+      margin-bottom:12px;
+    }
+
+    .checkoutCardHead strong{
+      color:#dce6eb;
+      font-size:11px;
+    }
+
+    .checkoutCardHead span{
+      color:#718089;
+      font-size:8px;
+    }
+
+    .checkoutFields{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+    }
+
+    .checkoutFields label{
+      display:grid;
+      gap:5px;
+    }
+
+    .checkoutFields label span{
+      color:#7e8b92;
+      font-size:7px;
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .checkoutFields em{
+      color:#66737a;
+      font-style:normal;
+      font-weight:700;
+    }
+
+    .checkoutFields input{
+      width:100%;
+      min-height:40px;
+      padding:0 10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:8px;
+      outline:0;
+      color:#edf3f6;
+      background:#11171b;
+      font:inherit;
+      font-size:10px;
+    }
+
+    .checkoutFields input:focus{
+      border-color:rgba(75,188,255,.50);
+    }
+
+    .checkoutWide{
+      grid-column:1/-1;
+    }
+
+    .checkoutQuoteBtn{
+      margin-top:10px;
+    }
+
+    .checkoutRates{
+      display:grid;
+      gap:7px;
+      margin-top:10px;
+    }
+
+    .checkoutRate{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:9px;
+      align-items:center;
+      padding:10px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:8px;
+      background:#0f1518;
+      cursor:pointer;
+    }
+
+    .checkoutRate input{
+      accent-color:#68cdfb;
+    }
+
+    .checkoutRate strong{
+      display:block;
+      color:#cbd7dd;
+      font-size:9px;
+    }
+
+    .checkoutRate span{
+      display:block;
+      margin-top:2px;
+      color:#718089;
+      font-size:7px;
+    }
+
+    .checkoutRatePrice{
+      color:#78d4fb !important;
+      font-size:9px !important;
+      font-weight:950;
+    }
+
+    .checkoutSummary{
+      display:grid;
+      gap:8px;
+      margin-top:12px;
+      padding:14px;
+      border:1px solid rgba(210,178,110,.16);
+      border-radius:9px;
+      background:rgba(210,178,110,.025);
+    }
+
+    .checkoutSummary > div{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      color:#849198;
+      font-size:9px;
+    }
+
+    .checkoutSummary strong{
+      color:#d7e1e6;
+    }
+
+    .checkoutGrandTotal{
+      padding-top:9px;
+      border-top:1px solid rgba(255,255,255,.07);
+      color:#d5bb78 !important;
+      font-size:11px !important;
+      font-weight:950;
+    }
+
+    .checkoutGrandTotal strong{
+      color:#d8bd79;
+    }
+
+    .checkoutActions{
+      display:flex;
+      justify-content:flex-end;
+      gap:9px;
+      margin-top:14px;
+    }
+
+    .checkoutConfirmation{
+      grid-template-columns:42px 1fr;
+      gap:12px;
+      align-items:start;
+      margin-top:14px;
+      padding:14px;
+      border:1px solid rgba(105,216,155,.25);
+      border-radius:9px;
+      background:rgba(105,216,155,.05);
+    }
+
+    .checkoutConfirmation:not([hidden]){
+      display:grid;
+    }
+
+    .checkoutConfirmation > span{
+      display:grid;
+      width:38px;
+      height:38px;
+      place-items:center;
+      border-radius:50%;
+      color:#07170f;
+      background:#72dba0;
+      font-weight:1000;
+    }
+
+    .checkoutConfirmation strong{
+      color:#b9e8c9;
+      font-size:11px;
+    }
+
+    .checkoutConfirmation p{
+      margin:4px 0 6px;
+      color:#839b8b;
+      font-size:9px;
+      line-height:1.5;
+    }
+
+    .checkoutConfirmation code{
+      color:#72dba0;
+      font-size:8px;
+      word-break:break-all;
+    }
+
+    @media(max-width:760px){
+      .checkoutOverlay{
+        padding:0;
+      }
+
+      .checkoutPanel{
+        min-height:100vh;
+        margin:0;
+        border:0;
+      }
+
+      .checkoutColumns,
+      .checkoutFields{
+        grid-template-columns:1fr;
+      }
+
+      .checkoutWide{
+        grid-column:auto;
+      }
+
+      .checkoutItem{
+        grid-template-columns:50px 1fr;
+      }
+
+      .checkoutQty{
+        grid-column:2;
+      }
+
+      .checkoutActions{
+        display:grid;
+      }
     }
 
 
@@ -4450,11 +4878,285 @@
 
       <button
         class="checkoutBtn"
+        id="checkoutBtn"
         type="button"
         disabled
       >
-        Checkout Finalizing
+        Checkout
       </button>
+    </div>
+
+    <div
+      class="checkoutOverlay"
+      id="checkoutOverlay"
+      hidden
+    >
+      <section
+        class="checkoutPanel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="checkoutTitle"
+      >
+        <div class="checkoutHead">
+          <div>
+            <div class="sectionKicker">
+              XRP CHECKOUT
+            </div>
+
+            <h2 id="checkoutTitle">
+              Review Order
+            </h2>
+          </div>
+
+          <button
+            class="checkoutClose"
+            id="checkoutCloseBtn"
+            type="button"
+            aria-label="Close checkout"
+          >
+            ×
+          </button>
+        </div>
+
+        <div
+          class="checkoutStatus sellerStatus"
+          id="checkoutStatus"
+        >
+          Review your cart before creating the order.
+        </div>
+
+        <div
+          class="checkoutSellerPicker"
+          id="checkoutSellerPicker"
+          hidden
+        >
+          <strong>
+            Checkout by Store
+          </strong>
+
+          <p>
+            MONOLITH orders are settled with one seller at a time.
+          </p>
+
+          <div
+            class="checkoutSellerChoices"
+            id="checkoutSellerChoices"
+          ></div>
+        </div>
+
+        <div
+          class="checkoutItems"
+          id="checkoutItems"
+        ></div>
+
+        <div class="checkoutColumns">
+          <section class="checkoutCard">
+            <div class="checkoutCardHead">
+              <strong>Contact</strong>
+              <span>
+                Used for this order only.
+              </span>
+            </div>
+
+            <div class="checkoutFields">
+              <label>
+                <span>Name</span>
+                <input
+                  id="checkoutBuyerName"
+                  type="text"
+                  maxlength="160"
+                  autocomplete="name"
+                  placeholder="Your name"
+                >
+              </label>
+
+              <label>
+                <span>Email</span>
+                <input
+                  id="checkoutBuyerEmail"
+                  type="email"
+                  maxlength="320"
+                  autocomplete="email"
+                  placeholder="you@example.com"
+                >
+              </label>
+
+              <label class="checkoutWide">
+                <span>XRP Wallet <em>Optional</em></span>
+                <input
+                  id="checkoutBuyerWallet"
+                  type="text"
+                  autocomplete="off"
+                  placeholder="r..."
+                >
+              </label>
+            </div>
+          </section>
+
+          <section
+            class="checkoutCard"
+            id="checkoutShippingCard"
+          >
+            <div class="checkoutCardHead">
+              <strong>Shipping Address</strong>
+              <span>
+                Physical merchandise ships to this address.
+              </span>
+            </div>
+
+            <div class="checkoutFields">
+              <label class="checkoutWide">
+                <span>Recipient Name</span>
+                <input
+                  id="checkoutShippingName"
+                  type="text"
+                  maxlength="160"
+                  autocomplete="shipping name"
+                  placeholder="Full name"
+                >
+              </label>
+
+              <label class="checkoutWide">
+                <span>Address</span>
+                <input
+                  id="checkoutAddress1"
+                  type="text"
+                  maxlength="240"
+                  autocomplete="shipping address-line1"
+                  placeholder="Street address"
+                >
+              </label>
+
+              <label class="checkoutWide">
+                <span>Address 2 <em>Optional</em></span>
+                <input
+                  id="checkoutAddress2"
+                  type="text"
+                  maxlength="240"
+                  autocomplete="shipping address-line2"
+                  placeholder="Apartment, suite, unit"
+                >
+              </label>
+
+              <label>
+                <span>City</span>
+                <input
+                  id="checkoutCity"
+                  type="text"
+                  maxlength="160"
+                  autocomplete="shipping address-level2"
+                  placeholder="City"
+                >
+              </label>
+
+              <label>
+                <span>State / Region</span>
+                <input
+                  id="checkoutRegion"
+                  type="text"
+                  maxlength="160"
+                  autocomplete="shipping address-level1"
+                  placeholder="State or region"
+                >
+              </label>
+
+              <label>
+                <span>Postal Code</span>
+                <input
+                  id="checkoutPostal"
+                  type="text"
+                  maxlength="60"
+                  autocomplete="shipping postal-code"
+                  placeholder="Postal code"
+                >
+              </label>
+
+              <label>
+                <span>Country Code</span>
+                <input
+                  id="checkoutCountry"
+                  type="text"
+                  maxlength="2"
+                  autocomplete="shipping country"
+                  placeholder="US"
+                >
+              </label>
+            </div>
+
+            <button
+              class="sellerSecondaryBtn checkoutQuoteBtn"
+              id="checkoutQuoteBtn"
+              type="button"
+            >
+              Get Shipping Rates
+            </button>
+
+            <div
+              class="checkoutRates"
+              id="checkoutRates"
+            ></div>
+          </section>
+        </div>
+
+        <section class="checkoutSummary">
+          <div>
+            <span>Merchandise</span>
+            <strong id="checkoutSubtotal">
+              0 XRP
+            </strong>
+          </div>
+
+          <div>
+            <span>Shipping</span>
+            <strong id="checkoutShippingTotal">
+              Select rate
+            </strong>
+          </div>
+
+          <div class="checkoutGrandTotal">
+            <span>Order Total</span>
+            <strong id="checkoutGrandTotal">
+              0 XRP
+            </strong>
+          </div>
+        </section>
+
+        <div class="checkoutActions">
+          <button
+            class="sellerSecondaryBtn"
+            id="checkoutCancelBtn"
+            type="button"
+          >
+            Back to Marketplace
+          </button>
+
+          <button
+            class="sellerPrimaryBtn"
+            id="checkoutCreateOrderBtn"
+            type="button"
+          >
+            Create Order
+          </button>
+        </div>
+
+        <section
+          class="checkoutConfirmation"
+          id="checkoutConfirmation"
+          hidden
+        >
+          <span>✓</span>
+
+          <div>
+            <strong>
+              Order Created
+            </strong>
+
+            <p id="checkoutConfirmationText"></p>
+
+            <code id="checkoutOrderId"></code>
+          </div>
+        </section>
+      </section>
     </div>
   </main>
 
@@ -4491,6 +5193,125 @@
       let marketplaceProducts = [];
       let activeFilter = "all";
       let searchTerm = "";
+      let checkoutSellerId = "";
+      let checkoutShippingQuote = null;
+      let checkoutShippingRateId = "";
+      let createdCheckoutOrder = null;
+
+      const checkoutUi = {
+        button:
+          document.getElementById(
+            "checkoutBtn"
+          ),
+        overlay:
+          document.getElementById(
+            "checkoutOverlay"
+          ),
+        close:
+          document.getElementById(
+            "checkoutCloseBtn"
+          ),
+        cancel:
+          document.getElementById(
+            "checkoutCancelBtn"
+          ),
+        status:
+          document.getElementById(
+            "checkoutStatus"
+          ),
+        sellerPicker:
+          document.getElementById(
+            "checkoutSellerPicker"
+          ),
+        sellerChoices:
+          document.getElementById(
+            "checkoutSellerChoices"
+          ),
+        items:
+          document.getElementById(
+            "checkoutItems"
+          ),
+        buyerName:
+          document.getElementById(
+            "checkoutBuyerName"
+          ),
+        buyerEmail:
+          document.getElementById(
+            "checkoutBuyerEmail"
+          ),
+        buyerWallet:
+          document.getElementById(
+            "checkoutBuyerWallet"
+          ),
+        shippingCard:
+          document.getElementById(
+            "checkoutShippingCard"
+          ),
+        shippingName:
+          document.getElementById(
+            "checkoutShippingName"
+          ),
+        address1:
+          document.getElementById(
+            "checkoutAddress1"
+          ),
+        address2:
+          document.getElementById(
+            "checkoutAddress2"
+          ),
+        city:
+          document.getElementById(
+            "checkoutCity"
+          ),
+        region:
+          document.getElementById(
+            "checkoutRegion"
+          ),
+        postal:
+          document.getElementById(
+            "checkoutPostal"
+          ),
+        country:
+          document.getElementById(
+            "checkoutCountry"
+          ),
+        quote:
+          document.getElementById(
+            "checkoutQuoteBtn"
+          ),
+        rates:
+          document.getElementById(
+            "checkoutRates"
+          ),
+        subtotal:
+          document.getElementById(
+            "checkoutSubtotal"
+          ),
+        shippingTotal:
+          document.getElementById(
+            "checkoutShippingTotal"
+          ),
+        grandTotal:
+          document.getElementById(
+            "checkoutGrandTotal"
+          ),
+        create:
+          document.getElementById(
+            "checkoutCreateOrderBtn"
+          ),
+        confirmation:
+          document.getElementById(
+            "checkoutConfirmation"
+          ),
+        confirmationText:
+          document.getElementById(
+            "checkoutConfirmationText"
+          ),
+        orderId:
+          document.getElementById(
+            "checkoutOrderId"
+          )
+      };
 
       function escapeHtml(value) {
         return String(
@@ -4546,6 +5367,8 @@
                   item => ({
                     product:
                       item.product,
+                    variantId:
+                      item.variantId || null,
                     quantity:
                       Math.max(
                         1,
@@ -4634,6 +5457,8 @@
 
             cart.push({
               product,
+              variantId:
+                item.variantId || null,
               quantity
             });
           }
@@ -4749,6 +5574,16 @@
             count > 0
           );
 
+        const checkoutButton =
+          document.getElementById(
+            "checkoutBtn"
+          );
+
+        if (checkoutButton) {
+          checkoutButton.disabled =
+            count === 0;
+        }
+
         if (persist) {
           saveCart();
         }
@@ -4767,11 +5602,1140 @@
         } else {
           cart.push({
             product,
+            variantId:null,
             quantity:1
           });
         }
 
         updateCart();
+      }
+
+      function checkoutMessage(
+        message,
+        type = ""
+      ) {
+        checkoutUi.status.textContent =
+          message;
+
+        checkoutUi.status.className =
+          `checkoutStatus sellerStatus ${type}`.trim();
+      }
+
+      function cartSellerId(item) {
+        return String(
+          item?.product?.sellerId ||
+          item?.product?.coordinate ||
+          ""
+        );
+      }
+
+      function checkoutSellerGroups() {
+        const groups =
+          new Map();
+
+        for (const item of cart) {
+          const key =
+            cartSellerId(item);
+
+          if (!key) continue;
+
+          if (!groups.has(key)) {
+            groups.set(
+              key,
+              {
+                sellerId:key,
+                coordinate:
+                  item.product.coordinate ||
+                  "",
+                name:
+                  item.product.vendor ||
+                  item.product.coordinate ||
+                  "MONOLITH Seller",
+                items:[]
+              }
+            );
+          }
+
+          groups.get(key).items.push(
+            item
+          );
+        }
+
+        return [...groups.values()];
+      }
+
+      function activeCheckoutGroup() {
+        const groups =
+          checkoutSellerGroups();
+
+        if (!groups.length) {
+          return null;
+        }
+
+        let group =
+          groups.find(
+            item =>
+              item.sellerId ===
+              checkoutSellerId
+          );
+
+        if (!group) {
+          group = groups[0];
+          checkoutSellerId =
+            group.sellerId;
+        }
+
+        return group;
+      }
+
+      function selectedVariant(
+        item
+      ) {
+        const variants =
+          Array.isArray(
+            item.product.variants
+          )
+            ? item.product.variants
+            : [];
+
+        if (!variants.length) {
+          return null;
+        }
+
+        return variants.find(
+          variant =>
+            variant.variantId ===
+            item.variantId
+        ) || null;
+      }
+
+      function checkoutItemPrice(
+        item
+      ) {
+        const variant =
+          selectedVariant(item);
+
+        return Number(
+          variant
+            ? variant.priceXrp
+            : item.product.priceXrp ||
+              0
+        );
+      }
+
+      function checkoutSubtotalValue() {
+        const group =
+          activeCheckoutGroup();
+
+        if (!group) return 0;
+
+        return group.items.reduce(
+          (sum,item) =>
+            sum +
+            checkoutItemPrice(item) *
+            item.quantity,
+          0
+        );
+      }
+
+      function checkoutRequiresShipping() {
+        const group =
+          activeCheckoutGroup();
+
+        if (!group) return false;
+
+        return group.items.some(
+          item => {
+            const variant =
+              selectedVariant(item);
+
+            if (variant) {
+              return (
+                variant.requiresShipping !==
+                false
+              );
+            }
+
+            return (
+              item.product.requiresShipping !==
+              false
+            );
+          }
+        );
+      }
+
+      function resetCheckoutShipping() {
+        checkoutShippingQuote = null;
+        checkoutShippingRateId = "";
+        checkoutUi.rates.innerHTML = "";
+
+        checkoutUi.shippingTotal.textContent =
+          checkoutRequiresShipping()
+            ? "Select rate"
+            : "0 XRP";
+
+        renderCheckoutTotals();
+      }
+
+      function renderCheckoutTotals() {
+        const subtotal =
+          checkoutShippingQuote
+            ?.subtotalXrp != null
+              ? Number(
+                  checkoutShippingQuote
+                    .subtotalXrp
+                )
+              : checkoutSubtotalValue();
+
+        const rate =
+          checkoutShippingQuote &&
+          Array.isArray(
+            checkoutShippingQuote
+              .shippingRates
+          )
+            ? checkoutShippingQuote
+                .shippingRates
+                .find(
+                  item =>
+                    item.shippingRateId ===
+                    checkoutShippingRateId
+                )
+            : null;
+
+        checkoutUi.subtotal.textContent =
+          `${subtotal.toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits:6
+            }
+          )} XRP`;
+
+        checkoutUi.shippingTotal.textContent =
+          checkoutRequiresShipping()
+            ? (
+                rate
+                  ? `${Number(
+                      rate.shippingXrp ||
+                      0
+                    ).toLocaleString(
+                      undefined,
+                      {
+                        maximumFractionDigits:6
+                      }
+                    )} XRP`
+                  : "Select rate"
+              )
+            : "0 XRP";
+
+        const authoritativeTotal =
+          checkoutRequiresShipping()
+            ? (
+                rate?.totalXrp != null
+                  ? Number(
+                      rate.totalXrp
+                    )
+                  : null
+              )
+            : (
+                checkoutShippingQuote
+                  ?.totalXrp != null
+                  ? Number(
+                      checkoutShippingQuote
+                        .totalXrp
+                    )
+                  : null
+              );
+
+        checkoutUi.grandTotal.textContent =
+          authoritativeTotal != null
+            ? `${authoritativeTotal.toLocaleString(
+                undefined,
+                {
+                  maximumFractionDigits:6
+                }
+              )} XRP`
+            : "Calculating…";
+      }
+
+      function renderCheckoutSellerPicker() {
+        const groups =
+          checkoutSellerGroups();
+
+        checkoutUi.sellerPicker.hidden =
+          groups.length <= 1;
+
+        checkoutUi.sellerChoices.innerHTML =
+          groups.map(
+            group => `
+              <button
+                class="checkoutSellerChoice ${
+                  group.sellerId ===
+                  checkoutSellerId
+                    ? "active"
+                    : ""
+                }"
+                type="button"
+                data-checkout-seller="${
+                  escapeHtml(
+                    group.sellerId
+                  )
+                }"
+              >
+                ${escapeHtml(group.name)}
+                · ${group.items.reduce(
+                  (sum,item) =>
+                    sum +
+                    item.quantity,
+                  0
+                )} item${
+                  group.items.reduce(
+                    (sum,item) =>
+                      sum +
+                      item.quantity,
+                    0
+                  ) === 1
+                    ? ""
+                    : "s"
+                }
+              </button>
+            `
+          ).join("");
+
+        checkoutUi.sellerChoices
+          .querySelectorAll(
+            "[data-checkout-seller]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => {
+                  checkoutSellerId =
+                    button.dataset
+                      .checkoutSeller;
+
+                  resetCheckoutShipping();
+                  renderCheckout();
+                }
+              );
+            }
+          );
+      }
+
+      function renderCheckoutItems() {
+        const group =
+          activeCheckoutGroup();
+
+        if (!group) {
+          checkoutUi.items.innerHTML =
+            "";
+          return;
+        }
+
+        checkoutUi.items.innerHTML =
+          group.items.map(
+            (item,index) => {
+              const product =
+                item.product;
+
+              const variants =
+                Array.isArray(
+                  product.variants
+                )
+                  ? product.variants.filter(
+                      variant =>
+                        variant.status !==
+                        "archived"
+                    )
+                  : [];
+
+              const image =
+                firstImage(product) ||
+                "/assets/monolith_icon.webp";
+
+              const price =
+                checkoutItemPrice(item);
+
+              return `
+                <article
+                  class="checkoutItem"
+                  data-checkout-index="${index}"
+                >
+                  <div class="checkoutItemImage">
+                    <img
+                      src="${escapeHtml(image)}"
+                      alt=""
+                    >
+                  </div>
+
+                  <div class="checkoutItemCopy">
+                    <strong>
+                      ${escapeHtml(product.title)}
+                    </strong>
+
+                    <span>
+                      ${price.toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits:6
+                        }
+                      )} XRP each
+                    </span>
+
+                    ${
+                      variants.length
+                        ? `
+                          <select
+                            class="checkoutVariantSelect"
+                            data-checkout-variant="${index}"
+                          >
+                            <option value="">
+                              Choose option
+                            </option>
+
+                            ${
+                              variants.map(
+                                variant => {
+                                  const combination =
+                                    Array.isArray(
+                                      variant.optionValues
+                                    )
+                                      ? variant.optionValues
+                                          .map(
+                                            option =>
+                                              option.value
+                                          )
+                                          .join(" / ")
+                                      : "";
+
+                                  const label =
+                                    variant.title ||
+                                    combination ||
+                                    "Variant";
+
+                                  return `
+                                    <option
+                                      value="${
+                                        escapeHtml(
+                                          variant.variantId
+                                        )
+                                      }"
+                                      ${
+                                        item.variantId ===
+                                          variant.variantId
+                                          ? "selected"
+                                          : ""
+                                      }
+                                    >
+                                      ${escapeHtml(label)}
+                                      · ${escapeHtml(variant.priceXrp)} XRP
+                                    </option>
+                                  `;
+                                }
+                              ).join("")
+                            }
+                          </select>
+                        `
+                        : ""
+                    }
+                  </div>
+
+                  <div class="checkoutQty">
+                    <button
+                      type="button"
+                      data-checkout-qty-down="${index}"
+                    >
+                      −
+                    </button>
+
+                    <span>
+                      ${item.quantity}
+                    </span>
+
+                    <button
+                      type="button"
+                      data-checkout-qty-up="${index}"
+                    >
+                      +
+                    </button>
+                  </div>
+                </article>
+              `;
+            }
+          ).join("");
+
+        checkoutUi.items
+          .querySelectorAll(
+            "[data-checkout-variant]"
+          )
+          .forEach(
+            select => {
+              select.addEventListener(
+                "change",
+                () => {
+                  const group =
+                    activeCheckoutGroup();
+
+                  const item =
+                    group?.items[
+                      Number(
+                        select.dataset
+                          .checkoutVariant
+                      )
+                    ];
+
+                  if (!item) return;
+
+                  item.variantId =
+                    select.value || null;
+
+                  saveCart();
+                  resetCheckoutShipping();
+                  renderCheckout();
+                }
+              );
+            }
+          );
+
+        checkoutUi.items
+          .querySelectorAll(
+            "[data-checkout-qty-down]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => {
+                  const group =
+                    activeCheckoutGroup();
+
+                  const item =
+                    group?.items[
+                      Number(
+                        button.dataset
+                          .checkoutQtyDown
+                      )
+                    ];
+
+                  if (!item) return;
+
+                  if (item.quantity <= 1) {
+                    const cartIndex =
+                      cart.indexOf(item);
+
+                    if (cartIndex >= 0) {
+                      cart.splice(
+                        cartIndex,
+                        1
+                      );
+                    }
+                  } else {
+                    item.quantity -= 1;
+                  }
+
+                  saveCart();
+                  updateCart(false);
+                  resetCheckoutShipping();
+
+                  if (!cart.length) {
+                    closeCheckout();
+                    return;
+                  }
+
+                  renderCheckout();
+                }
+              );
+            }
+          );
+
+        checkoutUi.items
+          .querySelectorAll(
+            "[data-checkout-qty-up]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => {
+                  const group =
+                    activeCheckoutGroup();
+
+                  const item =
+                    group?.items[
+                      Number(
+                        button.dataset
+                          .checkoutQtyUp
+                      )
+                    ];
+
+                  if (!item) return;
+
+                  item.quantity += 1;
+
+                  saveCart();
+                  updateCart(false);
+                  resetCheckoutShipping();
+                  renderCheckout();
+                }
+              );
+            }
+          );
+      }
+
+      function renderCheckout() {
+        const group =
+          activeCheckoutGroup();
+
+        if (!group) {
+          closeCheckout();
+          return;
+        }
+
+        renderCheckoutSellerPicker();
+        renderCheckoutItems();
+
+        checkoutUi.shippingCard.hidden =
+          !checkoutRequiresShipping();
+
+        checkoutUi.confirmation.hidden =
+          true;
+
+        checkoutUi.create.hidden =
+          false;
+
+        renderCheckoutTotals();
+
+        if (
+          !checkoutRequiresShipping() &&
+          !checkoutShippingQuote
+        ) {
+          quoteCheckoutShipping();
+        }
+      }
+
+      function openCheckout() {
+        if (!cart.length) return;
+
+        const groups =
+          checkoutSellerGroups();
+
+        checkoutSellerId =
+          groups[0]?.sellerId || "";
+
+        checkoutShippingQuote = null;
+        checkoutShippingRateId = "";
+        createdCheckoutOrder = null;
+
+        checkoutUi.overlay.hidden =
+          false;
+
+        document.body.style.overflow =
+          "hidden";
+
+        renderCheckout();
+
+        checkoutMessage(
+          groups.length > 1
+            ? "Your cart contains more than one seller. Choose which store to checkout first."
+            : "Review your items and enter your order details."
+        );
+      }
+
+      function closeCheckout() {
+        checkoutUi.overlay.hidden =
+          true;
+
+        document.body.style.overflow =
+          "";
+      }
+
+      function checkoutOrderItems() {
+        const group =
+          activeCheckoutGroup();
+
+        if (!group) {
+          throw new Error(
+            "Your cart is empty."
+          );
+        }
+
+        return group.items.map(
+          item => {
+            const variants =
+              Array.isArray(
+                item.product.variants
+              )
+                ? item.product.variants
+                : [];
+
+            if (
+              variants.length &&
+              !item.variantId
+            ) {
+              throw new Error(
+                `Choose an option for ${item.product.title}.`
+              );
+            }
+
+            return {
+              productId:
+                item.product.productId,
+              variantId:
+                item.variantId || null,
+              quantity:
+                item.quantity
+            };
+          }
+        );
+      }
+
+      async function quoteCheckoutShipping() {
+        let items;
+
+        try {
+          items =
+            checkoutOrderItems();
+        } catch (error) {
+          checkoutMessage(
+            error.message,
+            "error"
+          );
+          return;
+        }
+
+        const requiresShipping =
+          checkoutRequiresShipping();
+
+        const country =
+          String(
+            checkoutUi.country.value ||
+            ""
+          )
+            .trim()
+            .toUpperCase();
+
+        if (
+          requiresShipping &&
+          !/^[A-Z]{2}$/.test(country)
+        ) {
+          checkoutMessage(
+            "Enter a two-letter country code such as US.",
+            "error"
+          );
+          return;
+        }
+
+        checkoutUi.quote.disabled =
+          true;
+
+        checkoutMessage(
+          requiresShipping
+            ? "Checking available shipping rates…"
+            : "Calculating order total…"
+        );
+
+        try {
+          const response =
+            await fetch(
+              "/api/merch/order/shipping-quote",
+              {
+                method:"POST",
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+                body:JSON.stringify(
+                  requiresShipping
+                    ? {
+                        items,
+                        shippingCountry:
+                          country
+                      }
+                    : {
+                        items
+                      }
+                )
+              }
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (
+            !response.ok ||
+            !data.ok
+          ) {
+            throw new Error(
+              data.error ||
+              data.code ||
+              "shipping_quote_failed"
+            );
+          }
+
+          checkoutShippingQuote =
+            data.quote;
+
+          checkoutShippingRateId = "";
+
+          const rates =
+            Array.isArray(
+              data.quote
+                ?.shippingRates
+            )
+              ? data.quote.shippingRates
+              : [];
+
+          if (
+            data.quote
+              ?.requiresShipping === false
+          ) {
+            checkoutUi.rates.innerHTML =
+              "";
+
+            checkoutMessage(
+              "Order total calculated.",
+              "success"
+            );
+
+            renderCheckoutTotals();
+            return;
+          }
+
+          if (!rates.length) {
+            checkoutUi.rates.innerHTML = `
+              <div class="productAdvancedNotice">
+                No shipping rate is available for this destination.
+              </div>
+            `;
+
+            checkoutMessage(
+              "This seller does not currently have a shipping rate for that destination.",
+              "error"
+            );
+
+            renderCheckoutTotals();
+            return;
+          }
+
+          checkoutUi.rates.innerHTML =
+            rates.map(
+              rate => `
+                <label class="checkoutRate">
+                  <input
+                    type="radio"
+                    name="checkoutShippingRate"
+                    value="${
+                      escapeHtml(
+                        rate.shippingRateId
+                      )
+                    }"
+                  >
+
+                  <div>
+                    <strong>
+                      ${escapeHtml(rate.name)}
+                    </strong>
+
+                    <span>
+                      ${
+                        rate.freeApplied
+                          ? "Free shipping applied"
+                          : "Seller shipping rate"
+                      }
+                    </span>
+                  </div>
+
+                  <span class="checkoutRatePrice">
+                    ${escapeHtml(rate.shippingXrp)} XRP
+                  </span>
+                </label>
+              `
+            ).join("");
+
+          checkoutUi.rates
+            .querySelectorAll(
+              'input[name="checkoutShippingRate"]'
+            )
+            .forEach(
+              input => {
+                input.addEventListener(
+                  "change",
+                  () => {
+                    checkoutShippingRateId =
+                      input.value;
+
+                    renderCheckoutTotals();
+                  }
+                );
+              }
+            );
+
+          checkoutMessage(
+            "Choose a shipping rate, then create the order.",
+            "success"
+          );
+
+          renderCheckoutTotals();
+        } catch (error) {
+          checkoutShippingQuote = null;
+          checkoutShippingRateId = "";
+          checkoutUi.rates.innerHTML = "";
+
+          checkoutMessage(
+            error.message ||
+            "Unable to quote shipping.",
+            "error"
+          );
+
+          renderCheckoutTotals();
+        } finally {
+          checkoutUi.quote.disabled =
+            false;
+        }
+      }
+
+      function checkoutPayload() {
+        const items =
+          checkoutOrderItems();
+
+        const buyerName =
+          String(
+            checkoutUi.buyerName.value ||
+            ""
+          ).trim();
+
+        const buyerEmail =
+          String(
+            checkoutUi.buyerEmail.value ||
+            ""
+          ).trim();
+
+        if (!buyerName) {
+          throw new Error(
+            "Enter your name."
+          );
+        }
+
+        if (!buyerEmail) {
+          throw new Error(
+            "Enter your email address."
+          );
+        }
+
+        const payload = {
+          items,
+          buyerName,
+          buyerEmail,
+          buyerWallet:
+            String(
+              checkoutUi.buyerWallet.value ||
+              ""
+            ).trim()
+        };
+
+        if (checkoutRequiresShipping()) {
+          const shippingName =
+            String(
+              checkoutUi.shippingName
+                .value ||
+              ""
+            ).trim();
+
+          const address1 =
+            String(
+              checkoutUi.address1.value ||
+              ""
+            ).trim();
+
+          const city =
+            String(
+              checkoutUi.city.value ||
+              ""
+            ).trim();
+
+          const postal =
+            String(
+              checkoutUi.postal.value ||
+              ""
+            ).trim();
+
+          const country =
+            String(
+              checkoutUi.country.value ||
+              ""
+            )
+              .trim()
+              .toUpperCase();
+
+          if (
+            !shippingName ||
+            !address1 ||
+            !city ||
+            !postal ||
+            !/^[A-Z]{2}$/.test(country)
+          ) {
+            throw new Error(
+              "Complete the shipping address."
+            );
+          }
+
+          if (!checkoutShippingRateId) {
+            throw new Error(
+              "Choose a shipping rate."
+            );
+          }
+
+          payload.shippingName =
+            shippingName;
+
+          payload.shippingAddress1 =
+            address1;
+
+          payload.shippingAddress2 =
+            String(
+              checkoutUi.address2.value ||
+              ""
+            ).trim();
+
+          payload.shippingCity =
+            city;
+
+          payload.shippingRegion =
+            String(
+              checkoutUi.region.value ||
+              ""
+            ).trim();
+
+          payload.shippingPostalCode =
+            postal;
+
+          payload.shippingCountry =
+            country;
+
+          payload.shippingRateId =
+            checkoutShippingRateId;
+        }
+
+        return payload;
+      }
+
+      async function createCheckoutOrder() {
+        let payload;
+
+        try {
+          payload =
+            checkoutPayload();
+        } catch (error) {
+          checkoutMessage(
+            error.message,
+            "error"
+          );
+          return;
+        }
+
+        checkoutUi.create.disabled =
+          true;
+
+        checkoutMessage(
+          "Creating your MONOLITH order…"
+        );
+
+        try {
+          const response =
+            await fetch(
+              "/api/merch/order",
+              {
+                method:"POST",
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+                body:JSON.stringify(
+                  payload
+                )
+              }
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (
+            !response.ok ||
+            !data.ok ||
+            !data.order
+          ) {
+            throw new Error(
+              data.error ||
+              data.code ||
+              "order_create_failed"
+            );
+          }
+
+          createdCheckoutOrder =
+            data.order;
+
+          const purchasedGroup =
+            activeCheckoutGroup();
+
+          const purchasedItems =
+            new Set(
+              purchasedGroup
+                ? purchasedGroup.items
+                : []
+            );
+
+          for (
+            let index =
+              cart.length - 1;
+            index >= 0;
+            index -= 1
+          ) {
+            if (
+              purchasedItems.has(
+                cart[index]
+              )
+            ) {
+              cart.splice(
+                index,
+                1
+              );
+            }
+          }
+
+          saveCart();
+          updateCart(false);
+
+          checkoutUi.confirmation.hidden =
+            false;
+
+          checkoutUi.create.hidden =
+            true;
+
+          checkoutUi.confirmationText
+            .textContent =
+              `Reserved for payment. Total: ${data.order.totalXrp} XRP.`;
+
+          checkoutUi.orderId.textContent =
+            data.order.orderId;
+
+          checkoutMessage(
+            "Order created successfully. XRP payment is the next step.",
+            "success"
+          );
+        } catch (error) {
+          checkoutMessage(
+            error.message ||
+            "Unable to create order.",
+            "error"
+          );
+        } finally {
+          checkoutUi.create.disabled =
+            false;
+        }
       }
 
       function productCategory(product) {
@@ -9204,6 +11168,69 @@
               productUi.archive.disabled =
                 false;
             }
+          }
+        );
+
+      checkoutUi.button
+        ?.addEventListener(
+          "click",
+          openCheckout
+        );
+
+      checkoutUi.close
+        ?.addEventListener(
+          "click",
+          closeCheckout
+        );
+
+      checkoutUi.cancel
+        ?.addEventListener(
+          "click",
+          closeCheckout
+        );
+
+      checkoutUi.overlay
+        ?.addEventListener(
+          "click",
+          event => {
+            if (
+              event.target ===
+              checkoutUi.overlay
+            ) {
+              closeCheckout();
+            }
+          }
+        );
+
+      checkoutUi.quote
+        ?.addEventListener(
+          "click",
+          quoteCheckoutShipping
+        );
+
+      checkoutUi.create
+        ?.addEventListener(
+          "click",
+          createCheckoutOrder
+        );
+
+      checkoutUi.country
+        ?.addEventListener(
+          "input",
+          () => {
+            checkoutUi.country.value =
+              String(
+                checkoutUi.country.value ||
+                ""
+              )
+                .toUpperCase()
+                .replace(
+                  /[^A-Z]/g,
+                  ""
+                )
+                .slice(0,2);
+
+            resetCheckoutShipping();
           }
         );
 
