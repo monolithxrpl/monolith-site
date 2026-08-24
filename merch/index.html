@@ -5153,10 +5153,12 @@ body.merchLaunchSoon .footerBrand strong{
   }
 
   body.merchLaunchSoon .nav{
+    display:flex!important;
     grid-column:1 / -1;
     order:3;
     justify-content:flex-start;
     gap:22px;
+    width:100%;
     overflow-x:auto;
     padding:0 2px;
     scrollbar-width:none;
@@ -5291,12 +5293,19 @@ body.merchLaunchSoon .footerBrand strong{
   }
 
   body.merchLaunchSoon .nav{
+    display:flex!important;
     grid-column:auto;
     order:initial;
+    justify-content:flex-start;
     gap:18px;
     width:100%;
     overflow-x:auto;
     padding-bottom:2px;
+    scrollbar-width:none;
+  }
+
+  body.merchLaunchSoon .nav::-webkit-scrollbar{
+    display:none;
   }
 
   body.merchLaunchSoon .nav a{
@@ -6578,6 +6587,12 @@ body.merchLaunchSoon .marketHeroMark img{
     border-color .16s ease,
     background .16s ease,
     color .16s ease;
+}
+
+.sellerCenterNav a.active{
+  border-color:#9bd8f4;
+  background:#edf8fd;
+  color:#082c3e;
 }
 
 .sellerCenterNav a:hover{
@@ -15481,6 +15496,101 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           </article>
         `;
       }
+
+      function setSellerCenterTab(
+        target
+      ) {
+        const setup =
+          document.getElementById(
+            "sellers"
+          );
+
+        const shipping =
+          document.getElementById(
+            "sellerShipping"
+          );
+
+        const links =
+          document.querySelectorAll(
+            ".sellerCenterNav a"
+          );
+
+        links.forEach(link => {
+          link.classList.toggle(
+            "active",
+            link.getAttribute("href") ===
+              target
+          );
+        });
+
+        if (target === "#sellerShipping") {
+          if (setup) {
+            setup.hidden = true;
+          }
+
+          if (shipping) {
+            shipping.hidden = false;
+          }
+
+          if (
+            !sellerProfile ||
+            sellerProfile.status !==
+              "verified" ||
+            sellerProfile
+              .verificationStatus !==
+              "verified"
+          ) {
+            renderShippingLockedPreview();
+          }
+
+          shipping?.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+          });
+
+          return;
+        }
+
+        if (shipping) {
+          shipping.hidden = true;
+        }
+
+        if (setup) {
+          setup.hidden = false;
+        }
+
+        setup?.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+      }
+
+      document
+        .querySelectorAll(
+          '.sellerCenterNav a[href="#sellers"], .sellerCenterNav a[href="#sellerShipping"]'
+        )
+        .forEach(link => {
+          link.addEventListener(
+            "click",
+            event => {
+              event.preventDefault();
+
+              setSellerCenterTab(
+                link.getAttribute(
+                  "href"
+                )
+              );
+            }
+          );
+        });
+
+      document
+        .querySelector(
+          '.sellerCenterNav a[href="#sellers"]'
+        )
+        ?.classList.add(
+          "active"
+        );
 
       async function loadSellerShipping() {
         if (
