@@ -3555,6 +3555,114 @@
       cursor:pointer;
     }
 
+    .shippingProfileSettings{
+      display:grid;
+      gap:16px;
+      padding:18px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      background:rgba(75,188,255,.035);
+    }
+
+    .shippingSettingsTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .shippingSettingsTitle strong{
+      font-size:12px;
+    }
+
+    .shippingSettingsTitle span{
+      color:#71808a;
+      font-size:9px;
+    }
+
+    .shippingFieldGrid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .shippingFieldGrid .wide{
+      grid-column:1/-1;
+    }
+
+    .shippingFieldGrid label,
+    .shippingModeBlock > label{
+      display:grid;
+      gap:5px;
+      color:#7f909a;
+      font-size:9px;
+    }
+
+    .shippingFieldGrid input,
+    .shippingModeBlock select{
+      width:100%;
+      min-height:42px;
+      padding:0 11px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:8px;
+      color:#edf3f6;
+      background:#11171b;
+      font:inherit;
+      font-size:10px;
+      outline:0;
+    }
+
+    .shippingModeRow{
+      display:grid;
+      grid-template-columns:minmax(0,220px) 1fr;
+      gap:14px;
+      align-items:end;
+    }
+
+    .shippingCarriers{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .shippingCarrierChoice{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      min-height:42px;
+      padding:0 12px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:8px;
+      background:#11171b;
+      color:#d8e3e9;
+      font-size:10px;
+    }
+
+    .shippingCarrierChoice input{
+      margin:0;
+    }
+
+    .shippingLiveNotice{
+      padding:11px 12px;
+      border:1px solid rgba(75,188,255,.18);
+      border-radius:8px;
+      background:rgba(75,188,255,.05);
+      color:#8fb8cf;
+      font-size:9px;
+      line-height:1.55;
+    }
+
+    .shippingSettingsActions{
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    @media(max-width:760px){
+      .shippingFieldGrid,
+      .shippingModeRow{
+        grid-template-columns:1fr;
+      }
+    }
+
     .shippingProfileBody{
       display:grid;
       gap:10px;
@@ -4707,9 +4815,17 @@ body.merchLaunchSoon .nav a.active::after{
    Operational seller management stays hidden until launch. */
 
 body.merchLaunchSoon #sellerProducts,
-body.merchLaunchSoon #sellerShipping,
 body.merchLaunchSoon #sellerOrders{
   display:none!important;
+}
+
+/* Shipping setup is available during launch preview. */
+body.merchLaunchSoon #sellerShipping:not([hidden]){
+  display:block!important;
+}
+
+body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
+  display:flex!important;
 }
 
 
@@ -7728,6 +7844,45 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
                 <option value="lb">lb</option>
                 <option value="g">g</option>
                 <option value="kg">kg</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Package Length</span>
+              <input
+                id="productPackageLength"
+                type="text"
+                inputmode="decimal"
+                placeholder="e.g. 12"
+              >
+            </label>
+
+            <label>
+              <span>Package Width</span>
+              <input
+                id="productPackageWidth"
+                type="text"
+                inputmode="decimal"
+                placeholder="e.g. 9"
+              >
+            </label>
+
+            <label>
+              <span>Package Height</span>
+              <input
+                id="productPackageHeight"
+                type="text"
+                inputmode="decimal"
+                placeholder="e.g. 3"
+              >
+            </label>
+
+            <label>
+              <span>Dimension Unit</span>
+              <select id="productDimensionUnit">
+                <option value="">None</option>
+                <option value="in">in</option>
+                <option value="cm">cm</option>
               </select>
             </label>
 
@@ -12873,6 +13028,22 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
           document.getElementById(
             "productWeightUnit"
           ),
+        packageLength:
+          document.getElementById(
+            "productPackageLength"
+          ),
+        packageWidth:
+          document.getElementById(
+            "productPackageWidth"
+          ),
+        packageHeight:
+          document.getElementById(
+            "productPackageHeight"
+          ),
+        dimensionUnit:
+          document.getElementById(
+            "productDimensionUnit"
+          ),
         shippingProfile:
           document.getElementById(
             "productShippingProfile"
@@ -14607,6 +14778,164 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
                 </div>
 
                 <div class="shippingProfileBody">
+                  <div class="shippingProfileSettings">
+                    <div class="shippingSettingsTitle">
+                      <strong>Shipping Setup</strong>
+                      <span>
+                        Origin, carrier mode and enabled carriers
+                      </span>
+                    </div>
+
+                    <div class="shippingFieldGrid">
+                      <label>
+                        Ship-from name
+                        <input
+                          type="text"
+                          maxlength="160"
+                          data-ship-name="${escapeHtml(profile.shippingProfileId)}"
+                          value="${escapeHtml(profile.shipFrom?.name || "")}"
+                          placeholder="Your name"
+                        >
+                      </label>
+
+                      <label>
+                        Company
+                        <input
+                          type="text"
+                          maxlength="160"
+                          data-ship-company="${escapeHtml(profile.shippingProfileId)}"
+                          value="${escapeHtml(profile.shipFrom?.company || "")}"
+                          placeholder="Optional"
+                        >
+                      </label>
+
+                      <label class="wide">
+                        Address
+                        <input
+                          type="text"
+                          maxlength="240"
+                          data-ship-address1="${escapeHtml(profile.shippingProfileId)}"
+                          value="${escapeHtml(profile.shipFrom?.address1 || "")}"
+                          placeholder="Street address"
+                        >
+                      </label>
+
+                      <label class="wide">
+                        Address line 2
+                        <input
+                          type="text"
+                          maxlength="240"
+                          data-ship-address2="${escapeHtml(profile.shippingProfileId)}"
+                          value="${escapeHtml(profile.shipFrom?.address2 || "")}"
+                          placeholder="Apartment, suite, unit — optional"
+                        >
+                      </label>
+
+                      <label>
+                        City
+                        <input
+                          type="text"
+                          maxlength="160"
+                          data-ship-city="${escapeHtml(profile.shippingProfileId)}"
+                          value="${escapeHtml(profile.shipFrom?.city || "")}"
+                          placeholder="City"
+                        >
+                      </label>
+
+                      <label>
+                        State / Region
+                        <input
+                          type="text"
+                          maxlength="160"
+                          data-ship-region="${escapeHtml(profile.shippingProfileId)}"
+                          value="${escapeHtml(profile.shipFrom?.region || "")}"
+                          placeholder="State or region"
+                        >
+                      </label>
+
+                      <label>
+                        Postal code
+                        <input
+                          type="text"
+                          maxlength="60"
+                          data-ship-postal="${escapeHtml(profile.shippingProfileId)}"
+                          value="${escapeHtml(profile.shipFrom?.postalCode || "")}"
+                          placeholder="ZIP / Postal code"
+                        >
+                      </label>
+
+                      <label>
+                        Country
+                        <input
+                          type="text"
+                          maxlength="2"
+                          data-ship-country="${escapeHtml(profile.shippingProfileId)}"
+                          value="${escapeHtml(profile.shipFrom?.country || "")}"
+                          placeholder="US"
+                        >
+                      </label>
+                    </div>
+
+                    <div class="shippingModeRow">
+                      <div class="shippingModeBlock">
+                        <label>
+                          Shipping rate mode
+                          <select data-rate-mode="${escapeHtml(profile.shippingProfileId)}">
+                            <option value="manual" ${profile.rateMode === "manual" ? "selected" : ""}>
+                              Manual
+                            </option>
+                            <option value="live" ${profile.rateMode === "live" ? "selected" : ""}>
+                              Live Carrier Rates
+                            </option>
+                            <option value="hybrid" ${profile.rateMode === "hybrid" ? "selected" : ""}>
+                              Hybrid
+                            </option>
+                          </select>
+                        </label>
+                      </div>
+
+                      <div class="shippingCarriers">
+                        ${["USPS","UPS","FedEx"].map(carrier => `
+                          <label class="shippingCarrierChoice">
+                            <input
+                              type="checkbox"
+                              data-carrier="${escapeHtml(carrier)}"
+                              data-carrier-profile="${escapeHtml(profile.shippingProfileId)}"
+                              ${(profile.enabledCarriers || []).includes(carrier) ? "checked" : ""}
+                            >
+                            ${escapeHtml(carrier)}
+                          </label>
+                        `).join("")}
+                      </div>
+                    </div>
+
+                    ${
+                      profile.rateMode === "live" ||
+                      profile.rateMode === "hybrid"
+                        ? `
+                          <div class="shippingLiveNotice">
+                            Live USPS, UPS and FedEx pricing is built into MONOLITH.
+                            Carrier quoting will activate once the shipping provider
+                            account finishes verification.
+                          </div>
+                        `
+                        : ""
+                    }
+
+                    <div class="shippingSettingsActions">
+                      <button
+                        class="sellerPrimaryBtn"
+                        type="button"
+                        data-save-profile="${escapeHtml(profile.shippingProfileId)}"
+                      >
+                        Save Shipping Setup
+                      </button>
+                    </div>
+                  </div>
+
+                  ${
+                    profile.rateMode !== "live"
+                      ? `
                   <div class="shippingZoneCreate">
                     <strong>Add Destination Zone</strong>
 
@@ -14804,10 +15133,32 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
                         ).join("")
                     }
                   </div>
+                  `
+                      : `
+                        <div class="shippingEmpty">
+                          Manual zones are disabled while this profile uses Live Carrier Rates.
+                        </div>
+                      `
+                  }
                 </div>
               </article>
             `
           ).join("");
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-save-profile]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => saveShippingProfileUi(
+                  button.dataset.saveProfile
+                )
+              );
+            }
+          );
 
         shippingUi.profiles
           .querySelectorAll(
@@ -14886,6 +15237,103 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
               );
             }
           );
+      }
+
+      async function saveShippingProfileUi(
+        profileId
+      ) {
+        const card =
+          shippingUi.profiles
+            .querySelector(
+              `[data-shipping-profile="${CSS.escape(profileId)}"]`
+            );
+
+        if (!card) return;
+
+        const value = selector =>
+          String(
+            card.querySelector(selector)
+              ?.value || ""
+          ).trim();
+
+        const rateMode =
+          value(
+            `[data-rate-mode="${CSS.escape(profileId)}"]`
+          ) || "manual";
+
+        const enabledCarriers =
+          [...card.querySelectorAll(
+            `[data-carrier-profile="${CSS.escape(profileId)}"]:checked`
+          )].map(
+            input =>
+              input.dataset.carrier
+          );
+
+        const body = {
+          payloadUuid:
+            sellerPayload(),
+          rateMode,
+          enabledCarriers,
+          shipFromName:
+            value(
+              `[data-ship-name="${CSS.escape(profileId)}"]`
+            ),
+          shipFromCompany:
+            value(
+              `[data-ship-company="${CSS.escape(profileId)}"]`
+            ),
+          shipFromAddress1:
+            value(
+              `[data-ship-address1="${CSS.escape(profileId)}"]`
+            ),
+          shipFromAddress2:
+            value(
+              `[data-ship-address2="${CSS.escape(profileId)}"]`
+            ),
+          shipFromCity:
+            value(
+              `[data-ship-city="${CSS.escape(profileId)}"]`
+            ),
+          shipFromRegion:
+            value(
+              `[data-ship-region="${CSS.escape(profileId)}"]`
+            ),
+          shipFromPostalCode:
+            value(
+              `[data-ship-postal="${CSS.escape(profileId)}"]`
+            ),
+          shipFromCountry:
+            value(
+              `[data-ship-country="${CSS.escape(profileId)}"]`
+            ).toUpperCase()
+        };
+
+        try {
+          await merchJson(
+            `/api/merch/shipping/profile/${
+              encodeURIComponent(
+                profileId
+              )
+            }`,
+            {
+              method:"POST",
+              body
+            }
+          );
+
+          await loadSellerShipping();
+
+          shippingMessage(
+            "Shipping setup saved.",
+            "success"
+          );
+        } catch (error) {
+          shippingMessage(
+            error.message ||
+            "Unable to save shipping setup.",
+            "error"
+          );
+        }
       }
 
       async function loadSellerShipping() {
@@ -15280,6 +15728,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
         productUi.inventory.value = "0";
         productUi.weight.value = "";
         productUi.weightUnit.value = "";
+        productUi.packageLength.value = "";
+        productUi.packageWidth.value = "";
+        productUi.packageHeight.value = "";
+        productUi.dimensionUnit.value = "";
         productUi.shippingProfile.value = "";
         productUi.tags.value = "";
         productUi.trackInventory.checked =
@@ -15369,6 +15821,18 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
 
         productUi.weightUnit.value =
           product.weightUnit || "";
+
+        productUi.packageLength.value =
+          product.packageLength || "";
+
+        productUi.packageWidth.value =
+          product.packageWidth || "";
+
+        productUi.packageHeight.value =
+          product.packageHeight || "";
+
+        productUi.dimensionUnit.value =
+          product.dimensionUnit || "";
 
         productUi.shippingProfile.value =
           product.shippingProfile || "";
