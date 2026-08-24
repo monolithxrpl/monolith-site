@@ -7147,6 +7147,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
         <a href="#collections">Collections</a>
         <a href="#sellers">Sell</a>
         <a href="#about">About</a>
+        <a href="/">Entrance</a>
+        <a href="/monolith.html">The Wall</a>
       </nav>
 
       <div class="headerActions">
@@ -15336,6 +15338,147 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
         }
       }
 
+      function renderShippingLockedPreview() {
+        shippingUi.manager.hidden =
+          false;
+
+        if (shippingUi.newProfile) {
+          shippingUi.newProfile.hidden =
+            true;
+        }
+
+        shippingUi.status.textContent =
+          "Preview your shipping tools now. Complete seller verification to save shipping settings.";
+
+        shippingUi.profiles.innerHTML = `
+          <article class="shippingProfileCard">
+            <div class="shippingProfileHead">
+              <div>
+                <strong>Shipping Setup Preview</strong>
+                <span>
+                  Available after seller verification
+                </span>
+              </div>
+            </div>
+
+            <div class="shippingProfileBody">
+              <div class="shippingProfileSettings">
+                <div class="shippingSettingsTitle">
+                  <strong>Ship From</strong>
+                  <span>Seller origin address</span>
+                </div>
+
+                <div class="shippingFieldGrid">
+                  <label>
+                    Ship-from name
+                    <input
+                      type="text"
+                      placeholder="Your name"
+                      disabled
+                    >
+                  </label>
+
+                  <label>
+                    Company
+                    <input
+                      type="text"
+                      placeholder="Optional"
+                      disabled
+                    >
+                  </label>
+
+                  <label class="wide">
+                    Address
+                    <input
+                      type="text"
+                      placeholder="Street address"
+                      disabled
+                    >
+                  </label>
+
+                  <label>
+                    City
+                    <input
+                      type="text"
+                      placeholder="City"
+                      disabled
+                    >
+                  </label>
+
+                  <label>
+                    State / Region
+                    <input
+                      type="text"
+                      placeholder="State or region"
+                      disabled
+                    >
+                  </label>
+
+                  <label>
+                    Postal code
+                    <input
+                      type="text"
+                      placeholder="ZIP / Postal code"
+                      disabled
+                    >
+                  </label>
+
+                  <label>
+                    Country
+                    <input
+                      type="text"
+                      placeholder="US"
+                      disabled
+                    >
+                  </label>
+                </div>
+
+                <div class="shippingModeRow">
+                  <div class="shippingModeBlock">
+                    <label>
+                      Shipping rate mode
+                      <select disabled>
+                        <option>Manual</option>
+                        <option>Live Carrier Rates</option>
+                        <option>Hybrid</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <div class="shippingCarriers">
+                    ${["USPS","UPS","FedEx"].map(carrier => `
+                      <label class="shippingCarrierChoice">
+                        <input
+                          type="checkbox"
+                          disabled
+                        >
+                        ${carrier}
+                      </label>
+                    `).join("")}
+                  </div>
+                </div>
+
+                <div class="shippingLiveNotice">
+                  MONOLITH supports automatic USPS, UPS and FedEx
+                  shipping-rate quotes. Live quoting activates after
+                  seller verification and carrier-provider setup.
+                </div>
+
+                <div class="shippingSettingsActions">
+                  <button
+                    class="sellerPrimaryBtn"
+                    type="button"
+                    disabled
+                  >
+                    Complete Seller Verification to Configure
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
       async function loadSellerShipping() {
         if (
           !sellerProfile ||
@@ -15345,13 +15488,17 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerOrders"]{
             .verificationStatus !==
             "verified"
         ) {
-          shippingUi.manager.hidden =
-            true;
+          renderShippingLockedPreview();
           return;
         }
 
         shippingUi.manager.hidden =
           false;
+
+        if (shippingUi.newProfile) {
+          shippingUi.newProfile.hidden =
+            false;
+        }
 
         try {
           const data =
