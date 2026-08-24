@@ -2,15 +2,24 @@
 (() => {
   const LABELS = {
     p2p_payments: "P2P Payments",
-    nft_store: "NFT Store",
+    merch_store: "Merch Store",
     otc_desk: "OTC Desk",
-    token_info: "Token Info",
-    dex_widget: "DEX Data",
     marketplace: "Tile Market",
-    merch_store: "Merch Store"
+    nft_store: "NFT Store",
+    token_info: "Token Info",
+    dex_widget: "DEX Tools"
   };
 
-  const MODULE_KEYS = Object.keys(LABELS);
+  const MODULE_KEYS = [
+    "p2p_payments",
+    "merch_store",
+    "otc_desk",
+    "marketplace",
+    "nft_store",
+    "token_info",
+    "dex_widget"
+  ];
+
   const MODULE_ORDER = new Map(
     MODULE_KEYS.map((key,index)=>[key,index])
   );
