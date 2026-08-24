@@ -940,6 +940,155 @@ main .row + .entranceV5Hero{
 }
 </style>
 
+
+<style id="monolith-directory-stage-20260823">
+.monolithDirectoryStage{
+  position:relative;
+  overflow:hidden;
+  margin:22px 0;
+  padding:22px;
+  border:1px solid rgba(130,220,255,.24);
+  border-radius:26px;
+  background:
+    linear-gradient(135deg,rgba(5,22,36,.98),rgba(3,11,20,.98)),
+    #05121d;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.025),
+    0 20px 48px rgba(0,0,0,.28);
+}
+
+.monolithDirectoryStage:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(82,193,244,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(82,193,244,.035) 1px,transparent 1px);
+  background-size:28px 28px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent);
+}
+
+.monolithDirectoryHead{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:22px;
+  margin-bottom:18px;
+}
+
+.monolithDirectoryEyebrow{
+  display:block;
+  margin-bottom:7px;
+  color:#82dcff;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.19em;
+}
+
+.monolithDirectoryHead h2{
+  margin:0;
+  color:#f4fbff;
+  font-size:25px;
+  line-height:1.08;
+}
+
+.monolithDirectoryHead p{
+  max-width:640px;
+  margin:9px 0 0;
+  color:#8faebe;
+  font-size:12px;
+  line-height:1.55;
+}
+
+.monolithDirectoryStatus{
+  flex:0 0 auto;
+  padding:7px 10px;
+  border:1px solid rgba(247,201,109,.45);
+  border-radius:999px;
+  color:#ffe39a;
+  background:rgba(247,201,109,.08);
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.12em;
+}
+
+.monolithDirectoryGrid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+
+.monolithDirectoryLane{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:82px;
+  padding:14px;
+  border:1px solid rgba(130,220,255,.16);
+  border-radius:17px;
+  background:rgba(8,30,46,.66);
+}
+
+.monolithDirectoryLane > span{
+  display:grid;
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  place-items:center;
+  border:1px solid rgba(130,220,255,.26);
+  border-radius:10px;
+  color:#82dcff;
+  background:rgba(73,191,255,.08);
+  font-size:9px;
+  font-weight:950;
+}
+
+.monolithDirectoryLane b{
+  display:block;
+  color:#f1f9fc;
+  font-size:12px;
+}
+
+.monolithDirectoryLane small{
+  display:block;
+  margin-top:4px;
+  color:#7f9ba9;
+  font-size:9px;
+  line-height:1.35;
+}
+
+@media(max-width:820px){
+  .monolithDirectoryGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:520px){
+  .monolithDirectoryStage{
+    padding:17px;
+    border-radius:20px;
+  }
+
+  .monolithDirectoryHead{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .monolithDirectoryGrid{
+    grid-template-columns:1fr;
+  }
+
+  .monolithDirectoryLane{
+    min-height:70px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -968,10 +1117,10 @@ main .row + .entranceV5Hero{
       <div class="ctaRow entranceV5Actions" aria-label="Actions">
         <a class="btn primary" href="/monolith.html">Explore Wall</a>
         <a class="btn" href="/claim/#trial">Free Trial</a>
-        <a class="btn warn marketGoldBtn" href="/market/">Open Market</a>
-        <a class="btn merchStoreLaunchBtn" href="/merch/">Merch Store</a>
         <a class="btn" href="/tile/ORIGIN">Example Tile</a>
         <a class="btn warn" href="/rules.html">Rules</a>
+        <a class="btn merchStoreLaunchBtn" href="/merch/">Merch Store</a>
+        <a class="btn warn marketGoldBtn" href="/market/">Tile Market</a>
       </div>
 
       <section class="entranceV5WallBanner" aria-label="MONOLITH wall preview">
@@ -997,11 +1146,63 @@ main .row + .entranceV5Hero{
         <div class="entranceV5Title">Commerce Apps</div>
         <div class="entranceV5Launcher entranceV5Commerce">
           <div class="open"><b>P2P Payments</b><em>LIVE</em></div>
-          <div class="open"><b>Marketplace</b><em>OPEN</em></div>
+          <div><b>Merch Store</b><em>COMING SOON</em></div>
+          <div><b>OTC Desk</b><em>WAITING ON BATCH UPDATE</em></div>
+          <div class="open"><b>Tile Market</b><em>OPEN</em></div>
           <div><b>NFT Store</b><em>SOON</em></div>
-          <div><b>OTC Desk</b><em>SOON</em></div>
           <div><b>Token Info</b><em>SOON</em></div>
           <div><b>DEX Tools</b><em>SOON</em></div>
+        </div>
+      </section>
+
+      <section class="monolithDirectoryStage" aria-label="MONOLITH Directory">
+        <div class="monolithDirectoryHead">
+          <div>
+            <span class="monolithDirectoryEyebrow">MONOLITH DIRECTORY</span>
+            <h2>Find your way through MONOLITH.</h2>
+            <p>
+              Coordinates, people, storefronts and places — indexed through one
+              MONOLITH discovery layer.
+            </p>
+          </div>
+
+          <span class="monolithDirectoryStatus">
+            DIRECTORY BUILDING
+          </span>
+        </div>
+
+        <div class="monolithDirectoryGrid">
+          <div class="monolithDirectoryLane">
+            <span>01</span>
+            <div>
+              <b>Coordinates</b>
+              <small>Search the Wall by coordinate.</small>
+            </div>
+          </div>
+
+          <div class="monolithDirectoryLane">
+            <span>02</span>
+            <div>
+              <b>People</b>
+              <small>Find owners and verified identities.</small>
+            </div>
+          </div>
+
+          <div class="monolithDirectoryLane">
+            <span>03</span>
+            <div>
+              <b>Storefronts</b>
+              <small>Discover MONOLITH Merch sellers.</small>
+            </div>
+          </div>
+
+          <div class="monolithDirectoryLane">
+            <span>04</span>
+            <div>
+              <b>Places</b>
+              <small>Browse tiles by purpose and community.</small>
+            </div>
+          </div>
         </div>
       </section>
 
