@@ -13262,6 +13262,14 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
       hydrateSellerInputs();
 
+      window.addEventListener(
+        "monolith:owner-session-verified",
+        () => {
+          sellerProfile = null;
+          refreshSellerFlow();
+        }
+      );
+
       setTimeout(
         () => {
           refreshSellerFlow();

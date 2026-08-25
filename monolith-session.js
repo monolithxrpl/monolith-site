@@ -92,6 +92,13 @@
       session.verifiedAt = Date.now();
       setSession(session);
       renderStatus();
+
+      window.dispatchEvent(
+        new CustomEvent("monolith:owner-session-verified", {
+          detail: { session }
+        })
+      );
+
       return { ok:true, session, data:verified.data };
     }
 
