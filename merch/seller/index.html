@@ -7405,6 +7405,65 @@ body.merchSellerPage #sellerShipping:not([hidden]){
 }
 </style>
 
+
+<style id="monolith-seller-visual-fix-20260825">
+
+/* Seller Center top-right account controls */
+body.merchSellerPage .sellerSignOutBtn{
+  border:1px solid #159fe5!important;
+  background:#159fe5!important;
+  color:#fff!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+
+body.merchSellerPage .sellerSignOutBtn:hover{
+  background:#087fc1!important;
+}
+
+/* Header owner/order buttons */
+body.merchSellerPage #ownerSignInBtn,
+body.merchSellerPage #headerOrderBtn{
+  border:1px solid #159fe5!important;
+  background:#fff!important;
+  color:#087fc1!important;
+  opacity:1!important;
+}
+
+body.merchSellerPage #ownerSignInBtn:hover,
+body.merchSellerPage #headerOrderBtn:hover{
+  background:#eef9ff!important;
+}
+
+/* Remove dark Seller Center section headers */
+body.merchSellerPage .productManagerHead,
+body.merchSellerPage .sellerOrdersHead{
+  background:#eef8fd!important;
+  color:#12394d!important;
+  border:1px solid #b9dceb!important;
+  box-shadow:none!important;
+}
+
+body.merchSellerPage .productManagerHead h2,
+body.merchSellerPage .sellerOrdersHead h2{
+  color:#12394d!important;
+}
+
+body.merchSellerPage .productManagerHead p,
+body.merchSellerPage .sellerOrdersHead p{
+  color:#587687!important;
+}
+
+/* Keep section action buttons readable */
+body.merchSellerPage .productManagerHead button,
+body.merchSellerPage .sellerOrdersHead button{
+  background:#159fe5!important;
+  color:#fff!important;
+  border:1px solid #159fe5!important;
+}
+
+</style>
+
 </head>
 
 <body class="merchLaunchSoon merchSellerPage">
