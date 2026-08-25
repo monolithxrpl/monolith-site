@@ -7374,6 +7374,37 @@ body.merchSellerPage #sellerShipping:not([hidden]){
 }
 </style>
 
+
+<style id="monolith-seller-signout-20260825">
+.sellerCenterAccount{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.sellerSignOutBtn{
+  appearance:none;
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  border-radius:10px;
+  padding:9px 14px;
+  font:inherit;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.sellerSignOutBtn:hover{
+  background:rgba(255,255,255,.12);
+}
+
+.sellerSignOutBtn[hidden]{
+  display:none!important;
+}
+</style>
+
 </head>
 
 <body class="merchLaunchSoon merchSellerPage">
@@ -7688,8 +7719,19 @@ body.merchSellerPage #sellerShipping:not([hidden]){
           </p>
         </div>
 
-        <div class="sellerCenterBadge">
-          MONOLITH SELLER
+        <div class="sellerCenterAccount">
+          <div class="sellerCenterBadge">
+            MONOLITH SELLER
+          </div>
+
+          <button
+            class="sellerSignOutBtn"
+            id="sellerSignOutBtn"
+            type="button"
+            hidden
+          >
+            Sign Out
+          </button>
         </div>
       </div>
 
@@ -9156,6 +9198,52 @@ body.merchSellerPage #sellerShipping:not([hidden]){
   </main>
 
   <script src="/monolith-session.js"></script>
+
+<script id="monolith-seller-signout-js-20260825">
+(function(){
+  function syncSellerSignOut(){
+    const btn = document.getElementById("sellerSignOutBtn");
+    if (!btn) return;
+
+    const session =
+      window.MonolithSession &&
+      typeof window.MonolithSession.get === "function"
+        ? window.MonolithSession.get()
+        : null;
+
+    btn.hidden = !(session && session.ownerVerified);
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    const btn = document.getElementById("sellerSignOutBtn");
+
+    if (btn){
+      btn.addEventListener("click", function(){
+        if (
+          window.MonolithSession &&
+          typeof window.MonolithSession.clear === "function"
+        ){
+          window.MonolithSession.clear();
+        }
+
+        window.location.href = "/merch/seller/";
+      });
+    }
+
+    syncSellerSignOut();
+  });
+
+  window.addEventListener(
+    "monolith:owner-session-verified",
+    syncSellerSignOut
+  );
+
+  document.addEventListener(
+    "monolith:owner-session-verified",
+    syncSellerSignOut
+  );
+})();
+</script>
 
   <script>
     (() => {
