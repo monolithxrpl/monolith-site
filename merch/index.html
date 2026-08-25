@@ -6701,6 +6701,12 @@ body.merchLaunchSoon .marketHeroMark img{
 }
 
 
+/* Completed Seller Center steps must never remain visible. */
+.sellerCenterShell [hidden]{
+  display:none!important;
+}
+
+
 /* -----------------------------------------------------------
    BUTTON LANGUAGE
    ----------------------------------------------------------- */
@@ -7813,7 +7819,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               type="button"
               hidden
             >
-              Verify Sign-In
+              Check Xaman Sign-In
             </button>
 
             <button
@@ -12390,6 +12396,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
       function hideSellerActions() {
         [
+          sellerUi.connect,
           sellerUi.openXaman,
           sellerUi.verifySignIn,
           sellerUi.create,
@@ -12821,7 +12828,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               );
 
               sellerMessage(
-                "Open Xaman, approve the owner Sign-In, then return here and verify it."
+                "Approve the Sign-In in Xaman. If MONOLITH does not advance automatically after you return, click Check Xaman Sign-In to confirm the completed signature."
               );
 
               if (session.signUrl) {
