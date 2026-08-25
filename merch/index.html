@@ -18620,6 +18620,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
     "#sellerConnectBtn",
     "#sellerVerifySignInBtn",
     "#sellerCreateBtn",
+    "#sellerFeeBtn",
+    "#sellerVerifyFeeBtn",
+    "#sellerIdentityBtn",
+    "#sellerSyncIdentityBtn",
     "#orderStatusBtn",
     "[id^='orderStatus']"
   ].join(",");
@@ -18668,8 +18672,11 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       )
       .forEach(node => {
         if (
-          node.id ===
-          "sellerOpenXaman"
+          [
+            "sellerOpenXaman",
+            "sellerOpenFeeXaman",
+            "sellerOpenIdentity"
+          ].includes(node.id)
         ) {
           node.removeAttribute(
             "aria-disabled"
