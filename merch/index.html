@@ -8437,6 +8437,45 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       </div>
     </section>
 
+    <style id="monolith-merch-manual-shipping-launch-20260825">
+      .shippingLaunchNotice{
+        margin-top:16px;
+        padding:16px;
+        border:1px solid rgba(22,143,209,.28);
+        border-radius:14px;
+        background:rgba(22,143,209,.07);
+      }
+
+      .shippingLaunchNotice strong{
+        display:block;
+        margin-bottom:6px;
+      }
+
+      .shippingLaunchNotice span{
+        display:block;
+        line-height:1.55;
+      }
+
+      .shippingCarrierLinks{
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+        margin-top:12px;
+      }
+
+      .shippingCarrierLinks a{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        min-height:38px;
+        padding:8px 14px;
+        border:1px solid currentColor;
+        border-radius:10px;
+        text-decoration:none;
+        font-weight:700;
+      }
+    </style>
+
     <section
       class="section sellerShippingManager"
       id="sellerShipping"
@@ -8453,6 +8492,35 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           <p>
             Set where you ship and what buyers pay in XRP.
           </p>
+
+          <div class="shippingLaunchNotice">
+            <strong>Manual Shipping — Launch Mode</strong>
+            <span>
+              Automated carrier rates are coming. For now, use the official
+              carrier pricing tools below to estimate your shipping costs,
+              then set the amount you want buyers to pay.
+            </span>
+
+            <div class="shippingCarrierLinks">
+              <a
+                href="https://postcalc.usps.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >USPS Rates</a>
+
+              <a
+                href="https://wwwapps.ups.com/ctc/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >UPS Rates</a>
+
+              <a
+                href="https://www.fedex.com/en-us/shipping/how-to-estimate-shipping-cost.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >FedEx Rates</a>
+            </div>
+          </div>
         </div>
 
         <button
@@ -15024,7 +15092,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                     <div class="shippingSettingsTitle">
                       <strong>Shipping Setup</strong>
                       <span>
-                        Origin, carrier mode and enabled carriers
+                        Ship-from details and manual shipping rates
                       </span>
                     </div>
 
@@ -15123,31 +15191,23 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                         <label>
                           Shipping rate mode
                           <select data-rate-mode="${escapeHtml(profile.shippingProfileId)}">
-                            <option value="manual" ${profile.rateMode === "manual" ? "selected" : ""}>
-                              Manual
+                            <option value="manual" selected>
+                              Manual — Launch Mode
                             </option>
-                            <option value="live" ${profile.rateMode === "live" ? "selected" : ""}>
-                              Live Carrier Rates
+                            <option value="live" disabled>
+                              Live Carrier Rates — Coming Soon
                             </option>
-                            <option value="hybrid" ${profile.rateMode === "hybrid" ? "selected" : ""}>
-                              Hybrid
+                            <option value="hybrid" disabled>
+                              Hybrid — Coming Soon
                             </option>
                           </select>
                         </label>
                       </div>
 
-                      <div class="shippingCarriers">
-                        ${["USPS","UPS","FedEx"].map(carrier => `
-                          <label class="shippingCarrierChoice">
-                            <input
-                              type="checkbox"
-                              data-carrier="${escapeHtml(carrier)}"
-                              data-carrier-profile="${escapeHtml(profile.shippingProfileId)}"
-                              ${(profile.enabledCarriers || []).includes(carrier) ? "checked" : ""}
-                            >
-                            ${escapeHtml(carrier)}
-                          </label>
-                        `).join("")}
+                      <div class="shippingLiveNotice">
+                        Automated USPS, UPS and FedEx rates are coming.
+                        Use the official carrier pricing links above while
+                        MONOLITH launches with seller-set manual shipping.
                       </div>
                     </div>
 
@@ -15498,24 +15558,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               ?.value || ""
           ).trim();
 
-        const rateMode =
-          value(
-            `[data-rate-mode="${CSS.escape(profileId)}"]`
-          ) || "manual";
-
-        const enabledCarriers =
-          [...card.querySelectorAll(
-            `[data-carrier-profile="${CSS.escape(profileId)}"]:checked`
-          )].map(
-            input =>
-              input.dataset.carrier
-          );
-
         const body = {
           payloadUuid:
             sellerPayload(),
-          rateMode,
-          enabledCarriers,
+          rateMode:"manual",
           shipFromName:
             value(
               `[data-ship-name="${CSS.escape(profileId)}"]`
@@ -15902,7 +15948,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   sellerPayload(),
                 sellerId:
                   sellerProfile.sellerId,
-                name
+                name,
+                rateMode:"manual"
               }
             }
           );
