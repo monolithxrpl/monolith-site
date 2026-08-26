@@ -4,39 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>About | MONOLITH Merch Store</title>
-<meta name="description" content="Learn how the MONOLITH Merch Store connects physical commerce, verified sellers and XRP payments.">
+<link rel="stylesheet" href="/merch/merch-shell.css">
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4fbff;color:#17384a}
-header{background:#fff;border-bottom:1px solid #d4e8f2;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.04em}
-.brand img{width:42px;height:42px}
-nav{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-nav a{color:#31586b;text-decoration:none;font-weight:800}
-nav a.active{color:#0788c7}
-main{max-width:1180px;margin:0 auto;padding:64px 24px 90px}
 .kicker{font-size:13px;font-weight:900;letter-spacing:.18em;color:#0788c7}
-h1{font-size:clamp(38px,6vw,72px);line-height:1;margin:12px 0 18px}
+h1{font-size:clamp(38px,6vw,72px);margin:12px 0 18px}
 .lead{font-size:18px;line-height:1.6;color:#607b89;max-width:760px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:42px}
-.card{background:#fff;border:1px solid #cfe3ed;border-radius:18px;padding:32px;box-shadow:0 14px 35px rgba(43,105,133,.08)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:42px}
+.card{background:#fff;border:1px solid #cfe3ed;border-radius:18px;padding:32px}
 .card span{font-size:12px;font-weight:900;letter-spacing:.16em;color:#0788c7}
 .card h2{font-size:26px;margin:12px 0}
-.card p{margin:0;color:#66808d;line-height:1.6}
-footer{border-top:1px solid #d4e8f2;padding:28px;text-align:center;color:#78909b;background:#fff}
-@media(max-width:800px){.grid{grid-template-columns:1fr}header{padding:16px 18px}}
+.card p{color:#66808d;line-height:1.6}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 
-<header>
-  <div class="brand">
-    <img src="/assets/monolith_icon.webp" alt="MONOLITH">
-    MONOLITH MERCH STORE
-  </div>
+<div class="shell">
 
-  <nav>
+<section class="previewBanner">
+  <div class="previewCopy">
+    <strong>MONOLITH MERCH STORE — LAUNCH COMING SOON</strong>
+    <span>Explore the Merch Store now. Buying and seller tools activate at launch.</span>
+  </div>
+  <div></div>
+  <div class="previewStatus">LAUNCH COMING SOON</div>
+</section>
+
+<header class="header">
+  <a class="brand" href="/merch/">
+    <img src="/assets/monolith_icon.webp" alt="MONOLITH">
+    <span class="brandText">
+      <strong>MONOLITH</strong>
+      <small>MERCH STORE</small>
+    </span>
+  </a>
+
+  <nav class="nav">
     <a href="/merch/">Store</a>
     <a href="/merch/collections/">Collections</a>
     <a href="/merch/seller/">Sell</a>
@@ -44,11 +47,12 @@ footer{border-top:1px solid #d4e8f2;padding:28px;text-align:center;color:#78909b
     <a href="/">Entrance</a>
     <a href="/monolith.html">The Wall</a>
   </nav>
+
+  <div class="headerActions"></div>
 </header>
 
-<main>
+<main class="pageContent">
   <div class="kicker">COMMERCE INFRASTRUCTURE</div>
-
   <h1>Built Differently.</h1>
 
   <p class="lead">
@@ -56,37 +60,26 @@ footer{border-top:1px solid #d4e8f2;padding:28px;text-align:center;color:#78909b
   </p>
 
   <div class="grid">
-
     <article class="card">
       <span>01</span>
       <h2>Real Products</h2>
-      <p>
-        The Merch Store is built for physical merchandise and seller-managed fulfillment rather than another token listing page.
-      </p>
+      <p>The Merch Store is built for physical merchandise and seller-managed fulfillment rather than another token listing page.</p>
     </article>
 
     <article class="card">
       <span>02</span>
       <h2>Real Payments</h2>
-      <p>
-        Orders are built around XRP settlement with transaction verification on the XRP Ledger.
-      </p>
+      <p>Orders are built around XRP settlement with transaction verification on the XRP Ledger.</p>
     </article>
 
     <article class="card">
       <span>03</span>
       <h2>Real Builders</h2>
-      <p>
-        Verified sellers can operate storefronts inside the broader MONOLITH commerce system.
-      </p>
+      <p>Verified sellers can operate storefronts inside the broader MONOLITH commerce system.</p>
     </article>
-
   </div>
 </main>
 
-<footer>
-  MONOLITH MERCH STORE · A House of Cauliman Project
-</footer>
-
+</div>
 </body>
 </html>
