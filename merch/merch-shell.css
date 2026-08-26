@@ -207,3 +207,70 @@ a{text-decoration:none}
     width:min(100% - 16px,var(--max));
   }
 }
+/* Match the live /merch/ retail header exactly */
+
+.header{
+  min-height:72px;
+  margin-top:14px;
+  margin-bottom:18px;
+  padding:0 18px;
+  border:1px solid #d6e4eb!important;
+  border-radius:16px;
+  background:#ffffff!important;
+  box-shadow:0 4px 16px rgba(42,75,92,.045)!important;
+}
+
+.brand img{
+  filter:none!important;
+}
+
+.brandText strong{
+  color:#17384a!important;
+}
+
+.brandText small{
+  color:#159fe5!important;
+}
+
+.nav a{
+  color:#657d89!important;
+}
+
+.nav a:hover,
+.nav a.active{
+  color:#0878af!important;
+}
+
+.nav a.active::after{
+  height:2px;
+  background:#159fe5!important;
+}
+
+.headerActions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:9px;
+}
+
+.iconBtn{
+  display:grid;
+  place-items:center;
+  width:40px;
+  min-height:38px;
+  border:1px solid #111;
+  background:#111;
+  color:#fff;
+}
+
+.payBtn{
+  min-height:38px;
+  border:1px solid #159fe5;
+  background:#fff;
+  color:#0878af;
+  font-weight:900;
+}
+
+.previewBanner{
+  display:none!important;
+}
