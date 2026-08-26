@@ -7515,7 +7515,209 @@ body.merchSellerPage .sellerOrdersHead button{
       </div>
     </header>
 
+    <section class="marketHero" id="store">
+      <div class="marketHeroCopy">
+        <div class="heroEyebrow">
+          XRP-NATIVE MARKETPLACE
+        </div>
 
+        <h1>
+          Shop MONOLITH.
+        </h1>
+
+        <p>
+          Physical merchandise from verified MONOLITH sellers.
+          Pay with XRP.
+        </p>
+      </div>
+
+      <div class="marketHeroMark">
+        <img
+          src="/assets/monolith_icon.webp"
+          alt="MONOLITH"
+        >
+      </div>
+    </section>
+
+    <section class="marketplaceShell">
+      <aside class="marketSidebar">
+        <div class="sidebarTitle">
+          Marketplace
+        </div>
+
+        <label class="marketSearch">
+          <span>⌕</span>
+          <input
+            id="marketSearch"
+            type="search"
+            placeholder="What are you looking for?"
+            autocomplete="off"
+          >
+        </label>
+
+        <nav
+          class="marketNav"
+          aria-label="Marketplace categories"
+        >
+          <button class="marketNavItem active" type="button" data-filter="all">
+            <span class="marketNavIcon">⌂</span>
+            Browse All
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="apparel">
+            <span class="marketNavIcon">A</span>
+            Apparel
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="accessories">
+            <span class="marketNavIcon">AC</span>
+            Accessories
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="art_collectibles">
+            <span class="marketNavIcon">ART</span>
+            Art &amp; Collectibles
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="home_living">
+            <span class="marketNavIcon">H</span>
+            Home &amp; Living
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="electronics">
+            <span class="marketNavIcon">E</span>
+            Electronics
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="toys_games">
+            <span class="marketNavIcon">TG</span>
+            Toys &amp; Games
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="books_media">
+            <span class="marketNavIcon">B</span>
+            Books &amp; Media
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="sports_outdoors">
+            <span class="marketNavIcon">S</span>
+            Sports &amp; Outdoors
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="auto_tools">
+            <span class="marketNavIcon">AT</span>
+            Auto &amp; Tools
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="beauty">
+            <span class="marketNavIcon">B</span>
+            Beauty
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="food_specialty">
+            <span class="marketNavIcon">F</span>
+            Food &amp; Specialty
+          </button>
+
+          <button class="marketNavItem" type="button" data-filter="other">
+            <span class="marketNavIcon">+</span>
+            Other
+          </button>
+        </nav>
+
+        <div class="sidebarRule"></div>
+
+        <a class="sellShortcut" href="#sellers">
+          <strong>Sell on MONOLITH</strong>
+          <span>Manage your XRP storefront</span>
+        </a>
+      </aside>
+
+      <section class="marketContent">
+        <div class="marketTopbar">
+          <div>
+            <div class="sectionKicker">
+              MARKETPLACE
+            </div>
+
+            <h2 id="productsTitle">
+              Today's Picks
+            </h2>
+          </div>
+
+          <div class="marketTopActions">
+            <span
+              class="resultCount"
+              id="resultCount"
+            >
+              0 listings
+            </span>
+
+            <a
+              class="marketContext"
+              id="storeContext"
+              href="/merch/"
+            >
+              MONOLITH Marketplace
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="categoryChips"
+          aria-label="Quick categories"
+        >
+          <button
+            class="categoryChip active"
+            type="button"
+            data-filter="all"
+          >
+            All
+          </button>
+
+          <button
+            class="categoryChip"
+            type="button"
+            data-filter="apparel"
+          >
+            Apparel
+          </button>
+
+          <button
+            class="categoryChip"
+            type="button"
+            data-filter="headwear"
+          >
+            Headwear
+          </button>
+
+          <button
+            class="categoryChip"
+            type="button"
+            data-filter="collectibles"
+          >
+            Collectibles
+          </button>
+
+          <button
+            class="categoryChip"
+            type="button"
+            data-filter="gear"
+          >
+            Gear
+          </button>
+        </div>
+
+        <div
+          class="products marketplaceProducts"
+          id="products"
+        >
+          <div class="emptyProducts">
+            Loading marketplace…
+          </div>
+        </div>
+      </section>
+    </section>
 
     <section class="sellerCenterShell" id="sellerCenter">
       <div class="sellerCenterHeader">
@@ -8531,6 +8733,49 @@ body.merchSellerPage .sellerOrdersHead button{
 
     </section>
 
+    <section
+      class="section"
+      id="about"
+    >
+      <div class="sectionHeader">
+        <div>
+          <div class="sectionKicker">
+            COMMERCE INFRASTRUCTURE
+          </div>
+
+          <h2>Built Differently</h2>
+        </div>
+      </div>
+
+      <div class="aboutGrid">
+        <article class="aboutCard">
+          <span>01</span>
+          <h3>Real Products</h3>
+          <p>
+            The Merch Store is built for physical merchandise and
+            seller-managed fulfillment rather than another token listing page.
+          </p>
+        </article>
+
+        <article class="aboutCard">
+          <span>02</span>
+          <h3>Real Payments</h3>
+          <p>
+            Orders are built around XRP settlement with transaction
+            verification on the XRP Ledger.
+          </p>
+        </article>
+
+        <article class="aboutCard">
+          <span>03</span>
+          <h3>Real Builders</h3>
+          <p>
+            Verified sellers can operate storefronts inside the broader
+            MONOLITH commerce system.
+          </p>
+        </article>
+      </div>
+    </section>
 
     <footer class="footer">
       <div class="footerBrand">
@@ -11862,7 +12107,6 @@ body.merchSellerPage .sellerOrdersHead button{
       }
 
       function refreshMarketplace() {
-        if (document.body.classList.contains("merchSellerPage")) return;
         const visible =
           filteredProducts();
 
@@ -12045,7 +12289,6 @@ body.merchSellerPage .sellerOrdersHead button{
       }
 
       async function loadMarketplace() {
-        if (document.body.classList.contains("merchSellerPage")) return;
         try {
           const endpoint =
             coordinate
