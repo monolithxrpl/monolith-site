@@ -8160,6 +8160,35 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         );
 
       const cart = [];
+      let merchXrpUsd = null;
+
+      async function loadMerchXrpRate() {
+        try {
+          const res = await fetch("/api/rates/xrp");
+          const data = await res.json();
+          const rate = Number(data?.rate?.xrpUsd);
+          merchXrpUsd =
+            Number.isFinite(rate) && rate > 0
+              ? rate
+              : null;
+        } catch (_) {
+          merchXrpUsd = null;
+        }
+      }
+
+      function usdToDisplayXrp(value) {
+        const usd = Number(value);
+
+        if (
+          !merchXrpUsd ||
+          !Number.isFinite(usd) ||
+          usd <= 0
+        ) return "";
+
+        return (usd / merchXrpUsd).toFixed(6);
+      }
+
+      loadMerchXrpRate();
       const CART_STORAGE_KEY =
         "monolithMerchCartV1";
       const CART_STORAGE_VERSION = 1;
@@ -8592,7 +8621,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               sum +
               (
                 Number(
-                  item.product.priceXrp ||
+                  item.product.priceUsd ||
                   0
                 ) *
                 item.quantity
@@ -8775,8 +8804,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
         return Number(
           variant
-            ? variant.priceXrp
-            : item.product.priceXrp ||
+            ? variant.priceUsd
+            : item.product.priceUsd ||
               0
         );
       }
@@ -8830,21 +8859,12 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         checkoutUi.shippingTotal.textContent =
           checkoutRequiresShipping()
             ? "Select rate"
-            : "0 XRP";
+            : "$0.00 · 0 XRP";
 
         renderCheckoutTotals();
       }
 
       function renderCheckoutTotals() {
-        const subtotal =
-          checkoutShippingQuote
-            ?.subtotalXrp != null
-              ? Number(
-                  checkoutShippingQuote
-                    .subtotalXrp
-                )
-              : checkoutSubtotalValue();
-
         const rate =
           checkoutShippingQuote &&
           Array.isArray(
@@ -8860,30 +8880,36 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 )
             : null;
 
+        const subtotalUsd =
+          checkoutShippingQuote?.subtotalUsdCents != null
+            ? Number(checkoutShippingQuote.subtotalUsdCents) / 100
+            : checkoutSubtotalValue();
+
         checkoutUi.subtotal.textContent =
-          `${subtotal.toLocaleString(
-            undefined,
-            {
-              maximumFractionDigits:6
-            }
-          )} XRP`;
+          checkoutShippingQuote?.subtotalXrp != null
+            ? `$${subtotalUsd.toFixed(2)} · ≈ ${Number(
+                checkoutShippingQuote.subtotalXrp
+              ).toLocaleString(
+                undefined,
+                { maximumFractionDigits:6 }
+              )} XRP`
+            : `$${subtotalUsd.toFixed(2)}`;
 
         checkoutUi.shippingTotal.textContent =
           checkoutRequiresShipping()
             ? (
                 rate
-                  ? `${Number(
-                      rate.shippingXrp ||
-                      0
+                  ? `$${Number(
+                      rate.amountUsd || 0
+                    ).toFixed(2)} · ≈ ${Number(
+                      rate.shippingXrp || 0
                     ).toLocaleString(
                       undefined,
-                      {
-                        maximumFractionDigits:6
-                      }
+                      { maximumFractionDigits:6 }
                     )} XRP`
                   : "Select rate"
               )
-            : "0 XRP";
+            : "$0.00 · 0 XRP";
 
         const authoritativeTotal =
           checkoutRequiresShipping()
@@ -8904,14 +8930,26 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   : null
               );
 
+        const totalUsd =
+          authoritativeTotal != null &&
+          checkoutShippingQuote?.xrpUsd
+            ? authoritativeTotal *
+              Number(checkoutShippingQuote.xrpUsd)
+            : null;
+
         checkoutUi.grandTotal.textContent =
           authoritativeTotal != null
-            ? `${authoritativeTotal.toLocaleString(
-                undefined,
-                {
-                  maximumFractionDigits:6
-                }
-              )} XRP`
+            ? (
+                totalUsd != null
+                  ? `$${totalUsd.toFixed(2)} · ≈ ${authoritativeTotal.toLocaleString(
+                      undefined,
+                      { maximumFractionDigits:6 }
+                    )} XRP`
+                  : `${authoritativeTotal.toLocaleString(
+                      undefined,
+                      { maximumFractionDigits:6 }
+                    )} XRP`
+              )
             : "Calculating…";
       }
 
@@ -9086,7 +9124,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                                       }
                                     >
                                       ${escapeHtml(label)}
-                                      · ${escapeHtml(variant.priceXrp)} XRP
+                                      · $${escapeHtml(variant.priceUsd)}
                                     </option>
                                   `;
                                 }
@@ -9518,7 +9556,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   </div>
 
                   <span class="checkoutRatePrice">
-                    ${escapeHtml(rate.shippingXrp)} XRP
+                    $${escapeHtml(rate.amountUsd || "0.00")}
+                    <small>
+                      ≈ ${escapeHtml(rate.shippingXrp)} XRP
+                    </small>
                   </span>
                 </label>
               `
@@ -11153,14 +11194,14 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
                     <div class="productFooter">
                       <div class="price">
-                        ${
-                          escapeHtml(
-                            product.priceXrp
-                          )
-                        } XRP
+                        $${escapeHtml(product.priceUsd)}
 
                         <small>
-                          XRPL PAYMENT
+                          ${
+                            usdToDisplayXrp(product.priceUsd)
+                              ? `≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} XRP`
+                              : "XRPL PAYMENT"
+                          }
                         </small>
                       </div>
 
@@ -12616,7 +12657,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
         if (!price) {
           throw new Error(
-            "Enter a product price in XRP."
+            "Enter a product price in USD."
           );
         }
 
@@ -12641,9 +12682,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 ""
               ).trim()
             ),
-          priceXrp:
+          priceUsd:
             price,
-          compareAtPriceXrp:
+          compareAtPriceUsd:
             String(
               productUi
                 .comparePrice
@@ -13120,7 +13161,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   </div>
 
                   <span class="variantRowPrice">
-                    ${escapeHtml(variant.priceXrp)} XRP
+                    $${escapeHtml(variant.priceUsd)}
                   </span>
 
                   <button
@@ -13177,7 +13218,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                     variant.title || "";
 
                   productUi.variantPrice.value =
-                    variant.priceXrp || "";
+                    variant.priceUsd || "";
 
                   productUi.variantSku.value =
                     variant.sku || "";
@@ -13677,7 +13718,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           ).trim();
 
         if (price) {
-          payload.priceXrp =
+          payload.priceUsd =
             price;
         }
 
@@ -14371,15 +14412,15 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
                                             <span>
                                               ${
-                                                rate.freeOverXrp
-                                                  ? `Free over ${escapeHtml(rate.freeOverXrp)} XRP`
+                                                rate.freeOverUsd
+                                                  ? `Free over $${escapeHtml(rate.freeOverUsd)}`
                                                   : "No free-shipping threshold"
                                               }
                                             </span>
                                           </div>
 
                                           <span class="shippingRatePrice">
-                                            ${escapeHtml(rate.rateXrp)} XRP
+                                            $${escapeHtml(rate.rateUsd)}
                                           </span>
 
                                           <button
@@ -14403,7 +14444,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                                 <strong>Add Shipping Rate</strong>
 
                                 <p>
-                                  Set the shipping charge in XRP.
+                                  Set the shipping charge in USD.
                                   Free-over threshold is optional.
                                 </p>
 
@@ -14422,8 +14463,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                                   <input
                                     type="text"
                                     inputmode="decimal"
-                                    placeholder="Rate XRP"
-                                    data-rate-xrp="${
+                                    placeholder="Rate USD"
+                                    data-rate-usd="${
                                       escapeHtml(
                                         zone.shippingZoneId
                                       )
@@ -14433,7 +14474,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                                   <input
                                     type="text"
                                     inputmode="decimal"
-                                    placeholder="Free over XRP (optional)"
+                                    placeholder="Free over USD (optional)"
                                     data-rate-free-over="${
                                       escapeHtml(
                                         zone.shippingZoneId
@@ -15097,15 +15138,15 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             ""
           ).trim();
 
-        const rateXrp =
+        const rateUsd =
           String(
             card?.querySelector(
-              `[data-rate-xrp="${CSS.escape(zoneId)}"]`
+              `[data-rate-usd="${CSS.escape(zoneId)}"]`
             )?.value ||
             ""
           ).trim();
 
-        const freeOverXrp =
+        const freeOverUsd =
           String(
             card?.querySelector(
               `[data-rate-free-over="${CSS.escape(zoneId)}"]`
@@ -15113,9 +15154,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             ""
           ).trim();
 
-        if (!name || rateXrp === "") {
+        if (!name || rateUsd === "") {
           shippingMessage(
-            "Enter a rate name and XRP shipping amount.",
+            "Enter a rate name and USD shipping amount.",
             "error"
           );
           return;
@@ -15134,9 +15175,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 payloadUuid:
                   sellerPayload(),
                 name,
-                rateXrp,
-                freeOverXrp:
-                  freeOverXrp || null
+                rateUsd,
+                freeOverUsd:
+                  freeOverUsd || null
               }
             }
           );
@@ -15345,10 +15386,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           product.title || "";
 
         productUi.price.value =
-          product.priceXrp || "";
+          product.priceUsd || "";
 
         productUi.comparePrice.value =
-          product.compareAtPriceXrp || "";
+          product.compareAtPriceUsd || "";
 
         productUi.category.value =
           product.category ||
@@ -15489,11 +15530,12 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                     </strong>
 
                     <span>
+                      $${escapeHtml(product.priceUsd)}
                       ${
-                        escapeHtml(
-                          product.priceXrp
-                        )
-                      } XRP
+                        usdToDisplayXrp(product.priceUsd)
+                          ? ` · ≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} XRP`
+                          : ""
+                      }
                     </span>
                   </span>
 

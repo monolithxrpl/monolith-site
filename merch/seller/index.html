@@ -8061,12 +8061,12 @@ body.merchSellerPage .sellerOrdersHead button{
             </label>
 
             <label>
-              <span>Price in XRP</span>
+              <span>Price in USD</span>
               <input
                 id="productPrice"
                 type="text"
                 inputmode="decimal"
-                placeholder="25"
+                placeholder="25.00"
               >
             </label>
 
@@ -8357,7 +8357,7 @@ body.merchSellerPage .sellerOrdersHead button{
                   </label>
 
                   <label>
-                    <span>Price XRP</span>
+                    <span>Price USD</span>
                     <input
                       id="variantPrice"
                       type="text"
@@ -9217,6 +9217,35 @@ body.merchSellerPage .sellerOrdersHead button{
         );
 
       const cart = [];
+      let merchXrpUsd = null;
+
+      async function loadMerchXrpRate() {
+        try {
+          const res = await fetch("/api/rates/xrp");
+          const data = await res.json();
+          const rate = Number(data?.rate?.xrpUsd);
+          merchXrpUsd =
+            Number.isFinite(rate) && rate > 0
+              ? rate
+              : null;
+        } catch (_) {
+          merchXrpUsd = null;
+        }
+      }
+
+      function usdToDisplayXrp(value) {
+        const usd = Number(value);
+
+        if (
+          !merchXrpUsd ||
+          !Number.isFinite(usd) ||
+          usd <= 0
+        ) return "";
+
+        return (usd / merchXrpUsd).toFixed(6);
+      }
+
+      loadMerchXrpRate();
       const CART_STORAGE_KEY =
         "monolithMerchCartV1";
       const CART_STORAGE_VERSION = 1;
@@ -9649,7 +9678,7 @@ body.merchSellerPage .sellerOrdersHead button{
               sum +
               (
                 Number(
-                  item.product.priceXrp ||
+                  item.product.priceUsd ||
                   0
                 ) *
                 item.quantity
@@ -9673,12 +9702,13 @@ body.merchSellerPage .sellerOrdersHead button{
             "cartTotal"
           )
           .textContent =
-            `${total.toLocaleString(
+            `$${total.toLocaleString(
               undefined,
               {
-                maximumFractionDigits:6
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
               }
-            )} XRP`;
+            )}`;
 
         document
           .getElementById(
@@ -9832,8 +9862,8 @@ body.merchSellerPage .sellerOrdersHead button{
 
         return Number(
           variant
-            ? variant.priceXrp
-            : item.product.priceXrp ||
+            ? variant.priceUsd
+            : item.product.priceUsd ||
               0
         );
       }
@@ -10143,7 +10173,7 @@ body.merchSellerPage .sellerOrdersHead button{
                                       }
                                     >
                                       ${escapeHtml(label)}
-                                      · ${escapeHtml(variant.priceXrp)} XRP
+                                      · ${escapeHtml(variant.priceUsd)} USD
                                     </option>
                                   `;
                                 }
@@ -12210,14 +12240,14 @@ body.merchSellerPage .sellerOrdersHead button{
 
                     <div class="productFooter">
                       <div class="price">
-                        ${
-                          escapeHtml(
-                            product.priceXrp
-                          )
-                        } XRP
+                        $${escapeHtml(product.priceUsd)}
 
                         <small>
-                          XRPL PAYMENT
+                          ${
+                            usdToDisplayXrp(product.priceUsd)
+                              ? `≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} XRP`
+                              : "XRPL PAYMENT"
+                          }
                         </small>
                       </div>
 
@@ -13672,7 +13702,7 @@ body.merchSellerPage .sellerOrdersHead button{
 
         if (!price) {
           throw new Error(
-            "Enter a product price in XRP."
+            "Enter a product price in USD."
           );
         }
 
@@ -13697,9 +13727,9 @@ body.merchSellerPage .sellerOrdersHead button{
                 ""
               ).trim()
             ),
-          priceXrp:
+          priceUsd:
             price,
-          compareAtPriceXrp:
+          compareAtPriceUsd:
             String(
               productUi
                 .comparePrice
@@ -14176,7 +14206,7 @@ body.merchSellerPage .sellerOrdersHead button{
                   </div>
 
                   <span class="variantRowPrice">
-                    ${escapeHtml(variant.priceXrp)} XRP
+                    ${escapeHtml(variant.priceUsd)} USD
                   </span>
 
                   <button
@@ -14233,7 +14263,7 @@ body.merchSellerPage .sellerOrdersHead button{
                     variant.title || "";
 
                   productUi.variantPrice.value =
-                    variant.priceXrp || "";
+                    variant.priceUsd || "";
 
                   productUi.variantSku.value =
                     variant.sku || "";
@@ -14733,7 +14763,7 @@ body.merchSellerPage .sellerOrdersHead button{
           ).trim();
 
         if (price) {
-          payload.priceXrp =
+          payload.priceUsd =
             price;
         }
 
@@ -15427,15 +15457,15 @@ body.merchSellerPage .sellerOrdersHead button{
 
                                             <span>
                                               ${
-                                                rate.freeOverXrp
-                                                  ? `Free over ${escapeHtml(rate.freeOverXrp)} XRP`
+                                                rate.freeOverUsd
+                                                  ? `Free over $${escapeHtml(rate.freeOverUsd)}`
                                                   : "No free-shipping threshold"
                                               }
                                             </span>
                                           </div>
 
                                           <span class="shippingRatePrice">
-                                            ${escapeHtml(rate.rateXrp)} XRP
+                                            $${escapeHtml(rate.rateUsd)}
                                           </span>
 
                                           <button
@@ -15459,7 +15489,7 @@ body.merchSellerPage .sellerOrdersHead button{
                                 <strong>Add Shipping Rate</strong>
 
                                 <p>
-                                  Set the shipping charge in XRP.
+                                  Set the shipping charge in USD.
                                   Free-over threshold is optional.
                                 </p>
 
@@ -15478,8 +15508,8 @@ body.merchSellerPage .sellerOrdersHead button{
                                   <input
                                     type="text"
                                     inputmode="decimal"
-                                    placeholder="Rate XRP"
-                                    data-rate-xrp="${
+                                    placeholder="Rate USD"
+                                    data-rate-usd="${
                                       escapeHtml(
                                         zone.shippingZoneId
                                       )
@@ -15489,7 +15519,7 @@ body.merchSellerPage .sellerOrdersHead button{
                                   <input
                                     type="text"
                                     inputmode="decimal"
-                                    placeholder="Free over XRP (optional)"
+                                    placeholder="Free over USD (optional)"
                                     data-rate-free-over="${
                                       escapeHtml(
                                         zone.shippingZoneId
@@ -16153,15 +16183,15 @@ body.merchSellerPage .sellerOrdersHead button{
             ""
           ).trim();
 
-        const rateXrp =
+        const rateUsd =
           String(
             card?.querySelector(
-              `[data-rate-xrp="${CSS.escape(zoneId)}"]`
+              `[data-rate-usd="${CSS.escape(zoneId)}"]`
             )?.value ||
             ""
           ).trim();
 
-        const freeOverXrp =
+        const freeOverUsd =
           String(
             card?.querySelector(
               `[data-rate-free-over="${CSS.escape(zoneId)}"]`
@@ -16169,9 +16199,9 @@ body.merchSellerPage .sellerOrdersHead button{
             ""
           ).trim();
 
-        if (!name || rateXrp === "") {
+        if (!name || rateUsd === "") {
           shippingMessage(
-            "Enter a rate name and XRP shipping amount.",
+            "Enter a rate name and USD shipping amount.",
             "error"
           );
           return;
@@ -16190,9 +16220,9 @@ body.merchSellerPage .sellerOrdersHead button{
                 payloadUuid:
                   sellerPayload(),
                 name,
-                rateXrp,
-                freeOverXrp:
-                  freeOverXrp || null
+                rateUsd,
+                freeOverUsd:
+                  freeOverUsd || null
               }
             }
           );
@@ -16401,10 +16431,10 @@ body.merchSellerPage .sellerOrdersHead button{
           product.title || "";
 
         productUi.price.value =
-          product.priceXrp || "";
+          product.priceUsd || "";
 
         productUi.comparePrice.value =
-          product.compareAtPriceXrp || "";
+          product.compareAtPriceUsd || "";
 
         productUi.category.value =
           product.category ||
@@ -16545,11 +16575,12 @@ body.merchSellerPage .sellerOrdersHead button{
                     </strong>
 
                     <span>
+                      $${escapeHtml(product.priceUsd)}
                       ${
-                        escapeHtml(
-                          product.priceXrp
-                        )
-                      } XRP
+                        usdToDisplayXrp(product.priceUsd)
+                          ? ` · ≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} XRP`
+                          : ""
+                      }
                     </span>
                   </span>
 
