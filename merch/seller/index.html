@@ -7375,55 +7375,13 @@ body.merchSellerPage #sellerShipping:not([hidden]){
 </style>
 
 
-<style id="monolith-seller-signout-20260825">
-.sellerCenterAccount{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-}
-
-.sellerSignOutBtn{
-  appearance:none;
-  border:1px solid rgba(255,255,255,.22);
-  background:rgba(255,255,255,.06);
-  color:#fff;
-  border-radius:10px;
-  padding:9px 14px;
-  font:inherit;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.sellerSignOutBtn:hover{
-  background:rgba(255,255,255,.12);
-}
-
-.sellerSignOutBtn[hidden]{
-  display:none!important;
-}
-</style>
 
 
 <style id="monolith-seller-visual-fix-20260825">
 
-/* Seller Center top-right account controls */
-body.merchSellerPage .sellerSignOutBtn{
-  border:1px solid #159fe5!important;
-  background:#159fe5!important;
-  color:#fff!important;
-  opacity:1!important;
-  visibility:visible!important;
-}
-
-body.merchSellerPage .sellerSignOutBtn:hover{
-  background:#087fc1!important;
-}
-
 /* Header owner/order buttons */
 body.merchSellerPage #ownerSignInBtn,
-body.merchSellerPage #headerOrderBtn{
+body.merchSellerPage #orderStatusBtn{
   border:1px solid #159fe5!important;
   background:#fff!important;
   color:#087fc1!important;
@@ -7431,7 +7389,7 @@ body.merchSellerPage #headerOrderBtn{
 }
 
 body.merchSellerPage #ownerSignInBtn:hover,
-body.merchSellerPage #headerOrderBtn:hover{
+body.merchSellerPage #orderStatusBtn:hover{
   background:#eef9ff!important;
 }
 
@@ -7518,6 +7476,7 @@ body.merchSellerPage .sellerOrdersHead button{
         <button
           class="payBtn"
           id="ownerSignInBtn"
+          data-monolith-session-toggle
           type="button"
           title="Sign in as a MONOLITH coordinate owner"
         >
@@ -7778,19 +7737,8 @@ body.merchSellerPage .sellerOrdersHead button{
           </p>
         </div>
 
-        <div class="sellerCenterAccount">
-          <div class="sellerCenterBadge">
-            MONOLITH SELLER
-          </div>
-
-          <button
-            class="sellerSignOutBtn"
-            id="sellerSignOutBtn"
-            type="button"
-            hidden
-          >
-            Sign Out
-          </button>
+        <div class="sellerCenterBadge">
+          MONOLITH SELLER
         </div>
       </div>
 
@@ -9258,51 +9206,6 @@ body.merchSellerPage .sellerOrdersHead button{
 
   <script src="/monolith-session.js"></script>
 
-<script id="monolith-seller-signout-js-20260825">
-(function(){
-  function syncSellerSignOut(){
-    const btn = document.getElementById("sellerSignOutBtn");
-    if (!btn) return;
-
-    const session =
-      window.MonolithSession &&
-      typeof window.MonolithSession.get === "function"
-        ? window.MonolithSession.get()
-        : null;
-
-    btn.hidden = !(session && session.ownerVerified);
-  }
-
-  document.addEventListener("DOMContentLoaded", function(){
-    const btn = document.getElementById("sellerSignOutBtn");
-
-    if (btn){
-      btn.addEventListener("click", function(){
-        if (
-          window.MonolithSession &&
-          typeof window.MonolithSession.clear === "function"
-        ){
-          window.MonolithSession.clear();
-        }
-
-        window.location.href = "/merch/seller/";
-      });
-    }
-
-    syncSellerSignOut();
-  });
-
-  window.addEventListener(
-    "monolith:owner-session-verified",
-    syncSellerSignOut
-  );
-
-  document.addEventListener(
-    "monolith:owner-session-verified",
-    syncSellerSignOut
-  );
-})();
-</script>
 
   <script>
     (() => {
@@ -18946,6 +18849,39 @@ body.merchSellerPage .sellerOrdersHead button{
     ?.addEventListener(
       "click",
       () => {
+        const session =
+          window.MonolithSession
+            ? window.MonolithSession.get()
+            : null;
+
+        if (
+          session &&
+          session.ownerVerified
+        ) {
+          window.MonolithSession.clear();
+
+          if (
+            document.body.classList.contains(
+              "merchSellerPage"
+            )
+          ) {
+            window.location.href =
+              "/merch/seller/";
+          }
+
+          return;
+        }
+
+        if (
+          !document.body.classList.contains(
+            "merchSellerPage"
+          )
+        ) {
+          window.location.href =
+            "/merch/seller/";
+          return;
+        }
+
         const sellers =
           document.getElementById(
             "sellers"

@@ -7349,6 +7349,25 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
 
 
+
+<style id="monolith-merch-header-account-contrast-20260825">
+.headerActions #ownerSignInBtn,
+.headerActions #orderStatusBtn{
+  background:#dceef7!important;
+  border:1px solid #117fae!important;
+  color:#07587d!important;
+  opacity:1!important;
+  font-weight:800!important;
+}
+
+.headerActions #ownerSignInBtn:hover,
+.headerActions #orderStatusBtn:hover{
+  background:#c8e6f4!important;
+  border-color:#07587d!important;
+  color:#043f5a!important;
+}
+</style>
+
 </head>
 
 <body class="merchLaunchSoon">
@@ -7403,6 +7422,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         <button
           class="payBtn"
           id="ownerSignInBtn"
+          data-monolith-session-toggle
           type="button"
           title="Sign in as a MONOLITH coordinate owner"
         >
@@ -17761,6 +17781,39 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
     ?.addEventListener(
       "click",
       () => {
+        const session =
+          window.MonolithSession
+            ? window.MonolithSession.get()
+            : null;
+
+        if (
+          session &&
+          session.ownerVerified
+        ) {
+          window.MonolithSession.clear();
+
+          if (
+            document.body.classList.contains(
+              "merchSellerPage"
+            )
+          ) {
+            window.location.href =
+              "/merch/seller/";
+          }
+
+          return;
+        }
+
+        if (
+          !document.body.classList.contains(
+            "merchSellerPage"
+          )
+        ) {
+          window.location.href =
+            "/merch/seller/";
+          return;
+        }
+
         const sellers =
           document.getElementById(
             "sellers"
