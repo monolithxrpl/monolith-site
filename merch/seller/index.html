@@ -6777,6 +6777,59 @@ body.merchLaunchSoon .marketHeroMark img{
   background:#ffffff;
 }
 
+.sellerCenterShell .productShippingCard{
+  margin-top:16px;
+}
+
+.sellerCenterShell .productShippingCard .productChecks{
+  margin:0 0 16px;
+}
+
+.sellerCenterShell .productShippingCard .productFields{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px 16px;
+}
+
+.sellerCenterShell .productShippingCard .productFields label{
+  display:grid;
+  gap:7px;
+  min-width:0;
+}
+
+.sellerCenterShell .productShippingCard .productFields label > span{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:#718792;
+}
+
+.sellerCenterShell .productShippingCard .productFields input,
+.sellerCenterShell .productShippingCard .productFields select{
+  width:100%;
+  min-height:42px;
+  box-sizing:border-box;
+}
+
+.sellerCenterShell .productShippingCard .productWideField{
+  grid-column:1 / -1;
+}
+
+.sellerCenterShell .productShippingCard .productAdvancedNotice{
+  margin-top:14px;
+}
+
+@media(max-width:680px){
+  .sellerCenterShell .productShippingCard .productFields{
+    grid-template-columns:1fr;
+  }
+
+  .sellerCenterShell .productShippingCard .productWideField{
+    grid-column:auto;
+  }
+}
+
 
 
 /* -----------------------------------------------------------
@@ -8190,7 +8243,7 @@ body.merchSellerPage .sellerOrdersHead button{
               type="button"
               disabled
             >
-              Save Product to Upload Images
+              Upload Images
             </button>
           </div>
 
@@ -8498,7 +8551,7 @@ body.merchSellerPage .sellerOrdersHead button{
               class="productAdvancedNotice"
               id="productShippingProfileNotice"
             >
-              Create a shipping profile below before publishing a shippable product.
+              Create a shipping profile in the Shipping tab before publishing a shippable product.
             </div>
           </section>
 
@@ -16431,7 +16484,7 @@ body.merchSellerPage .sellerOrdersHead button{
         productUi.uploadImage.disabled =
           true;
         productUi.uploadImage.textContent =
-          "Save Product to Upload Images";
+          "Upload Images";
         productUi.archive.hidden =
           true;
         productUi.media.innerHTML = "";
@@ -18208,7 +18261,7 @@ body.merchSellerPage .sellerOrdersHead button{
       async function saveProduct(
         status
       ) {
-        if (!sellerProfile) return;
+        if (!sellerProfile) return null;
 
         let payload;
 
@@ -18222,7 +18275,7 @@ body.merchSellerPage .sellerOrdersHead button{
             error.message,
             "error"
           );
-          return;
+          return null;
         }
 
         if (!payload.title) {
@@ -18230,7 +18283,7 @@ body.merchSellerPage .sellerOrdersHead button{
             "Enter a product title.",
             "error"
           );
-          return;
+          return null;
         }
 
         productUi.saveDraft.disabled =
@@ -18281,12 +18334,16 @@ body.merchSellerPage .sellerOrdersHead button{
           );
 
           loadMarketplace();
+
+          return editingProduct;
         } catch (error) {
           productMessage(
             error.message ||
             "Unable to save product.",
             "error"
           );
+
+          return null;
         } finally {
           productUi.saveDraft.disabled =
             false;
@@ -18420,14 +18477,11 @@ body.merchSellerPage .sellerOrdersHead button{
           "change",
           () => {
             productUi.uploadImage.disabled =
-              !editingProduct ||
               !productUi.image.files ||
               !productUi.image.files.length;
 
             productUi.uploadImage.textContent =
-              editingProduct
-                ? "Upload Images"
-                : "Save Product to Upload Images";
+              "Upload Images";
           }
         );
 
@@ -18436,7 +18490,6 @@ body.merchSellerPage .sellerOrdersHead button{
           "click",
           async () => {
             if (
-              !editingProduct ||
               !productUi.image.files ||
               !productUi.image.files.length
             ) {
@@ -18451,11 +18504,27 @@ body.merchSellerPage .sellerOrdersHead button{
             productUi.uploadImage.disabled =
               true;
 
-            productMessage(
-              `Uploading ${files.length} product image${files.length === 1 ? "" : "s"}…`
-            );
-
             try {
+              if (!editingProduct) {
+                productMessage(
+                  "Saving product draft before uploading images…"
+                );
+
+                const saved =
+                  await saveProduct(
+                    "draft"
+                  );
+
+                if (!saved) {
+                  productUi.uploadImage.disabled =
+                    false;
+                  return;
+                }
+              }
+
+              productMessage(
+                `Uploading ${files.length} product image${files.length === 1 ? "" : "s"}…`
+              );
               for (const file of files) {
                 const form =
                   new FormData();
