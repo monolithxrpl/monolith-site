@@ -16770,6 +16770,29 @@ body.merchSellerPage .sellerOrdersHead button{
         },
 
         UPS:{
+          "UPS Simple Rate":[
+            {
+              id:"ups-simple-xs",
+              label:"Extra Small — 1–100 cubic in"
+            },
+            {
+              id:"ups-simple-small",
+              label:"Small — 101–250 cubic in"
+            },
+            {
+              id:"ups-simple-medium",
+              label:"Medium — 251–650 cubic in"
+            },
+            {
+              id:"ups-simple-large",
+              label:"Large — 651–1,050 cubic in"
+            },
+            {
+              id:"ups-simple-xl",
+              label:"Extra Large — 1,051–1,728 cubic in"
+            }
+          ],
+
           "UPS Ground":[
             {
               id:"custom",
@@ -16831,6 +16854,41 @@ body.merchSellerPage .sellerOrdersHead button{
         },
 
         FedEx:{
+          "FedEx One Rate":[
+            {
+              id:"fedex-onerate-envelope",
+              label:"FedEx Envelope"
+            },
+            {
+              id:"fedex-onerate-xs",
+              label:"FedEx Extra Small Box"
+            },
+            {
+              id:"fedex-onerate-pak",
+              label:"FedEx Pak"
+            },
+            {
+              id:"fedex-onerate-small",
+              label:"FedEx Small Box"
+            },
+            {
+              id:"fedex-onerate-medium",
+              label:"FedEx Medium Box"
+            },
+            {
+              id:"fedex-onerate-large",
+              label:"FedEx Large Box"
+            },
+            {
+              id:"fedex-onerate-xl",
+              label:"FedEx Extra Large Box"
+            },
+            {
+              id:"fedex-onerate-tube",
+              label:"FedEx Tube"
+            }
+          ],
+
           "FedEx Ground":[
             {
               id:"custom",
@@ -17046,27 +17104,62 @@ body.merchSellerPage .sellerOrdersHead button{
         refreshShippingPackageFields();
       }
 
+      function shippingPackageMode() {
+        const carrier =
+          productUi.shippingCarrier?.value || "";
+
+        const service =
+          productUi.shippingService?.value || "";
+
+        const packageId =
+          productUi.shippingPackage?.value || "";
+
+        if (packageId === "custom") {
+          return "custom";
+        }
+
+        if (
+          carrier === "USPS" &&
+          (
+            packageId.startsWith("usps-flat-") ||
+            packageId.startsWith("usps-legal-") ||
+            packageId.startsWith("usps-padded-") ||
+            packageId.includes("-flat-box") ||
+            packageId.startsWith("usps-express-")
+          )
+        ) {
+          return "flat_rate";
+        }
+
+        if (
+          carrier === "FedEx" &&
+          service === "FedEx One Rate"
+        ) {
+          return "flat_rate";
+        }
+
+        if (
+          carrier === "UPS" &&
+          service === "UPS Simple Rate"
+        ) {
+          return "simple_rate";
+        }
+
+        return "preset";
+      }
+
       function refreshShippingPackageFields() {
-        const custom =
-          productUi.shippingPackage?.value ===
-          "custom";
+        const mode =
+          shippingPackageMode();
 
-        const selectedOption =
-          productUi.shippingPackage
-            ?.selectedOptions?.[0];
-
-        const flatRate =
-          /flat rate/i.test(
-            selectedOption?.textContent || ""
-          );
-
-        const fields =
+        const customFields =
           document.getElementById(
             "productCustomPackageFields"
           );
 
-        if (fields) {
-          fields.hidden = !custom;
+        if (customFields) {
+          customFields.hidden =
+            mode !== "custom";
         }
 
         [
@@ -17077,7 +17170,9 @@ body.merchSellerPage .sellerOrdersHead button{
             input?.closest("label");
 
           if (label) {
-            label.hidden = flatRate;
+            label.hidden =
+              mode === "flat_rate" ||
+              mode === "simple_rate";
           }
         });
       }
