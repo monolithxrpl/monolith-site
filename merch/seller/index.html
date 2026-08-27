@@ -6889,6 +6889,41 @@ body.merchLaunchSoon .marketHeroMark img{
   margin-top:14px;
 }
 
+.sellerCenterShell .productManualShippingNotice{
+  grid-column:1 / -1;
+  margin-top:16px;
+  padding:16px;
+  border:1px solid #c7e1ec;
+  border-radius:10px;
+  background:#f4fafc;
+}
+
+.sellerCenterShell .productManualShippingNotice strong{
+  display:block;
+  margin-bottom:7px;
+  color:#263c47;
+  font-size:10px;
+}
+
+.sellerCenterShell .productManualShippingNotice p{
+  margin:5px 0;
+  color:#607985;
+  font-size:9px;
+  line-height:1.6;
+}
+
+.sellerCenterShell .productManualShippingNotice .shippingCarrierLinks{
+  margin-top:12px;
+}
+
+.sellerCenterShell .productShippingPresetHelp{
+  display:block;
+  margin-top:5px;
+  color:#718792;
+  font-size:8px;
+  line-height:1.45;
+}
+
 @media(max-width:680px){
   .sellerCenterShell .productShippingCard .productFields{
     grid-template-columns:1fr;
@@ -8657,6 +8692,29 @@ body.merchSellerPage .sellerOrdersHead button{
                   >
                 </label>
 
+                <label>
+                  <span>Carrier</span>
+                  <select id="productShippingCarrier">
+                    <option value="USPS">USPS</option>
+                    <option value="UPS">UPS</option>
+                    <option value="FedEx">FedEx</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>Service</span>
+                  <select id="productShippingService"></select>
+                </label>
+
+                <label class="productWideField">
+                  <span>Package</span>
+                  <select id="productShippingPackage"></select>
+                  <small
+                    class="productShippingPresetHelp"
+                    id="productShippingPackageHelp"
+                  ></small>
+                </label>
+
                 <label class="productWideField">
                   <span>Shipping Cost USD</span>
                   <input
@@ -8670,6 +8728,50 @@ body.merchSellerPage .sellerOrdersHead button{
                     id="productShippingCostXrp"
                   ></small>
                 </label>
+              </div>
+
+              <div class="productManualShippingNotice">
+                <strong>Manual Carrier Pricing — Temporary Launch Mode</strong>
+
+                <p>
+                  MONOLITH automatic carrier pricing is being activated.
+                  Until live rates are available, check the current shipping
+                  price with the carrier, then enter the amount you want the
+                  buyer to pay.
+                </p>
+
+                <p>
+                  Carrier prices change based on package size, weight,
+                  destination and service. The amount you enter here is the
+                  shipping charge shown to your customer. MONOLITH will
+                  automatically display and collect its XRP equivalent at checkout.
+                </p>
+
+                <div class="shippingCarrierLinks">
+                  <a
+                    href="https://postcalc.usps.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Check USPS Rates
+                  </a>
+
+                  <a
+                    href="https://wwwapps.ups.com/ctc/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Check UPS Rates
+                  </a>
+
+                  <a
+                    href="https://www.fedex.com/en-us/shipping/how-to-estimate-shipping-cost.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Check FedEx Rates
+                  </a>
+                </div>
               </div>
 
               <button
@@ -13694,6 +13796,18 @@ body.merchSellerPage .sellerOrdersHead button{
           document.getElementById(
             "productShippingCountries"
           ),
+        shippingCarrier:
+          document.getElementById(
+            "productShippingCarrier"
+          ),
+        shippingService:
+          document.getElementById(
+            "productShippingService"
+          ),
+        shippingPackage:
+          document.getElementById(
+            "productShippingPackage"
+          ),
         shippingCostUsd:
           document.getElementById(
             "productShippingCostUsd"
@@ -16518,6 +16632,496 @@ body.merchSellerPage .sellerOrdersHead button{
         }
       }
 
+      const merchShippingPresets = {
+        USPS:{
+          "USPS Ground Advantage":[
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            }
+          ],
+
+          "USPS Priority Mail":[
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            },
+            {
+              id:"usps-flat-envelope",
+              label:'Flat Rate Envelope — 12.5 × 9.5 in',
+              l:"12.5",
+              w:"9.5",
+              h:""
+            },
+            {
+              id:"usps-legal-envelope",
+              label:'Legal Flat Rate Envelope — 15 × 9.5 in',
+              l:"15",
+              w:"9.5",
+              h:""
+            },
+            {
+              id:"usps-padded-envelope",
+              label:'Padded Flat Rate Envelope — 12.5 × 9.5 in',
+              l:"12.5",
+              w:"9.5",
+              h:""
+            },
+            {
+              id:"usps-small-flat-box",
+              label:'Small Flat Rate Box — 8 11/16 × 5 7/16 × 1 3/4 in',
+              l:"8.6875",
+              w:"5.4375",
+              h:"1.75"
+            },
+            {
+              id:"usps-medium-flat-top",
+              label:'Medium Flat Rate Box — Top Loading — 11 1/4 × 8 3/4 × 6 in',
+              l:"11.25",
+              w:"8.75",
+              h:"6"
+            },
+            {
+              id:"usps-medium-flat-side",
+              label:'Medium Flat Rate Box — Side Loading — 14 1/8 × 12 × 3 1/2 in',
+              l:"14.125",
+              w:"12",
+              h:"3.5"
+            },
+            {
+              id:"usps-large-flat-box",
+              label:'Large Flat Rate Box — 12 1/4 × 12 × 6 in',
+              l:"12.25",
+              w:"12",
+              h:"6"
+            },
+            {
+              id:"usps-priority-small-box",
+              label:'Priority Mail Small Box — 9 7/16 × 6 7/16 × 2 3/16 in',
+              l:"9.4375",
+              w:"6.4375",
+              h:"2.1875"
+            },
+            {
+              id:"usps-priority-medium-cube",
+              label:'Priority Mail Medium Cube — 7 1/4 × 7 1/4 × 6 1/2 in',
+              l:"7.25",
+              w:"7.25",
+              h:"6.5"
+            },
+            {
+              id:"usps-priority-medium-side",
+              label:'Priority Mail Side-Loading Medium Box — 13 11/16 × 12 × 2 7/8 in',
+              l:"13.6875",
+              w:"12",
+              h:"2.875"
+            },
+            {
+              id:"usps-priority-large-box",
+              label:'Priority Mail Large Box — 12 1/4 × 12 × 8 1/2 in',
+              l:"12.25",
+              w:"12",
+              h:"8.5"
+            },
+            {
+              id:"usps-priority-shoe-box",
+              label:'Priority Mail Shoe Box — 14 7/8 × 5 1/4 × 7 3/8 in',
+              l:"14.875",
+              w:"5.25",
+              h:"7.375"
+            }
+          ],
+
+          "USPS Priority Mail Express":[
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            },
+            {
+              id:"usps-express-envelope",
+              label:'Flat Rate Envelope — 12.5 × 9.5 in',
+              l:"12.5",
+              w:"9.5",
+              h:""
+            },
+            {
+              id:"usps-express-legal",
+              label:'Legal Flat Rate Envelope — 15 × 9.5 in',
+              l:"15",
+              w:"9.5",
+              h:""
+            },
+            {
+              id:"usps-express-padded",
+              label:'Padded Flat Rate Envelope — 12.5 × 9.5 in',
+              l:"12.5",
+              w:"9.5",
+              h:""
+            }
+          ]
+        },
+
+        UPS:{
+          "UPS Ground":[
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            }
+          ],
+
+          "UPS 2nd Day Air":[
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            },
+            {
+              id:"ups-envelope",
+              label:'UPS Express Envelope — 12.5 × 9.5 in',
+              l:"12.5",
+              w:"9.5",
+              h:""
+            },
+            {
+              id:"ups-pak",
+              label:'UPS Express Pak — 16 × 12.75 in',
+              l:"16",
+              w:"12.75",
+              h:""
+            },
+            {
+              id:"ups-box-small",
+              label:'UPS Express Box Small — 13 × 11 × 2 in',
+              l:"13",
+              w:"11",
+              h:"2"
+            },
+            {
+              id:"ups-box-medium",
+              label:'UPS Express Box Medium — 15 × 11 × 3 in',
+              l:"15",
+              w:"11",
+              h:"3"
+            },
+            {
+              id:"ups-box-large",
+              label:'UPS Express Box Large — 18 × 13 × 3 in',
+              l:"18",
+              w:"13",
+              h:"3"
+            },
+            {
+              id:"ups-tube",
+              label:'UPS Tube — 38 × 6 × 6 in',
+              l:"38",
+              w:"6",
+              h:"6"
+            }
+          ],
+
+          "UPS Next Day Air Saver":null,
+          "UPS Next Day Air":null
+        },
+
+        FedEx:{
+          "FedEx Ground":[
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            }
+          ],
+
+          "FedEx Home Delivery":[
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            }
+          ],
+
+          "FedEx Express Saver":[
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            },
+            {
+              id:"fedex-extra-small",
+              label:'FedEx Extra Small Box — 7 1/4 × 2 1/2 × 4 11/16 in',
+              l:"7.25",
+              w:"2.5",
+              h:"4.6875"
+            },
+            {
+              id:"fedex-small-1",
+              label:'FedEx Small Box — 10 7/8 × 1 1/2 × 12 3/8 in',
+              l:"10.875",
+              w:"1.5",
+              h:"12.375"
+            },
+            {
+              id:"fedex-small-2",
+              label:'FedEx Small Box — 8 3/4 × 2 5/8 × 11 1/4 in',
+              l:"8.75",
+              w:"2.625",
+              h:"11.25"
+            },
+            {
+              id:"fedex-medium-1",
+              label:'FedEx Medium Box — 11 1/2 × 2 3/8 × 13 1/4 in',
+              l:"11.5",
+              w:"2.375",
+              h:"13.25"
+            },
+            {
+              id:"fedex-medium-2",
+              label:'FedEx Medium Box — 8 3/4 × 4 3/8 × 11 1/4 in',
+              l:"8.75",
+              w:"4.375",
+              h:"11.25"
+            },
+            {
+              id:"fedex-large-1",
+              label:'FedEx Large Box — 12 3/8 × 3 × 17 1/2 in',
+              l:"12.375",
+              w:"3",
+              h:"17.5"
+            },
+            {
+              id:"fedex-large-2",
+              label:'FedEx Large Box — 8 3/4 × 7 3/4 × 11 1/4 in',
+              l:"8.75",
+              w:"7.75",
+              h:"11.25"
+            },
+            {
+              id:"fedex-xl-1",
+              label:'FedEx Extra Large Box — 11 7/8 × 10 3/4 × 11 in',
+              l:"11.875",
+              w:"10.75",
+              h:"11"
+            },
+            {
+              id:"fedex-xl-2",
+              label:'FedEx Extra Large Box — 15 3/4 × 14 1/8 × 6 in',
+              l:"15.75",
+              w:"14.125",
+              h:"6"
+            },
+            {
+              id:"fedex-tube",
+              label:'FedEx Tube — 6 × 6 × 38 in',
+              l:"38",
+              w:"6",
+              h:"6"
+            }
+          ],
+
+          "FedEx 2Day":null,
+          "FedEx Standard Overnight":null,
+          "FedEx Priority Overnight":null
+        }
+      };
+
+      // UPS Air services use the same UPS Express packaging.
+      merchShippingPresets.UPS[
+        "UPS Next Day Air Saver"
+      ] =
+        merchShippingPresets.UPS[
+          "UPS 2nd Day Air"
+        ];
+
+      merchShippingPresets.UPS[
+        "UPS Next Day Air"
+      ] =
+        merchShippingPresets.UPS[
+          "UPS 2nd Day Air"
+        ];
+
+      // FedEx One Rate packaging is available across supported
+      // FedEx Express services.
+      [
+        "FedEx 2Day",
+        "FedEx Standard Overnight",
+        "FedEx Priority Overnight"
+      ].forEach(
+        service => {
+          merchShippingPresets.FedEx[
+            service
+          ] =
+            merchShippingPresets.FedEx[
+              "FedEx Express Saver"
+            ];
+        }
+      );
+
+      function shippingPresetServices() {
+        const carrier =
+          productUi.shippingCarrier
+            ?.value ||
+          "USPS";
+
+        return Object.keys(
+          merchShippingPresets[
+            carrier
+          ] || {}
+        );
+      }
+
+      function renderShippingServicePresets() {
+        const services =
+          shippingPresetServices();
+
+        const previous =
+          productUi.shippingService
+            ?.value ||
+          "";
+
+        productUi.shippingService
+          .innerHTML =
+            services.map(
+              service => `
+                <option value="${escapeHtml(service)}">
+                  ${escapeHtml(service)}
+                </option>
+              `
+            ).join("");
+
+        if (
+          services.includes(
+            previous
+          )
+        ) {
+          productUi.shippingService.value =
+            previous;
+        }
+
+        renderShippingPackagePresets();
+      }
+
+      function renderShippingPackagePresets() {
+        const carrier =
+          productUi.shippingCarrier.value;
+
+        const service =
+          productUi.shippingService.value;
+
+        const presets =
+          merchShippingPresets[
+            carrier
+          ]?.[
+            service
+          ] || [
+            {
+              id:"custom",
+              label:"Custom / Your Own Packaging"
+            }
+          ];
+
+        productUi.shippingPackage
+          .innerHTML =
+            presets.map(
+              preset => `
+                <option value="${escapeHtml(preset.id)}">
+                  ${escapeHtml(preset.label)}
+                </option>
+              `
+            ).join("");
+
+        const help =
+          document.getElementById(
+            "productShippingPackageHelp"
+          );
+
+        if (help) {
+          help.textContent =
+            "Carrier-branded package dimensions are preset. Choose Custom if you use your own box or mailer.";
+        }
+      }
+
+      function applyShippingPackagePreset() {
+        const carrier =
+          productUi.shippingCarrier.value;
+
+        const service =
+          productUi.shippingService.value;
+
+        const selected =
+          productUi.shippingPackage.value;
+
+        const presets =
+          merchShippingPresets[
+            carrier
+          ]?.[
+            service
+          ] || [];
+
+        const preset =
+          presets.find(
+            item =>
+              item.id === selected
+          );
+
+        if (
+          !preset ||
+          preset.id === "custom"
+        ) {
+          return;
+        }
+
+        productUi.packageLength.value =
+          preset.l || "";
+
+        productUi.packageWidth.value =
+          preset.w || "";
+
+        productUi.packageHeight.value =
+          preset.h || "";
+
+        productUi.dimensionUnit.value =
+          "in";
+
+        if (
+          !productUi.weightUnit.value
+        ) {
+          productUi.weightUnit.value =
+            "oz";
+        }
+
+        const help =
+          document.getElementById(
+            "productShippingPackageHelp"
+          );
+
+        if (
+          help &&
+          !preset.h
+        ) {
+          help.textContent =
+            "Length and width were filled from the carrier package. Enter the packed thickness/height if needed.";
+        } else if (help) {
+          help.textContent =
+            "Official package dimensions filled automatically.";
+        }
+      }
+
+      productUi.shippingCarrier
+        ?.addEventListener(
+          "change",
+          renderShippingServicePresets
+        );
+
+      productUi.shippingService
+        ?.addEventListener(
+          "change",
+          renderShippingPackagePresets
+        );
+
+      productUi.shippingPackage
+        ?.addEventListener(
+          "change",
+          applyShippingPackagePreset
+        );
+
+      renderShippingServicePresets();
+
       productUi.shippingSave
         ?.addEventListener(
           "click",
@@ -16531,6 +17135,27 @@ body.merchSellerPage .sellerOrdersHead button{
                   .value ||
                 ""
               ).trim();
+
+            const carrier =
+              String(
+                productUi.shippingCarrier
+                  ?.value ||
+                ""
+              ).trim();
+
+            const service =
+              String(
+                productUi.shippingService
+                  ?.value ||
+                ""
+              ).trim();
+
+            const packageLabel =
+              productUi.shippingPackage
+                ?.selectedOptions?.[0]
+                ?.textContent
+                ?.trim() ||
+              "Custom Packaging";
 
             const rateUsd =
               String(
@@ -16598,7 +17223,11 @@ body.merchSellerPage .sellerOrdersHead button{
                       sellerId:
                         sellerProfile.sellerId,
                       name,
-                      rateMode:"manual"
+                      rateMode:"manual",
+                      enabledCarriers:
+                        carrier
+                          ? [carrier]
+                          : []
                     }
                   }
                 );
@@ -16626,7 +17255,8 @@ body.merchSellerPage .sellerOrdersHead button{
                     body:{
                       payloadUuid:
                         sellerPayload(),
-                      name:"Standard",
+                      name:
+                        countries.join(", "),
                       countries
                     }
                   }
@@ -16654,7 +17284,8 @@ body.merchSellerPage .sellerOrdersHead button{
                   body:{
                     payloadUuid:
                       sellerPayload(),
-                    name:"Standard",
+                    name:
+                      `${carrier} ${service} — ${packageLabel}`,
                     rateUsd,
                     freeOverUsd:null
                   }
