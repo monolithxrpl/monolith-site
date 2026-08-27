@@ -8864,6 +8864,7 @@ body.merchSellerPage .sellerOrdersHead button{
       class="section sellerShippingManager"
       id="sellerShipping"
       hidden
+      style="display:none !important;"
     >
       <div class="shippingManagerHead">
         <div>
@@ -17034,6 +17035,48 @@ body.merchSellerPage .sellerOrdersHead button{
           help.textContent =
             "Carrier-branded package dimensions are preset. Choose Custom if you use your own box or mailer.";
         }
+
+        refreshShippingPackageFields();
+      }
+
+      function refreshShippingPackageFields() {
+        const custom =
+          productUi.shippingPackage?.value ===
+          "custom";
+
+        const weightFields = [
+          productUi.weight,
+          productUi.weightUnit
+        ];
+
+        const dimensionFields = [
+          productUi.packageLength,
+          productUi.packageWidth,
+          productUi.packageHeight,
+          productUi.dimensionUnit
+        ];
+
+        weightFields.forEach(
+          input => {
+            const label =
+              input?.closest("label");
+
+            if (label) {
+              label.hidden = false;
+            }
+          }
+        );
+
+        dimensionFields.forEach(
+          input => {
+            const label =
+              input?.closest("label");
+
+            if (label) {
+              label.hidden = !custom;
+            }
+          }
+        );
       }
 
       function applyShippingPackagePreset() {
@@ -17117,7 +17160,10 @@ body.merchSellerPage .sellerOrdersHead button{
       productUi.shippingPackage
         ?.addEventListener(
           "change",
-          applyShippingPackagePreset
+          () => {
+            applyShippingPackagePreset();
+            refreshShippingPackageFields();
+          }
         );
 
       renderShippingServicePresets();
