@@ -17051,6 +17051,15 @@ body.merchSellerPage .sellerOrdersHead button{
           productUi.shippingPackage?.value ===
           "custom";
 
+        const selectedOption =
+          productUi.shippingPackage
+            ?.selectedOptions?.[0];
+
+        const flatRate =
+          /flat rate/i.test(
+            selectedOption?.textContent || ""
+          );
+
         const fields =
           document.getElementById(
             "productCustomPackageFields"
@@ -17059,6 +17068,18 @@ body.merchSellerPage .sellerOrdersHead button{
         if (fields) {
           fields.hidden = !custom;
         }
+
+        [
+          productUi.weight,
+          productUi.weightUnit
+        ].forEach(input => {
+          const label =
+            input?.closest("label");
+
+          if (label) {
+            label.hidden = flatRate;
+          }
+        });
       }
 
       function applyShippingPackagePreset() {
