@@ -8590,75 +8590,6 @@ body.merchSellerPage .sellerOrdersHead button{
               </label>
             </div>
 
-            <div class="productFields">
-              <label>
-                <span>Weight</span>
-                <input
-                  id="productWeight"
-                  type="text"
-                  inputmode="decimal"
-                  placeholder="Optional"
-                >
-              </label>
-
-              <label>
-                <span>Weight Unit</span>
-                <select id="productWeightUnit">
-                  <option value="">None</option>
-                  <option value="oz">oz</option>
-                  <option value="lb">lb</option>
-                  <option value="g">g</option>
-                  <option value="kg">kg</option>
-                </select>
-              </label>
-
-              <label>
-                <span>Package Length</span>
-                <input
-                  id="productPackageLength"
-                  type="text"
-                  inputmode="decimal"
-                  placeholder="e.g. 12"
-                >
-              </label>
-
-              <label>
-                <span>Package Width</span>
-                <input
-                  id="productPackageWidth"
-                  type="text"
-                  inputmode="decimal"
-                  placeholder="e.g. 9"
-                >
-              </label>
-
-              <label>
-                <span>Package Height</span>
-                <input
-                  id="productPackageHeight"
-                  type="text"
-                  inputmode="decimal"
-                  placeholder="e.g. 3"
-                >
-              </label>
-
-              <label>
-                <span>Dimension Unit</span>
-                <select id="productDimensionUnit">
-                  <option value="">None</option>
-                  <option value="in">in</option>
-                  <option value="cm">cm</option>
-                </select>
-              </label>
-
-              <label class="productWideField">
-                <span>Shipping Profile</span>
-                <select id="productShippingProfile">
-                  <option value="">No profile selected</option>
-                </select>
-              </label>
-            </div>
-
             <div class="productQuickShipping">
               <div class="productAdvancedHead">
                 <div>
@@ -8714,6 +8645,74 @@ body.merchSellerPage .sellerOrdersHead button{
                     id="productShippingPackageHelp"
                   ></small>
                 </label>
+
+                <label>
+                  <span>Weight</span>
+                  <input
+                    id="productWeight"
+                    type="text"
+                    inputmode="decimal"
+                    placeholder="e.g. 12"
+                  >
+                </label>
+
+                <label>
+                  <span>Weight Unit</span>
+                  <select id="productWeightUnit">
+                    <option value="">Choose unit</option>
+                    <option value="oz">oz</option>
+                    <option value="lb">lb</option>
+                    <option value="g">g</option>
+                    <option value="kg">kg</option>
+                  </select>
+                </label>
+
+                <div
+                  class="productCustomPackageFields productWideField"
+                  id="productCustomPackageFields"
+                  hidden
+                >
+                  <div class="productFields">
+                    <label>
+                      <span>Package Length</span>
+                      <input
+                        id="productPackageLength"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="e.g. 12"
+                      >
+                    </label>
+
+                    <label>
+                      <span>Package Width</span>
+                      <input
+                        id="productPackageWidth"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="e.g. 9"
+                      >
+                    </label>
+
+                    <label>
+                      <span>Package Height</span>
+                      <input
+                        id="productPackageHeight"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="e.g. 3"
+                      >
+                    </label>
+
+                    <label>
+                      <span>Dimension Unit</span>
+                      <select id="productDimensionUnit">
+                        <option value="">Choose unit</option>
+                        <option value="in">in</option>
+                        <option value="cm">cm</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
 
                 <label class="productWideField">
                   <span>Shipping Cost USD</span>
@@ -8781,6 +8780,14 @@ body.merchSellerPage .sellerOrdersHead button{
               >
                 Save Shipping
               </button>
+
+              <select
+                id="productShippingProfile"
+                hidden
+                aria-hidden="true"
+              >
+                <option value="">No profile selected</option>
+              </select>
 
               <div
                 class="productAdvancedNotice"
@@ -17044,39 +17051,14 @@ body.merchSellerPage .sellerOrdersHead button{
           productUi.shippingPackage?.value ===
           "custom";
 
-        const weightFields = [
-          productUi.weight,
-          productUi.weightUnit
-        ];
+        const fields =
+          document.getElementById(
+            "productCustomPackageFields"
+          );
 
-        const dimensionFields = [
-          productUi.packageLength,
-          productUi.packageWidth,
-          productUi.packageHeight,
-          productUi.dimensionUnit
-        ];
-
-        weightFields.forEach(
-          input => {
-            const label =
-              input?.closest("label");
-
-            if (label) {
-              label.hidden = false;
-            }
-          }
-        );
-
-        dimensionFields.forEach(
-          input => {
-            const label =
-              input?.closest("label");
-
-            if (label) {
-              label.hidden = !custom;
-            }
-          }
-        );
+        if (fields) {
+          fields.hidden = !custom;
+        }
       }
 
       function applyShippingPackagePreset() {
