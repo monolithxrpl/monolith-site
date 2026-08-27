@@ -6820,6 +6820,51 @@ body.merchLaunchSoon .marketHeroMark img{
   margin-top:14px;
 }
 
+.sellerCenterShell .productMediaGrid{
+  grid-template-columns:repeat(auto-fill,minmax(105px,1fr));
+  gap:12px;
+}
+
+.sellerCenterShell .productMediaItem{
+  border:1px solid #dce7ec;
+  background:#f5f9fb;
+  box-shadow:0 2px 8px rgba(20,48,60,.06);
+}
+
+.sellerCenterShell .collectionRow{
+  border:1px solid #dce7ec;
+  background:#f5f9fb;
+}
+
+.sellerCenterShell .collectionRow strong{
+  color:#263c47;
+}
+
+.sellerCenterShell .collectionRow span{
+  color:#718792;
+}
+
+.sellerCenterShell .productOptionBlock{
+  border-color:#dce7ec;
+  background:#f5f9fb;
+}
+
+.sellerCenterShell .productOptionTop strong{
+  color:#263c47;
+}
+
+.sellerCenterShell .optionValueChip{
+  border-color:#cce3ed;
+  color:#395865;
+  background:#edf7fb;
+}
+
+.sellerCenterShell .optionValueAdd input{
+  border-color:#d3e1e7;
+  color:#243a44;
+  background:#fff;
+}
+
 .sellerCenterShell .sellerXrpEquivalent{
   display:block;
   min-height:16px;
@@ -14160,6 +14205,12 @@ body.merchSellerPage .sellerOrdersHead button{
             ? product.media
             : [];
 
+        productUi.media.hidden =
+          false;
+
+        productUi.media.style.display =
+          "grid";
+
         productUi.media.innerHTML =
           media.map(
             item => `
@@ -14561,7 +14612,7 @@ body.merchSellerPage .sellerOrdersHead button{
                   </div>
 
                   <span class="variantRowPrice">
-                    $${escapeHtml(variant.priceUsd)} · ≈ ${escapeHtml(usdToDisplayXrp(variant.priceUsd) || '—')} XRP
+                    $${escapeHtml(variant.priceUsd)} · ≈ ${escapeHtml(sellerUsdToXrp(variant.priceUsd) || '—')} XRP
                   </span>
 
                   <button
@@ -14821,15 +14872,31 @@ body.merchSellerPage .sellerOrdersHead button{
         if (index >= 0) {
           sellerProducts[index] =
             product;
+        } else {
+          sellerProducts.unshift(
+            product
+          );
         }
 
         editingProduct =
           product;
 
         renderSellerProducts();
-        fillProductEditor(
+        renderProductMedia(
           product
         );
+        renderAdvancedProductTools();
+        refreshSellerPriceEquivalents();
+
+        productUi.editorTitle.textContent =
+          product.title ||
+          "Product";
+
+        productUi.editorStatus.textContent =
+          String(
+            product.status ||
+            "draft"
+          ).toUpperCase();
       }
 
       async function ensureEditingProductDraft() {
@@ -15204,6 +15271,11 @@ body.merchSellerPage .sellerOrdersHead button{
         productUi.variantSave.disabled =
           true;
 
+        const wasEditingVariant =
+          Boolean(
+            editingVariant
+          );
+
         try {
           const url =
             editingVariant
@@ -15238,7 +15310,7 @@ body.merchSellerPage .sellerOrdersHead button{
           );
 
           productMessage(
-            editingVariant
+            wasEditingVariant
               ? "Variant updated."
               : "Variant added.",
             "success"
