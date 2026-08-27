@@ -10173,7 +10173,7 @@ body.merchSellerPage .sellerOrdersHead button{
                                       }
                                     >
                                       ${escapeHtml(label)}
-                                      · ${escapeHtml(variant.priceUsd)} USD
+                                      · $${escapeHtml(variant.priceUsd)} · ≈ ${escapeHtml(usdToDisplayXrp(variant.priceUsd) || '—')} XRP
                                     </option>
                                   `;
                                 }
@@ -14206,7 +14206,7 @@ body.merchSellerPage .sellerOrdersHead button{
                   </div>
 
                   <span class="variantRowPrice">
-                    ${escapeHtml(variant.priceUsd)} USD
+                    $${escapeHtml(variant.priceUsd)} · ≈ ${escapeHtml(usdToDisplayXrp(variant.priceUsd) || '—')} XRP
                   </span>
 
                   <button
