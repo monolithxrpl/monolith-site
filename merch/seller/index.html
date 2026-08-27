@@ -6820,6 +6820,30 @@ body.merchLaunchSoon .marketHeroMark img{
   margin-top:14px;
 }
 
+.sellerCenterShell .sellerXrpEquivalent{
+  display:block;
+  min-height:16px;
+  margin-top:5px;
+  color:#087ab6;
+  font-size:9px;
+  font-weight:800;
+}
+
+.sellerCenterShell .productQuickShipping{
+  grid-column:1 / -1;
+  margin-top:18px;
+  padding-top:18px;
+  border-top:1px solid #e1eaee;
+}
+
+.sellerCenterShell .productQuickShipping .productFields{
+  margin-top:12px;
+}
+
+.sellerCenterShell .productShippingSaveBtn{
+  margin-top:14px;
+}
+
 @media(max-width:680px){
   .sellerCenterShell .productShippingCard .productFields{
     grid-template-columns:1fr;
@@ -8121,6 +8145,10 @@ body.merchSellerPage .sellerOrdersHead button{
                 inputmode="decimal"
                 placeholder="25.00"
               >
+              <small
+                class="sellerXrpEquivalent"
+                id="productPriceXrp"
+              ></small>
             </label>
 
             <label>
@@ -8131,6 +8159,10 @@ body.merchSellerPage .sellerOrdersHead button{
                 inputmode="decimal"
                 placeholder="Optional"
               >
+              <small
+                class="sellerXrpEquivalent"
+                id="productComparePriceXrp"
+              ></small>
             </label>
 
             <label>
@@ -8547,11 +8579,68 @@ body.merchSellerPage .sellerOrdersHead button{
               </label>
             </div>
 
-            <div
-              class="productAdvancedNotice"
-              id="productShippingProfileNotice"
-            >
-              Create a shipping profile in the Shipping tab before publishing a shippable product.
+            <div class="productQuickShipping">
+              <div class="productAdvancedHead">
+                <div>
+                  <strong>Shipping Rate</strong>
+                  <span>
+                    Create and assign a manual shipping rate to this product.
+                  </span>
+                </div>
+              </div>
+
+              <div class="productFields">
+                <label>
+                  <span>Profile Name</span>
+                  <input
+                    id="productShippingProfileName"
+                    type="text"
+                    maxlength="120"
+                    placeholder="Standard Shipping"
+                    value="Standard Shipping"
+                  >
+                </label>
+
+                <label>
+                  <span>Ships To</span>
+                  <input
+                    id="productShippingCountries"
+                    type="text"
+                    maxlength="120"
+                    placeholder="US"
+                    value="US"
+                  >
+                </label>
+
+                <label class="productWideField">
+                  <span>Shipping Cost USD</span>
+                  <input
+                    id="productShippingCostUsd"
+                    type="text"
+                    inputmode="decimal"
+                    placeholder="5.99"
+                  >
+                  <small
+                    class="sellerXrpEquivalent"
+                    id="productShippingCostXrp"
+                  ></small>
+                </label>
+              </div>
+
+              <button
+                class="sellerPrimaryBtn productShippingSaveBtn"
+                id="productShippingSaveBtn"
+                type="button"
+              >
+                Save Shipping
+              </button>
+
+              <div
+                class="productAdvancedNotice"
+                id="productShippingProfileNotice"
+              >
+                Enter a shipping cost and save it here, or choose an existing shipping profile above.
+              </div>
             </div>
           </section>
 
@@ -9306,6 +9395,12 @@ body.merchSellerPage .sellerOrdersHead button{
             Number.isFinite(rate) && rate > 0
               ? rate
               : null;
+
+          window.dispatchEvent(
+            new Event(
+              "merch-xrp-rate"
+            )
+          );
         } catch (_) {
           merchXrpUsd = null;
         }
@@ -13546,6 +13641,26 @@ body.merchSellerPage .sellerOrdersHead button{
           document.getElementById(
             "productShippingProfile"
           ),
+        shippingProfileName:
+          document.getElementById(
+            "productShippingProfileName"
+          ),
+        shippingCountries:
+          document.getElementById(
+            "productShippingCountries"
+          ),
+        shippingCostUsd:
+          document.getElementById(
+            "productShippingCostUsd"
+          ),
+        shippingCostXrp:
+          document.getElementById(
+            "productShippingCostXrp"
+          ),
+        shippingSave:
+          document.getElementById(
+            "productShippingSaveBtn"
+          ),
         tags:
           document.getElementById(
             "productTags"
@@ -13756,6 +13871,147 @@ body.merchSellerPage .sellerOrdersHead button{
         productUi.message.className =
           `sellerStatus ${type}`.trim();
       }
+
+      let sellerXrpUsd = null;
+
+      async function loadSellerXrpRate() {
+        try {
+          const response =
+            await fetch(
+              "/api/rates/xrp"
+            );
+
+          const data =
+            await response.json();
+
+          const rate =
+            Number(
+              data?.rate?.xrpUsd
+            );
+
+          sellerXrpUsd =
+            Number.isFinite(rate) &&
+            rate > 0
+              ? rate
+              : null;
+
+          refreshSellerPriceEquivalents();
+        } catch (_) {
+          sellerXrpUsd = null;
+        }
+      }
+
+      function sellerUsdToXrp(
+        value
+      ) {
+        const usd =
+          Number(value);
+
+        if (
+          !sellerXrpUsd ||
+          !Number.isFinite(usd) ||
+          usd <= 0
+        ) {
+          return "";
+        }
+
+        return (
+          usd / sellerXrpUsd
+        ).toFixed(6);
+      }
+
+      function sellerXrpEquivalent(
+        input,
+        output
+      ) {
+        if (!input || !output) return;
+
+        const xrp =
+          sellerUsdToXrp(
+            input.value
+          );
+
+        output.textContent =
+          xrp
+            ? `≈ ${xrp} XRP`
+            : "";
+      }
+
+      function refreshSellerPriceEquivalents() {
+        sellerXrpEquivalent(
+          productUi.price,
+          document.getElementById(
+            "productPriceXrp"
+          )
+        );
+
+        sellerXrpEquivalent(
+          productUi.comparePrice,
+          document.getElementById(
+            "productComparePriceXrp"
+          )
+        );
+
+        sellerXrpEquivalent(
+          productUi.shippingCostUsd,
+          productUi.shippingCostXrp
+        );
+
+        if (
+          productUi.variantPrice
+        ) {
+          let output =
+            document.getElementById(
+              "productVariantPriceXrp"
+            );
+
+          if (!output) {
+            output =
+              document.createElement(
+                "small"
+              );
+
+            output.id =
+              "productVariantPriceXrp";
+
+            output.className =
+              "sellerXrpEquivalent";
+
+            productUi.variantPrice
+              .insertAdjacentElement(
+                "afterend",
+                output
+              );
+          }
+
+          sellerXrpEquivalent(
+            productUi.variantPrice,
+            output
+          );
+        }
+      }
+
+      [
+        productUi.price,
+        productUi.comparePrice,
+        productUi.shippingCostUsd,
+        productUi.variantPrice
+      ]
+        .filter(Boolean)
+        .forEach(
+          input =>
+            input.addEventListener(
+              "input",
+              refreshSellerPriceEquivalents
+            )
+        );
+
+      loadSellerXrpRate();
+
+      setInterval(
+        loadSellerXrpRate,
+        60000
+      );
 
       function productTagsFromInput() {
         return String(
@@ -16128,6 +16384,177 @@ body.merchSellerPage .sellerOrdersHead button{
         }
       }
 
+      productUi.shippingSave
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!sellerProfile) return;
+
+            const name =
+              String(
+                productUi
+                  .shippingProfileName
+                  .value ||
+                ""
+              ).trim();
+
+            const rateUsd =
+              String(
+                productUi
+                  .shippingCostUsd
+                  .value ||
+                ""
+              ).trim();
+
+            let countries;
+
+            try {
+              countries =
+                normalizeShippingCountries(
+                  productUi
+                    .shippingCountries
+                    .value
+                );
+            } catch (error) {
+              productMessage(
+                error.message,
+                "error"
+              );
+              return;
+            }
+
+            if (!name) {
+              productMessage(
+                "Enter a shipping profile name.",
+                "error"
+              );
+              return;
+            }
+
+            if (
+              !rateUsd ||
+              !Number.isFinite(
+                Number(rateUsd)
+              ) ||
+              Number(rateUsd) < 0
+            ) {
+              productMessage(
+                "Enter a valid shipping cost in USD.",
+                "error"
+              );
+              return;
+            }
+
+            productUi.shippingSave.disabled =
+              true;
+
+            productMessage(
+              "Saving shipping…"
+            );
+
+            try {
+              const profileData =
+                await merchJson(
+                  "/api/merch/shipping/profile",
+                  {
+                    method:"POST",
+                    body:{
+                      payloadUuid:
+                        sellerPayload(),
+                      sellerId:
+                        sellerProfile.sellerId,
+                      name,
+                      rateMode:"manual"
+                    }
+                  }
+                );
+
+              const profileId =
+                profileData
+                  .shippingProfile
+                  ?.shippingProfileId;
+
+              if (!profileId) {
+                throw new Error(
+                  "shipping_profile_id_missing"
+                );
+              }
+
+              const zoneData =
+                await merchJson(
+                  `/api/merch/shipping/profile/${
+                    encodeURIComponent(
+                      profileId
+                    )
+                  }/zone`,
+                  {
+                    method:"POST",
+                    body:{
+                      payloadUuid:
+                        sellerPayload(),
+                      name:"Standard",
+                      countries
+                    }
+                  }
+                );
+
+              const zoneId =
+                zoneData
+                  .shippingZone
+                  ?.shippingZoneId;
+
+              if (!zoneId) {
+                throw new Error(
+                  "shipping_zone_id_missing"
+                );
+              }
+
+              await merchJson(
+                `/api/merch/shipping/zone/${
+                  encodeURIComponent(
+                    zoneId
+                  )
+                }/rate`,
+                {
+                  method:"POST",
+                  body:{
+                    payloadUuid:
+                      sellerPayload(),
+                    name:"Standard",
+                    rateUsd,
+                    freeOverUsd:null
+                  }
+                }
+              );
+
+              await loadSellerShipping();
+
+              productUi.shippingProfile.value =
+                profileId;
+
+              if (editingProduct) {
+                await saveProduct(
+                  "draft"
+                );
+              }
+
+              productMessage(
+                "Shipping saved and assigned to this product.",
+                "success"
+              );
+            } catch (error) {
+              productMessage(
+                error.message ||
+                "Unable to save shipping.",
+                "error"
+              );
+            } finally {
+              productUi.shippingSave.disabled =
+                false;
+            }
+          }
+        );
+
       async function createShippingProfileUi() {
         if (!sellerProfile) return;
 
@@ -16614,6 +17041,8 @@ body.merchSellerPage .sellerOrdersHead button{
 
         editingVariant = null;
         renderAdvancedProductTools();
+
+        refreshSellerPriceEquivalents();
 
         productMessage(
           `Editing ${product.title}.`
@@ -18507,18 +18936,45 @@ body.merchSellerPage .sellerOrdersHead button{
             try {
               if (!editingProduct) {
                 productMessage(
-                  "Saving product draft before uploading images…"
+                  "Creating product draft before uploading images…"
                 );
 
-                const saved =
-                  await saveProduct(
-                    "draft"
+                let payload;
+
+                try {
+                  payload =
+                    productPayload(
+                      "draft"
+                    );
+                } catch (error) {
+                  throw error;
+                }
+
+                if (!payload.title) {
+                  throw new Error(
+                    "Enter a product title before uploading images."
+                  );
+                }
+
+                const created =
+                  await merchJson(
+                    "/api/merch/product",
+                    {
+                      method:"POST",
+                      body:payload
+                    }
                   );
 
-                if (!saved) {
-                  productUi.uploadImage.disabled =
-                    false;
-                  return;
+                editingProduct =
+                  created.product;
+
+                if (
+                  !editingProduct ||
+                  !editingProduct.productId
+                ) {
+                  throw new Error(
+                    "product_draft_create_failed"
+                  );
                 }
               }
 
