@@ -17821,7 +17821,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
     )
     ?.addEventListener(
       "click",
-      () => {
+      async () => {
         const session =
           window.MonolithSession
             ? window.MonolithSession.get()
@@ -17832,49 +17832,54 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           session.ownerVerified
         ) {
           window.MonolithSession.clear();
+          window.location.href =
+            "/merch/";
+          return;
+        }
+
+        try {
+          const response =
+            await fetch(
+              "/api/merch/seller/auth/start",
+              {
+                method:"POST",
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+                body:
+                  JSON.stringify({
+                    returnUrl:
+                      "/merch/seller/"
+                  })
+              }
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
 
           if (
-            document.body.classList.contains(
-              "merchSellerPage"
-            )
+            !response.ok ||
+            !data.ok ||
+            !data.auth?.signUrl
           ) {
-            window.location.href =
-              "/merch/seller/";
+            throw new Error(
+              data.error ||
+              data.code ||
+              "seller_signin_failed"
+            );
           }
 
-          return;
-        }
-
-        if (
-          !document.body.classList.contains(
-            "merchSellerPage"
-          )
-        ) {
           window.location.href =
-            "/merch/seller/";
-          return;
-        }
-
-        const sellers =
-          document.getElementById(
-            "sellers"
+            data.auth.signUrl;
+        } catch (error) {
+          alert(
+            error.message ||
+            "Unable to start Xaman Sign-In."
           );
-
-        sellers?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-        window.setTimeout(
-          () => {
-            document
-              .getElementById(
-                "sellerCoordinate"
-              )
-              ?.focus();
-          },
-          350
-        );
+        }
       }
     );
 
