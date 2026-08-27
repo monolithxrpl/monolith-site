@@ -19029,24 +19029,121 @@ body.merchSellerPage .sellerOrdersHead button{
 
 <script id="monolith-seller-owner-signin-fix-20260826">
 (() => {
-  if (!document.body.classList.contains("merchSellerPage")) return;
+  if (
+    !document.body.classList.contains(
+      "merchSellerPage"
+    )
+  ) return;
 
   const ownerBtn =
-    document.getElementById("ownerSignInBtn");
+    document.getElementById(
+      "ownerSignInBtn"
+    );
 
   if (!ownerBtn) return;
 
+  async function postJson(url, body) {
+    const response =
+      await fetch(
+        url,
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:
+            JSON.stringify(body)
+        }
+      );
+
+    const data =
+      await response
+        .json()
+        .catch(() => ({}));
+
+    if (
+      !response.ok ||
+      !data.ok
+    ) {
+      throw new Error(
+        data.error ||
+        data.code ||
+        "seller_signin_failed"
+      );
+    }
+
+    return data;
+  }
+
+  async function finishSellerSignIn(
+    payloadUuid
+  ) {
+    const data =
+      await postJson(
+        "/api/merch/seller/auth/verify",
+        {
+          payloadUuid
+        }
+      );
+
+    const sellers =
+      Array.isArray(data.sellers)
+        ? data.sellers
+        : [];
+
+    if (!sellers.length) {
+      throw new Error(
+        "No MONOLITH seller account is registered to this wallet."
+      );
+    }
+
+    if (sellers.length > 1) {
+      throw new Error(
+        "Multiple seller accounts are registered to this wallet. Seller selection is required."
+      );
+    }
+
+    const seller =
+      sellers[0];
+
+    if (!window.MonolithSession) {
+      throw new Error(
+        "MONOLITH session service unavailable."
+      );
+    }
+
+    window.MonolithSession.set({
+      sourceCoordinate:
+        seller.coordinate,
+      payloadUuid,
+      signUrl:"",
+      ownerVerified:true,
+      ownerWallet:
+        data.wallet || "",
+      createdAt:
+        Date.now(),
+      verifiedAt:
+        Date.now(),
+      merchSellerAuth:true
+    });
+
+    window.location.replace(
+      "/merch/seller/"
+    );
+  }
+
   ownerBtn.addEventListener(
     "click",
-    () => {
-      const session =
+    async () => {
+      const current =
         window.MonolithSession
           ? window.MonolithSession.get()
           : null;
 
       if (
-        session &&
-        session.ownerVerified
+        current &&
+        current.ownerVerified
       ) {
         window.MonolithSession.clear();
         window.location.href =
@@ -19054,51 +19151,74 @@ body.merchSellerPage .sellerOrdersHead button{
         return;
       }
 
-      const coordinate =
-        document.getElementById(
-          "sellerCoordinate"
-        );
+      ownerBtn.disabled = true;
 
-      const connect =
-        document.getElementById(
-          "sellerConnectBtn"
-        );
+      try {
+        const data =
+          await postJson(
+            "/api/merch/seller/auth/start",
+            {
+              returnUrl:
+                "/merch/seller/"
+            }
+          );
 
-      const verify =
-        document.getElementById(
-          "sellerVerifySignInBtn"
-        );
+        const auth =
+          data.auth || {};
 
-      if (
-        coordinate?.value?.trim() &&
-        connect &&
-        !connect.hidden
-      ) {
-        connect.click();
-        return;
+        if (!auth.signUrl) {
+          throw new Error(
+            "Xaman Sign-In URL was not returned."
+          );
+        }
+
+        window.location.href =
+          auth.signUrl;
+      } catch (error) {
+        ownerBtn.disabled = false;
+
+        alert(
+          error.message ||
+          "Unable to start Xaman Sign-In."
+        );
       }
-
-      if (
-        verify &&
-        !verify.hidden
-      ) {
-        verify.click();
-        return;
-      }
-
-      document
-        .getElementById("sellers")
-        ?.scrollIntoView({
-          behavior:"smooth",
-          block:"start"
-        });
-
-      setTimeout(
-        () => coordinate?.focus(),
-        350
-      );
     }
   );
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const isReturn =
+    params.get(
+      "merchSellerAuth"
+    ) === "1";
+
+  const payloadUuid =
+    params.get("payload") ||
+    params.get("payloadUuid") ||
+    "";
+
+  if (
+    isReturn &&
+    payloadUuid
+  ) {
+    ownerBtn.disabled = true;
+
+    finishSellerSignIn(
+      payloadUuid
+    ).catch(
+      error => {
+        ownerBtn.disabled = false;
+
+        alert(
+          error.message ||
+          "Unable to verify seller Sign-In."
+        );
+      }
+    );
+  }
 })();
 </script>
 
