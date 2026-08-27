@@ -17083,6 +17083,11 @@ body.merchSellerPage .sellerOrdersHead button{
 
         productUi.shippingPackage
           .innerHTML =
+            `
+              <option value="">
+                Select a package
+              </option>
+            ` +
             presets.map(
               preset => `
                 <option value="${escapeHtml(preset.id)}">
@@ -17090,6 +17095,9 @@ body.merchSellerPage .sellerOrdersHead button{
                 </option>
               `
             ).join("");
+
+        productUi.shippingPackage.value =
+          "";
 
         const help =
           document.getElementById(
@@ -17270,7 +17278,27 @@ body.merchSellerPage .sellerOrdersHead button{
         ?.addEventListener(
           "click",
           async () => {
-            if (!sellerProfile) return;
+            if (!sellerProfile) {
+              try {
+                await loadSellerProfile();
+
+              } catch (error) {
+                productMessage(
+                  error.message ||
+                  "Unable to reload seller profile.",
+                  "error"
+                );
+                return;
+              }
+            }
+
+            if (!sellerProfile) {
+              productMessage(
+                "Seller profile is not available. Sign in again and retry.",
+                "error"
+              );
+              return;
+            }
 
             const name =
               String(
@@ -17356,6 +17384,18 @@ body.merchSellerPage .sellerOrdersHead button{
             );
 
             try {
+              const product =
+                await ensureEditingProductDraft();
+
+              const productId =
+                product?.productId;
+
+              if (!productId) {
+                throw new Error(
+                  "Unable to identify the product for shipping."
+                );
+              }
+
               const profileData =
                 await merchJson(
                   "/api/merch/shipping/profile",
@@ -17436,16 +17476,51 @@ body.merchSellerPage .sellerOrdersHead button{
                 }
               );
 
+              const productData =
+                await merchJson(
+                  `/api/merch/product/${
+                    encodeURIComponent(
+                      productId
+                    )
+                  }`,
+                  {
+                    method:"POST",
+                    body:{
+                      payloadUuid:
+                        sellerPayload(),
+                      priceUsd:
+                        String(
+                          productUi.price.value ||
+                          editingProduct?.priceUsd ||
+                          ""
+                        ).trim(),
+                      shippingProfile:
+                        profileId
+                    }
+                  }
+                );
+
+              const savedProduct =
+                productData.product;
+
+              if (
+                !savedProduct ||
+                savedProduct.shippingProfile !==
+                  profileId
+              ) {
+                throw new Error(
+                  "Shipping was created, but could not be assigned to this product."
+                );
+              }
+
+              editingProduct =
+                savedProduct;
+
+              await loadSellerProducts();
               await loadSellerShipping();
 
               productUi.shippingProfile.value =
                 profileId;
-
-              if (editingProduct) {
-                await saveProduct(
-                  "draft"
-                );
-              }
 
               productMessage(
                 "Shipping saved and assigned to this product.",
@@ -17927,6 +18002,135 @@ body.merchSellerPage .sellerOrdersHead button{
 
         productUi.shippingProfile.value =
           product.shippingProfile || "";
+
+        // Rehydrate the visible Quick Shipping controls from
+        // the shipping profile assigned to this product.
+        if (product.shippingProfile) {
+          const savedShippingProfile =
+            sellerShippingProfiles.find(
+              profile =>
+                profile.shippingProfileId ===
+                product.shippingProfile
+            );
+
+          if (savedShippingProfile) {
+            const savedZone =
+              (savedShippingProfile.zones || [])
+                .find(
+                  zone =>
+                    zone.status !== "archived"
+                );
+
+            const savedRate =
+              (savedZone?.rates || [])
+                .find(
+                  rate =>
+                    rate.status !== "archived"
+                );
+
+            productUi.shippingProfileName.value =
+              savedShippingProfile.name || "";
+
+            productUi.shippingCountries.value =
+              (savedZone?.countries || [])
+                .join(", ");
+
+            if (savedRate) {
+              productUi.shippingCostUsd.value =
+                savedRate.rateUsd || "";
+
+              const rateName =
+                String(
+                  savedRate.name || ""
+                );
+
+              const carriers =
+                Object.keys(
+                  merchShippingPresets
+                );
+
+              const matchedCarrier =
+                carriers.find(
+                  carrier =>
+                    rateName.startsWith(
+                      carrier + " "
+                    )
+                ) || "";
+
+              if (matchedCarrier) {
+                productUi.shippingCarrier.value =
+                  matchedCarrier;
+
+                renderShippingServicePresets();
+
+                const services =
+                  Object.keys(
+                    merchShippingPresets[
+                      matchedCarrier
+                    ] || {}
+                  ).sort(
+                    (a, b) =>
+                      b.length - a.length
+                  );
+
+                const afterCarrier =
+                  rateName.slice(
+                    matchedCarrier.length + 1
+                  );
+
+                const matchedService =
+                  services.find(
+                    service =>
+                      afterCarrier.startsWith(
+                        service
+                      )
+                  ) || "";
+
+                if (matchedService) {
+                  productUi.shippingService.value =
+                    matchedService;
+
+                  renderShippingPackagePresets();
+
+                  const packageText =
+                    afterCarrier
+                      .slice(
+                        matchedService.length
+                      )
+                      .replace(
+                        /^\s*[—-]\s*/,
+                        ""
+                      )
+                      .trim();
+
+                  const presets =
+                    merchShippingPresets[
+                      matchedCarrier
+                    ]?.[
+                      matchedService
+                    ] || [];
+
+                  const matchedPackage =
+                    presets.find(
+                      preset =>
+                        preset.label ===
+                        packageText
+                    );
+
+                  if (matchedPackage) {
+                    productUi.shippingPackage.value =
+                      matchedPackage.id;
+
+                    applyShippingPackagePreset();
+                  }
+                }
+              }
+            }
+
+            refreshShippingPackageFields();
+            refreshSellerPriceEquivalents();
+          }
+        }
 
         productUi.tags.value =
           Array.isArray(product.tags)
@@ -19618,6 +19822,7 @@ body.merchSellerPage .sellerOrdersHead button{
             productPayload(
               status
             );
+
         } catch (error) {
           productMessage(
             error.message,
