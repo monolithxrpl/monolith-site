@@ -19027,5 +19027,80 @@ body.merchSellerPage .sellerOrdersHead button{
 })();
 </script>
 
+<script id="monolith-seller-owner-signin-fix-20260826">
+(() => {
+  if (!document.body.classList.contains("merchSellerPage")) return;
+
+  const ownerBtn =
+    document.getElementById("ownerSignInBtn");
+
+  if (!ownerBtn) return;
+
+  ownerBtn.addEventListener(
+    "click",
+    () => {
+      const session =
+        window.MonolithSession
+          ? window.MonolithSession.get()
+          : null;
+
+      if (
+        session &&
+        session.ownerVerified
+      ) {
+        window.MonolithSession.clear();
+        window.location.href =
+          "/merch/seller/";
+        return;
+      }
+
+      const coordinate =
+        document.getElementById(
+          "sellerCoordinate"
+        );
+
+      const connect =
+        document.getElementById(
+          "sellerConnectBtn"
+        );
+
+      const verify =
+        document.getElementById(
+          "sellerVerifySignInBtn"
+        );
+
+      if (
+        coordinate?.value?.trim() &&
+        connect &&
+        !connect.hidden
+      ) {
+        connect.click();
+        return;
+      }
+
+      if (
+        verify &&
+        !verify.hidden
+      ) {
+        verify.click();
+        return;
+      }
+
+      document
+        .getElementById("sellers")
+        ?.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+
+      setTimeout(
+        () => coordinate?.focus(),
+        350
+      );
+    }
+  );
+})();
+</script>
+
 </body>
 </html>
