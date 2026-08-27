@@ -8139,72 +8139,6 @@ body.merchSellerPage .sellerOrdersHead button{
               >
             </label>
 
-            <label>
-              <span>Weight</span>
-              <input
-                id="productWeight"
-                type="text"
-                placeholder="Optional"
-              >
-            </label>
-
-            <label>
-              <span>Weight Unit</span>
-              <select id="productWeightUnit">
-                <option value="">None</option>
-                <option value="oz">oz</option>
-                <option value="lb">lb</option>
-                <option value="g">g</option>
-                <option value="kg">kg</option>
-              </select>
-            </label>
-
-            <label>
-              <span>Package Length</span>
-              <input
-                id="productPackageLength"
-                type="text"
-                inputmode="decimal"
-                placeholder="e.g. 12"
-              >
-            </label>
-
-            <label>
-              <span>Package Width</span>
-              <input
-                id="productPackageWidth"
-                type="text"
-                inputmode="decimal"
-                placeholder="e.g. 9"
-              >
-            </label>
-
-            <label>
-              <span>Package Height</span>
-              <input
-                id="productPackageHeight"
-                type="text"
-                inputmode="decimal"
-                placeholder="e.g. 3"
-              >
-            </label>
-
-            <label>
-              <span>Dimension Unit</span>
-              <select id="productDimensionUnit">
-                <option value="">None</option>
-                <option value="in">in</option>
-                <option value="cm">cm</option>
-              </select>
-            </label>
-
-            <label>
-              <span>Shipping Profile</span>
-              <select id="productShippingProfile">
-                <option value="">No profile selected</option>
-              </select>
-            </label>
-
             <label class="productWideField">
               <span>Tags</span>
               <input
@@ -8233,19 +8167,11 @@ body.merchSellerPage .sellerOrdersHead button{
               Continue selling when sold out
             </label>
 
-            <label>
-              <input
-                id="productRequiresShipping"
-                type="checkbox"
-                checked
-              >
-              Requires shipping
-            </label>
           </div>
 
           <div class="productImagePanel">
             <div>
-              <strong>Product Image</strong>
+              <strong>Product Images</strong>
               <span>
                 PNG, JPG, JPEG or WEBP up to 5 MB. GIF up to 25 MB.
               </span>
@@ -8254,6 +8180,7 @@ body.merchSellerPage .sellerOrdersHead button{
             <input
               id="productImage"
               type="file"
+              multiple
               accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif"
             >
 
@@ -8263,7 +8190,7 @@ body.merchSellerPage .sellerOrdersHead button{
               type="button"
               disabled
             >
-              Upload Image
+              Save Product to Upload Images
             </button>
           </div>
 
@@ -8476,6 +8403,104 @@ body.merchSellerPage .sellerOrdersHead button{
             </section>
 
           </div>
+
+          <section class="productAdvancedCard productShippingCard">
+            <div class="productAdvancedHead">
+              <div>
+                <strong>Shipping</strong>
+                <span>
+                  Package and shipping information for this product.
+                </span>
+              </div>
+            </div>
+
+            <div class="productChecks">
+              <label>
+                <input
+                  id="productRequiresShipping"
+                  type="checkbox"
+                  checked
+                >
+                Requires shipping
+              </label>
+            </div>
+
+            <div class="productFields">
+              <label>
+                <span>Weight</span>
+                <input
+                  id="productWeight"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="Optional"
+                >
+              </label>
+
+              <label>
+                <span>Weight Unit</span>
+                <select id="productWeightUnit">
+                  <option value="">None</option>
+                  <option value="oz">oz</option>
+                  <option value="lb">lb</option>
+                  <option value="g">g</option>
+                  <option value="kg">kg</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Package Length</span>
+                <input
+                  id="productPackageLength"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="e.g. 12"
+                >
+              </label>
+
+              <label>
+                <span>Package Width</span>
+                <input
+                  id="productPackageWidth"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="e.g. 9"
+                >
+              </label>
+
+              <label>
+                <span>Package Height</span>
+                <input
+                  id="productPackageHeight"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="e.g. 3"
+                >
+              </label>
+
+              <label>
+                <span>Dimension Unit</span>
+                <select id="productDimensionUnit">
+                  <option value="">None</option>
+                  <option value="in">in</option>
+                  <option value="cm">cm</option>
+                </select>
+              </label>
+
+              <label class="productWideField">
+                <span>Shipping Profile</span>
+                <select id="productShippingProfile">
+                  <option value="">No profile selected</option>
+                </select>
+              </label>
+            </div>
+
+            <div
+              class="productAdvancedNotice"
+              id="productShippingProfileNotice"
+            >
+              Create a shipping profile below before publishing a shippable product.
+            </div>
+          </section>
 
           <div class="productEditorActions">
             <button
@@ -13788,6 +13813,25 @@ body.merchSellerPage .sellerOrdersHead button{
             productUi
               .weightUnit
               .value,
+          packageLength:
+            String(
+              productUi.packageLength.value ||
+              ""
+            ).trim(),
+          packageWidth:
+            String(
+              productUi.packageWidth.value ||
+              ""
+            ).trim(),
+          packageHeight:
+            String(
+              productUi.packageHeight.value ||
+              ""
+            ).trim(),
+          dimensionUnit:
+            productUi
+              .dimensionUnit
+              .value,
           shippingProfile:
             productUi
               .shippingProfile
@@ -15094,7 +15138,11 @@ body.merchSellerPage .sellerOrdersHead button{
         productUi.shippingProfile.innerHTML =
           `
             <option value="">
-              No profile selected
+              ${
+                profiles.length
+                  ? "No profile selected"
+                  : "No shipping profiles created"
+              }
             </option>
           ` +
           profiles.map(
@@ -16382,6 +16430,8 @@ body.merchSellerPage .sellerOrdersHead button{
         productUi.image.value = "";
         productUi.uploadImage.disabled =
           true;
+        productUi.uploadImage.textContent =
+          "Save Product to Upload Images";
         productUi.archive.hidden =
           true;
         productUi.media.innerHTML = "";
@@ -16497,7 +16547,9 @@ body.merchSellerPage .sellerOrdersHead button{
           false;
 
         productUi.uploadImage.disabled =
-          false;
+          !productUi.image.files?.length;
+        productUi.uploadImage.textContent =
+          "Upload Images";
 
         productUi.archive.hidden =
           product.status ===
@@ -18217,7 +18269,9 @@ body.merchSellerPage .sellerOrdersHead button{
           await loadSellerProducts();
 
           productUi.uploadImage.disabled =
-            false;
+            !productUi.image.files?.length;
+          productUi.uploadImage.textContent =
+            "Upload Images";
 
           productMessage(
             status === "active"
@@ -18368,7 +18422,12 @@ body.merchSellerPage .sellerOrdersHead button{
             productUi.uploadImage.disabled =
               !editingProduct ||
               !productUi.image.files ||
-              !productUi.image.files[0];
+              !productUi.image.files.length;
+
+            productUi.uploadImage.textContent =
+              editingProduct
+                ? "Upload Images"
+                : "Save Product to Upload Images";
           }
         );
 
@@ -18379,65 +18438,72 @@ body.merchSellerPage .sellerOrdersHead button{
             if (
               !editingProduct ||
               !productUi.image.files ||
-              !productUi.image.files[0]
+              !productUi.image.files.length
             ) {
               return;
             }
+
+            const files =
+              Array.from(
+                productUi.image.files
+              );
 
             productUi.uploadImage.disabled =
               true;
 
             productMessage(
-              "Uploading product image…"
+              `Uploading ${files.length} product image${files.length === 1 ? "" : "s"}…`
             );
 
             try {
-              const form =
-                new FormData();
+              for (const file of files) {
+                const form =
+                  new FormData();
 
-              form.append(
-                "image",
-                productUi.image.files[0]
-              );
-
-              form.append(
-                "payloadUuid",
-                sellerPayload()
-              );
-
-              form.append(
-                "altText",
-                productUi.title.value ||
-                editingProduct.title ||
-                ""
-              );
-
-              const response =
-                await fetch(
-                  `/api/merch/product/${
-                    encodeURIComponent(
-                      editingProduct.productId
-                    )
-                  }/media`,
-                  {
-                    method:"POST",
-                    body:form
-                  }
+                form.append(
+                  "image",
+                  file
                 );
 
-              const data =
-                await response
-                  .json()
-                  .catch(() => ({}));
-
-              if (
-                !response.ok ||
-                !data.ok
-              ) {
-                throw new Error(
-                  data.error ||
-                  "image_upload_failed"
+                form.append(
+                  "payloadUuid",
+                  sellerPayload()
                 );
+
+                form.append(
+                  "altText",
+                  productUi.title.value ||
+                  editingProduct.title ||
+                  ""
+                );
+
+                const response =
+                  await fetch(
+                    `/api/merch/product/${
+                      encodeURIComponent(
+                        editingProduct.productId
+                      )
+                    }/media`,
+                    {
+                      method:"POST",
+                      body:form
+                    }
+                  );
+
+                const data =
+                  await response
+                    .json()
+                    .catch(() => ({}));
+
+                if (
+                  !response.ok ||
+                  !data.ok
+                ) {
+                  throw new Error(
+                    data.error ||
+                    "image_upload_failed"
+                  );
+                }
               }
 
               productUi.image.value = "";
@@ -18445,7 +18511,7 @@ body.merchSellerPage .sellerOrdersHead button{
               await loadSellerProducts();
 
               productMessage(
-                "Product image uploaded.",
+                `${files.length} product image${files.length === 1 ? "" : "s"} uploaded.`,
                 "success"
               );
 
@@ -18453,12 +18519,12 @@ body.merchSellerPage .sellerOrdersHead button{
             } catch (error) {
               productMessage(
                 error.message ||
-                "Unable to upload image.",
+                "Unable to upload images.",
                 "error"
               );
             } finally {
               productUi.uploadImage.disabled =
-                !editingProduct;
+                true;
             }
           }
         );
