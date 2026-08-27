@@ -18901,23 +18901,50 @@ body.merchSellerPage .sellerOrdersHead button{
           return;
         }
 
-        const sellers =
+        const coordinate =
           document.getElementById(
-            "sellers"
+            "sellerCoordinate"
           );
 
-        sellers?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
+        const connect =
+          document.getElementById(
+            "sellerConnectBtn"
+          );
+
+        const verify =
+          document.getElementById(
+            "sellerVerifySignInBtn"
+          );
+
+        if (
+          coordinate?.value?.trim() &&
+          connect &&
+          !connect.hidden
+        ) {
+          connect.click();
+          return;
+        }
+
+        if (
+          verify &&
+          !verify.hidden
+        ) {
+          verify.click();
+          return;
+        }
+
+        document
+          .getElementById(
+            "sellers"
+          )
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
 
         window.setTimeout(
           () => {
-            document
-              .getElementById(
-                "sellerCoordinate"
-              )
-              ?.focus();
+            coordinate?.focus();
           },
           350
         );
