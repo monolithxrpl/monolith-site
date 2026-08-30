@@ -4673,9 +4673,6 @@
   background:rgba(247,201,109,.07)!important;
 }
 
-body.merchLaunchSoon [data-launch-locked="true"]{
-  cursor:not-allowed!important;
-}
 
 body.merchLaunchSoon button:disabled,
 body.merchLaunchSoon input:disabled,
@@ -7533,7 +7530,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
 </head>
 
-<body>
+<body class="merchLaunchSoon">
   <main class="shell">
 
     <header class="header">
@@ -19473,92 +19470,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
   if (!launchGate) return;
 
-  const allowedControlSelector = [
-    "#marketSearch",
-    ".marketNav button",
-    ".categoryChip",
-    "#buyerSignInBtn",
-    "#headerSearchBtn",
-    "#headerCartBtn",
-    "#sellerCoordinate",
-    "#sellerDisplayName",
-    "#sellerDescription",
-    "#sellerConnectBtn",
-    "#sellerVerifySignInBtn",
-    "#sellerCreateBtn",
-    "#sellerFeeBtn",
-    "#sellerVerifyFeeBtn",
-    "#sellerIdentityBtn",
-    "#sellerSyncIdentityBtn",
-    "#orderStatusBtn",
-    "[id^='orderStatus']"
-  ].join(",");
 
-  function controlAllowed(node) {
-    return Boolean(
-      node &&
-      node.matches &&
-      node.matches(allowedControlSelector)
-    );
-  }
-
-  function applyLaunchGate() {
-    document
-      .querySelectorAll(
-        "button, input, select, textarea"
-      )
-      .forEach(node => {
-        if (controlAllowed(node)) {
-          if (
-            node.dataset.launchLocked ===
-            "true"
-          ) {
-            node.disabled = false;
-            node.removeAttribute(
-              "aria-disabled"
-            );
-            delete node.dataset.launchLocked;
-          }
-
-          return;
-        }
-
-        node.disabled = true;
-        node.setAttribute(
-          "aria-disabled",
-          "true"
-        );
-        node.dataset.launchLocked =
-          "true";
-      });
-
-    document
-      .querySelectorAll(
-        "a.sellerPrimaryBtn, a.sellerSecondaryBtn"
-      )
-      .forEach(node => {
-        if (
-          [
-            "sellerOpenXaman",
-            "sellerOpenFeeXaman",
-            "sellerOpenIdentity"
-          ].includes(node.id)
-        ) {
-          node.removeAttribute(
-            "aria-disabled"
-          );
-          delete node.dataset.launchLocked;
-          return;
-        }
-
-        node.setAttribute(
-          "aria-disabled",
-          "true"
-        );
-        node.dataset.launchLocked =
-          "true";
-      });
-  }
 
   document
     .getElementById(
@@ -19628,79 +19540,6 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       }
     );
 
-  document.addEventListener(
-    "click",
-    event => {
-      const locked =
-        event.target.closest(
-          "[data-launch-locked='true']"
-        );
-
-      if (!locked) return;
-
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    },
-    true
-  );
-
-  document.addEventListener(
-    "submit",
-    event => {
-      const form =
-        event.target;
-
-      if (
-        form &&
-        form.querySelector &&
-        form.querySelector(
-          "[id^='orderStatus']"
-        )
-      ) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    },
-    true
-  );
-
-  if (
-    document.readyState ===
-    "loading"
-  ) {
-    document.addEventListener(
-      "DOMContentLoaded",
-      applyLaunchGate,
-      {
-        once: true
-      }
-    );
-  } else {
-    applyLaunchGate();
-  }
-
-  window.addEventListener(
-    "load",
-    applyLaunchGate,
-    {
-      once: true
-    }
-  );
-
-  const observer =
-    new MutationObserver(
-      () => applyLaunchGate()
-    );
-
-  observer.observe(
-    document.documentElement,
-    {
-      childList: true,
-      subtree: true
-    }
-  );
 })();
 </script>
 
