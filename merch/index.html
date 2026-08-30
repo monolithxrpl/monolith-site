@@ -12715,7 +12715,12 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 firstImage(product);
 
               return `
-                <article class="productCard">
+                <article
+                  class="productCard"
+                  data-product-open="${escapeHtml(product.productId)}"
+                  role="link"
+                  tabindex="0"
+                >
                   <div class="productMedia">
                     ${
                       image
@@ -12825,7 +12830,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             button => {
               button.addEventListener(
                 "click",
-                () => {
+                event => {
+                  event.stopPropagation();
+
                   const product =
                     products.find(
                       item =>
@@ -12834,6 +12841,23 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                     );
 
                   if (!product) return;
+
+                  const variants =
+                    Array.isArray(
+                      product.variants
+                    )
+                      ? product.variants
+                      : [];
+
+                  if (variants.length) {
+                    window.location.href =
+                      `/merch/product/?id=${
+                        encodeURIComponent(
+                          product.productId
+                        )
+                      }`;
+                    return;
+                  }
 
                   addToCart(product);
 
@@ -12854,6 +12878,175 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               );
             }
           );
+
+        productsRoot
+          .querySelectorAll(
+            "[data-product-open]"
+          )
+          .forEach(
+            card => {
+              const openProduct = () => {
+                const productId =
+                  String(
+                    card.dataset.productOpen ||
+                    ""
+                  ).trim();
+
+                if (!productId) return;
+
+                window.location.href =
+                  `/merch/product/?id=${
+                    encodeURIComponent(
+                      productId
+                    )
+                  }`;
+              };
+
+              card.addEventListener(
+                "click",
+                event => {
+                  if (
+                    event.target.closest(
+                      "button, a, input, select, textarea"
+                    )
+                  ) {
+                    return;
+                  }
+
+                  openProduct();
+                }
+              );
+
+              card.addEventListener(
+                "keydown",
+                event => {
+                  if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                  ) {
+                    event.preventDefault();
+                    openProduct();
+                  }
+                }
+              );
+            }
+          );
+      }
+
+      async function processProductHandoff() {
+        const productId =
+          String(
+            params.get("merchProduct") ||
+            ""
+          ).trim();
+
+        if (!productId) return;
+
+        const requestedVariantId =
+          String(
+            params.get("variant") ||
+            ""
+          ).trim();
+
+        const buyNow =
+          params.get("buyNow") === "1";
+
+        const product =
+          marketplaceProducts.find(
+            item =>
+              item.productId ===
+              productId
+          );
+
+        if (!product) return;
+
+        const variants =
+          Array.isArray(
+            product.variants
+          )
+            ? product.variants
+            : [];
+
+        let variantId = null;
+
+        if (variants.length) {
+          const variant =
+            variants.find(
+              item =>
+                String(
+                  item.variantId
+                ) ===
+                  requestedVariantId &&
+                item.available !== false
+            );
+
+          if (!variant) {
+            window.location.href =
+              `/merch/product/?id=${
+                encodeURIComponent(
+                  productId
+                )
+              }`;
+            return;
+          }
+
+          variantId =
+            String(
+              variant.variantId
+            );
+        }
+
+        const existing =
+          cart.find(
+            entry =>
+              entry.product.productId ===
+                productId &&
+              String(
+                entry.variantId || ""
+              ) ===
+                String(
+                  variantId || ""
+                )
+          );
+
+        if (existing) {
+          existing.quantity += 1;
+        } else {
+          cart.push({
+            product,
+            variantId,
+            quantity:1
+          });
+        }
+
+        updateCart();
+
+        const cleanUrl =
+          new URL(
+            window.location.href
+          );
+
+        cleanUrl.searchParams.delete(
+          "merchProduct"
+        );
+
+        cleanUrl.searchParams.delete(
+          "variant"
+        );
+
+        cleanUrl.searchParams.delete(
+          "buyNow"
+        );
+
+        history.replaceState(
+          {},
+          "",
+          cleanUrl
+        );
+
+        if (buyNow) {
+          await openCheckout();
+        }
       }
 
       async function loadMarketplace() {
@@ -12930,6 +13123,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
           reconcileCartProducts();
           refreshMarketplace();
+          await processProductHandoff();
 
         } catch (error) {
           console.error(
