@@ -20701,6 +20701,7 @@ body.merchSellerPage #orderStatusBtn{
         }
 
         if (
+          status === "active" &&
           productUi.requiresShipping.checked &&
           !String(
             productUi.shippingProfile.value ||
@@ -20708,7 +20709,7 @@ body.merchSellerPage #orderStatusBtn{
           ).trim()
         ) {
           productMessage(
-            "Shipping is required before this product can be saved or published. Choose a package, enter the shipping price, and click Save Shipping.",
+            "Shipping is required before this product can be published. Choose a package, enter the shipping price, and click Save Shipping.",
             "error"
           );
 
