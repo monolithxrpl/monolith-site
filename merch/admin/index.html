@@ -1,0 +1,1264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  >
+  <title>MONOLITH Merch Admin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #071625;
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 22px auto 70px;
+    }
+
+    .header,
+    .panel {
+      border: 1px solid #245f8c;
+      border-radius: 14px;
+      background: #0a2033;
+      box-shadow: 0 14px 36px rgba(0,0,0,.22);
+    }
+
+    .header {
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .sub {
+      margin-top: 4px;
+      color: #b9d4e8;
+      font-size: 14px;
+    }
+
+    .panel {
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    button,
+    .action {
+      border: 1px solid #4eb5ff;
+      border-radius: 9px;
+      background: #075b94;
+      color: #fff;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    button.secondary {
+      background: #17344b;
+      border-color: #45667c;
+    }
+
+    .status {
+      margin-top: 12px;
+      color: #c9deec;
+      line-height: 1.45;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .count {
+      font-size: 20px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .count.hot {
+      color: #ff9b73;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 16px 0 6px;
+    }
+
+    .summaryCard {
+      border: 1px solid #31546d;
+      border-radius: 10px;
+      background: #0d2a40;
+      padding: 11px 13px;
+    }
+
+    .summaryLabel {
+      color: #9fc0d4;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .summaryValue {
+      margin-top: 4px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .approval {
+      border: 1px solid #31546d;
+      border-radius: 10px;
+      margin-top: 10px;
+      background: #0d2a40;
+      overflow: hidden;
+    }
+
+    .approval.waiting {
+      border-color: #ff9b73;
+    }
+
+    .approvalMain {
+      display: grid;
+      grid-template-columns: 150px 145px minmax(130px, .8fr) minmax(220px, 1.4fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+    }
+
+    .approvalType {
+      font-weight: 900;
+    }
+
+    .statePill {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #173b55;
+      border: 1px solid #376987;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .statePill.waiting {
+      background: #4d2a1d;
+      border-color: #b96d49;
+    }
+
+    .amount {
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .orderShort {
+      color: #cde1ed;
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .detailsBtn {
+      background: #17344b;
+      border-color: #45667c;
+      padding: 8px 11px;
+      white-space: nowrap;
+    }
+
+    .approvalDetails {
+      display: none;
+      border-top: 1px solid #31546d;
+      padding: 12px 14px 14px;
+      background: #0a2235;
+    }
+
+    .approval.open .approvalDetails {
+      display: block;
+    }
+
+    .detailGrid {
+      display: grid;
+      grid-template-columns: 130px minmax(0, 1fr);
+      gap: 7px 14px;
+      font-size: 13px;
+    }
+
+    .detailLabel {
+      color: #91b3c9;
+      font-weight: 700;
+    }
+
+    .detailValue {
+      color: #e1edf4;
+      overflow-wrap: anywhere;
+      font-family: monospace;
+    }
+
+    .action {
+      margin-top: 12px;
+    }
+
+    .empty {
+      color: #b9d4e8;
+      padding-top: 10px;
+    }
+
+    @media (max-width: 820px) {
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .approvalMain {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .approvalMain > :nth-child(4) {
+        grid-column: 1 / -1;
+      }
+
+      .approvalMain > :last-child {
+        justify-self: start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: calc(100% - 20px);
+        margin-top: 10px;
+      }
+
+      .header,
+      .panel {
+        padding: 14px;
+      }
+
+      .approvalMain {
+        grid-template-columns: 1fr;
+      }
+
+      .approvalMain > :nth-child(4) {
+        grid-column: auto;
+      }
+
+      .detailGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .detailLabel {
+        margin-top: 4px;
+      }
+    }
+  
+    /* MONOLITH Merch Store admin light theme */
+    body {
+      background: #f5f7f9;
+      color: #17212b;
+    }
+
+    .header,
+    .panel {
+      background: #ffffff;
+      border-color: #d8e0e7;
+      box-shadow: 0 8px 24px rgba(20, 35, 50, .07);
+    }
+
+    .header {
+      border-radius: 12px;
+    }
+
+    .brand {
+      color: #101820;
+    }
+
+    .sub,
+    .status {
+      color: #617181;
+    }
+
+    #adminPanel > .topline > div:last-child {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .count {
+      color: #17212b;
+      margin: 0;
+    }
+
+    .count.hot {
+      color: #b94a2f;
+    }
+
+    button,
+    .action {
+      background: #17212b;
+      border-color: #17212b;
+      color: #ffffff;
+      box-shadow: none;
+    }
+
+    button:hover,
+    .action:hover {
+      background: #263746;
+    }
+
+    button.secondary,
+    .detailsBtn {
+      background: #ffffff;
+      border-color: #c8d2da;
+      color: #17212b;
+    }
+
+    button.secondary:hover,
+    .detailsBtn:hover {
+      background: #f2f5f7;
+    }
+
+    .summaryCard {
+      background: #f8fafb;
+      border-color: #dbe2e8;
+    }
+
+    .summaryLabel {
+      color: #687987;
+    }
+
+    .summaryValue {
+      color: #17212b;
+    }
+
+    .approval {
+      background: #ffffff;
+      border-color: #dbe2e8;
+      box-shadow: 0 2px 7px rgba(20, 35, 50, .035);
+    }
+
+    .approval.waiting {
+      border-color: #c98b69;
+    }
+
+    .approvalType,
+    .amount {
+      color: #17212b;
+    }
+
+    .orderShort {
+      color: #536573;
+    }
+
+    .statePill {
+      background: #edf5f2;
+      border-color: #c7ddd5;
+      color: #245b49;
+    }
+
+    .statePill.waiting {
+      background: #fff3eb;
+      border-color: #e6b99e;
+      color: #934c29;
+    }
+
+    .approvalDetails {
+      background: #f8fafb;
+      border-top-color: #dbe2e8;
+    }
+
+    .detailLabel {
+      color: #697986;
+    }
+
+    .detailValue {
+      color: #263746;
+    }
+
+    .empty {
+      color: #687987;
+    }
+
+    @media (max-width: 640px) {
+      #adminPanel > .topline > div:last-child {
+        width: 100%;
+        justify-content: space-between;
+        gap: 14px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <section class="header">
+      <div class="brand">MONOLITH</div>
+      <div class="sub">Merch Store Administration</div>
+    </section>
+
+    <section
+      id="authPanel"
+      class="panel"
+    >
+      <h2>Operator Sign-In</h2>
+
+      <p>
+        Access is restricted to the MONOLITH operating wallet.
+      </p>
+
+      <button
+        id="signInBtn"
+        type="button"
+      >
+        Sign In with Xaman
+      </button>
+
+      <a
+        id="openXaman"
+        class="action hidden"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open Xaman
+      </a>
+
+      <button
+        id="verifyBtn"
+        class="secondary hidden"
+        type="button"
+      >
+        Check Sign-In
+      </button>
+
+      <div
+        id="authStatus"
+        class="status"
+      ></div>
+    </section>
+
+    <section
+      id="adminPanel"
+      class="panel hidden"
+    >
+      <div class="topline">
+        <div>
+          <h2 style="margin:0;">Merch Operations</h2>
+          <div id="operatorWallet" class="status"></div>
+        </div>
+
+        <div>
+          <div
+            id="pendingCount"
+            class="count"
+          >
+            Operations (0)
+          </div>
+
+          <button
+            id="signOutBtn"
+            class="secondary"
+            type="button"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="summaryCard">
+          <div class="summaryLabel">Needs Attention</div>
+          <div id="summaryWaiting" class="summaryValue">0</div>
+        </div>
+
+        <div class="summaryCard">
+          <div class="summaryLabel">Completed</div>
+          <div id="summaryComplete" class="summaryValue">0</div>
+        </div>
+
+        <div class="summaryCard">
+          <div class="summaryLabel">Exceptions</div>
+          <div id="summaryProblems" class="summaryValue">0</div>
+        </div>
+      </div>
+
+      <div id="approvalList"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const KEY =
+        "monolithMerchOperatorSessionV1";
+
+      const MAX_AGE_MS =
+        12 * 60 * 60 * 1000;
+
+      let refreshTimer = null;
+
+      const authPanel =
+        document.getElementById("authPanel");
+
+      const adminPanel =
+        document.getElementById("adminPanel");
+
+      const signInBtn =
+        document.getElementById("signInBtn");
+
+      const openXaman =
+        document.getElementById("openXaman");
+
+      const verifyBtn =
+        document.getElementById("verifyBtn");
+
+      const signOutBtn =
+        document.getElementById("signOutBtn");
+
+      const authStatus =
+        document.getElementById("authStatus");
+
+      const operatorWallet =
+        document.getElementById("operatorWallet");
+
+      const pendingCount =
+        document.getElementById("pendingCount");
+
+      const approvalList =
+        document.getElementById("approvalList");
+
+      const summaryWaiting =
+        document.getElementById("summaryWaiting");
+
+      const summaryComplete =
+        document.getElementById("summaryComplete");
+
+      const summaryProblems =
+        document.getElementById("summaryProblems");
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function getSession() {
+        try {
+          const raw =
+            localStorage.getItem(KEY);
+
+          if (!raw) return null;
+
+          const session =
+            JSON.parse(raw);
+
+          if (
+            !session ||
+            !session.payloadUuid
+          ) {
+            return null;
+          }
+
+          if (
+            session.createdAt &&
+            Date.now() -
+              Number(session.createdAt) >
+              MAX_AGE_MS
+          ) {
+            clearSession();
+            return null;
+          }
+
+          return session;
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function setSession(session) {
+        localStorage.setItem(
+          KEY,
+          JSON.stringify(session)
+        );
+      }
+
+      function clearSession() {
+        localStorage.removeItem(KEY);
+
+        if (refreshTimer) {
+          clearInterval(refreshTimer);
+          refreshTimer = null;
+        }
+      }
+
+      async function postJson(url, body) {
+        const response =
+          await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body:
+              JSON.stringify(
+                body || {}
+              )
+          });
+
+        const data =
+          await response.json()
+            .catch(() => ({}));
+
+        return {
+          response,
+          data
+        };
+      }
+
+      async function startAuth() {
+        authStatus.textContent =
+          "Creating secure Xaman sign-in...";
+
+        const {
+          response,
+          data
+        } =
+          await postJson(
+            "/api/merch/operator/auth/start",
+            {
+              returnUrl:
+                "/merch/admin/"
+            }
+          );
+
+        if (
+          !response.ok ||
+          !data.ok ||
+          !data.auth ||
+          !data.auth.payloadUuid
+        ) {
+          throw new Error(
+            data.error ||
+            "operator_auth_start_failed"
+          );
+        }
+
+        const session = {
+          payloadUuid:
+            data.auth.payloadUuid,
+          signUrl:
+            data.auth.signUrl || "",
+          createdAt:
+            Date.now(),
+          verified: false
+        };
+
+        setSession(session);
+
+        if (session.signUrl) {
+          openXaman.href =
+            session.signUrl;
+
+          openXaman.classList.remove(
+            "hidden"
+          );
+
+          window.open(
+            session.signUrl,
+            "_blank",
+            "noopener"
+          );
+        }
+
+        verifyBtn.classList.remove(
+          "hidden"
+        );
+
+        authStatus.textContent =
+          "Approve the MONOLITH Merch Admin sign-in in Xaman.";
+
+        pollVerify();
+      }
+
+      async function verifyAuth() {
+        const session =
+          getSession();
+
+        if (!session) {
+          return false;
+        }
+
+        const {
+          response,
+          data
+        } =
+          await postJson(
+            "/api/merch/operator/auth/verify",
+            {
+              payloadUuid:
+                session.payloadUuid
+            }
+          );
+
+        if (
+          response.status === 409
+        ) {
+          authStatus.textContent =
+            "Waiting for Xaman approval...";
+          return false;
+        }
+
+        if (
+          !response.ok ||
+          !data.ok ||
+          !data.operatorVerified
+        ) {
+          if (
+            response.status === 403
+          ) {
+            clearSession();
+          }
+
+          throw new Error(
+            data.error ||
+            "operator_auth_verify_failed"
+          );
+        }
+
+        session.verified = true;
+        session.wallet =
+          data.wallet || "";
+        session.verifiedAt =
+          Date.now();
+
+        setSession(session);
+
+        showAdmin(session);
+        await refreshApprovals();
+
+        return true;
+      }
+
+      function pollVerify() {
+        let tries = 0;
+
+        const timer =
+          setInterval(async () => {
+            tries += 1;
+
+            try {
+              const done =
+                await verifyAuth();
+
+              if (done || tries >= 60) {
+                clearInterval(timer);
+              }
+            } catch (error) {
+              clearInterval(timer);
+              authStatus.textContent =
+                error.message;
+            }
+          }, 2000);
+      }
+
+      function formatXrp(drops) {
+        const amount =
+          Number(drops) / 1000000;
+
+        if (!Number.isFinite(amount)) {
+          return String(drops || "");
+        }
+
+        return (
+          amount.toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits: 6
+            }
+          ) +
+          " $XRP"
+        );
+      }
+
+      function typeLabel(type) {
+        return type === "buyer_refund"
+          ? "Buyer Refund"
+          : "Seller Payout";
+      }
+
+      function shortId(value) {
+        const text =
+          String(value || "");
+
+        if (text.length <= 18) {
+          return text;
+        }
+
+        return (
+          text.slice(0, 12) +
+          "..." +
+          text.slice(-6)
+        );
+      }
+
+      function renderApprovals(data) {
+        const count =
+          Number(
+            data.pendingCount || 0
+          );
+
+        pendingCount.textContent =
+          `Operations (${count})`;
+
+        pendingCount.classList.toggle(
+          "hot",
+          count > 0
+        );
+
+        const approvals =
+          Array.isArray(data.approvals)
+            ? data.approvals
+            : [];
+
+        const waiting =
+          approvals.filter(
+            item =>
+              item.needsApproval ||
+              item.state === "problem" ||
+              item.state === "expired"
+          ).length;
+
+        const complete =
+          approvals.filter(
+            item =>
+              item.state === "complete"
+          ).length;
+
+        const problems =
+          approvals.filter(
+            item =>
+              item.state === "problem" ||
+              item.state === "expired"
+          ).length;
+
+        summaryWaiting.textContent =
+          String(waiting);
+
+        summaryComplete.textContent =
+          String(complete);
+
+        summaryProblems.textContent =
+          String(problems);
+
+        if (!approvals.length) {
+          approvalList.innerHTML =
+            '<div class="empty">No settlement activity yet.</div>';
+          return;
+        }
+
+        approvalList.innerHTML =
+          approvals.map((item, index) => {
+            const waitingClass =
+              item.needsApproval
+                ? "waiting"
+                : "";
+
+            const action =
+              item.needsApproval &&
+              item.signUrl
+                ? `
+                  <a
+                    class="action"
+                    href="${escapeHtml(item.signUrl)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Review Exception
+                  </a>
+                `
+                : "";
+
+            const tx =
+              item.xrplTxHash
+                ? escapeHtml(item.xrplTxHash)
+                : "—";
+
+            const error =
+              item.lastError
+                ? escapeHtml(item.lastError)
+                : "—";
+
+            return `
+              <article
+                class="approval ${waitingClass}"
+                data-approval-index="${index}"
+              >
+                <div class="approvalMain">
+                  <div class="approvalType">
+                    ${escapeHtml(
+                      typeLabel(item.type)
+                    )}
+                  </div>
+
+                  <div>
+                    <span class="statePill ${waitingClass}">
+                      ${escapeHtml(
+                        item.stateLabel ||
+                        item.state
+                      )}
+                    </span>
+                  </div>
+
+                  <div class="amount">
+                    ${escapeHtml(
+                      formatXrp(
+                        item.amountDrops
+                      )
+                    )}
+                  </div>
+
+                  <div
+                    class="orderShort"
+                    title="${escapeHtml(item.orderId)}"
+                  >
+                    ${escapeHtml(
+                      shortId(item.orderId)
+                    )}
+                  </div>
+
+                  <button
+                    class="detailsBtn"
+                    type="button"
+                    data-details-index="${index}"
+                  >
+                    View
+                  </button>
+                </div>
+
+                <div class="approvalDetails">
+                  <div class="detailGrid">
+                    <div class="detailLabel">Order</div>
+                    <div class="detailValue">
+                      ${escapeHtml(item.orderId)}
+                    </div>
+
+                    <div class="detailLabel">Destination</div>
+                    <div class="detailValue">
+                      ${escapeHtml(item.destinationWallet)}
+                    </div>
+
+                    <div class="detailLabel">Transaction</div>
+                    <div class="detailValue">
+                      ${tx}
+                    </div>
+
+                    <div class="detailLabel">Status</div>
+                    <div class="detailValue">
+                      ${escapeHtml(
+                        item.stateLabel ||
+                        item.state
+                      )}
+                    </div>
+
+                    <div class="detailLabel">Attempts</div>
+                    <div class="detailValue">
+                      ${escapeHtml(
+                        item.attempts ?? 0
+                      )}
+                    </div>
+
+                    <div class="detailLabel">Last Error</div>
+                    <div class="detailValue">
+                      ${error}
+                    </div>
+                  </div>
+
+                  ${action}
+                </div>
+              </article>
+            `;
+          }).join("");
+
+        approvalList
+          .querySelectorAll(
+            "[data-details-index]"
+          )
+          .forEach(button => {
+            button.addEventListener(
+              "click",
+              () => {
+                const row =
+                  button.closest(
+                    ".approval"
+                  );
+
+                if (!row) {
+                  return;
+                }
+
+                row.classList.toggle(
+                  "open"
+                );
+
+                button.textContent =
+                  row.classList.contains(
+                    "open"
+                  )
+                    ? "Close"
+                    : "View";
+              }
+            );
+          });
+      }
+
+      async function refreshApprovals() {
+        const session =
+          getSession();
+
+        if (
+          !session ||
+          !session.verified
+        ) {
+          return;
+        }
+
+        const url =
+          new URL(
+            "/api/merch/operator/approvals",
+            location.origin
+          );
+
+        url.searchParams.set(
+          "payloadUuid",
+          session.payloadUuid
+        );
+
+        const response =
+          await fetch(
+            url.toString(),
+            {
+              cache: "no-store"
+            }
+          );
+
+        const data =
+          await response.json()
+            .catch(() => ({}));
+
+        if (
+          response.status === 403
+        ) {
+          clearSession();
+          showAuth();
+          return;
+        }
+
+        if (
+          !response.ok ||
+          !data.ok
+        ) {
+          throw new Error(
+            data.error ||
+            "operator_approvals_failed"
+          );
+        }
+
+        renderApprovals(data);
+      }
+
+      function showAdmin(session) {
+        authPanel.classList.add(
+          "hidden"
+        );
+
+        adminPanel.classList.remove(
+          "hidden"
+        );
+
+        operatorWallet.textContent =
+          session.wallet
+            ? `Operating wallet ${session.wallet}`
+            : "";
+
+        if (!refreshTimer) {
+          refreshTimer =
+            setInterval(
+              () => {
+                refreshApprovals()
+                  .catch(() => {});
+              },
+              30000
+            );
+        }
+      }
+
+      function showAuth() {
+        adminPanel.classList.add(
+          "hidden"
+        );
+
+        authPanel.classList.remove(
+          "hidden"
+        );
+
+        authStatus.textContent = "";
+        openXaman.classList.add(
+          "hidden"
+        );
+        verifyBtn.classList.add(
+          "hidden"
+        );
+      }
+
+      function hydrateReturn() {
+        const params =
+          new URLSearchParams(
+            location.search
+          );
+
+        const payloadUuid =
+          params.get("payload") ||
+          "";
+
+        if (!payloadUuid) {
+          return false;
+        }
+
+        const existing =
+          getSession() || {};
+
+        setSession({
+          ...existing,
+          payloadUuid,
+          createdAt:
+            existing.createdAt ||
+            Date.now(),
+          verified: false
+        });
+
+        const url =
+          new URL(location.href);
+
+        url.searchParams.delete(
+          "payload"
+        );
+        url.searchParams.delete(
+          "merchOperatorAuth"
+        );
+
+        history.replaceState(
+          null,
+          "",
+          url.pathname +
+          url.search +
+          url.hash
+        );
+
+        return true;
+      }
+
+      signInBtn.addEventListener(
+        "click",
+        () => {
+          startAuth()
+            .catch(error => {
+              authStatus.textContent =
+                error.message;
+            });
+        }
+      );
+
+      verifyBtn.addEventListener(
+        "click",
+        () => {
+          verifyAuth()
+            .catch(error => {
+              authStatus.textContent =
+                error.message;
+            });
+        }
+      );
+
+      signOutBtn.addEventListener(
+        "click",
+        () => {
+          clearSession();
+          showAuth();
+        }
+      );
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
+          const returned =
+            hydrateReturn();
+
+          const session =
+            getSession();
+
+          if (
+            session &&
+            session.verified
+          ) {
+            showAdmin(session);
+
+            refreshApprovals()
+              .catch(() => {});
+            return;
+          }
+
+          showAuth();
+
+          if (
+            returned ||
+            (
+              session &&
+              session.payloadUuid
+            )
+          ) {
+            verifyBtn.classList.remove(
+              "hidden"
+            );
+
+            authStatus.textContent =
+              "Checking Xaman sign-in...";
+
+            verifyAuth()
+              .catch(error => {
+                authStatus.textContent =
+                  error.message;
+              });
+          }
+        }
+      );
+    })();
+  </script>
+</body>
+</html>

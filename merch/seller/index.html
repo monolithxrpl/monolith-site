@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#050505">
 
   <title>MONOLITH Merch Store</title>
 
   <meta
     name="description"
-    content="MONOLITH Merch Store — verified sellers, real products and XRP-native commerce on the XRPL."
+    content="MONOLITH Merch Store — verified sellers, real products and $XRP-native commerce on the XRPL."
   >
 
   <link rel="icon" href="/favicon.ico">
@@ -1086,7 +1086,7 @@
       gap:12px;
       align-items:center;
       padding:10px;
-      border:1px solid rgba(255,255,255,.07);
+      border:1px solid rgba(18,47,66,.12);
       border-radius:9px;
       background:#0d1215;
     }
@@ -2900,7 +2900,7 @@
     .optionValueAdd input{
       min-height:34px;
       padding:0 9px;
-      border:1px solid rgba(255,255,255,.09);
+      border:1px solid rgba(18,47,66,.12);
       border-radius:7px;
       color:#edf3f6;
       background:#101519;
@@ -3197,16 +3197,21 @@
       padding:11px;
       border:1px solid rgba(255,255,255,.07);
       border-radius:8px;
-      color:inherit;
-      background:#0f1417;
+      color:#20313c;
+      background:#f8fbfd;
       text-align:left;
       cursor:pointer;
     }
 
-    .sellerOrderListItem:hover,
+    .sellerOrderListItem:hover{
+      border-color:rgba(75,188,255,.32);
+      background:#f2f9fd;
+    }
+
     .sellerOrderListItem.active{
-      border-color:rgba(75,188,255,.36);
-      background:rgba(75,188,255,.045);
+      border-color:rgba(75,188,255,.62);
+      background:#eef8fe;
+      box-shadow:inset 3px 0 0 #4bbcff;
     }
 
     .sellerOrderListTop{
@@ -3218,7 +3223,7 @@
 
     .sellerOrderListTop strong{
       overflow:hidden;
-      color:#dce6eb;
+      color:#173446;
       font-size:9px;
       text-overflow:ellipsis;
       white-space:nowrap;
@@ -3228,8 +3233,8 @@
       padding:4px 7px;
       border:1px solid rgba(255,255,255,.09);
       border-radius:999px;
-      color:#8c999f;
-      background:#101619;
+      color:#647985;
+      background:#f3f7f9;
       font-size:7px;
       font-weight:900;
       text-transform:uppercase;
@@ -6825,10 +6830,32 @@ body.merchLaunchSoon .marketHeroMark img{
   gap:12px;
 }
 
+
 .sellerCenterShell .productMediaItem{
+  position:relative;
   border:1px solid #dce7ec;
   background:#f5f9fb;
   box-shadow:0 2px 8px rgba(20,48,60,.06);
+}
+
+.sellerCenterShell .productMediaRemoveBtn{
+  position:absolute;
+  right:7px;
+  bottom:7px;
+  min-height:28px;
+  padding:5px 9px;
+  border:1px solid rgba(180,62,62,.22);
+  border-radius:7px;
+  background:rgba(255,255,255,.94);
+  color:#9b3f3f;
+  font-size:8px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.sellerCenterShell .productMediaRemoveBtn:disabled{
+  opacity:.55;
+  cursor:wait;
 }
 
 .sellerCenterShell .collectionRow{
@@ -7519,10 +7546,26 @@ body.merchSellerPage .sellerCenterShell{
   margin-top:24px!important;
 }
 
-body.merchSellerPage .sellerCenterNav a[href="#sellerProducts"],
-body.merchSellerPage .sellerCenterNav a[href="#sellerOrders"],
-body.merchSellerPage .sellerCenterNav a[href="#sellerShipping"]{
+body.merchSellerPage .sellerCenterNav a[href="#sellerProducts"]:not([hidden]),
+body.merchSellerPage .sellerCenterNav a[href="#sellerOrders"]:not([hidden]),
+body.merchSellerPage .sellerCenterNav a[href="#sellerShipping"]:not([hidden]){
   display:flex!important;
+}
+
+body.merchSellerPage .sellerCenterNav a[hidden]{
+  display:none!important;
+}
+
+@media(max-width:760px){
+  body.merchSellerPage .sellerCenterNav{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  body.merchSellerPage .sellerCenterNav a{
+    min-height:46px;
+    padding:0 11px;
+  }
 }
 
 body.merchSellerPage #sellerProducts:not([hidden]),
@@ -7569,6 +7612,81 @@ body.merchSellerPage .sellerOrdersHead button{
 </style>
 
 <style>body.merchSellerPage #ownerSignInBtn,body.merchSellerPage #orderStatusBtn{opacity:1!important;filter:none!important;color:#0878af!important;background:#dceef7!important;border-color:rgba(75,188,255,.34)!important}</style>
+
+<style id="monolith-seller-orders-readability-20260829">
+  /* Seller Orders light-theme readability */
+
+  .sellerOrderListPanel,
+  .sellerOrderDetail{
+    color:#20313c;
+  }
+
+  .sellerOrderListTop strong{
+    color:#102d3e !important;
+  }
+
+  .sellerOrderListMeta{
+    color:#536873 !important;
+  }
+
+  .sellerOrderEmpty{
+    color:#536873 !important;
+  }
+
+  .sellerOrderDetailHead strong{
+    color:#102d3e !important;
+  }
+
+  .sellerOrderDetailHead span{
+    color:#536873 !important;
+  }
+
+  .sellerOrderMetric span{
+    color:#526874 !important;
+  }
+
+  .sellerOrderMetric strong{
+    color:#173446 !important;
+  }
+
+  .sellerOrderSection > strong{
+    color:#173446 !important;
+  }
+
+  .sellerOrderRow{
+    color:#526874 !important;
+  }
+
+  .sellerOrderRow strong{
+    color:#173446 !important;
+  }
+
+  .shippingCreatePanel > strong{
+    color:#173446 !important;
+  }
+
+  .shippingCreatePanel > p{
+    color:#526874 !important;
+  }
+
+  .shippingCreatePanel label > span,
+  .shippingCreatePanel .productEditorFields label > span{
+    color:#405965 !important;
+  }
+
+  .shippingCreatePanel textarea,
+  .shippingCreatePanel input,
+  .shippingCreatePanel select{
+    color:#173446 !important;
+  }
+
+  .shippingCreatePanel textarea::placeholder,
+  .shippingCreatePanel input::placeholder{
+    color:#71838d !important;
+    opacity:1;
+  }
+</style>
+
 </head>
 
 <body class="merchLaunchSoon merchSellerPage">
@@ -7666,7 +7784,7 @@ body.merchSellerPage .sellerOrdersHead button{
     <section class="marketHero" id="store">
       <div class="marketHeroCopy">
         <div class="heroEyebrow">
-          XRP-NATIVE MARKETPLACE
+          $XRP-NATIVE MARKETPLACE
         </div>
 
         <h1>
@@ -7675,7 +7793,7 @@ body.merchSellerPage .sellerOrdersHead button{
 
         <p>
           Physical merchandise from verified MONOLITH sellers.
-          Pay with XRP.
+          Pay with $XRP.
         </p>
       </div>
 
@@ -7777,7 +7895,7 @@ body.merchSellerPage .sellerOrdersHead button{
 
         <a class="sellShortcut" href="#sellers">
           <strong>Sell on MONOLITH</strong>
-          <span>Manage your XRP storefront</span>
+          <span>Manage your $XRP storefront</span>
         </a>
       </aside>
 
@@ -7879,7 +7997,7 @@ body.merchSellerPage .sellerOrdersHead button{
           </h2>
 
           <p>
-            Manage your storefront, merchandise, shipping and XRP orders.
+            Manage your storefront, merchandise, shipping and $XRP orders.
           </p>
         </div>
 
@@ -7924,7 +8042,7 @@ body.merchSellerPage .sellerOrdersHead button{
           </div>
 
           <h2>
-            Open your XRP storefront.
+            Open your $XRP storefront.
           </h2>
 
           <p>
@@ -7932,6 +8050,21 @@ body.merchSellerPage .sellerOrdersHead button{
             Sign in with the wallet that owns the coordinate, create your
             seller profile, complete verification, then start publishing
             physical merchandise.
+          </p>
+
+          <p>
+            <strong>MONOLITH Merch Fee: 3%.</strong>
+            MONOLITH deducts 3% from merchandise sales. Shipping is not
+            charged a marketplace fee. Buyers make one $XRP payment to
+            MONOLITH, and your seller proceeds are paid out after payment
+            validation.
+          </p>
+
+          <p>
+            By selling through MONOLITH, you agree to the Merch Store Rules
+            and understand that products and seller accounts may be reviewed,
+            restricted, suspended, or removed for policy violations, legal
+            concerns, fraud, safety issues, or marketplace abuse.
           </p>
 
           <div class="sellerBenefits">
@@ -7952,7 +8085,7 @@ body.merchSellerPage .sellerOrdersHead button{
 
             <div>
               <strong>4</strong>
-              <span>Sell physical goods for XRP</span>
+              <span>Sell physical goods for $XRP</span>
             </div>
           </div>
         </div>
@@ -8070,7 +8203,7 @@ body.merchSellerPage .sellerOrdersHead button{
               rel="noopener"
               hidden
             >
-              Pay in XRP with Xaman
+              Pay in $XRP with Xaman
             </a>
 
             <button
@@ -8246,6 +8379,11 @@ body.merchSellerPage .sellerOrdersHead button{
               ></small>
             </label>
 
+            <div class="sellerStatus productWideField">
+              MONOLITH deducts a 3% marketplace fee from merchandise sales.
+              Shipping is passed to you without a marketplace fee.
+            </div>
+
             <label>
               <span>Category</span>
               <select id="productCategory">
@@ -8359,6 +8497,11 @@ body.merchSellerPage .sellerOrdersHead button{
               Upload Images
             </button>
           </div>
+
+          <div
+            class="productMediaGrid"
+            id="productMediaGrid"
+          ></div>
 
           <div class="productAdvancedGrid">
 
@@ -8615,13 +8758,14 @@ body.merchSellerPage .sellerOrdersHead button{
 
                 <label>
                   <span>Ships To</span>
-                  <input
+                  <select
                     id="productShippingCountries"
-                    type="text"
-                    maxlength="120"
-                    placeholder="US"
-                    value="US"
-                  >
+                    multiple
+                    size="7"
+                  ></select>
+                  <small>
+                    Select every country this shipping rate supports.
+                  </small>
                 </label>
 
                 <label>
@@ -8721,7 +8865,7 @@ body.merchSellerPage .sellerOrdersHead button{
                     id="productShippingCostUsd"
                     type="text"
                     inputmode="decimal"
-                    placeholder="5.99"
+                    placeholder="Enter shipping price"
                   >
                   <small
                     class="sellerXrpEquivalent"
@@ -8731,7 +8875,13 @@ body.merchSellerPage .sellerOrdersHead button{
               </div>
 
               <div class="productManualShippingNotice">
-                <strong>Manual Carrier Pricing — Temporary Launch Mode</strong>
+                <strong>Shipping Required Before Saving</strong>
+
+                <p>
+                  This product requires shipping. Choose a package and enter
+                  the shipping amount you want the buyer to pay before saving
+                  or publishing the product.
+                </p>
 
                 <p>
                   MONOLITH automatic carrier pricing is being activated.
@@ -8744,7 +8894,7 @@ body.merchSellerPage .sellerOrdersHead button{
                   Carrier prices change based on package size, weight,
                   destination and service. The amount you enter here is the
                   shipping charge shown to your customer. MONOLITH will
-                  automatically display and collect its XRP equivalent at checkout.
+                  automatically display and collect its $XRP equivalent at checkout.
                 </p>
 
                 <div class="shippingCarrierLinks">
@@ -8824,6 +8974,15 @@ body.merchSellerPage .sellerOrdersHead button{
             >
               Archive
             </button>
+
+            <button
+              class="productDeleteBtn"
+              id="productDeleteBtn"
+              type="button"
+              hidden
+            >
+              Delete Product
+            </button>
           </div>
         </div>
       </div>
@@ -8883,7 +9042,7 @@ body.merchSellerPage .sellerOrdersHead button{
           <h2>Shipping</h2>
 
           <p>
-            Set where you ship and what buyers pay in XRP.
+            Set where you ship and what buyers pay in $XRP.
           </p>
 
           <div class="shippingLaunchNotice">
@@ -8891,7 +9050,15 @@ body.merchSellerPage .sellerOrdersHead button{
             <span>
               Automated carrier rates are coming. For now, use the official
               carrier pricing tools below to estimate your shipping costs,
-              then set the amount you want buyers to pay.
+              then set the amount you want buyers to pay. You control the
+              countries and shipping zones you serve. MONOLITH does not take
+              its 3% marketplace fee from shipping charges, so the full
+              shipping amount is included in your seller proceeds.
+              For international orders, account for your own shipping costs
+              and clearly communicate whether you are covering any customs,
+              duties, VAT, GST or brokerage charges. Unless you state
+              otherwise, destination import charges are the buyer's
+              responsibility.
             </span>
 
             <div class="shippingCarrierLinks">
@@ -8929,7 +9096,7 @@ body.merchSellerPage .sellerOrdersHead button{
         class="shippingStatus sellerStatus"
         id="shippingStatus"
       >
-        Create a shipping profile, add destinations, then set XRP shipping rates.
+        Create a shipping profile, add destinations, then set $XRP shipping rates.
       </div>
 
       <div
@@ -8993,7 +9160,7 @@ body.merchSellerPage .sellerOrdersHead button{
           <h2>Orders</h2>
 
           <p>
-            Manage XRP orders, fulfillment, shipping and refunds.
+            Manage $XRP orders, fulfillment, shipping and refunds.
           </p>
         </div>
 
@@ -9011,6 +9178,12 @@ body.merchSellerPage .sellerOrdersHead button{
         id="sellerOrdersStatus"
       >
         Your storefront orders will appear here.
+      </div>
+
+      <div class="sellerStatus">
+        Buyers make one $XRP payment to MONOLITH. After payment validation,
+        MONOLITH deducts 3% from merchandise only, passes shipping through
+        without a marketplace fee, and pays the remaining seller proceeds.
       </div>
 
       <div class="sellerOrdersGrid">
@@ -9074,8 +9247,8 @@ body.merchSellerPage .sellerOrdersHead button{
           <span>02</span>
           <h3>Real Payments</h3>
           <p>
-            Orders are built around XRP settlement with transaction
-            verification on the XRP Ledger.
+            Orders are built around $XRP settlement with transaction
+            verification on the XRPL.
           </p>
         </article>
 
@@ -9123,7 +9296,7 @@ body.merchSellerPage .sellerOrdersHead button{
         </strong>
 
         <span id="cartTotal">
-          0 XRP
+          0 $XRP
         </span>
       </div>
 
@@ -9151,7 +9324,7 @@ body.merchSellerPage .sellerOrdersHead button{
         <div class="checkoutHead">
           <div>
             <div class="sectionKicker">
-              XRP CHECKOUT
+              $XRP CHECKOUT
             </div>
 
             <h2 id="checkoutTitle">
@@ -9233,7 +9406,7 @@ body.merchSellerPage .sellerOrdersHead button{
               </label>
 
               <label class="checkoutWide">
-                <span>XRP Wallet <em>Optional</em></span>
+                <span>$XRP Wallet <em>Optional</em></span>
                 <input
                   id="checkoutBuyerWallet"
                   type="text"
@@ -9353,7 +9526,7 @@ body.merchSellerPage .sellerOrdersHead button{
           <div>
             <span>Merchandise</span>
             <strong id="checkoutSubtotal">
-              0 XRP
+              0 $XRP
             </strong>
           </div>
 
@@ -9367,7 +9540,7 @@ body.merchSellerPage .sellerOrdersHead button{
           <div class="checkoutGrandTotal">
             <span>Order Total</span>
             <strong id="checkoutGrandTotal">
-              0 XRP
+              0 $XRP
             </strong>
           </div>
         </section>
@@ -9415,7 +9588,7 @@ body.merchSellerPage .sellerOrdersHead button{
         >
           <div class="checkoutCardHead">
             <strong>
-              Pay with XRP
+              Pay with $XRP
             </strong>
 
             <span>
@@ -10246,7 +10419,7 @@ body.merchSellerPage .sellerOrdersHead button{
         checkoutUi.shippingTotal.textContent =
           checkoutRequiresShipping()
             ? "Select rate"
-            : "0 XRP";
+            : "0 $XRP";
 
         renderCheckoutTotals();
       }
@@ -10282,7 +10455,7 @@ body.merchSellerPage .sellerOrdersHead button{
             {
               maximumFractionDigits:6
             }
-          )} XRP`;
+          )} $XRP`;
 
         checkoutUi.shippingTotal.textContent =
           checkoutRequiresShipping()
@@ -10296,10 +10469,10 @@ body.merchSellerPage .sellerOrdersHead button{
                       {
                         maximumFractionDigits:6
                       }
-                    )} XRP`
+                    )} $XRP`
                   : "Select rate"
               )
-            : "0 XRP";
+            : "0 $XRP";
 
         const authoritativeTotal =
           checkoutRequiresShipping()
@@ -10327,7 +10500,7 @@ body.merchSellerPage .sellerOrdersHead button{
                 {
                   maximumFractionDigits:6
                 }
-              )} XRP`
+              )} $XRP`
             : "Calculating…";
       }
 
@@ -10453,7 +10626,7 @@ body.merchSellerPage .sellerOrdersHead button{
                         {
                           maximumFractionDigits:6
                         }
-                      )} XRP each
+                      )} $XRP each
                     </span>
 
                     ${
@@ -10502,7 +10675,7 @@ body.merchSellerPage .sellerOrdersHead button{
                                       }
                                     >
                                       ${escapeHtml(label)}
-                                      · $${escapeHtml(variant.priceUsd)} · ≈ ${escapeHtml(usdToDisplayXrp(variant.priceUsd) || '—')} XRP
+                                      · $${escapeHtml(variant.priceUsd)} · ≈ ${escapeHtml(usdToDisplayXrp(variant.priceUsd) || '—')} $XRP
                                     </option>
                                   `;
                                 }
@@ -10934,7 +11107,7 @@ body.merchSellerPage .sellerOrdersHead button{
                   </div>
 
                   <span class="checkoutRatePrice">
-                    ${escapeHtml(rate.shippingXrp)} XRP
+                    ${escapeHtml(rate.shippingXrp)} $XRP
                   </span>
                 </label>
               `
@@ -11189,13 +11362,13 @@ body.merchSellerPage .sellerOrdersHead button{
                         escapeHtml(
                           orderPaymentAmount(role)
                         )
-                      } XRP
+                      } $XRP
                     </strong>
 
                     <span>
                       ${
                         state.verified
-                          ? "Validated on the XRP Ledger."
+                          ? "Validated on the XRPL."
                           : (
                               state.message ||
                               "Open Xaman to complete this payment."
@@ -11447,7 +11620,7 @@ body.merchSellerPage .sellerOrdersHead button{
           ...state,
           busy:true,
           message:
-            "Checking the XRP Ledger…"
+            "Checking the XRPL…"
         };
 
         renderCheckoutPayments();
@@ -11496,7 +11669,7 @@ body.merchSellerPage .sellerOrdersHead button{
             verified:true,
             busy:false,
             message:
-              "Validated on the XRP Ledger."
+              "Validated on the XRPL."
           };
 
           renderCheckoutPayments();
@@ -11520,7 +11693,7 @@ body.merchSellerPage .sellerOrdersHead button{
               ]?.verified
             ) {
               checkoutMessage(
-                `${paymentRoleLabel(role)} confirmed. Complete the remaining XRP payment.`,
+                `${paymentRoleLabel(role)} confirmed. Complete the remaining $XRP payment.`,
                 "success"
               );
             }
@@ -11579,10 +11752,10 @@ body.merchSellerPage .sellerOrdersHead button{
 
         checkoutUi.confirmationText
           .textContent =
-            `Paid in full. Total: ${createdCheckoutOrder.totalXrp} XRP.`;
+            `Paid in full. Total: ${createdCheckoutOrder.totalXrp} $XRP.`;
 
         checkoutMessage(
-          "Payment confirmed on the XRP Ledger. Your order is paid.",
+          "Payment confirmed on the XRPL. Your order is paid.",
           "success"
         );
       }
@@ -11669,7 +11842,7 @@ body.merchSellerPage .sellerOrdersHead button{
 
           checkoutUi.confirmationText
             .textContent =
-              `Reserved for payment. Total: ${data.order.totalXrp} XRP.`;
+              `Reserved for payment. Total: ${data.order.totalXrp} $XRP.`;
 
           checkoutUi.orderId.textContent =
             data.order.orderId;
@@ -11677,7 +11850,7 @@ body.merchSellerPage .sellerOrdersHead button{
           renderCheckoutPayments();
 
           checkoutMessage(
-            "Order created. Complete the required XRP payments in Xaman.",
+            "Order created. Complete the required $XRP payments in Xaman.",
             "success"
           );
         } catch (error) {
@@ -11937,7 +12110,7 @@ body.merchSellerPage .sellerOrdersHead button{
                           escapeHtml(
                             item.lineTotalXrp
                           )
-                        } XRP
+                        } $XRP
                       </span>
                     </div>
                   `
@@ -11953,7 +12126,7 @@ body.merchSellerPage .sellerOrdersHead button{
                 escapeHtml(
                   order.totalXrp
                 )
-              } XRP
+              } $XRP
             </strong>
           </div>
 
@@ -12058,7 +12231,7 @@ body.merchSellerPage .sellerOrdersHead button{
           orderStatusMessage(
             data.order.paymentProgress ===
               "paid"
-              ? "Payment confirmed on the XRP Ledger."
+              ? "Payment confirmed on the XRPL."
               : "Order status loaded.",
             data.order.paymentProgress ===
               "paid"
@@ -12523,7 +12696,7 @@ body.merchSellerPage .sellerOrdersHead button{
                     }
 
                     <div class="productBadge">
-                      XRP PRODUCT
+                      $XRP PRODUCT
                     </div>
                   </div>
 
@@ -12574,7 +12747,7 @@ body.merchSellerPage .sellerOrdersHead button{
                         <small>
                           ${
                             usdToDisplayXrp(product.priceUsd)
-                              ? `≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} XRP`
+                              ? `≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} $XRP`
                               : "XRPL PAYMENT"
                           }
                         </small>
@@ -12884,6 +13057,11 @@ body.merchSellerPage .sellerOrdersHead button{
           }
         };
 
+        if (method === "GET") {
+          options.cache =
+            "no-store";
+        }
+
         if (body !== null) {
           options.body =
             JSON.stringify(body);
@@ -12969,6 +13147,7 @@ body.merchSellerPage .sellerOrdersHead button{
       }
 
       function renderSellerFlow() {
+        syncSellerCenterAccess();
         hideSellerActions();
         hydrateSellerInputs();
 
@@ -13171,7 +13350,7 @@ body.merchSellerPage .sellerOrdersHead button{
           false;
 
         sellerMessage(
-          "Complete the $1.50 USD-equivalent identity verification cost in XRP through Xaman, then verify the payment here."
+          "Complete the $1.50 USD-equivalent identity verification cost in $XRP through Xaman, then verify the payment here."
         );
       }
 
@@ -13404,7 +13583,7 @@ body.merchSellerPage .sellerOrdersHead button{
               true;
 
             sellerMessage(
-              "Creating your $1.50 identity verification XRP quote…"
+              "Creating your $1.50 identity verification $XRP quote…"
             );
 
             try {
@@ -13447,8 +13626,8 @@ body.merchSellerPage .sellerOrdersHead button{
 
               sellerUi.openFeeXaman.textContent =
                 quotedXrp
-                  ? `Pay ${quotedXrp} XRP in Xaman`
-                  : "Pay in XRP with Xaman";
+                  ? `Pay ${quotedXrp} $XRP in Xaman`
+                  : "Pay in $XRP with Xaman";
 
               sellerUi.verifyFee.hidden =
                 false;
@@ -13463,8 +13642,8 @@ body.merchSellerPage .sellerOrdersHead button{
 
               sellerMessage(
                 quotedXrp
-                  ? `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent. Pay ${quotedXrp} XRP in Xaman at the quoted rate, then return here and verify the payment.`
-                  : `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent, paid in XRP through Xaman. Complete the payment, then return here and verify it.`
+                  ? `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent. Pay ${quotedXrp} $XRP in Xaman at the quoted rate, then return here and verify the payment.`
+                  : `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent, paid in $XRP through Xaman. Complete the payment, then return here and verify it.`
               );
 
               if (payment.signUrl) {
@@ -13869,6 +14048,10 @@ body.merchSellerPage .sellerOrdersHead button{
           document.getElementById(
             "productArchiveBtn"
           ),
+        deleteProduct:
+          document.getElementById(
+            "productDeleteBtn"
+          ),
         optionsNotice:
           document.getElementById(
             "productOptionsNotice"
@@ -13959,6 +14142,18 @@ body.merchSellerPage .sellerOrdersHead button{
           )
       };
 
+      if (
+        productUi.shippingCountries &&
+        window.MonolithCountries
+      ) {
+        productUi.shippingCountries
+          .insertAdjacentHTML(
+            "beforeend",
+            window.MonolithCountries
+              .optionHtml(["US"])
+          );
+      }
+
       let sellerProducts = [];
       let sellerCollections = [];
       let sellerShippingProfiles = [];
@@ -13993,6 +14188,29 @@ body.merchSellerPage .sellerOrdersHead button{
             "sellerOrdersRefreshBtn"
           )
       };
+
+      if (sellerOrdersUi.detail) {
+        sellerOrdersUi.detail.addEventListener(
+          "click",
+          event => {
+            const refundButton =
+              event.target.closest(
+                "#sellerRequestRefundBtn"
+              );
+
+            if (
+              !refundButton ||
+              !selectedSellerOrder
+            ) {
+              return;
+            }
+
+            requestSellerRefundUi(
+              selectedSellerOrder
+            );
+          }
+        );
+      }
 
       const shippingUi = {
         manager:
@@ -14101,7 +14319,7 @@ body.merchSellerPage .sellerOrdersHead button{
 
         output.textContent =
           xrp
-            ? `≈ ${xrp} XRP`
+            ? `≈ ${xrp} $XRP`
             : "";
       }
 
@@ -14194,7 +14412,10 @@ body.merchSellerPage .sellerOrdersHead button{
       }
 
       function productPayload(
-        status
+        status,
+        {
+          allowIncomplete = false
+        } = {}
       ) {
         const price =
           String(
@@ -14202,7 +14423,13 @@ body.merchSellerPage .sellerOrdersHead button{
             ""
           ).trim();
 
-        if (!price) {
+        if (
+          !price &&
+          !(
+            status === "draft" &&
+            allowIncomplete
+          )
+        ) {
           throw new Error(
             "Enter a product price in USD."
           );
@@ -14337,15 +14564,136 @@ body.merchSellerPage .sellerOrdersHead button{
         productUi.media.innerHTML =
           media.map(
             item => `
-              <div class="productMediaItem">
+              <div
+                class="productMediaItem"
+                data-product-media="${escapeHtml(item.mediaId)}"
+              >
                 <img
                   src="${escapeHtml(item.url)}"
                   alt="${escapeHtml(item.altText || product.title || "")}"
                   loading="lazy"
                 >
+
+                <button
+                  class="productMediaRemoveBtn"
+                  type="button"
+                  data-delete-product-media="${escapeHtml(item.mediaId)}"
+                  aria-label="Remove image"
+                  title="Remove image"
+                >
+                  Remove
+                </button>
               </div>
             `
           ).join("");
+
+        productUi.media
+          .querySelectorAll(
+            "[data-delete-product-media]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                async () => {
+                  if (
+                    !editingProduct
+                  ) {
+                    return;
+                  }
+
+                  const mediaId =
+                    button.dataset
+                      .deleteProductMedia;
+
+                  if (!mediaId) {
+                    return;
+                  }
+
+                  const confirmed =
+                    window.confirm(
+                      "Remove this product image?\n\nThis cannot be undone."
+                    );
+
+                  if (!confirmed) {
+                    return;
+                  }
+
+                  button.disabled =
+                    true;
+
+                  try {
+                    await merchJson(
+                      `/api/merch/product/${
+                        encodeURIComponent(
+                          editingProduct.productId
+                        )
+                      }/media/${
+                        encodeURIComponent(
+                          mediaId
+                        )
+                      }/delete`,
+                      {
+                        method:"POST",
+                        body:{
+                          payloadUuid:
+                            sellerPayload()
+                        }
+                      }
+                    );
+
+                    editingProduct.media =
+                      (
+                        Array.isArray(
+                          editingProduct.media
+                        )
+                          ? editingProduct.media
+                          : []
+                      ).filter(
+                        mediaItem =>
+                          mediaItem.mediaId !==
+                          mediaId
+                      );
+
+                    const productIndex =
+                      sellerProducts.findIndex(
+                        item =>
+                          item.productId ===
+                          editingProduct.productId
+                      );
+
+                    if (
+                      productIndex >= 0
+                    ) {
+                      sellerProducts[
+                        productIndex
+                      ] = editingProduct;
+                    }
+
+                    renderProductMedia(
+                      editingProduct
+                    );
+
+                    renderSellerProducts();
+
+                    productMessage(
+                      "Product image removed.",
+                      "success"
+                    );
+                  } catch (error) {
+                    button.disabled =
+                      false;
+
+                    productMessage(
+                      error.message ||
+                      "Unable to remove product image.",
+                      "error"
+                    );
+                  }
+                }
+              );
+            }
+          );
       }
 
       function productWithFreshData(
@@ -14735,7 +15083,7 @@ body.merchSellerPage .sellerOrdersHead button{
                   </div>
 
                   <span class="variantRowPrice">
-                    $${escapeHtml(variant.priceUsd)} · ≈ ${escapeHtml(sellerUsdToXrp(variant.priceUsd) || '—')} XRP
+                    $${escapeHtml(variant.priceUsd)} · ≈ ${escapeHtml(sellerUsdToXrp(variant.priceUsd) || '—')} $XRP
                   </span>
 
                   <button
@@ -15032,7 +15380,10 @@ body.merchSellerPage .sellerOrdersHead button{
 
         const payload =
           productPayload(
-            "draft"
+            "draft",
+            {
+              allowIncomplete: true
+            }
           );
 
         if (!payload.title) {
@@ -15653,12 +16004,18 @@ body.merchSellerPage .sellerOrdersHead button{
       function normalizeShippingCountries(
         value
       ) {
+        const source =
+          Array.isArray(value)
+            ? value
+            : String(value || "")
+                .split(/[,\s]+/);
+
         const countries =
-          String(value || "")
-            .split(/[,\s]+/)
+          source
             .map(
               item =>
-                item.trim()
+                String(item || "")
+                  .trim()
                   .toUpperCase()
             )
             .filter(Boolean);
@@ -15675,13 +16032,13 @@ body.merchSellerPage .sellerOrdersHead button{
           )
         ) {
           throw new Error(
-            "Use two-letter country codes such as US, CA or GB."
+            "Choose valid destination countries."
           );
         }
 
         if (!unique.length) {
           throw new Error(
-            "Add at least one destination country."
+            "Choose at least one destination country."
           );
         }
 
@@ -15966,8 +16323,7 @@ body.merchSellerPage .sellerOrdersHead button{
                     <strong>Add Destination Zone</strong>
 
                     <p>
-                      Enter countries using two-letter codes.
-                      Example: US, CA, GB.
+                      Choose every country included in this shipping zone.
                     </p>
 
                     <div class="shippingZoneForm">
@@ -15982,15 +16338,20 @@ body.merchSellerPage .sellerOrdersHead button{
                         }"
                       >
 
-                      <input
-                        type="text"
-                        placeholder="Countries: US, CA"
+                      <select
+                        multiple
+                        size="7"
                         data-zone-countries="${
                           escapeHtml(
                             profile.shippingProfileId
                           )
                         }"
                       >
+                        ${
+                          window.MonolithCountries
+                            ?.optionHtml() || ""
+                        }
+                      </select>
 
                       <button
                         class="sellerSecondaryBtn"
@@ -16489,77 +16850,140 @@ body.merchSellerPage .sellerOrdersHead button{
         `;
       }
 
+      function sellerCenterUnlocked() {
+        return !!(
+          sellerProfile &&
+          sellerProfile.status ===
+            "verified" &&
+          sellerProfile
+            .verificationStatus ===
+            "verified"
+        );
+      }
+
+      function syncSellerCenterAccess() {
+        const unlocked =
+          sellerCenterUnlocked();
+
+        document
+          .querySelectorAll(
+            '.sellerCenterNav a[href="#sellerProducts"], .sellerCenterNav a[href="#sellerShipping"], .sellerCenterNav a[href="#sellerOrders"]'
+          )
+          .forEach(link => {
+            link.hidden = !unlocked;
+          });
+
+        if (!unlocked) {
+          document.getElementById(
+            "sellerProducts"
+          )?.setAttribute(
+            "hidden",
+            ""
+          );
+
+          document.getElementById(
+            "sellerShipping"
+          )?.setAttribute(
+            "hidden",
+            ""
+          );
+
+          document.getElementById(
+            "sellerOrders"
+          )?.setAttribute(
+            "hidden",
+            ""
+          );
+        }
+      }
+
       function setSellerCenterTab(
         target
       ) {
-        const setup =
-          document.getElementById(
-            "sellers"
-          );
+        const sections = {
+          "#sellers":
+            document.getElementById(
+              "sellers"
+            ),
+          "#sellerProducts":
+            document.getElementById(
+              "sellerProducts"
+            ),
+          "#sellerShipping":
+            document.getElementById(
+              "sellerShipping"
+            ),
+          "#sellerOrders":
+            document.getElementById(
+              "sellerOrders"
+            )
+        };
 
-        const shipping =
-          document.getElementById(
-            "sellerShipping"
-          );
+        const protectedTarget =
+          target !== "#sellers";
 
-        const links =
-          document.querySelectorAll(
+        if (
+          protectedTarget &&
+          !sellerCenterUnlocked()
+        ) {
+          target = "#sellers";
+        }
+
+        Object.entries(
+          sections
+        ).forEach(
+          ([key, section]) => {
+            if (section) {
+              section.hidden =
+                key !== target;
+            }
+          }
+        );
+
+        document
+          .querySelectorAll(
             ".sellerCenterNav a"
-          );
+          )
+          .forEach(link => {
+            link.classList.toggle(
+              "active",
+              link.getAttribute(
+                "href"
+              ) === target
+            );
+          });
 
-        links.forEach(link => {
-          link.classList.toggle(
-            "active",
-            link.getAttribute("href") ===
-              target
-          );
-        });
+        if (
+          target ===
+          "#sellerProducts"
+        ) {
+          loadSellerProducts();
+        }
 
-        if (target === "#sellerShipping") {
-          if (setup) {
-            setup.hidden = true;
-          }
+        if (
+          target ===
+          "#sellerShipping"
+        ) {
+          loadSellerShipping();
+        }
 
-          if (shipping) {
-            shipping.hidden = false;
-          }
+        if (
+          target ===
+          "#sellerOrders"
+        ) {
+          loadSellerOrders();
+        }
 
-          if (
-            !sellerProfile ||
-            sellerProfile.status !==
-              "verified" ||
-            sellerProfile
-              .verificationStatus !==
-              "verified"
-          ) {
-            renderShippingLockedPreview();
-          }
-
-          shipping?.scrollIntoView({
+        sections[target]
+          ?.scrollIntoView({
             behavior:"smooth",
             block:"start"
           });
-
-          return;
-        }
-
-        if (shipping) {
-          shipping.hidden = true;
-        }
-
-        if (setup) {
-          setup.hidden = false;
-        }
-
-        setup?.scrollIntoView({
-          behavior:"smooth",
-          block:"start"
-        });
       }
 
       document
         .querySelectorAll(
-          '.sellerCenterNav a[href="#sellers"], .sellerCenterNav a[href="#sellerShipping"]'
+          ".sellerCenterNav a"
         )
         .forEach(link => {
           link.addEventListener(
@@ -16575,6 +16999,8 @@ body.merchSellerPage .sellerOrdersHead button{
             }
           );
         });
+
+      syncSellerCenterAccess();
 
       document
         .querySelector(
@@ -17343,9 +17769,10 @@ body.merchSellerPage .sellerOrdersHead button{
             try {
               countries =
                 normalizeShippingCountries(
-                  productUi
-                    .shippingCountries
-                    .value
+                  window.MonolithCountries
+                    ?.selectedValues(
+                      productUi.shippingCountries
+                    ) || []
                 );
             } catch (error) {
               productMessage(
@@ -17385,17 +17812,9 @@ body.merchSellerPage .sellerOrdersHead button{
             );
 
             try {
-              const product =
-                await ensureEditingProductDraft();
-
               const productId =
-                product?.productId;
-
-              if (!productId) {
-                throw new Error(
-                  "Unable to identify the product for shipping."
-                );
-              }
+                editingProduct?.productId ||
+                null;
 
               const profileData =
                 await merchJson(
@@ -17477,56 +17896,60 @@ body.merchSellerPage .sellerOrdersHead button{
                 }
               );
 
-              const productData =
-                await merchJson(
-                  `/api/merch/product/${
-                    encodeURIComponent(
-                      productId
-                    )
-                  }`,
-                  {
-                    method:"POST",
-                    body:{
-                      payloadUuid:
-                        sellerPayload(),
-                      priceUsd:
-                        String(
-                          productUi.price.value ||
-                          editingProduct?.priceUsd ||
-                          ""
-                        ).trim(),
-                      shippingProfile:
-                        profileId
-                    }
-                  }
-                );
+              productUi.shippingProfile.value =
+                profileId;
 
-              const savedProduct =
-                productData.product;
-
-              if (
-                !savedProduct ||
-                savedProduct.shippingProfile !==
-                  profileId
-              ) {
-                throw new Error(
-                  "Shipping was created, but could not be assigned to this product."
-                );
-              }
-
-              editingProduct =
-                savedProduct;
-
-              await loadSellerProducts();
               await loadSellerShipping();
 
               productUi.shippingProfile.value =
                 profileId;
 
-              productMessage(
-                "Shipping saved and assigned to this product.",
-                "success"
-              );
+              if (productId) {
+                const productData =
+                  await merchJson(
+                    `/api/merch/product/${
+                      encodeURIComponent(
+                        productId
+                      )
+                    }`,
+                    {
+                      method:"POST",
+                      body:{
+                        payloadUuid:
+                          sellerPayload(),
+                        shippingProfile:
+                          profileId
+                      }
+                    }
+                  );
+
+                const savedProduct =
+                  productData.product;
+
+                if (
+                  !savedProduct ||
+                  savedProduct.shippingProfile !==
+                    profileId
+                ) {
+                  throw new Error(
+                    "Shipping was created, but could not be assigned to this product."
+                  );
+                }
+
+                await refreshEditingProduct(
+                  savedProduct
+                );
+
+                productMessage(
+                  "Shipping saved and assigned to this product.",
+                  "success"
+                );
+              } else {
+                productMessage(
+                  "Shipping saved. Save Draft to create this product with the selected shipping profile.",
+                  "success"
+                );
+              }
             } catch (error) {
               productMessage(
                 error.message ||
@@ -17618,10 +18041,16 @@ body.merchSellerPage .sellerOrdersHead button{
             ""
           ).trim();
 
-        const countriesRaw =
+        const countriesSelect =
           card?.querySelector(
             `[data-zone-countries="${CSS.escape(profileId)}"]`
-          )?.value || "";
+          );
+
+        const countriesRaw =
+          window.MonolithCountries
+            ?.selectedValues(
+              countriesSelect
+            ) || [];
 
         if (!name) {
           shippingMessage(
@@ -18159,6 +18588,9 @@ body.merchSellerPage .sellerOrdersHead button{
           product.status ===
           "archived";
 
+        productUi.deleteProduct.hidden =
+          false;
+
         renderProductMedia(
           product
         );
@@ -18236,7 +18668,7 @@ body.merchSellerPage .sellerOrdersHead button{
                       $${escapeHtml(product.priceUsd)}
                       ${
                         usdToDisplayXrp(product.priceUsd)
-                          ? ` · ≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} XRP`
+                          ? ` · ≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} $XRP`
                           : ""
                       }
                     </span>
@@ -18368,6 +18800,39 @@ body.merchSellerPage .sellerOrdersHead button{
           }`;
       }
 
+      function sellerPayoutLabel(
+        payout
+      ) {
+        if (!payout) {
+          return "Not started";
+        }
+
+        switch (
+          String(
+            payout.status || ""
+          ).toLowerCase()
+        ) {
+          case "pending":
+          case "submitting":
+            return "Payout Pending";
+
+          case "submitted":
+            return "Payout Submitted";
+
+          case "validated":
+            return "Payout Complete";
+
+          case "failed":
+            return "Payout Issue";
+
+          case "cancelled":
+            return "Payout Cancelled";
+
+          default:
+            return "Payout Pending";
+        }
+      }
+
       function renderSellerOrderDetail(
         order
       ) {
@@ -18471,7 +18936,29 @@ body.merchSellerPage .sellerOrdersHead button{
                   sellerDropsToXrp(
                     order.totalDrops
                   )
-                )} XRP
+                )} $XRP
+              </strong>
+            </div>
+
+            <div class="sellerOrderMetric">
+              <span>Seller Proceeds</span>
+              <strong>
+                ${escapeHtml(
+                  sellerDropsToXrp(
+                    order.sellerProceedsDrops
+                  )
+                )} $XRP
+              </strong>
+            </div>
+
+            <div class="sellerOrderMetric">
+              <span>Payout</span>
+              <strong>
+                ${escapeHtml(
+                  sellerPayoutLabel(
+                    order.payout
+                  )
+                )}
               </strong>
             </div>
           </div>
@@ -18501,7 +18988,7 @@ body.merchSellerPage .sellerOrdersHead button{
               </div>
 
               <div class="sellerOrderRow">
-                <span>XRP Wallet</span>
+                <span>$XRP Wallet</span>
                 <strong>
                   ${escapeHtml(
                     order.buyerWallet ||
@@ -18598,7 +19085,7 @@ body.merchSellerPage .sellerOrdersHead button{
                                   item.lineTotalDrops
                                 )
                               )
-                            } XRP
+                            } $XRP
                           </strong>
                         </div>
                       `
@@ -18648,7 +19135,7 @@ body.merchSellerPage .sellerOrdersHead button{
                                   payment.amountDrops
                                 )
                               )
-                            } XRP
+                            } $XRP
                           </strong>
                         </div>
                       `
@@ -18773,22 +19260,48 @@ body.merchSellerPage .sellerOrdersHead button{
 
             ${
               (() => {
-                const sellerPayment =
-                  payments.find(
-                    payment =>
-                      String(
-                        payment.paymentRole || ""
-                      ).toLowerCase() ===
-                        "seller" &&
-                      payment.validated
+                const paymentStatus =
+                  String(
+                    order.paymentStatus || ""
+                  ).toLowerCase();
+
+                const payout =
+                  order.payout || null;
+
+                const payoutStatus =
+                  String(
+                    payout?.status || ""
+                  ).toLowerCase();
+
+                const payoutAttempts =
+                  Number(
+                    payout?.attempts || 0
                   );
 
-                if (
-                  !sellerPayment ||
+                const payoutTxHash =
                   String(
-                    sellerPayment.status || ""
-                  ).toLowerCase() ===
-                    "refunded" ||
+                    payout?.xrplTxHash ||
+                    payout?.xrpl_tx_hash ||
+                    ""
+                  ).trim();
+
+                const payoutPayloadUuid =
+                  String(
+                    payout?.xamanPayloadUuid ||
+                    payout?.xaman_payload_uuid ||
+                    ""
+                  ).trim();
+
+                const payoutUntouched =
+                  payout &&
+                  payoutStatus === "pending" &&
+                  payoutAttempts === 0 &&
+                  !payoutTxHash &&
+                  !payoutPayloadUuid;
+
+                if (
+                  paymentStatus !== "paid" ||
+                  !payoutUntouched ||
                   [
                     "cancelled",
                     "refunded"
@@ -18807,65 +19320,17 @@ body.merchSellerPage .sellerOrdersHead button{
                     id="sellerRefundPanel"
                   >
                     <strong>
-                      Refund Seller Payment
+                      Refund Buyer
                     </strong>
 
                     <p>
-                      Return the exact seller payment from the original receiving wallet to the original payer, then paste the validated XRPL transaction hash below.
+                      Request a full refund of this order. MONOLITH will return the validated order payment to the buyer and cancel the seller payout before it is sent.
                     </p>
-
-                    <div class="sellerOrderRows">
-                      <div class="sellerOrderRow">
-                        <span>Refund Amount</span>
-
-                        <strong>
-                          ${escapeHtml(
-                            sellerDropsToXrp(
-                              sellerPayment.amountDrops
-                            )
-                          )} XRP
-                        </strong>
-                      </div>
-
-                      <div class="sellerOrderRow">
-                        <span>Send From</span>
-
-                        <strong>
-                          ${escapeHtml(
-                            sellerPayment.destinationWallet ||
-                            "—"
-                          )}
-                        </strong>
-                      </div>
-
-                      <div class="sellerOrderRow">
-                        <span>Send To</span>
-
-                        <strong>
-                          ${escapeHtml(
-                            sellerPayment.payerWallet ||
-                            "—"
-                          )}
-                        </strong>
-                      </div>
-                    </div>
 
                     <div
                       class="productEditorFields"
                       style="margin-top:12px"
                     >
-                      <label class="productWideField">
-                        <span>Refund Transaction Hash</span>
-
-                        <input
-                          id="sellerRefundTxid"
-                          type="text"
-                          maxlength="128"
-                          autocomplete="off"
-                          placeholder="Paste the validated XRPL transaction hash"
-                        >
-                      </label>
-
                       <label class="productWideField">
                         <span>Reason</span>
 
@@ -18881,16 +19346,12 @@ body.merchSellerPage .sellerOrdersHead button{
                     <div class="sellerOrderActions">
                       <button
                         class="sellerOrderDangerBtn"
-                        id="sellerVerifyRefundBtn"
+                        id="sellerRequestRefundBtn"
                         type="button"
                       >
-                        Verify Seller Refund
+                        Refund Buyer
                       </button>
                     </div>
-
-                    <p>
-                      MONOLITH's payment leg is handled separately and is not controlled by the seller wallet.
-                    </p>
                   </div>
                 `;
               })()
@@ -19111,34 +19572,6 @@ body.merchSellerPage .sellerOrdersHead button{
           );
         }
 
-        const refundButton =
-          document.getElementById(
-            "sellerVerifyRefundBtn"
-          );
-
-        if (refundButton) {
-          const sellerPayment =
-            payments.find(
-              payment =>
-                String(
-                  payment.paymentRole || ""
-                ).toLowerCase() ===
-                  "seller" &&
-                payment.validated
-            );
-
-          if (sellerPayment) {
-            refundButton.addEventListener(
-              "click",
-              () => {
-                verifySellerRefundUi(
-                  order,
-                  sellerPayment
-                );
-              }
-            );
-          }
-        }
       }
 
       function renderSellerOrders() {
@@ -19239,13 +19672,21 @@ body.merchSellerPage .sellerOrdersHead button{
                       sellerDropsToXrp(
                         order.totalDrops
                       )
-                    )} XRP
+                    )} $XRP
                   </span>
 
                   <span>
                     ${escapeHtml(
                       order.paymentStatus ||
                       "Unknown payment"
+                    )}
+                  </span>
+
+                  <span>
+                    ${escapeHtml(
+                      sellerPayoutLabel(
+                        order.payout
+                      )
                     )}
                   </span>
 
@@ -19554,46 +19995,24 @@ body.merchSellerPage .sellerOrdersHead button{
         }
       }
 
-      async function verifySellerRefundUi(
-        order,
-        payment
+      async function requestSellerRefundUi(
+        order
       ) {
         if (
           !order ||
-          !order.orderId ||
-          !payment ||
-          !payment.paymentId
+          !order.orderId
         ) {
           return;
         }
-
-        const txid =
-          document.getElementById(
-            "sellerRefundTxid"
-          )?.value.trim() || "";
 
         const reason =
           document.getElementById(
             "sellerRefundReason"
           )?.value.trim() || "";
 
-        if (!txid) {
-          sellerOrderMessage(
-            "Enter the validated XRPL refund transaction hash.",
-            "error"
-          );
-          return;
-        }
-
         const confirmed =
           window.confirm(
-            `Verify this seller refund on the XRP Ledger?\n\nAmount: ${
-              sellerDropsToXrp(
-                payment.amountDrops
-              )
-            } XRP\nDestination: ${
-              payment.payerWallet || ""
-            }`
+            "Refund this order to the buyer?\n\nThis will cancel the seller payout and queue the full validated order payment for return to the buyer."
           );
 
         if (!confirmed) {
@@ -19601,7 +20020,7 @@ body.merchSellerPage .sellerOrdersHead button{
         }
 
         sellerOrderMessage(
-          "Verifying seller refund on the XRP Ledger..."
+          "Requesting buyer refund..."
         );
 
         try {
@@ -19611,15 +20030,12 @@ body.merchSellerPage .sellerOrdersHead button{
                 encodeURIComponent(
                   order.orderId
                 )
-              }/refund/verify`,
+              }/refund/request`,
               {
                 method: "POST",
                 body: {
                   payloadUuid:
                     sellerPayload(),
-                  paymentRole:
-                    "seller",
-                  txid,
                   reason
                 }
               }
@@ -19630,9 +20046,9 @@ body.merchSellerPage .sellerOrdersHead button{
 
           sellerOrderMessage(
             refund &&
-            refund.alreadyRefunded
-              ? "Seller refund was already verified."
-              : "Seller refund verified on the XRP Ledger.",
+            refund.alreadyRequested
+              ? "Buyer refund is already queued."
+              : "Buyer refund queued.",
             "success"
           );
 
@@ -19641,13 +20057,12 @@ body.merchSellerPage .sellerOrdersHead button{
           );
         } catch (error) {
           console.error(
-            "[merch:seller-refund-verify]",
+            "[merch:seller-refund-request]",
             error
           );
 
           sellerOrderMessage(
-            error.message ||
-            "Unable to verify seller refund.",
+            "Unable to request this refund. Please try again or contact MONOLITH support.",
             "error"
           );
         }
@@ -19840,6 +20255,22 @@ body.merchSellerPage .sellerOrdersHead button{
           return null;
         }
 
+        if (
+          productUi.requiresShipping.checked &&
+          !String(
+            productUi.shippingProfile.value ||
+            ""
+          ).trim()
+        ) {
+          productMessage(
+            "Shipping is required before this product can be saved or published. Choose a package, enter the shipping price, and click Save Shipping.",
+            "error"
+          );
+
+          productUi.shippingCostUsd.focus();
+          return null;
+        }
+
         productUi.saveDraft.disabled =
           true;
         productUi.publish.disabled =
@@ -19870,10 +20301,9 @@ body.merchSellerPage .sellerOrdersHead button{
               }
             );
 
-          editingProduct =
-            data.product;
-
-          await loadSellerProducts();
+          await refreshEditingProduct(
+            data.product
+          );
 
           productUi.uploadImage.disabled =
             !productUi.image.files?.length;
@@ -20111,7 +20541,6 @@ body.merchSellerPage .sellerOrdersHead button{
                   ""
                 );
 
-                // Preserve display order across batches.
                 const existingCount =
                   Array.isArray(
                     editingProduct.media
@@ -20155,17 +20584,62 @@ body.merchSellerPage .sellerOrdersHead button{
                   );
                 }
 
+                if (
+                  !data.media
+                ) {
+                  throw new Error(
+                    `Image ${uploaded + 1} uploaded but no media record was returned.`
+                  );
+                }
+
+                if (
+                  !Array.isArray(
+                    editingProduct.media
+                  )
+                ) {
+                  editingProduct.media = [];
+                }
+
+                editingProduct.media.push(
+                  data.media
+                );
+
+                editingProduct.media.sort(
+                  (a, b) =>
+                    Number(
+                      a.sortOrder || 0
+                    ) -
+                    Number(
+                      b.sortOrder || 0
+                    )
+                );
+
+                const productIndex =
+                  sellerProducts.findIndex(
+                    product =>
+                      product.productId ===
+                      editingProduct.productId
+                  );
+
+                if (
+                  productIndex >= 0
+                ) {
+                  sellerProducts[
+                    productIndex
+                  ] = editingProduct;
+                }
+
+                renderProductMedia(
+                  editingProduct
+                );
+
                 uploaded += 1;
               }
 
-              // Remove only the files that were part
-              // of this successful batch.
               pendingProductImages.splice(
                 0,
                 files.length
               );
-
-              await loadSellerProducts();
 
               refreshProductImageQueue();
 
@@ -20191,6 +20665,85 @@ body.merchSellerPage .sellerOrdersHead button{
           }
         );
 
+      productUi.deleteProduct
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!editingProduct) {
+              return;
+            }
+
+            const productId =
+              editingProduct.productId;
+
+            const title =
+              editingProduct.title ||
+              "this product";
+
+            const confirmed =
+              window.confirm(
+                `Permanently delete "${title}"?\n\nThis cannot be undone. Products with existing orders cannot be deleted and must be archived instead.`
+              );
+
+            if (!confirmed) {
+              return;
+            }
+
+            productUi.deleteProduct.disabled =
+              true;
+
+            productMessage(
+              "Deleting product…"
+            );
+
+            try {
+              await merchJson(
+                `/api/merch/product/${
+                  encodeURIComponent(
+                    productId
+                  )
+                }/delete`,
+                {
+                  method:"POST",
+                  body:{
+                    payloadUuid:
+                      sellerPayload()
+                  }
+                }
+              );
+
+              sellerProducts =
+                sellerProducts.filter(
+                  product =>
+                    product.productId !==
+                    productId
+                );
+
+              editingProduct =
+                null;
+
+              resetProductEditor();
+              renderSellerProducts();
+
+              productMessage(
+                "Product deleted.",
+                "success"
+              );
+
+              loadMarketplace();
+            } catch (error) {
+              productMessage(
+                error.message ||
+                "Unable to delete product.",
+                "error"
+              );
+            } finally {
+              productUi.deleteProduct.disabled =
+                false;
+            }
+          }
+        );
+
       productUi.archive
         ?.addEventListener(
           "click",
@@ -20205,26 +20758,48 @@ body.merchSellerPage .sellerOrdersHead button{
             );
 
             try {
-              await merchJson(
-                `/api/merch/product/${
-                  encodeURIComponent(
-                    editingProduct.productId
-                  )
-                }/archive`,
-                {
-                  method:"POST",
-                  body:{
-                    payloadUuid:
-                      sellerPayload()
+              const archiveData =
+                await merchJson(
+                  `/api/merch/product/${
+                    encodeURIComponent(
+                      editingProduct.productId
+                    )
+                  }/archive`,
+                  {
+                    method:"POST",
+                    body:{
+                      payloadUuid:
+                        sellerPayload()
+                    }
                   }
+                );
+
+              const archivedProduct =
+                archiveData.product;
+
+              if (
+                archivedProduct
+              ) {
+                const archiveIndex =
+                  sellerProducts.findIndex(
+                    item =>
+                      item.productId ===
+                      archivedProduct.productId
+                  );
+
+                if (
+                  archiveIndex >= 0
+                ) {
+                  sellerProducts[
+                    archiveIndex
+                  ] = archivedProduct;
                 }
-              );
+              }
 
               editingProduct = null;
 
               resetProductEditor();
-
-              await loadSellerProducts();
+              renderSellerProducts();
 
               productMessage(
                 "Product archived.",

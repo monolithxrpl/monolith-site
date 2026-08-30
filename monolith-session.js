@@ -20,6 +20,26 @@
 
       if (s.createdAt && Date.now() - Number(s.createdAt) > MAX_AGE_MS) {
         clearSession();
+
+        document
+          .querySelectorAll("[data-monolith-session-status]")
+          .forEach((node) => {
+            node.textContent = "Not signed in";
+            node.style.display = "none";
+          });
+
+        document
+          .querySelectorAll("[data-monolith-session-signout]")
+          .forEach((node) => {
+            node.style.display = "none";
+          });
+
+        document
+          .querySelectorAll("[data-monolith-session-toggle]")
+          .forEach((node) => {
+            node.textContent = "Sign In";
+          });
+
         return null;
       }
 

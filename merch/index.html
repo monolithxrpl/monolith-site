@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#050505">
 
   <title>MONOLITH Merch Store</title>
 
   <meta
     name="description"
-    content="MONOLITH Merch Store — verified sellers, real products and XRP-native commerce on the XRPL."
+    content="MONOLITH Merch Store — verified sellers, real products and $XRP-native commerce on the XRPL."
   >
 
   <link rel="icon" href="/favicon.ico">
@@ -938,9 +938,9 @@
       width:min(680px,calc(100% - 28px));
       padding:13px 15px;
       transform:translateX(-50%);
-      border:1px solid #444;
-      background:rgba(8,8,8,.97);
-      box-shadow:0 24px 70px rgba(0,0,0,.72);
+      border:1px solid #cfe0e8;
+      background:rgba(255,255,255,.97);
+      box-shadow:0 18px 50px rgba(32,67,83,.18);
       backdrop-filter:blur(12px);
     }
 
@@ -956,7 +956,7 @@
     .cartMeta span{
       display:block;
       margin-top:3px;
-      color:#888;
+      color:#617985;
       font-size:10px;
     }
 
@@ -1643,13 +1643,18 @@
 
     @media(max-width:760px){
       .checkoutOverlay{
-        padding:0;
+        padding:16px;
+        align-items:center;
+        justify-content:center;
       }
 
       .checkoutPanel{
-        min-height:100vh;
+        min-height:0;
+        max-height:calc(100dvh - 32px);
         margin:0;
-        border:0;
+        border-radius:14px;
+        overflow-y:auto;
+        overscroll-behavior:contain;
       }
 
       .checkoutColumns,
@@ -4514,7 +4519,19 @@
       }
 
       .payBtn{
-        display:none;
+        display:flex;
+        min-height:36px;
+        padding:0 9px;
+        font-size:8px;
+      }
+
+      .payBtn span{
+        width:18px;
+        height:18px;
+      }
+
+      .headerActions{
+        flex-wrap:wrap;
       }
 
       .hero{
@@ -7351,7 +7368,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
 
 <style id="monolith-merch-header-account-contrast-20260825">
-.headerActions #ownerSignInBtn,
+.headerActions #buyerSignInBtn,
 .headerActions #orderStatusBtn{
   background:#dceef7!important;
   border:1px solid #117fae!important;
@@ -7360,11 +7377,157 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
   font-weight:800!important;
 }
 
-.headerActions #ownerSignInBtn:hover,
+.headerActions #buyerSignInBtn:hover,
 .headerActions #orderStatusBtn:hover{
   background:#c8e6f4!important;
   border-color:#07587d!important;
   color:#043f5a!important;
+}
+</style>
+
+
+<style id="monolith-merch-checkout-light-theme-20260828">
+.checkoutOverlay{
+  background:rgba(244,248,250,.88)!important;
+}
+
+.checkoutPanel{
+  background:#ffffff!important;
+  color:#203946!important;
+  border:1px solid #cfe0e8!important;
+  box-shadow:0 24px 70px rgba(32,67,83,.18)!important;
+}
+
+.checkoutHead,
+.checkoutSellerPicker,
+.checkoutItems,
+.checkoutCard,
+.checkoutSummary,
+.checkoutConfirmation,
+.checkoutPaymentStage{
+  background:#ffffff!important;
+  color:#203946!important;
+  border-color:#d7e4ea!important;
+}
+
+.checkoutHead h2,
+.checkoutCardHead strong,
+.checkoutSummary strong,
+.checkoutConfirmation strong{
+  color:#203946!important;
+}
+
+.checkoutHead p,
+.checkoutCardHead span,
+.checkoutFields em,
+.checkoutItemCopy span,
+.checkoutSellerPicker p{
+  color:#6b808b!important;
+}
+
+.checkoutStatus{
+  background:#f4fafc!important;
+  color:#385865!important;
+  border-color:#c8e0ea!important;
+}
+
+.checkoutItem{
+  background:#f7fafb!important;
+  border-color:#dce7ec!important;
+}
+
+.checkoutFields input,
+.checkoutFields select,
+.checkoutFields textarea{
+  background:#ffffff!important;
+  color:#203946!important;
+  border:1px solid #cbdde5!important;
+}
+
+.checkoutFields input::placeholder,
+.checkoutFields textarea::placeholder{
+  color:#93a5ad!important;
+}
+
+.checkoutFields input:focus,
+.checkoutFields select:focus,
+.checkoutFields textarea:focus{
+  background:#ffffff!important;
+  color:#203946!important;
+  border-color:#4bbcff!important;
+  box-shadow:0 0 0 3px rgba(75,188,255,.12)!important;
+}
+
+.checkoutRate{
+  background:#f7fafb!important;
+  border-color:#d7e4ea!important;
+  color:#203946!important;
+}
+
+.checkoutRate strong,
+.checkoutRate span,
+.checkoutRatePrice{
+  color:#385865!important;
+}
+
+.checkoutGrandTotal{
+  color:#203946!important;
+}
+
+.checkoutGrandTotal strong{
+  color:#0878af!important;
+}
+
+.checkoutClose{
+  color:#536c78!important;
+  background:#ffffff!important;
+  border-color:#cbdde5!important;
+}
+
+.checkoutClose:hover{
+  background:#eef7fb!important;
+}
+
+.checkoutQuoteBtn,
+.checkoutCancelBtn{
+  color:#35515f!important;
+  background:#ffffff!important;
+  border-color:#bfd5df!important;
+}
+
+.checkoutQuoteBtn:hover,
+.checkoutCancelBtn:hover{
+  background:#eef7fb!important;
+}
+
+.checkoutCreateOrderBtn{
+  color:#06202c!important;
+  background:#68cdfb!important;
+  border-color:rgba(75,188,255,.55)!important;
+}
+
+.checkoutCreateOrderBtn:hover{
+  background:#4bbcff!important;
+}
+
+.checkoutPaymentLeg{
+  background:#f7fafb!important;
+  border-color:#d7e4ea!important;
+}
+
+.checkoutPaymentLegCopy strong{
+  color:#203946!important;
+}
+
+.checkoutPaymentLegCopy span,
+.checkoutPaymentLegCopy code{
+  color:#637985!important;
+}
+
+.checkoutPaidNotice{
+  background:#f1faf4!important;
+  color:#315a43!important;
+  border-color:#bfddc8!important;
 }
 </style>
 
@@ -7420,23 +7583,22 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       <div class="headerActions">
         <button
           class="payBtn"
-          id="ownerSignInBtn"
-          data-monolith-session-toggle
+          id="buyerSignInBtn"
           type="button"
-          title="Sign in as a MONOLITH coordinate owner"
+          title="Sign in with Xaman"
         >
           <span>◆</span>
-          Owner Sign In
+          Buyer Sign In
         </button>
 
         <button
           class="payBtn"
           id="orderStatusBtn"
           type="button"
-          title="Check a MONOLITH merch order"
+          title="View your MONOLITH merch orders"
         >
           <span>✓</span>
-          Check Order
+          My Orders
         </button>
 
         <button
@@ -7465,7 +7627,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
     <section class="marketHero" id="store">
       <div class="marketHeroCopy">
         <div class="heroEyebrow">
-          XRP-NATIVE MARKETPLACE
+          $XRP-NATIVE MARKETPLACE
         </div>
 
         <h1>
@@ -7474,7 +7636,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
         <p>
           Physical merchandise from verified MONOLITH sellers.
-          Pay with XRP.
+          Pay with $XRP.
         </p>
       </div>
 
@@ -7576,7 +7738,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
         <a class="sellShortcut" href="#sellers">
           <strong>Sell on MONOLITH</strong>
-          <span>Manage your XRP storefront</span>
+          <span>Manage your $XRP storefront</span>
         </a>
       </aside>
 
@@ -7695,8 +7857,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           <span>02</span>
           <h3>Real Payments</h3>
           <p>
-            Orders are built around XRP settlement with transaction
-            verification on the XRP Ledger.
+            Orders are built around $XRP settlement with transaction
+            verification on the XRPL.
           </p>
         </article>
 
@@ -7744,7 +7906,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         </strong>
 
         <span id="cartTotal">
-          0 XRP
+          0 $XRP
         </span>
       </div>
 
@@ -7772,7 +7934,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         <div class="checkoutHead">
           <div>
             <div class="sectionKicker">
-              XRP CHECKOUT
+              $XRP CHECKOUT
             </div>
 
             <h2 id="checkoutTitle">
@@ -7854,12 +8016,13 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               </label>
 
               <label class="checkoutWide">
-                <span>XRP Wallet <em>Optional</em></span>
+                <span>Verified Xaman Wallet</span>
                 <input
                   id="checkoutBuyerWallet"
                   type="text"
                   autocomplete="off"
-                  placeholder="r..."
+                  placeholder="Sign in with Xaman to checkout"
+                  readonly
                 >
               </label>
             </div>
@@ -7944,14 +8107,15 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               </label>
 
               <label>
-                <span>Country Code</span>
-                <input
+                <span>Country</span>
+                <select
                   id="checkoutCountry"
-                  type="text"
-                  maxlength="2"
                   autocomplete="shipping country"
-                  placeholder="US"
                 >
+                  <option value="">
+                    Choose country
+                  </option>
+                </select>
               </label>
             </div>
 
@@ -7967,6 +8131,14 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               class="checkoutRates"
               id="checkoutRates"
             ></div>
+
+            <div class="checkoutShippingNotice">
+              International orders may be subject to customs duties,
+              import taxes, VAT, GST, brokerage fees or other charges
+              assessed by the destination country or carrier. These
+              charges are the buyer's responsibility unless the seller
+              specifically states otherwise.
+            </div>
           </section>
         </div>
 
@@ -7974,7 +8146,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           <div>
             <span>Merchandise</span>
             <strong id="checkoutSubtotal">
-              0 XRP
+              0 $XRP
             </strong>
           </div>
 
@@ -7988,7 +8160,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           <div class="checkoutGrandTotal">
             <span>Order Total</span>
             <strong id="checkoutGrandTotal">
-              0 XRP
+              0 $XRP
             </strong>
           </div>
         </section>
@@ -8036,7 +8208,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         >
           <div class="checkoutCardHead">
             <strong>
-              Pay with XRP
+              Pay with $XRP
             </strong>
 
             <span>
@@ -8062,6 +8234,19 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               Your MONOLITH order is fully paid.
             </span>
           </div>
+
+          <div
+            class="checkoutActions"
+            id="checkoutBuyerCancelActions"
+          >
+            <button
+              class="sellerSecondaryBtn"
+              id="checkoutBuyerCancelOrderBtn"
+              type="button"
+            >
+              Cancel Order
+            </button>
+          </div>
         </section>
       </section>
     </div>
@@ -8083,7 +8268,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             </div>
 
             <h2 id="orderStatusTitle">
-              Check Order
+              My Orders
             </h2>
           </div>
 
@@ -8197,6 +8382,200 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
       const LAST_ORDER_STORAGE_KEY =
         "monolithMerchLastOrderV1";
+      const LAST_ORDER_MAX_AGE_MS =
+        7 * 24 * 60 * 60 * 1000;
+
+      const CHECKOUT_RECOVERY_STORAGE_KEY =
+        "monolithMerchCheckoutRecoveryV1";
+
+      const CHECKOUT_RECOVERY_MAX_AGE_MS =
+        7 * 24 * 60 * 60 * 1000;
+
+      const BUYER_SESSION_STORAGE_KEY =
+        "monolithMerchBuyerSessionV1";
+
+      const BUYER_SESSION_MAX_AGE_MS =
+        7 * 24 * 60 * 60 * 1000;
+
+      function buyerSession() {
+        try {
+          const raw =
+            localStorage.getItem(
+              BUYER_SESSION_STORAGE_KEY
+            );
+
+          if (!raw) return null;
+
+          const parsed =
+            JSON.parse(raw);
+
+          if (
+            !parsed ||
+            !parsed.wallet ||
+            !parsed.payloadUuid ||
+            !parsed.savedAt ||
+            Date.now() - parsed.savedAt >
+              BUYER_SESSION_MAX_AGE_MS
+          ) {
+            localStorage.removeItem(
+              BUYER_SESSION_STORAGE_KEY
+            );
+
+            return null;
+          }
+
+          return parsed;
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function saveBuyerSession(
+        wallet,
+        payloadUuid
+      ) {
+        const session = {
+          wallet:
+            String(wallet || "").trim(),
+          payloadUuid:
+            String(
+              payloadUuid || ""
+            ).trim(),
+          savedAt:
+            Date.now()
+        };
+
+        localStorage.setItem(
+          BUYER_SESSION_STORAGE_KEY,
+          JSON.stringify(session)
+        );
+
+        return session;
+      }
+
+      function clearBuyerSession() {
+        localStorage.removeItem(
+          BUYER_SESSION_STORAGE_KEY
+        );
+      }
+
+      function compactWallet(value) {
+        const wallet =
+          String(value || "").trim();
+
+        if (wallet.length < 16) {
+          return wallet;
+        }
+
+        return `${wallet.slice(0,8)}…${wallet.slice(-6)}`;
+      }
+
+      function renderBuyerSession() {
+        const session =
+          buyerSession();
+
+        const signInBtn =
+          document.getElementById(
+            "buyerSignInBtn"
+          );
+
+        if (signInBtn) {
+          signInBtn.innerHTML =
+            session
+              ? "<span>◆</span> Sign Out"
+              : "<span>◆</span> Buyer Sign In";
+
+          signInBtn.title =
+            session
+              ? `Signed in as ${session.wallet}`
+              : "Sign in with Xaman";
+        }
+
+        if (checkoutUi?.buyerWallet) {
+          checkoutUi.buyerWallet.value =
+            session?.wallet || "";
+        }
+      }
+
+      async function startBuyerSignIn(
+        returnUrl = "/merch/"
+      ) {
+        const response =
+          await fetch(
+            "/api/merch/buyer/auth/start",
+            {
+              method:"POST",
+              headers:{
+                "Content-Type":
+                  "application/json"
+              },
+              body:JSON.stringify({
+                returnUrl
+              })
+            }
+          );
+
+        const data =
+          await response
+            .json()
+            .catch(() => ({}));
+
+        if (
+          !response.ok ||
+          !data.ok ||
+          !data.auth?.signUrl
+        ) {
+          throw new Error(
+            data.error ||
+            data.code ||
+            "buyer_signin_failed"
+          );
+        }
+
+        window.location.href =
+          data.auth.signUrl;
+      }
+
+      async function verifyBuyerPayload(
+        payloadUuid
+      ) {
+        const response =
+          await fetch(
+            "/api/merch/buyer/auth/verify",
+            {
+              method:"POST",
+              headers:{
+                "Content-Type":
+                  "application/json"
+              },
+              body:JSON.stringify({
+                payloadUuid
+              })
+            }
+          );
+
+        const data =
+          await response
+            .json()
+            .catch(() => ({}));
+
+        if (
+          !response.ok ||
+          !data.ok ||
+          !data.wallet
+        ) {
+          throw new Error(
+            data.error ||
+            data.code ||
+            "buyer_signin_verify_failed"
+          );
+        }
+
+        return saveBuyerSession(
+          data.wallet,
+          payloadUuid
+        );
+      }
 
       const MARKETPLACE_CATEGORIES = {
         all: "Browse All",
@@ -8238,9 +8617,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       let createdCheckoutOrder = null;
       let checkoutPurchasedItems = [];
       let checkoutPayments = {
-        seller:null,
-        platform:null
+        settlement:null
       };
+      let checkoutAutoVerifyTimer = null;
 
       const checkoutUi = {
         button:
@@ -8368,6 +8747,16 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             "checkoutPaidNotice"
           )
       };
+
+      if (
+        checkoutUi.country &&
+        window.MonolithCountries
+      ) {
+        checkoutUi.country.insertAdjacentHTML(
+          "beforeend",
+          window.MonolithCountries.optionHtml()
+        );
+      }
 
       const orderStatusUi = {
         button:
@@ -8645,12 +9034,13 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             "cartTotal"
           )
           .textContent =
-            `${total.toLocaleString(
+            `$${total.toLocaleString(
               undefined,
               {
-                maximumFractionDigits:6
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
               }
-            )} XRP`;
+            )}`;
 
         document
           .getElementById(
@@ -8859,7 +9249,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         checkoutUi.shippingTotal.textContent =
           checkoutRequiresShipping()
             ? "Select rate"
-            : "$0.00 · 0 XRP";
+            : "$0.00 · 0 $XRP";
 
         renderCheckoutTotals();
       }
@@ -8892,7 +9282,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               ).toLocaleString(
                 undefined,
                 { maximumFractionDigits:6 }
-              )} XRP`
+              )} $XRP`
             : `$${subtotalUsd.toFixed(2)}`;
 
         checkoutUi.shippingTotal.textContent =
@@ -8906,10 +9296,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                     ).toLocaleString(
                       undefined,
                       { maximumFractionDigits:6 }
-                    )} XRP`
+                    )} $XRP`
                   : "Select rate"
               )
-            : "$0.00 · 0 XRP";
+            : "$0.00 · 0 $XRP";
 
         const authoritativeTotal =
           checkoutRequiresShipping()
@@ -8944,11 +9334,11 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   ? `$${totalUsd.toFixed(2)} · ≈ ${authoritativeTotal.toLocaleString(
                       undefined,
                       { maximumFractionDigits:6 }
-                    )} XRP`
+                    )} $XRP`
                   : `${authoritativeTotal.toLocaleString(
                       undefined,
                       { maximumFractionDigits:6 }
-                    )} XRP`
+                    )} $XRP`
               )
             : "Calculating…";
       }
@@ -9070,12 +9460,13 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                     </strong>
 
                     <span>
-                      ${price.toLocaleString(
+                      $${price.toLocaleString(
                         undefined,
                         {
-                          maximumFractionDigits:6
+                          minimumFractionDigits:2,
+                          maximumFractionDigits:2
                         }
-                      )} XRP each
+                      )} each
                     </span>
 
                     ${
@@ -9309,8 +9700,33 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         }
       }
 
-      function openCheckout() {
+      async function openCheckout() {
         if (!cart.length) return;
+
+        const session =
+          buyerSession();
+
+        if (!session) {
+          try {
+            await startBuyerSignIn(
+              "/merch/?buyerCheckout=1"
+            );
+          } catch (error) {
+            alert(
+              buyerSafeError(
+                error,
+                "Unable to start Xaman Sign-In."
+              )
+            );
+          }
+
+          return;
+        }
+
+        if (checkoutUi?.buyerWallet) {
+          checkoutUi.buyerWallet.value =
+            session.wallet;
+        }
 
         const groups =
           checkoutSellerGroups();
@@ -9323,8 +9739,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         createdCheckoutOrder = null;
         checkoutPurchasedItems = [];
         checkoutPayments = {
-          seller:null,
-          platform:null
+          settlement:null
         };
 
         checkoutUi.paymentStage.hidden =
@@ -9558,7 +9973,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   <span class="checkoutRatePrice">
                     $${escapeHtml(rate.amountUsd || "0.00")}
                     <small>
-                      ≈ ${escapeHtml(rate.shippingXrp)} XRP
+                      ≈ ${escapeHtml(rate.shippingXrp)} $XRP
                     </small>
                   </span>
                 </label>
@@ -9595,8 +10010,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           checkoutUi.rates.innerHTML = "";
 
           checkoutMessage(
-            error.message ||
-            "Unable to quote shipping.",
+            buyerSafeError(
+              error,
+              "Unable to quote shipping."
+            ),
             "error"
           );
 
@@ -9635,15 +10052,27 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           );
         }
 
+        const session =
+          buyerSession();
+
+        if (
+          !session ||
+          !session.wallet ||
+          !session.payloadUuid
+        ) {
+          throw new Error(
+            "Sign in with Xaman before checkout."
+          );
+        }
+
         const payload = {
           items,
           buyerName,
           buyerEmail,
           buyerWallet:
-            String(
-              checkoutUi.buyerWallet.value ||
-              ""
-            ).trim()
+            session.wallet,
+          payloadUuid:
+            session.payloadUuid
         };
 
         if (checkoutRequiresShipping()) {
@@ -9732,28 +10161,136 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         return payload;
       }
 
+      function buyerSafeError(
+        error,
+        fallback =
+          "Something went wrong. Please try again."
+      ) {
+        const raw =
+          String(
+            error?.message ||
+            error?.code ||
+            error ||
+            ""
+          ).trim();
+
+        const code =
+          raw.toUpperCase();
+
+        const messages = {
+          SHIPPING_QUOTE_FAILED:
+            "We could not load shipping rates. Please try again.",
+          SHIPPING_RATE_NOT_FOUND:
+            "That shipping option is no longer available. Please choose another rate.",
+          SHIPPING_RATE_UNAVAILABLE:
+            "That shipping option is no longer available. Please choose another rate.",
+          ORDER_CREATE_FAILED:
+            "We could not create your order. Please review your information and try again.",
+          PAYMENT_PAYLOAD_FAILED:
+            "We could not open the Xaman payment. Please try again.",
+          PAYMENT_VERIFY_FAILED:
+            "The payment has not been confirmed on the XRPL yet. Please try verification again.",
+          MERCH_PAYMENT_NOT_VALIDATED:
+            "The payment has not been confirmed on the XRPL yet.",
+          MERCH_ORDER_NOT_FOUND:
+            "We could not find that order.",
+          ORDER_STATUS_FAILED:
+            "We could not load that order right now. Please try again.",
+          PARTIAL_MERCH_PAYMENT_EXISTS:
+            "An $XRP payment has already been received. This order can no longer be cancelled from checkout.",
+          PAID_MERCH_ORDER_CANNOT_CANCEL:
+            "An $XRP payment has already been received. This order can no longer be cancelled from checkout.",
+          MERCH_ORDER_NOT_CANCELLABLE:
+            "This order can no longer be cancelled from checkout.",
+          BUYER_CANCEL_TOKEN_REQUIRED:
+            "This checkout session can no longer authorize cancellation.",
+          BUYER_CANCEL_TOKEN_INVALID:
+            "This checkout session can no longer authorize cancellation."
+        };
+
+        if (messages[code]) {
+          return messages[code];
+        }
+
+        const lower =
+          raw.toLowerCase();
+
+        if (
+          lower.includes("shipping") &&
+          (
+            lower.includes("rate") ||
+            lower.includes("quote")
+          )
+        ) {
+          return "We could not load shipping rates. Please review the destination and try again.";
+        }
+
+        if (
+          lower.includes("inventory") ||
+          lower.includes("stock") ||
+          lower.includes("quantity")
+        ) {
+          return "One or more items are no longer available in the requested quantity. Please review your cart.";
+        }
+
+        if (
+          lower.includes("expired") ||
+          lower.includes("reservation")
+        ) {
+          return "This checkout has expired. Please return to your cart and create a new order.";
+        }
+
+        if (
+          lower.includes("xaman") ||
+          lower.includes("payload")
+        ) {
+          return "We could not open Xaman right now. Please try again.";
+        }
+
+        if (
+          lower.includes("ledger") ||
+          lower.includes("payment") ||
+          lower.includes("transaction")
+        ) {
+          return "We could not confirm the $XRP payment yet. Please try verification again.";
+        }
+
+        if (
+          lower.includes("network") ||
+          lower.includes("fetch")
+        ) {
+          return "We could not reach MONOLITH. Check your connection and try again.";
+        }
+
+        return fallback;
+      }
+
+
       function paymentRoleLabel(role) {
-        return role === "seller"
-          ? "Seller Payment"
-          : "MONOLITH Payment";
+        return role === "settlement"
+          ? "Order Payment"
+          : "Payment";
       }
 
       function orderPaymentAmount(role) {
-        if (!createdCheckoutOrder) {
+        if (
+          !createdCheckoutOrder ||
+          role !== "settlement"
+        ) {
           return "0";
         }
 
-        return role === "seller"
-          ? createdCheckoutOrder
-              .sellerProceedsXrp
-          : createdCheckoutOrder
-              .platformFeeXrp;
+        return createdCheckoutOrder
+          .totalXrp || "0";
       }
 
       function paymentLegRequired(role) {
-        return Number(
-          orderPaymentAmount(role) || 0
-        ) > 0;
+        return (
+          role === "settlement" &&
+          Number(
+            orderPaymentAmount(role) || 0
+          ) > 0
+        );
       }
 
       function paymentLegState(role) {
@@ -9767,6 +10304,187 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           };
       }
 
+      async function cancelBuyerCheckoutOrder() {
+        const order =
+          createdCheckoutOrder;
+
+        if (
+          !order ||
+          !order.orderId ||
+          !order.buyerCancelToken
+        ) {
+          checkoutMessage(
+            "This order cannot be cancelled from this checkout session.",
+            "error"
+          );
+          return;
+        }
+
+        const confirmed =
+          window.confirm(
+            "Cancel this unpaid order? No $XRP will be charged and reserved inventory will be released."
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        const button =
+          document.getElementById(
+            "checkoutBuyerCancelOrderBtn"
+          );
+
+        if (button) {
+          button.disabled = true;
+        }
+
+        checkoutMessage(
+          "Cancelling order…"
+        );
+
+        try {
+          const response =
+            await fetch(
+              `/api/merch/order/${
+                encodeURIComponent(
+                  order.orderId
+                )
+              }/buyer-cancel`,
+              {
+                method:"POST",
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+                body:JSON.stringify({
+                  buyerCancelToken:
+                    order.buyerCancelToken
+                })
+              }
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (
+            !response.ok ||
+            !data.ok
+          ) {
+            const code =
+              String(
+                data.code || ""
+              );
+
+            if (
+              code ===
+                "PARTIAL_MERCH_PAYMENT_EXISTS" ||
+              code ===
+                "PAID_MERCH_ORDER_CANNOT_CANCEL"
+            ) {
+              throw new Error(
+                "An $XRP payment has already been received. This order can no longer be cancelled from checkout."
+              );
+            }
+
+            if (
+              code ===
+                "MERCH_ORDER_NOT_CANCELLABLE"
+            ) {
+              throw new Error(
+                "This order can no longer be cancelled from checkout."
+              );
+            }
+
+            if (
+              code ===
+                "BUYER_CANCEL_TOKEN_REQUIRED" ||
+              code ===
+                "BUYER_CANCEL_TOKEN_INVALID"
+            ) {
+              throw new Error(
+                "This checkout session can no longer authorize cancellation."
+              );
+            }
+
+            throw new Error(
+              "We could not cancel the order. Please try again."
+            );
+          }
+
+          try {
+            if (
+              localStorage.getItem(
+                LAST_ORDER_STORAGE_KEY
+              ) === order.orderId
+            ) {
+              localStorage.removeItem(
+                LAST_ORDER_STORAGE_KEY
+              );
+            }
+          } catch (_) {}
+
+          createdCheckoutOrder = null;
+          checkoutPurchasedItems = [];
+
+          checkoutPayments = {
+            settlement:null
+          };
+
+          checkoutShippingQuote = null;
+          checkoutShippingRateId = "";
+
+          checkoutUi.paymentStage.hidden =
+            true;
+
+          checkoutUi.paidNotice.hidden =
+            true;
+
+          checkoutUi.paymentLegs.innerHTML =
+            "";
+
+          checkoutUi.confirmation.hidden =
+            true;
+
+          checkoutUi.create.hidden =
+            false;
+
+          checkoutUi.rates.innerHTML =
+            "";
+
+          checkoutMessage(
+            "Order cancelled. No $XRP was charged.",
+            "success"
+          );
+
+          closeCheckout();
+
+          updateCart(false);
+        } catch (error) {
+          checkoutMessage(
+            error.message ||
+              "We could not cancel the order. Please try again.",
+            "error"
+          );
+        } finally {
+          if (button) {
+            button.disabled = false;
+          }
+        }
+      }
+
+
+      document
+        .getElementById(
+          "checkoutBuyerCancelOrderBtn"
+        )
+        ?.addEventListener(
+          "click",
+          cancelBuyerCheckoutOrder
+        );
+
+
       function renderCheckoutPayments() {
         if (!createdCheckoutOrder) {
           checkoutUi.paymentStage.hidden =
@@ -9778,10 +10496,24 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           false;
 
         const roles =
-          ["seller","platform"]
+          ["settlement"]
             .filter(
               paymentLegRequired
             );
+
+        const buyerCancelActions =
+          document.getElementById(
+            "checkoutBuyerCancelActions"
+          );
+
+        if (buyerCancelActions) {
+          buyerCancelActions.hidden =
+            roles.some(
+              role =>
+                paymentLegState(role)
+                  .verified
+            );
+        }
 
         checkoutUi.paymentLegs.innerHTML =
           roles.map(
@@ -9805,22 +10537,17 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 >
                   <div class="checkoutPaymentLegCopy">
                     <strong>
-                      ${
-                        escapeHtml(
-                          paymentRoleLabel(role)
-                        )
-                      }
-                      · ${
+                      Pay ${
                         escapeHtml(
                           orderPaymentAmount(role)
                         )
-                      } XRP
+                      } $XRP with Xaman
                     </strong>
 
                     <span>
                       ${
                         state.verified
-                          ? "Validated on the XRP Ledger."
+                          ? "Validated on the XRPL."
                           : (
                               state.message ||
                               "Open Xaman to complete this payment."
@@ -10020,22 +10747,58 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               "Xaman payment is ready."
           };
 
+          try {
+            const recovery =
+              checkoutRecovery();
+
+            if (recovery) {
+              localStorage.setItem(
+                CHECKOUT_RECOVERY_STORAGE_KEY,
+                JSON.stringify({
+                  ...recovery,
+                  paymentId:
+                    data.payment.paymentId,
+                  payloadUuid:
+                    data.payment.payloadUuid
+                })
+              );
+            }
+          } catch (_) {}
+
           renderCheckoutPayments();
 
           if (data.payment.signUrl) {
+            const mobileCheckout =
+              window.matchMedia(
+                "(max-width: 760px)"
+              ).matches;
+
+            if (mobileCheckout) {
+              window.location.assign(
+                data.payment.signUrl
+              );
+              return;
+            }
+
             window.open(
               data.payment.signUrl,
               "_blank",
               "noopener"
             );
           }
+
+          startCheckoutAutoVerify(
+            role
+          );
         } catch (error) {
           checkoutPayments[role] = {
             ...paymentLegState(role),
             busy:false,
             message:
-              error.message ||
-              "Unable to create Xaman payment."
+              buyerSafeError(
+                error,
+                "Unable to create Xaman payment."
+              )
           };
 
           renderCheckoutPayments();
@@ -10047,6 +10810,143 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           );
         }
       }
+
+      function stopCheckoutAutoVerify() {
+        if (
+          checkoutAutoVerifyTimer !==
+          null
+        ) {
+          clearInterval(
+            checkoutAutoVerifyTimer
+          );
+
+          checkoutAutoVerifyTimer =
+            null;
+        }
+      }
+
+      async function autoVerifyCheckoutPayment(
+        role = "settlement"
+      ) {
+        const state =
+          paymentLegState(role);
+
+        const payment =
+          state.payment;
+
+        if (
+          !createdCheckoutOrder ||
+          state.verified ||
+          state.busy ||
+          !payment?.paymentId ||
+          !payment?.payloadUuid
+        ) {
+          return false;
+        }
+
+        try {
+          const response =
+            await fetch(
+              `/api/merch/payment/${
+                encodeURIComponent(
+                  payment.paymentId
+                )
+              }/verify`,
+              {
+                method:"POST",
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+                body:JSON.stringify({
+                  payloadUuid:
+                    payment.payloadUuid
+                })
+              }
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (
+            !response.ok ||
+            !data.ok ||
+            !data.payment ||
+            !data.payment.fullyPaid
+          ) {
+            return false;
+          }
+
+          checkoutPayments[role] = {
+            ...state,
+            payment,
+            verified:true,
+            busy:false,
+            message:
+              "Validated on the XRPL."
+          };
+
+          renderCheckoutPayments();
+
+          stopCheckoutAutoVerify();
+
+          finalizePaidCheckout(
+            data.payment
+          );
+
+          return true;
+        } catch (_) {
+          return false;
+        }
+      }
+
+      function startCheckoutAutoVerify(
+        role = "settlement"
+      ) {
+        stopCheckoutAutoVerify();
+
+        autoVerifyCheckoutPayment(
+          role
+        );
+
+        checkoutAutoVerifyTimer =
+          setInterval(
+            () =>
+              autoVerifyCheckoutPayment(
+                role
+              ),
+            3000
+          );
+      }
+
+      window.addEventListener(
+        "focus",
+        () => {
+          autoVerifyCheckoutPayment(
+            "settlement"
+          );
+
+          recoverCompletedCheckout();
+        }
+      );
+
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          if (
+            document.visibilityState ===
+              "visible"
+          ) {
+            autoVerifyCheckoutPayment(
+              "settlement"
+            );
+
+            recoverCompletedCheckout();
+          }
+        }
+      );
 
       async function verifyCheckoutPayment(
         role
@@ -10072,7 +10972,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           ...state,
           busy:true,
           message:
-            "Checking the XRP Ledger…"
+            "Checking the XRPL…"
         };
 
         renderCheckoutPayments();
@@ -10121,7 +11021,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             verified:true,
             busy:false,
             message:
-              "Validated on the XRP Ledger."
+              "Validated on the XRPL."
           };
 
           renderCheckoutPayments();
@@ -10131,24 +11031,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               data.payment
             );
           } else {
-            const nextRole =
-              role === "seller"
-                ? "platform"
-                : "seller";
-
-            if (
-              paymentLegRequired(
-                nextRole
-              ) &&
-              !checkoutPayments[
-                nextRole
-              ]?.verified
-            ) {
-              checkoutMessage(
-                `${paymentRoleLabel(role)} confirmed. Complete the remaining XRP payment.`,
-                "success"
-              );
-            }
+            checkoutMessage(
+              "Payment was found, but the order is not fully settled yet. Please try verification again.",
+              "error"
+            );
           }
         } catch (error) {
           checkoutPayments[role] = {
@@ -10156,8 +11042,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             payment,
             busy:false,
             message:
-              error.message ||
-              "Payment has not been validated yet."
+              buyerSafeError(
+                error,
+                "Payment has not been validated yet."
+              )
           };
 
           renderCheckoutPayments();
@@ -10173,6 +11061,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       function finalizePaidCheckout(
         paymentResult
       ) {
+        stopCheckoutAutoVerify();
+
         const purchased =
           new Set(
             checkoutPurchasedItems
@@ -10198,17 +11088,62 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
         saveCart();
         updateCart(false);
+        clearCheckoutRecovery();
 
         checkoutUi.paidNotice.hidden =
           false;
 
         checkoutUi.confirmationText
           .textContent =
-            `Paid in full. Total: ${createdCheckoutOrder.totalXrp} XRP.`;
+            `Paid in full. Total: ${createdCheckoutOrder.totalXrp} $XRP.`;
 
         checkoutMessage(
-          "Payment confirmed on the XRP Ledger. Your order is paid.",
+          "Payment confirmed on the XRPL. Your order is paid.",
           "success"
+        );
+
+        window.setTimeout(
+          () => {
+            createdCheckoutOrder =
+              null;
+
+            checkoutPurchasedItems =
+              [];
+
+            checkoutPayments = {
+              settlement:null
+            };
+
+            checkoutShippingQuote =
+              null;
+
+            checkoutShippingRateId =
+              "";
+
+            checkoutUi.paymentStage.hidden =
+              true;
+
+            checkoutUi.paidNotice.hidden =
+              true;
+
+            checkoutUi.paymentLegs.innerHTML =
+              "";
+
+            checkoutUi.confirmation.hidden =
+              true;
+
+            checkoutUi.create.hidden =
+              false;
+
+            checkoutUi.overlay.hidden =
+              true;
+
+            document.body.style.overflow =
+              "";
+
+            renderCheckout();
+          },
+          1400
         );
       }
 
@@ -10281,9 +11216,13 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               ? [...purchasedGroup.items]
               : [];
 
+          saveCheckoutRecovery(
+            data.order.orderId,
+            checkoutPurchasedItems
+          );
+
           checkoutPayments = {
-            seller:null,
-            platform:null
+            settlement:null
           };
 
           checkoutUi.confirmation.hidden =
@@ -10292,9 +11231,26 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           checkoutUi.create.hidden =
             true;
 
+          window.setTimeout(
+            () => {
+              checkoutUi.overlay.hidden =
+                false;
+
+              document.body.style.overflow =
+                "hidden";
+
+              checkoutUi.paymentStage
+                ?.scrollIntoView({
+                  behavior:"smooth",
+                  block:"start"
+                });
+            },
+            100
+          );
+
           checkoutUi.confirmationText
             .textContent =
-              `Reserved for payment. Total: ${data.order.totalXrp} XRP.`;
+              `Reserved for payment. Total: ${data.order.totalXrp} $XRP.`;
 
           checkoutUi.orderId.textContent =
             data.order.orderId;
@@ -10302,13 +11258,15 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           renderCheckoutPayments();
 
           checkoutMessage(
-            "Order created. Complete the required XRP payments in Xaman.",
+            "Order created. Complete the required $XRP payments in Xaman.",
             "success"
           );
         } catch (error) {
           checkoutMessage(
-            error.message ||
-            "Unable to create order.",
+            buyerSafeError(
+              error,
+              "Unable to create order."
+            ),
             "error"
           );
         } finally {
@@ -10327,6 +11285,351 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         );
       }
 
+      function saveCheckoutRecovery(
+        orderId,
+        items
+      ) {
+        if (
+          !validMerchOrderId(orderId) ||
+          !Array.isArray(items) ||
+          !items.length
+        ) {
+          return;
+        }
+
+        const savedItems =
+          items.map(item => ({
+            productId:
+              String(
+                item?.product?.productId ||
+                ""
+              ).trim(),
+            variantId:
+              String(
+                item?.variantId || ""
+              ).trim(),
+            quantity:
+              Math.max(
+                1,
+                Number(
+                  item?.quantity || 1
+                )
+              )
+          }))
+          .filter(
+            item => item.productId
+          );
+
+        if (!savedItems.length) {
+          return;
+        }
+
+        try {
+          localStorage.setItem(
+            CHECKOUT_RECOVERY_STORAGE_KEY,
+            JSON.stringify({
+              orderId,
+              items: savedItems,
+              savedAt: Date.now()
+            })
+          );
+        } catch (_) {}
+      }
+
+      function checkoutRecovery() {
+        try {
+          const raw =
+            localStorage.getItem(
+              CHECKOUT_RECOVERY_STORAGE_KEY
+            );
+
+          if (!raw) return null;
+
+          const saved =
+            JSON.parse(raw);
+
+          if (
+            !validMerchOrderId(
+              saved?.orderId
+            ) ||
+            !Array.isArray(
+              saved?.items
+            ) ||
+            !Number.isFinite(
+              Number(saved?.savedAt)
+            ) ||
+            Date.now() -
+              Number(saved.savedAt) >
+              CHECKOUT_RECOVERY_MAX_AGE_MS
+          ) {
+            localStorage.removeItem(
+              CHECKOUT_RECOVERY_STORAGE_KEY
+            );
+            return null;
+          }
+
+          return saved;
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function clearCheckoutRecovery() {
+        try {
+          localStorage.removeItem(
+            CHECKOUT_RECOVERY_STORAGE_KEY
+          );
+        } catch (_) {}
+      }
+
+      function removeRecoveredCartItems(
+        savedItems
+      ) {
+        for (const saved of savedItems) {
+          const productId =
+            String(
+              saved?.productId || ""
+            ).trim();
+
+          const variantId =
+            String(
+              saved?.variantId || ""
+            ).trim();
+
+          let remaining =
+            Math.max(
+              1,
+              Number(
+                saved?.quantity || 1
+              )
+            );
+
+          for (
+            let index =
+              cart.length - 1;
+            index >= 0 &&
+              remaining > 0;
+            index -= 1
+          ) {
+            const item =
+              cart[index];
+
+            if (
+              String(
+                item?.product?.productId ||
+                ""
+              ).trim() !== productId ||
+              String(
+                item?.variantId || ""
+              ).trim() !== variantId
+            ) {
+              continue;
+            }
+
+            const quantity =
+              Math.max(
+                1,
+                Number(
+                  item.quantity || 1
+                )
+              );
+
+            if (quantity <= remaining) {
+              remaining -= quantity;
+              cart.splice(index,1);
+            } else {
+              item.quantity =
+                quantity - remaining;
+              remaining = 0;
+            }
+          }
+        }
+
+        saveCart();
+        updateCart(false);
+      }
+
+      async function recoverCompletedCheckout() {
+        if (
+          recoverCompletedCheckout
+            .running === true
+        ) {
+          return;
+        }
+
+        const recovery =
+          checkoutRecovery();
+
+        if (!recovery) return;
+
+        recoverCompletedCheckout.running =
+          true;
+
+        const url =
+          new URL(
+            window.location.href
+          );
+
+        const xamanReturn =
+          url.searchParams.get(
+            "xamanReturn"
+          ) === "1";
+
+        if (xamanReturn) {
+          url.searchParams.delete(
+            "xamanReturn"
+          );
+
+          window.history.replaceState(
+            {},
+            "",
+            `${url.pathname}${
+              url.search
+            }${url.hash}`
+          );
+        }
+
+        const maxAttempts =
+          xamanReturn ? 12 : 1;
+
+        try {
+          for (
+            let attempt = 0;
+            attempt < maxAttempts;
+            attempt += 1
+          ) {
+            if (
+              recovery.paymentId &&
+              recovery.payloadUuid
+            ) {
+              try {
+                await fetch(
+                  `/api/merch/payment/${
+                    encodeURIComponent(
+                      recovery.paymentId
+                    )
+                  }/verify`,
+                  {
+                    method:"POST",
+                    headers:{
+                      "Content-Type":
+                        "application/json"
+                    },
+                    body:JSON.stringify({
+                      payloadUuid:
+                        recovery.payloadUuid
+                    })
+                  }
+                );
+              } catch (_) {}
+            }
+
+            let response;
+
+            try {
+              response =
+                await fetch(
+                  `/api/merch/order/${
+                    encodeURIComponent(
+                      recovery.orderId
+                    )
+                  }/status`
+                );
+            } catch (_) {
+              response = null;
+            }
+
+            if (response?.ok) {
+              const data =
+                await response
+                  .json()
+                  .catch(() => ({}));
+
+              if (
+                data.ok &&
+                data.order
+              ) {
+                const paymentStatus =
+                  String(
+                    data.order
+                      .paymentStatus ||
+                    ""
+                  ).toLowerCase();
+
+                if (
+                  paymentStatus ===
+                    "paid" ||
+                  paymentStatus ===
+                    "refunded"
+                ) {
+                  removeRecoveredCartItems(
+                    recovery.items
+                  );
+
+                  checkoutUi.overlay.hidden =
+                    false;
+
+                  document.body.style
+                    .overflow =
+                      "hidden";
+
+                  checkoutUi.confirmation
+                    .hidden =
+                      false;
+
+                  checkoutUi.create.hidden =
+                    true;
+
+                  checkoutUi.paymentStage
+                    .hidden =
+                      true;
+
+                  checkoutUi.paidNotice
+                    .hidden =
+                      false;
+
+                  checkoutUi
+                    .confirmationText
+                    .textContent =
+                      paymentStatus ===
+                        "paid"
+                        ? `Payment confirmed. Order ${recovery.orderId} is paid.`
+                        : `Refund confirmed. Order ${recovery.orderId} is refunded.`;
+
+                  checkoutMessage(
+                    paymentStatus ===
+                      "paid"
+                      ? "Your $XRP payment is confirmed. Your order is paid."
+                      : "Your refund has been confirmed.",
+                    "success"
+                  );
+
+                  clearCheckoutRecovery();
+
+                  return;
+                }
+              }
+            }
+
+            if (
+              attempt <
+                maxAttempts - 1
+            ) {
+              await new Promise(
+                resolve =>
+                  setTimeout(
+                    resolve,
+                    1500
+                  )
+              );
+            }
+          }
+        } finally {
+          recoverCompletedCheckout.running =
+            false;
+        }
+      }
+
       function rememberOrderId(
         orderId
       ) {
@@ -10341,24 +11644,64 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         try {
           localStorage.setItem(
             LAST_ORDER_STORAGE_KEY,
-            orderId
+            JSON.stringify({
+              orderId,
+              savedAt: Date.now()
+            })
           );
         } catch (_) {}
       }
 
       function rememberedOrderId() {
         try {
-          const orderId =
+          const raw =
             localStorage.getItem(
               LAST_ORDER_STORAGE_KEY
             ) || "";
 
-          return validMerchOrderId(
-            orderId
-          )
-            ? orderId
-            : "";
+          if (!raw) {
+            return "";
+          }
+
+          if (validMerchOrderId(raw)) {
+            rememberOrderId(raw);
+            return raw;
+          }
+
+          const saved =
+            JSON.parse(raw);
+
+          const orderId =
+            String(
+              saved?.orderId || ""
+            ).trim();
+
+          const savedAt =
+            Number(
+              saved?.savedAt || 0
+            );
+
+          if (
+            !validMerchOrderId(orderId) ||
+            !Number.isFinite(savedAt) ||
+            savedAt <= 0 ||
+            Date.now() - savedAt >
+              LAST_ORDER_MAX_AGE_MS
+          ) {
+            localStorage.removeItem(
+              LAST_ORDER_STORAGE_KEY
+            );
+            return "";
+          }
+
+          return orderId;
         } catch (_) {
+          try {
+            localStorage.removeItem(
+              LAST_ORDER_STORAGE_KEY
+            );
+          } catch (_) {}
+
           return "";
         }
       }
@@ -10413,6 +11756,273 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
         document.body.style.overflow =
           "";
+      }
+
+      function renderBuyerOrders(
+        orders
+      ) {
+        const list =
+          Array.isArray(orders)
+            ? orders
+            : [];
+
+        document.getElementById(
+          "orderStatusTitle"
+        ).textContent =
+          "My Orders";
+
+        const lookup =
+          document.querySelector(
+            ".orderStatusLookup"
+          );
+
+        if (lookup) {
+          lookup.hidden = true;
+        }
+
+        if (!list.length) {
+          orderStatusUi.result.hidden =
+            false;
+
+          orderStatusUi.result.innerHTML = `
+            <section class="checkoutCard">
+              <div class="checkoutCardHead">
+                <strong>No orders yet</strong>
+                <span>
+                  Purchases made with this wallet will appear here.
+                </span>
+              </div>
+            </section>
+          `;
+
+          orderStatusMessage(
+            "Signed in with Xaman."
+          );
+
+          return;
+        }
+
+        orderStatusUi.result.hidden =
+          false;
+
+        orderStatusUi.result.innerHTML = `
+          <div class="orderStatusItems">
+            ${
+              list.map(
+                order => `
+                  <button
+                    class="checkoutCard buyerOrderCard"
+                    type="button"
+                    data-buyer-order="${
+                      escapeHtml(
+                        order.orderId
+                      )
+                    }"
+                    style="width:100%;text-align:left;cursor:pointer"
+                  >
+                    <div class="checkoutCardHead">
+                      <strong>
+                        ${
+                          escapeHtml(
+                            order.items?.[0]
+                              ?.productTitle ||
+                            "MONOLITH Order"
+                          )
+                        }
+                      </strong>
+
+                      <span>
+                        ${
+                          escapeHtml(
+                            order.createdAt ||
+                            ""
+                          )
+                        }
+                      </span>
+                    </div>
+
+                    <div class="orderStatusOverview">
+                      <div class="orderStatusMetric">
+                        <span>Payment</span>
+                        <strong class="${
+                          orderStateClass(
+                            order.paymentProgress
+                          )
+                        }">
+                          ${
+                            escapeHtml(
+                              order.paymentProgress ||
+                              order.paymentStatus ||
+                              "Unknown"
+                            )
+                          }
+                        </strong>
+                      </div>
+
+                      <div class="orderStatusMetric">
+                        <span>Fulfillment</span>
+                        <strong>
+                          ${
+                            escapeHtml(
+                              order.fulfillmentStatus ||
+                              "Unfulfilled"
+                            )
+                          }
+                        </strong>
+                      </div>
+
+                      <div class="orderStatusMetric">
+                        <span>Total</span>
+                        <strong>
+                          ${
+                            escapeHtml(
+                              order.totalXrp
+                            )
+                          } $XRP
+                        </strong>
+                      </div>
+                    </div>
+                  </button>
+                `
+              ).join("")
+            }
+          </div>
+        `;
+
+        orderStatusUi.result
+          .querySelectorAll(
+            "[data-buyer-order]"
+          )
+          .forEach(button => {
+            button.addEventListener(
+              "click",
+              () => {
+                const orderId =
+                  button.dataset
+                    .buyerOrder || "";
+
+                const lookup =
+                  document.querySelector(
+                    ".orderStatusLookup"
+                  );
+
+                if (lookup) {
+                  lookup.hidden = false;
+                }
+
+                document.getElementById(
+                  "orderStatusTitle"
+                ).textContent =
+                  "Order Details";
+
+                loadPublicOrderStatus(
+                  orderId
+                );
+              }
+            );
+          });
+
+        orderStatusMessage(
+          `${list.length} ${
+            list.length === 1
+              ? "order"
+              : "orders"
+          } found.`
+        );
+      }
+
+      async function openBuyerOrders() {
+        let session =
+          buyerSession();
+
+        if (!session) {
+          try {
+            await startBuyerSignIn(
+              "/merch/?buyerOrders=1"
+            );
+          } catch (error) {
+            alert(
+              buyerSafeError(
+                error,
+                "Unable to start Xaman Sign-In."
+              )
+            );
+          }
+
+          return;
+        }
+
+        orderStatusUi.overlay.hidden =
+          false;
+
+        document.body.style.overflow =
+          "hidden";
+
+        orderStatusUi.result.hidden =
+          true;
+
+        document.getElementById(
+          "orderStatusTitle"
+        ).textContent =
+          "My Orders";
+
+        orderStatusMessage(
+          "Loading your orders…"
+        );
+
+        try {
+          const response =
+            await fetch(
+              `/api/merch/buyer/orders?payloadUuid=${
+                encodeURIComponent(
+                  session.payloadUuid
+                )
+              }`
+            );
+
+          const data =
+            await response
+              .json()
+              .catch(() => ({}));
+
+          if (
+            !response.ok ||
+            !data.ok ||
+            !Array.isArray(
+              data.orders
+            )
+          ) {
+            throw new Error(
+              data.error ||
+              data.code ||
+              "buyer_orders_failed"
+            );
+          }
+
+          renderBuyerOrders(
+            data.orders
+          );
+        } catch (error) {
+          if (
+            String(
+              error.message || ""
+            ).includes("signed") ||
+            String(
+              error.message || ""
+            ).includes("payload")
+          ) {
+            clearBuyerSession();
+            renderBuyerSession();
+          }
+
+          orderStatusMessage(
+            buyerSafeError(
+              error,
+              "Unable to load your orders."
+            ),
+            "error"
+          );
+        }
       }
 
       function orderStateClass(
@@ -10562,7 +12172,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                           escapeHtml(
                             item.lineTotalXrp
                           )
-                        } XRP
+                        } $XRP
                       </span>
                     </div>
                   `
@@ -10578,7 +12188,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 escapeHtml(
                   order.totalXrp
                 )
-              } XRP
+              } $XRP
             </strong>
           </div>
 
@@ -10683,7 +12293,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           orderStatusMessage(
             data.order.paymentProgress ===
               "paid"
-              ? "Payment confirmed on the XRP Ledger."
+              ? "Payment confirmed on the XRPL."
               : "Order status loaded.",
             data.order.paymentProgress ===
               "paid"
@@ -10695,8 +12305,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             true;
 
           orderStatusMessage(
-            error.message ||
-            "Unable to load order status.",
+            buyerSafeError(
+              error,
+              "Unable to load order status."
+            ),
             "error"
           );
         } finally {
@@ -11148,7 +12760,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                     }
 
                     <div class="productBadge">
-                      XRP PRODUCT
+                      $XRP PRODUCT
                     </div>
                   </div>
 
@@ -11199,7 +12811,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                         <small>
                           ${
                             usdToDisplayXrp(product.priceUsd)
-                              ? `≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} XRP`
+                              ? `≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} $XRP`
                               : "XRPL PAYMENT"
                           }
                         </small>
@@ -11797,7 +13409,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           false;
 
         sellerMessage(
-          "Complete the $1.50 USD-equivalent identity verification cost in XRP through Xaman, then verify the payment here."
+          "Complete the $1.50 USD-equivalent identity verification cost in $XRP through Xaman, then verify the payment here."
         );
       }
 
@@ -12030,7 +13642,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               true;
 
             sellerMessage(
-              "Creating your $1.50 identity verification XRP quote…"
+              "Creating your $1.50 identity verification $XRP quote…"
             );
 
             try {
@@ -12073,8 +13685,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
               sellerUi.openFeeXaman.textContent =
                 quotedXrp
-                  ? `Pay ${quotedXrp} XRP in Xaman`
-                  : "Pay in XRP with Xaman";
+                  ? `Pay ${quotedXrp} $XRP in Xaman`
+                  : "Pay in $XRP with Xaman";
 
               sellerUi.verifyFee.hidden =
                 false;
@@ -12089,8 +13701,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
               sellerMessage(
                 quotedXrp
-                  ? `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent. Pay ${quotedXrp} XRP in Xaman at the quoted rate, then return here and verify the payment.`
-                  : `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent, paid in XRP through Xaman. Complete the payment, then return here and verify it.`
+                  ? `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent. Pay ${quotedXrp} $XRP in Xaman at the quoted rate, then return here and verify the payment.`
+                  : `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent, paid in $XRP through Xaman. Complete the payment, then return here and verify it.`
               );
 
               if (payment.signUrl) {
@@ -15533,7 +17145,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                       $${escapeHtml(product.priceUsd)}
                       ${
                         usdToDisplayXrp(product.priceUsd)
-                          ? ` · ≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} XRP`
+                          ? ` · ≈ ${escapeHtml(usdToDisplayXrp(product.priceUsd))} $XRP`
                           : ""
                       }
                     </span>
@@ -15768,7 +17380,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   sellerDropsToXrp(
                     order.totalDrops
                   )
-                )} XRP
+                )} $XRP
               </strong>
             </div>
           </div>
@@ -15798,7 +17410,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               </div>
 
               <div class="sellerOrderRow">
-                <span>XRP Wallet</span>
+                <span>$XRP Wallet</span>
                 <strong>
                   ${escapeHtml(
                     order.buyerWallet ||
@@ -15895,7 +17507,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                                   item.lineTotalDrops
                                 )
                               )
-                            } XRP
+                            } $XRP
                           </strong>
                         </div>
                       `
@@ -15945,7 +17557,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                                   payment.amountDrops
                                 )
                               )
-                            } XRP
+                            } $XRP
                           </strong>
                         </div>
                       `
@@ -16120,7 +17732,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                             sellerDropsToXrp(
                               sellerPayment.amountDrops
                             )
-                          )} XRP
+                          )} $XRP
                         </strong>
                       </div>
 
@@ -16536,7 +18148,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                       sellerDropsToXrp(
                         order.totalDrops
                       )
-                    )} XRP
+                    )} $XRP
                   </span>
 
                   <span>
@@ -16884,11 +18496,11 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
         const confirmed =
           window.confirm(
-            `Verify this seller refund on the XRP Ledger?\n\nAmount: ${
+            `Verify this seller refund on the XRPL?\n\nAmount: ${
               sellerDropsToXrp(
                 payment.amountDrops
               )
-            } XRP\nDestination: ${
+            } $XRP\nDestination: ${
               payment.payerWallet || ""
             }`
           );
@@ -16898,7 +18510,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         }
 
         sellerOrderMessage(
-          "Verifying seller refund on the XRP Ledger..."
+          "Verifying seller refund on the XRPL..."
         );
 
         try {
@@ -16929,7 +18541,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             refund &&
             refund.alreadyRefunded
               ? "Seller refund was already verified."
-              : "Seller refund verified on the XRP Ledger.",
+              : "Seller refund verified on the XRPL.",
             "success"
           );
 
@@ -17519,6 +19131,53 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           }
         );
 
+      document
+        .getElementById(
+          "buyerSignInBtn"
+        )
+        ?.addEventListener(
+          "click",
+          async () => {
+            const session =
+              buyerSession();
+
+            if (session) {
+              if (
+                confirm(
+                  "Sign out of this MONOLITH buyer account?"
+                )
+              ) {
+                clearBuyerSession();
+                renderBuyerSession();
+              }
+
+              return;
+            }
+
+            try {
+              await startBuyerSignIn(
+                "/merch/"
+              );
+            } catch (error) {
+              alert(
+                buyerSafeError(
+                  error,
+                  "Unable to start Xaman Sign-In."
+                )
+              );
+            }
+          }
+        );
+
+      document
+        .getElementById(
+          "orderStatusBtn"
+        )
+        ?.addEventListener(
+          "click",
+          openBuyerOrders
+        );
+
       checkoutUi.button
         ?.addEventListener(
           "click",
@@ -17636,6 +19295,96 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       updateCart(false);
       loadMarketplace();
 
+      renderBuyerSession();
+
+      recoverCompletedCheckout();
+
+      const buyerReturnPayload =
+        String(
+          params.get("payload") ||
+          ""
+        ).trim();
+
+      const buyerAuthReturn =
+        params.get(
+          "merchBuyerAuth"
+        ) === "1";
+
+      if (
+        buyerAuthReturn &&
+        buyerReturnPayload
+      ) {
+        verifyBuyerPayload(
+          buyerReturnPayload
+        )
+          .then(() => {
+            renderBuyerSession();
+
+            const cleanUrl =
+              new URL(
+                window.location.href
+              );
+
+            cleanUrl.searchParams.delete(
+              "merchBuyerAuth"
+            );
+
+            cleanUrl.searchParams.delete(
+              "payload"
+            );
+
+            const shouldCheckout =
+              cleanUrl.searchParams.get(
+                "buyerCheckout"
+              ) === "1";
+
+            const shouldOpenOrders =
+              cleanUrl.searchParams.get(
+                "buyerOrders"
+              ) === "1";
+
+            cleanUrl.searchParams.delete(
+              "buyerCheckout"
+            );
+
+            cleanUrl.searchParams.delete(
+              "buyerOrders"
+            );
+
+            history.replaceState(
+              null,
+              "",
+              `${cleanUrl.pathname}${
+                cleanUrl.search
+              }${
+                cleanUrl.hash
+              }`
+            );
+
+            if (
+              shouldCheckout &&
+              cart.length
+            ) {
+              openCheckout();
+            } else if (
+              shouldOpenOrders
+            ) {
+              openBuyerOrders();
+            }
+          })
+          .catch(error => {
+            clearBuyerSession();
+            renderBuyerSession();
+
+            alert(
+              buyerSafeError(
+                error,
+                "Unable to verify Xaman Sign-In."
+              )
+            );
+          });
+      }
+
       const requestedOrderId =
         String(
           params.get("order") ||
@@ -17654,9 +19403,88 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
     })();
   </script>
 
+<script id="monolith-merch-owner-signin-retired-20260829">
+(() => {
+  const ownerBtn =
+    document.getElementById(
+      "ownerSignInBtn"
+    );
+
+  if (!ownerBtn) return;
+
+  ownerBtn.addEventListener(
+    "click",
+    async () => {
+      const session =
+        window.MonolithSession
+          ? window.MonolithSession.get()
+          : null;
+
+      if (
+        session &&
+        session.ownerVerified
+      ) {
+        window.MonolithSession.clear();
+        window.location.href =
+          "/merch/";
+        return;
+      }
+
+      ownerBtn.disabled = true;
+
+      try {
+        const response =
+          await fetch(
+            "/api/merch/seller/auth/start",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+              body:
+                JSON.stringify({
+                  returnUrl:
+                    "/merch/seller/"
+                })
+            }
+          );
+
+        const data =
+          await response
+            .json()
+            .catch(() => ({}));
+
+        if (
+          !response.ok ||
+          !data.ok ||
+          !data.auth?.signUrl
+        ) {
+          throw new Error(
+            data.error ||
+            data.code ||
+            "seller_signin_failed"
+          );
+        }
+
+        window.location.href =
+          data.auth.signUrl;
+      } catch (error) {
+        ownerBtn.disabled = false;
+
+        alert(
+          error.message ||
+          "Unable to start Xaman Sign-In."
+        );
+      }
+    }
+  );
+})();
+</script>
+
 <script id="monolith-merch-launch-soon-gate-script-20260822">
 (() => {
-  const launchGate = true;
+  const launchGate = false;
 
   if (!launchGate) return;
 
@@ -17664,7 +19492,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
     "#marketSearch",
     ".marketNav button",
     ".categoryChip",
-    "#ownerSignInBtn",
+    "#buyerSignInBtn",
     "#headerSearchBtn",
     "#headerCartBtn",
     "#sellerCoordinate",
@@ -17812,74 +19640,6 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             behavior: "smooth",
             block: "start"
           });
-      }
-    );
-
-  document
-    .getElementById(
-      "ownerSignInBtn"
-    )
-    ?.addEventListener(
-      "click",
-      async () => {
-        const session =
-          window.MonolithSession
-            ? window.MonolithSession.get()
-            : null;
-
-        if (
-          session &&
-          session.ownerVerified
-        ) {
-          window.MonolithSession.clear();
-          window.location.href =
-            "/merch/";
-          return;
-        }
-
-        try {
-          const response =
-            await fetch(
-              "/api/merch/seller/auth/start",
-              {
-                method:"POST",
-                headers:{
-                  "Content-Type":
-                    "application/json"
-                },
-                body:
-                  JSON.stringify({
-                    returnUrl:
-                      "/merch/seller/"
-                  })
-              }
-            );
-
-          const data =
-            await response
-              .json()
-              .catch(() => ({}));
-
-          if (
-            !response.ok ||
-            !data.ok ||
-            !data.auth?.signUrl
-          ) {
-            throw new Error(
-              data.error ||
-              data.code ||
-              "seller_signin_failed"
-            );
-          }
-
-          window.location.href =
-            data.auth.signUrl;
-        } catch (error) {
-          alert(
-            error.message ||
-            "Unable to start Xaman Sign-In."
-          );
-        }
       }
     );
 
