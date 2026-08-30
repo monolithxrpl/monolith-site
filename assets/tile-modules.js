@@ -26,6 +26,15 @@
 
   let marketBoxRef = null;
 
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+  }
+
   function orderedModules(modules) {
     return [...modules].sort(
       (a,b)=>
@@ -119,6 +128,7 @@
 
     if (module.key === "merch_store") {
       return `
+        <div data-merch-storefront></div>
         <a class="btn commerceModuleAction"
            href="/merch/?tile=${encodeURIComponent(coordinate())}">
           Open Merch Store
@@ -232,6 +242,8 @@
       }
     }
 
+    loadMerchStorefront(publicRoot);
+
     publicRoot.querySelectorAll(
       '[data-commerce-action="payment"]'
     ).forEach(button => {
@@ -248,6 +260,109 @@
           ?.focus();
       });
     });
+  }
+
+  async function loadMerchStorefront(publicRoot) {
+    const slot =
+      publicRoot.querySelector(
+        "[data-merch-storefront]"
+      );
+
+    if (!slot) return;
+
+    try {
+      const response = await fetch(
+        `/api/merch/storefront/${
+          encodeURIComponent(coordinate())
+        }`
+      );
+
+      const data = await response.json();
+
+      const products =
+        Array.isArray(data.products)
+          ? data.products
+          : [];
+
+      if (!data.ok || !products.length) {
+        slot.innerHTML = `
+          <div class="commerceModuleDescription">
+            No live merchandise listed yet.
+          </div>
+        `;
+        return;
+      }
+
+      const sellerName =
+        data.seller?.displayName || "";
+
+      slot.innerHTML = `
+        ${
+          sellerName
+            ? `<div class="commerceModuleDescription">
+                 Storefront by ${escapeHtml(sellerName)}
+               </div>`
+            : ""
+        }
+
+        <div class="commerceMerchGrid">
+          ${products.map(product => {
+            const media =
+              Array.isArray(product.media)
+                ? product.media[0]
+                : null;
+
+            const image =
+              media?.url
+                ? `<img
+                     class="commerceMerchImage"
+                     src="${escapeHtml(media.url)}"
+                     alt="${escapeHtml(
+                       media.altText ||
+                       product.title ||
+                       "Merch product"
+                     )}"
+                     loading="lazy"
+                   >`
+                : "";
+
+            return `
+              <a
+                class="commerceMerchProduct"
+                href="/merch/product/?id=${
+                  encodeURIComponent(
+                    product.productId
+                  )
+                }"
+              >
+                ${image}
+
+                <div class="commerceMerchProductCopy">
+                  <strong>
+                    ${escapeHtml(product.title)}
+                  </strong>
+
+                  <span>
+                    $${escapeHtml(product.priceUsd)}
+                  </span>
+                </div>
+              </a>
+            `;
+          }).join("")}
+        </div>
+      `;
+    } catch (error) {
+      console.error(
+        "[tile-merch-storefront]",
+        error
+      );
+
+      slot.innerHTML = `
+        <div class="commerceModuleDescription">
+          Merch storefront temporarily unavailable.
+        </div>
+      `;
+    }
   }
 
   function renderOwnerControls(modules) {
