@@ -7038,6 +7038,7 @@ body.merchLaunchSoon .marketHeroMark img{
 }
 
 .sellerCenterShell .shippingFieldGrid input,
+.sellerCenterShell .shippingFieldGrid select,
 .sellerCenterShell .shippingModeBlock select,
 .sellerCenterShell .shippingInlineForm input,
 .sellerCenterShell .shippingZoneForm input,
@@ -7045,6 +7046,82 @@ body.merchLaunchSoon .marketHeroMark img{
   border:1px solid #d4e2e9;
   color:#173847;
   background:#ffffff;
+}
+
+.sellerCenterShell .shippingFieldGrid select{
+  width:100%;
+  min-height:42px;
+  padding:0 11px;
+  border-radius:8px;
+  font:inherit;
+  font-size:10px;
+  outline:0;
+}
+
+.sellerCenterShell .shippingManageBtn{
+  min-height:34px;
+  padding:0 12px;
+  border:1px solid #9fd8f1;
+  border-radius:7px;
+  color:#0878af;
+  background:#ffffff;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.04em;
+  cursor:pointer;
+}
+
+.sellerCenterShell .shippingManageBtn:hover{
+  border-color:#159fe5;
+  color:#056999;
+}
+
+.sellerCenterShell .shippingProfileSwitcher{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  border:1px solid #d8e7ee;
+  border-radius:12px;
+  background:#f8fbfc;
+}
+
+.sellerCenterShell .shippingProfileSwitcher label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#5f7b8a;
+  font-size:10px;
+  font-weight:900;
+}
+
+.sellerCenterShell .shippingProfileSwitcher select{
+  min-height:36px;
+  padding:0 10px;
+  border:1px solid #d4e2e9;
+  border-radius:8px;
+  background:#fff;
+  color:#173847;
+  font:inherit;
+  font-size:10px;
+}
+
+.sellerCenterShell .shippingProfileSwitcher span{
+  color:#718a98;
+  font-size:9px;
+}
+
+.sellerCenterShell
+.shippingProfileCard:not(.is-managed)
+.shippingProfileBody{
+  display:none;
+}
+
+.sellerCenterShell
+.shippingProfileCard:not(.is-managed)
+.shippingProfileHead{
+  border-bottom:0;
 }
 
 .sellerCenterShell .shippingFieldGrid input::placeholder,
@@ -14155,6 +14232,7 @@ body.merchSellerPage #orderStatusBtn{
       let sellerProducts = [];
       let sellerCollections = [];
       let sellerShippingProfiles = [];
+      let activeShippingProfileId = "";
       let sellerOrders = [];
       let selectedSellerOrder = null;
       let editingProduct = null;
@@ -16104,6 +16182,217 @@ body.merchSellerPage #orderStatusBtn{
         }
       }
 
+      const SHIPPING_US_STATES = [
+        ["AL","Alabama"],
+        ["AK","Alaska"],
+        ["AZ","Arizona"],
+        ["AR","Arkansas"],
+        ["CA","California"],
+        ["CO","Colorado"],
+        ["CT","Connecticut"],
+        ["DE","Delaware"],
+        ["FL","Florida"],
+        ["GA","Georgia"],
+        ["HI","Hawaii"],
+        ["ID","Idaho"],
+        ["IL","Illinois"],
+        ["IN","Indiana"],
+        ["IA","Iowa"],
+        ["KS","Kansas"],
+        ["KY","Kentucky"],
+        ["LA","Louisiana"],
+        ["ME","Maine"],
+        ["MD","Maryland"],
+        ["MA","Massachusetts"],
+        ["MI","Michigan"],
+        ["MN","Minnesota"],
+        ["MS","Mississippi"],
+        ["MO","Missouri"],
+        ["MT","Montana"],
+        ["NE","Nebraska"],
+        ["NV","Nevada"],
+        ["NH","New Hampshire"],
+        ["NJ","New Jersey"],
+        ["NM","New Mexico"],
+        ["NY","New York"],
+        ["NC","North Carolina"],
+        ["ND","North Dakota"],
+        ["OH","Ohio"],
+        ["OK","Oklahoma"],
+        ["OR","Oregon"],
+        ["PA","Pennsylvania"],
+        ["RI","Rhode Island"],
+        ["SC","South Carolina"],
+        ["SD","South Dakota"],
+        ["TN","Tennessee"],
+        ["TX","Texas"],
+        ["UT","Utah"],
+        ["VT","Vermont"],
+        ["VA","Virginia"],
+        ["WA","Washington"],
+        ["WV","West Virginia"],
+        ["WI","Wisconsin"],
+        ["WY","Wyoming"],
+        ["DC","District of Columbia"]
+      ];
+
+      const SHIPPING_CA_PROVINCES = [
+        ["AB","Alberta"],
+        ["BC","British Columbia"],
+        ["MB","Manitoba"],
+        ["NB","New Brunswick"],
+        ["NL","Newfoundland and Labrador"],
+        ["NS","Nova Scotia"],
+        ["NT","Northwest Territories"],
+        ["NU","Nunavut"],
+        ["ON","Ontario"],
+        ["PE","Prince Edward Island"],
+        ["QC","Quebec"],
+        ["SK","Saskatchewan"],
+        ["YT","Yukon"]
+      ];
+
+      function shippingRegionControlHtml(
+        profileId,
+        country,
+        region
+      ) {
+        const cleanCountry =
+          String(
+            country || ""
+          )
+            .trim()
+            .toUpperCase();
+
+        const cleanRegion =
+          String(
+            region || ""
+          ).trim();
+
+        const escapedId =
+          escapeHtml(
+            profileId
+          );
+
+        if (
+          cleanCountry === "US" ||
+          cleanCountry === "CA"
+        ) {
+          const items =
+            cleanCountry === "US"
+              ? SHIPPING_US_STATES
+              : SHIPPING_CA_PROVINCES;
+
+          const label =
+            cleanCountry === "US"
+              ? "State"
+              : "Province";
+
+          return `
+            <label
+              data-region-wrap="${escapedId}"
+            >
+              ${label}
+              <select
+                data-ship-region="${escapedId}"
+              >
+                <option value="">
+                  Select ${label.toLowerCase()}
+                </option>
+
+                ${
+                  items.map(
+                    ([code,name]) => `
+                      <option
+                        value="${escapeHtml(code)}"
+                        ${
+                          cleanRegion
+                            .toUpperCase() ===
+                          code
+                            ? "selected"
+                            : ""
+                        }
+                      >
+                        ${escapeHtml(name)}
+                      </option>
+                    `
+                  ).join("")
+                }
+              </select>
+            </label>
+          `;
+        }
+
+        return `
+          <label
+            data-region-wrap="${escapedId}"
+          >
+            State / Region
+            <input
+              type="text"
+              maxlength="160"
+              data-ship-region="${escapedId}"
+              value="${escapeHtml(cleanRegion)}"
+              placeholder="State or region"
+            >
+          </label>
+        `;
+      }
+
+      function syncShippingRegionControl(
+        profileId,
+        country
+      ) {
+        const card =
+          shippingUi.profiles
+            .querySelector(
+              `[data-shipping-profile="${
+                CSS.escape(profileId)
+              }"]`
+            );
+
+        if (!card) return;
+
+        const current =
+          String(
+            card.querySelector(
+              `[data-ship-region="${
+                CSS.escape(profileId)
+              }"]`
+            )?.value || ""
+          ).trim();
+
+        const wrap =
+          card.querySelector(
+            `[data-region-wrap="${
+              CSS.escape(profileId)
+            }"]`
+          );
+
+        if (!wrap) return;
+
+        const holder =
+          document.createElement(
+            "div"
+          );
+
+        holder.innerHTML =
+          shippingRegionControlHtml(
+            profileId,
+            country,
+            current
+          ).trim();
+
+        const replacement =
+          holder.firstElementChild;
+
+        if (replacement) {
+          wrap.replaceWith(
+            replacement
+          );
+        }
+      }
+
       function renderShippingProfiles() {
         renderProductShippingProfiles();
 
@@ -16123,9 +16412,65 @@ body.merchSellerPage #orderStatusBtn{
           return;
         }
 
-        shippingUi.profiles.innerHTML =
-          profiles.map(
-            profile => `
+        if (
+          !activeShippingProfileId ||
+          !profiles.some(
+            profile =>
+              profile.shippingProfileId ===
+              activeShippingProfileId
+          )
+        ) {
+          activeShippingProfileId =
+            profiles[0].shippingProfileId;
+        }
+
+        const activeProfile =
+          profiles.find(
+            profile =>
+              profile.shippingProfileId ===
+              activeShippingProfileId
+          ) || profiles[0];
+
+        shippingUi.profiles.innerHTML = `
+          ${
+            profiles.length > 1
+              ? `
+                <div class="shippingProfileSwitcher">
+                  <label>
+                    Shipping profile
+
+                    <select data-shipping-profile-select>
+                      ${
+                        profiles.map(
+                          profile => `
+                            <option
+                              value="${escapeHtml(profile.shippingProfileId)}"
+                              ${
+                                profile.shippingProfileId ===
+                                activeProfile.shippingProfileId
+                                  ? "selected"
+                                  : ""
+                              }
+                            >
+                              ${escapeHtml(profile.name)}
+                            </option>
+                          `
+                        ).join("")
+                      }
+                    </select>
+                  </label>
+
+                  <span>
+                    ${profiles.length} saved profiles
+                  </span>
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            [activeProfile].map(
+              profile => `
               <article
                 class="shippingProfileCard"
                 data-shipping-profile="${
@@ -16153,6 +16498,18 @@ body.merchSellerPage #orderStatusBtn{
 
                   <div class="shippingHeadActions">
                     <button
+                      class="shippingManageBtn"
+                      type="button"
+                      data-manage-profile="${
+                        escapeHtml(
+                          profile.shippingProfileId
+                        )
+                      }"
+                    >
+                      Manage
+                    </button>
+
+                    <button
                       class="shippingArchiveBtn"
                       type="button"
                       data-archive-profile="${
@@ -16161,7 +16518,7 @@ body.merchSellerPage #orderStatusBtn{
                         )
                       }"
                     >
-                      Archive Profile
+                      Archive
                     </button>
                   </div>
                 </div>
@@ -16231,16 +16588,13 @@ body.merchSellerPage #orderStatusBtn{
                         >
                       </label>
 
-                      <label>
-                        State / Region
-                        <input
-                          type="text"
-                          maxlength="160"
-                          data-ship-region="${escapeHtml(profile.shippingProfileId)}"
-                          value="${escapeHtml(profile.shipFrom?.region || "")}"
-                          placeholder="State or region"
-                        >
-                      </label>
+                      ${
+                        shippingRegionControlHtml(
+                          profile.shippingProfileId,
+                          profile.shipFrom?.country || "",
+                          profile.shipFrom?.region || ""
+                        )
+                      }
 
                       <label>
                         Postal code
@@ -16255,13 +16609,26 @@ body.merchSellerPage #orderStatusBtn{
 
                       <label>
                         Country
-                        <input
-                          type="text"
-                          maxlength="2"
+                        <select
                           data-ship-country="${escapeHtml(profile.shippingProfileId)}"
-                          value="${escapeHtml(profile.shipFrom?.country || "")}"
-                          placeholder="US"
                         >
+                          <option value="">
+                            Select country
+                          </option>
+
+                          ${
+                            window.MonolithCountries
+                              ?.optionHtml(
+                                profile.shipFrom?.country
+                                  ? [
+                                      String(
+                                        profile.shipFrom.country
+                                      ).toUpperCase()
+                                    ]
+                                  : []
+                              ) || ""
+                          }
+                        </select>
                       </label>
                     </div>
 
@@ -16271,22 +16638,16 @@ body.merchSellerPage #orderStatusBtn{
                           Shipping rate mode
                           <select data-rate-mode="${escapeHtml(profile.shippingProfileId)}">
                             <option value="manual" selected>
-                              Manual — Launch Mode
-                            </option>
-                            <option value="live" disabled>
-                              Live Carrier Rates — Coming Soon
-                            </option>
-                            <option value="hybrid" disabled>
-                              Hybrid — Coming Soon
+                              Seller-Set Rates
                             </option>
                           </select>
                         </label>
                       </div>
 
                       <div class="shippingLiveNotice">
-                        Automated USPS, UPS and FedEx rates are coming.
-                        Use the official carrier pricing links above while
-                        MONOLITH launches with seller-set manual shipping.
+                        Set the shipping rates you charge buyers for each
+                        destination zone. Rates are stored in USD and converted
+                        into the checkout settlement automatically.
                       </div>
                     </div>
 
@@ -16450,7 +16811,7 @@ body.merchSellerPage #orderStatusBtn{
                                               )
                                             }"
                                           >
-                                            Archive
+                                            Delete
                                           </button>
                                         </div>
                                       `
@@ -16527,8 +16888,85 @@ body.merchSellerPage #orderStatusBtn{
                   }
                 </div>
               </article>
-            `
-          ).join("");
+              `
+            ).join("")
+          }
+        `;
+
+        shippingUi.profiles
+          .querySelector(
+            "[data-shipping-profile-select]"
+          )
+          ?.addEventListener(
+            "change",
+            event => {
+              activeShippingProfileId =
+                String(
+                  event.target.value ||
+                  ""
+                );
+
+              renderShippingProfiles();
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-manage-profile]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () => {
+                  const profileId =
+                    button.dataset
+                      .manageProfile;
+
+                  const card =
+                    shippingUi.profiles
+                      .querySelector(
+                        `[data-shipping-profile="${
+                          CSS.escape(
+                            profileId
+                          )
+                        }"]`
+                      );
+
+                  if (!card) return;
+
+                  const open =
+                    card.classList.toggle(
+                      "is-managed"
+                    );
+
+                  button.textContent =
+                    open
+                      ? "Close"
+                      : "Manage";
+                }
+              );
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-ship-country]"
+          )
+          .forEach(
+            select => {
+              select.addEventListener(
+                "change",
+                () => {
+                  syncShippingRegionControl(
+                    select.dataset
+                      .shipCountry,
+                    select.value
+                  );
+                }
+              );
+            }
+          );
 
         shippingUi.profiles
           .querySelectorAll(
@@ -18253,6 +18691,15 @@ body.merchSellerPage #orderStatusBtn{
       async function archiveShippingRateUi(
         rateId
       ) {
+        const confirmed =
+          window.confirm(
+            "Delete this shipping option? Buyers will no longer be able to select it."
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
         try {
           await merchJson(
             `/api/merch/shipping/rate/${
@@ -18272,13 +18719,13 @@ body.merchSellerPage #orderStatusBtn{
           await loadSellerShipping();
 
           shippingMessage(
-            "Shipping rate archived.",
+            "Shipping option deleted.",
             "success"
           );
         } catch (error) {
           shippingMessage(
             error.message ||
-            "Unable to archive shipping rate.",
+            "Unable to delete shipping option.",
             "error"
           );
         }
@@ -20976,9 +21423,41 @@ body.merchSellerPage #orderStatusBtn{
         syncCategoryUrl();
       }
 
-      restoreCart();
-      updateCart(false);
-      loadMarketplace();
+      if (
+        !document.body.classList.contains(
+          "merchSellerPage"
+        )
+      ) {
+        restoreCart();
+        updateCart(false);
+        loadMarketplace();
+      } else {
+        cart.length = 0;
+
+        const sellerCartBar =
+          document.getElementById(
+            "cartBar"
+          );
+
+        if (sellerCartBar) {
+          sellerCartBar.classList.remove(
+            "show"
+          );
+
+          sellerCartBar.hidden =
+            true;
+        }
+
+        const sellerHeaderCart =
+          document.getElementById(
+            "headerCartBtn"
+          );
+
+        if (sellerHeaderCart) {
+          sellerHeaderCart.hidden =
+            true;
+        }
+      }
 
       const requestedOrderId =
         String(
