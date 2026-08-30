@@ -532,6 +532,190 @@ table{
 @media(max-width:1120px){.listing-console{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:700px){.wrap{padding:18px 12px 72px!important}.hero{min-height:270px;padding:26px!important}.hero p{font-size:15px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.market-grid{grid-template-columns:1fr!important}.listing-console,.actions{grid-template-columns:1fr!important}.card{max-width:520px;width:100%;margin:auto}}
 </style>
+
+<style id="MONOLITH_TILE_MARKET_REAL_ESTATE_REDESIGN_20260830">
+.market-real-estate-eyebrow{
+  margin:0 0 8px;
+  color:#f7c96d;
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.16em;
+  line-height:1.3;
+  text-transform:uppercase;
+}
+
+.hero-copy h1{
+  margin-top:0;
+}
+
+.hero-copy p{
+  max-width:760px;
+  line-height:1.55;
+}
+
+#listingGrid .card{
+  overflow:hidden;
+}
+
+#listingGrid .card .body{
+  display:block;
+  padding:16px;
+}
+
+.listing-property-type{
+  margin:0 0 7px;
+  color:#f7c96d;
+  font-size:9px;
+  font-weight:1000;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.listing-title-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:16px;
+  align-items:start;
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(247,201,109,.22);
+}
+
+.listing-title-row .coord{
+  margin:0 0 4px;
+  color:#fff4cf!important;
+  font-size:24px;
+  line-height:1;
+}
+
+.listing-title-row .owner{
+  color:#9fc7dd!important;
+}
+
+.listing-ask-price{
+  min-width:138px;
+  padding:11px 13px;
+  border:1px solid rgba(247,201,109,.55);
+  border-radius:12px;
+  background:
+    linear-gradient(180deg,rgba(247,201,109,.13),rgba(247,201,109,.035));
+  text-align:right;
+}
+
+.listing-ask-price span{
+  display:block;
+  margin-bottom:3px;
+  color:#f7c96d;
+  font-size:8px;
+  font-weight:1000;
+  letter-spacing:.14em;
+}
+
+.listing-ask-price strong{
+  display:block;
+  color:#ffe39a!important;
+  font-size:21px;
+  line-height:1.05;
+  white-space:nowrap;
+  text-shadow:0 0 16px rgba(247,201,109,.18);
+}
+
+.listing-details{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0;
+  margin:12px 0 14px;
+  border:1px solid rgba(130,220,255,.13);
+  border-radius:12px;
+  overflow:hidden;
+  background:rgba(1,9,18,.46);
+}
+
+.listing-details > div{
+  min-width:0;
+  padding:10px 11px;
+}
+
+.listing-details > div:nth-child(odd){
+  border-right:1px solid rgba(130,220,255,.11);
+}
+
+.listing-details > div:nth-child(-n+2){
+  border-bottom:1px solid rgba(130,220,255,.11);
+}
+
+.listing-details span{
+  display:block;
+  margin-bottom:4px;
+  color:#7db7d5;
+  font-size:8px;
+  font-weight:1000;
+  letter-spacing:.12em;
+}
+
+.listing-details strong{
+  display:block;
+  overflow:hidden;
+  color:#eaf8ff!important;
+  font-size:10px;
+  line-height:1.35;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+#listingGrid .price-badge{
+  display:none!important;
+}
+
+#listingGrid .actions{
+  gap:8px;
+}
+
+#listingGrid .actions .btn{
+  min-height:42px;
+}
+
+@media(max-width:560px){
+  .market-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  #listingGrid .card{
+    padding:8px;
+  }
+
+  #listingGrid .card .body{
+    padding:14px 8px 8px;
+  }
+
+  .listing-title-row{
+    grid-template-columns:1fr;
+    gap:11px;
+  }
+
+  .listing-ask-price{
+    width:100%;
+    min-width:0;
+    text-align:left;
+  }
+
+  .listing-ask-price strong{
+    font-size:25px;
+  }
+
+  .listing-details{
+    grid-template-columns:1fr 1fr;
+  }
+
+  #listingGrid .actions{
+    grid-template-columns:1fr!important;
+  }
+
+  #listingGrid .actions .btn{
+    width:100%;
+  }
+}
+</style>
+
 </head>
 <body>
   <main class="wrap">
@@ -549,8 +733,9 @@ table{
 
     <section class="hero">
       <div class="hero-copy">
+        <div class="market-real-estate-eyebrow">MONOLITH COORDINATE DEED REAL ESTATE</div>
         <h1>Tile Market</h1>
-        <p>Buy and sell verified MONOLITH coordinate real estate through ledger-backed XRPL Coordinate Deeds.</p>
+        <p>Browse verified Coordinate Deed real estate listings and buy or sell claimed MONOLITH coordinates through XRPL-backed ownership and settlement.</p>
         <div class="hero-row">
           <span class="pill green">XRPL Deed Market</span>
           <span class="pill">Claimed Tiles Only</span>
@@ -571,8 +756,8 @@ table{
     <section class="panel" id="listYourTilePanel">
       <div class="market-head">
         <div>
-          <h2>List Your Tile</h2>
-          <p>Enter a claimed coordinate and ask price. MONOLITH requires owner Sign-In first, then a real XRPL Coordinate Deed sell offer through Xaman.</p>
+          <h2>List Coordinate Real Estate</h2>
+          <p>List a claimed MONOLITH coordinate for sale by setting an asking price and locking a verified XRPL Coordinate Deed NFT sell offer through Xaman.</p>
         </div>
       </div>
 
@@ -606,7 +791,8 @@ table{
     <section class="panel">
       <div class="market-head">
         <div>
-          <h2>Listed Coordinates</h2>
+          <div class="market-real-estate-eyebrow">VERIFIED MONOLITH PROPERTY MARKET</div>
+          <h2>Coordinate Deed Real Estate Listings</h2>
           <p id="marketStatus">Loading market...</p>
         </div>
         <div class="tools">
@@ -1191,15 +1377,34 @@ function listingCard(item){
         <span class="price-badge">${esc(ask)} $XRP</span>
       </a>
       <div class="body">
-        <h3 class="coord">${esc(item.coordinate)}</h3>
-        <div class="owner">${esc(title)}</div>
-        <div class="meta-row">
-          <span>${esc(shortWallet(item.sellerWallet))}</span>
-          <span>${esc(date)}</span>
+        <div class="listing-property-type">COORDINATE DEED REAL ESTATE</div>
+        <div class="listing-title-row">
+          <div>
+            <h3 class="coord">${esc(item.coordinate)}</h3>
+            <div class="owner">${esc(title)}</div>
+          </div>
+          <div class="listing-ask-price">
+            <span>ASK PRICE</span>
+            <strong>${esc(ask)} $XRP</strong>
+          </div>
         </div>
-        <div class="meta-row">
-          <span>${ready ? "XRPL offer locked" : "Waiting on seller deed offer"}</span>
-          <span>${item.xrplOfferIndex ? "Offer " + esc(shortWallet(item.xrplOfferIndex)) : "No offer yet"}</span>
+        <div class="listing-details">
+          <div>
+            <span>SELLER</span>
+            <strong>${esc(shortWallet(item.sellerWallet))}</strong>
+          </div>
+          <div>
+            <span>LISTED</span>
+            <strong>${esc(date)}</strong>
+          </div>
+          <div>
+            <span>DEED STATUS</span>
+            <strong>${ready ? "XRPL OFFER LOCKED" : "SELLER DEED PENDING"}</strong>
+          </div>
+          <div>
+            <span>SELL OFFER</span>
+            <strong>${item.xrplOfferIndex ? "VERIFIED · " + esc(shortWallet(item.xrplOfferIndex)) : "NOT LOCKED"}</strong>
+          </div>
         </div>
         <div class="actions">
           <a class="btn" href="/tile/${encodeURIComponent(item.coordinate)}">View</a>
