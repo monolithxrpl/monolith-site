@@ -7611,7 +7611,24 @@ body.merchSellerPage .sellerOrdersHead button{
 
 </style>
 
-<style>body.merchSellerPage #ownerSignInBtn,body.merchSellerPage #orderStatusBtn{opacity:1!important;filter:none!important;color:#0878af!important;background:#dceef7!important;border-color:rgba(75,188,255,.34)!important}</style>
+<style>
+body.merchSellerPage #ownerSignInBtn,
+body.merchSellerPage #orderStatusBtn{
+  opacity:1!important;
+  filter:none!important;
+  color:#0878af!important;
+  background:#dceef7!important;
+  border-color:rgba(75,188,255,.34)!important;
+}
+
+@media(max-width:760px){
+  body.merchSellerPage #ownerSignInBtn{
+    display:flex!important;
+    align-items:center;
+    justify-content:center;
+  }
+}
+</style>
 
 <style id="monolith-seller-orders-readability-20260829">
   /* Seller Orders light-theme readability */
