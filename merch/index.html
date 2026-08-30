@@ -8360,7 +8360,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       loadMerchXrpRate();
       const CART_STORAGE_KEY =
         "monolithMerchCartV1";
-      const CART_STORAGE_VERSION = 1;
+      const CART_STORAGE_VERSION = 2;
       const CART_MAX_AGE_MS =
         7 * 24 * 60 * 60 * 1000;
 
@@ -8812,16 +8812,26 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             localStorage.removeItem(
               CART_STORAGE_KEY
             );
+            sessionStorage.removeItem(
+              CART_STORAGE_KEY
+            );
             return;
           }
 
-          localStorage.setItem(
+          const cartStorage =
+            buyerSession()
+              ? localStorage
+              : sessionStorage;
+
+          cartStorage.setItem(
             CART_STORAGE_KEY,
             JSON.stringify({
               version:
                 CART_STORAGE_VERSION,
               savedAt:
                 Date.now(),
+              buyerWallet:
+                buyerSession()?.wallet || null,
               items:
                 cart.map(
                   item => ({
@@ -8853,8 +8863,22 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
       function restoreCart() {
         try {
+          const session =
+            buyerSession();
+
+          const cartStorage =
+            session
+              ? localStorage
+              : sessionStorage;
+
+          if (!session) {
+            localStorage.removeItem(
+              CART_STORAGE_KEY
+            );
+          }
+
           const raw =
-            localStorage.getItem(
+            cartStorage.getItem(
               CART_STORAGE_KEY
             );
 
@@ -8879,9 +8903,30 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
               saved.items
             )
           ) {
-            localStorage.removeItem(
+            cartStorage.removeItem(
               CART_STORAGE_KEY
             );
+            return;
+          }
+
+          const savedWallet =
+            String(
+              saved.buyerWallet || ""
+            ).trim();
+
+          const sessionWallet =
+            String(
+              session?.wallet || ""
+            ).trim();
+
+          if (
+            savedWallet !==
+              sessionWallet
+          ) {
+            cartStorage.removeItem(
+              CART_STORAGE_KEY
+            );
+            cart.length = 0;
             return;
           }
 
@@ -8932,6 +8977,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
           try {
             localStorage.removeItem(
+              CART_STORAGE_KEY
+            );
+            sessionStorage.removeItem(
               CART_STORAGE_KEY
             );
           } catch (_) {}
@@ -19326,6 +19374,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 )
               ) {
                 clearBuyerSession();
+                cart.length = 0;
+                localStorage.removeItem(CART_STORAGE_KEY);
+                sessionStorage.removeItem(CART_STORAGE_KEY);
+                updateCart(false);
                 renderBuyerSession();
               }
 
@@ -19497,6 +19549,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         )
           .then(() => {
             renderBuyerSession();
+            saveCart();
+            sessionStorage.removeItem(
+              CART_STORAGE_KEY
+            );
 
             const cleanUrl =
               new URL(
