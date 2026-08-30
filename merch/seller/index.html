@@ -7706,21 +7706,21 @@ body.merchSellerPage #orderStatusBtn{
 
 </head>
 
-<body class="merchLaunchSoon merchSellerPage">
+<body class="merchSellerPage">
   <main class="shell">
 
     <section class="previewBanner">
       <div class="previewMark">M</div>
 
       <div class="previewCopy">
-        <strong>MONOLITH MERCH STORE — LAUNCH COMING SOON</strong>
+        <strong>MONOLITH MERCH STORE</strong>
         <span>
           Explore the Merch Store now. Buying and seller tools activate at launch.
         </span>
       </div>
 
       <div class="previewStatus">
-        LAUNCH COMING SOON
+        SELLER CENTER
       </div>
     </section>
 
@@ -21360,6 +21360,20 @@ body.merchSellerPage #orderStatusBtn{
     );
 
   if (!ownerBtn) return;
+
+  function syncSellerAuthButton() {
+    const current =
+      window.MonolithSession
+        ? window.MonolithSession.get()
+        : null;
+
+    ownerBtn.innerHTML =
+      current && current.ownerVerified
+        ? "<span>◆</span> Seller Sign Out"
+        : "<span>◆</span> Seller Sign In";
+  }
+
+  syncSellerAuthButton();
 
   async function postJson(url, body) {
     const response =
