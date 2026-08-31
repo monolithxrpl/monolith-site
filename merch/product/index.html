@@ -537,6 +537,25 @@ h1{
       product.productId
     );
 
+    const primaryMedia =
+      Array.isArray(product.media)
+        ? product.media.find(
+            item =>
+              item &&
+              item.url &&
+              (!item.mediaType || item.mediaType === "image")
+          )
+        : null;
+
+    const shareVersion =
+      primaryMedia?.mediaId ||
+      product.productId;
+
+    url.searchParams.set(
+      "v",
+      shareVersion
+    );
+
     const shareData = {
       title: `${title} | MONOLITH Merch Store`,
       text: `${title} — Buy with $XRP on MONOLITH`,
