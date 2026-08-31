@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MONOLITH Directory</title>
+  <meta
+    name="description"
+    content="Search MONOLITH coordinates, people, storefronts and places."
+  >
+
+  <style>
+    *{box-sizing:border-box}
+
+    html{
+      background:#02070c;
+      color:#f4fbff;
+      font-family:Arial,Helvetica,sans-serif;
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 50% 0,rgba(41,146,205,.18),transparent 40%),
+        linear-gradient(180deg,#06131e 0,#02070c 55%);
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .page{
+      width:min(1180px,calc(100% - 28px));
+      margin:0 auto;
+      padding:28px 0 60px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:28px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:950;
+      letter-spacing:.13em;
+    }
+
+    .brand img{
+      width:40px;
+      height:40px;
+      object-fit:contain;
+    }
+
+    .back{
+      padding:10px 14px;
+      border:1px solid rgba(130,220,255,.24);
+      border-radius:12px;
+      color:#bfeaff;
+      background:rgba(8,30,46,.72);
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      padding:30px;
+      border:1px solid rgba(130,220,255,.24);
+      border-radius:28px;
+      background:
+        linear-gradient(135deg,rgba(5,22,36,.98),rgba(3,11,20,.98));
+      box-shadow:0 22px 60px rgba(0,0,0,.3);
+    }
+
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(82,193,244,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(82,193,244,.035) 1px,transparent 1px);
+      background-size:28px 28px;
+      mask-image:linear-gradient(to bottom,#000,transparent);
+    }
+
+    .heroInner{
+      position:relative;
+      z-index:1;
+    }
+
+    .eyebrow{
+      color:#82dcff;
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.2em;
+    }
+
+    h1{
+      margin:8px 0 10px;
+      font-size:clamp(32px,6vw,58px);
+      line-height:.98;
+    }
+
+    .hero p{
+      max-width:700px;
+      margin:0;
+      color:#91adbc;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .searchWrap{
+      display:flex;
+      gap:10px;
+      margin-top:24px;
+    }
+
+    .searchWrap input{
+      width:100%;
+      min-width:0;
+      padding:15px 17px;
+      border:1px solid rgba(130,220,255,.25);
+      border-radius:14px;
+      outline:none;
+      color:#fff;
+      background:rgba(3,12,23,.92);
+      font-size:15px;
+    }
+
+    .searchWrap input:focus{
+      border-color:#82dcff;
+      box-shadow:0 0 0 3px rgba(130,220,255,.08);
+    }
+
+    .searchWrap button{
+      padding:0 22px;
+      border:1px solid rgba(130,220,255,.38);
+      border-radius:14px;
+      color:#031019;
+      background:#82dcff;
+      font-weight:950;
+      cursor:pointer;
+    }
+
+    .filters{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:18px 0 0;
+    }
+
+    .filter{
+      padding:9px 13px;
+      border:1px solid rgba(130,220,255,.18);
+      border-radius:999px;
+      color:#9bbdce;
+      background:rgba(8,30,46,.66);
+      font-size:10px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .filter.active{
+      border-color:rgba(130,220,255,.6);
+      color:#eafaff;
+      background:rgba(73,191,255,.16);
+    }
+
+    .summary{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin:20px 0;
+    }
+
+    .summary span{
+      padding:8px 11px;
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:10px;
+      color:#88a8b8;
+      background:rgba(255,255,255,.025);
+      font-size:10px;
+      font-weight:800;
+    }
+
+    .status{
+      margin:24px 0;
+      color:#8faebe;
+      font-size:13px;
+    }
+
+    .section{
+      margin-top:30px;
+    }
+
+    .sectionHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .sectionHead h2{
+      margin:0;
+      font-size:18px;
+    }
+
+    .sectionHead span{
+      color:#82dcff;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.08em;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .card{
+      display:flex;
+      gap:13px;
+      min-width:0;
+      padding:14px;
+      border:1px solid rgba(130,220,255,.15);
+      border-radius:17px;
+      background:rgba(7,24,37,.78);
+      transition:.15s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(130,220,255,.4);
+      background:rgba(9,34,51,.92);
+    }
+
+    .thumb{
+      width:62px;
+      height:62px;
+      flex:0 0 62px;
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(130,220,255,.14);
+      border-radius:14px;
+      color:#82dcff;
+      background:#07131d;
+      font-size:10px;
+      font-weight:950;
+    }
+
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .content{
+      min-width:0;
+      flex:1;
+    }
+
+    .title{
+      overflow:hidden;
+      color:#f2fbff;
+      font-size:13px;
+      font-weight:950;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .meta{
+      margin-top:4px;
+      color:#82dcff;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.06em;
+    }
+
+    .desc{
+      display:-webkit-box;
+      overflow:hidden;
+      margin-top:7px;
+      color:#829dab;
+      font-size:10px;
+      line-height:1.45;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:3;
+    }
+
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:5px;
+      margin-top:8px;
+    }
+
+    .badge{
+      padding:4px 6px;
+      border:1px solid rgba(247,201,109,.28);
+      border-radius:999px;
+      color:#ffe39a;
+      background:rgba(247,201,109,.06);
+      font-size:7px;
+      font-weight:950;
+      letter-spacing:.06em;
+    }
+
+    .badge.verified{
+      border-color:rgba(91,226,155,.28);
+      color:#8cf0b9;
+      background:rgba(91,226,155,.06);
+    }
+
+    .empty{
+      padding:22px;
+      border:1px dashed rgba(130,220,255,.16);
+      border-radius:16px;
+      color:#7894a3;
+      text-align:center;
+      font-size:12px;
+    }
+
+    footer{
+      margin-top:50px;
+      color:#607d8c;
+      text-align:center;
+      font-size:9px;
+    }
+
+    @media(max-width:900px){
+      .grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media(max-width:620px){
+      .page{
+        width:min(100% - 18px,1180px);
+        padding-top:14px;
+      }
+
+      .topbar{
+        margin-bottom:16px;
+      }
+
+      .brand{
+        font-size:11px;
+      }
+
+      .hero{
+        padding:20px 16px;
+        border-radius:20px;
+      }
+
+      .searchWrap{
+        flex-direction:column;
+      }
+
+      .searchWrap button{
+        min-height:46px;
+      }
+
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .card{
+        min-height:92px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="topbar">
+      <a class="brand" href="/">
+        <img src="/assets/monolith_icon.webp" alt="">
+        <span>MONOLITH</span>
+      </a>
+
+      <a class="back" href="/">Entrance</a>
+    </div>
+
+    <section class="hero">
+      <div class="heroInner">
+        <span class="eyebrow">MONOLITH DIRECTORY</span>
+
+        <h1>Find your way through MONOLITH.</h1>
+
+        <p>
+          Search claimed coordinates, people, verified storefronts and
+          discoverable places across MONOLITH.
+        </p>
+
+        <form class="searchWrap" id="searchForm">
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="Search a coordinate, person, project, seller or keyword"
+          >
+          <button type="submit">SEARCH</button>
+        </form>
+
+        <div class="filters" id="filters">
+          <button class="filter active" data-type="all" type="button">All</button>
+          <button class="filter" data-type="coordinates" type="button">Coordinates</button>
+          <button class="filter" data-type="people" type="button">People</button>
+          <button class="filter" data-type="storefronts" type="button">Storefronts</button>
+          <button class="filter" data-type="places" type="button">Places</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="summary" id="summary"></div>
+    <div class="status" id="status">Loading MONOLITH Directory...</div>
+    <div id="results"></div>
+
+    <footer>
+      MONOLITH · A House of Cauliman Project
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const form = document.getElementById("searchForm");
+      const input = document.getElementById("searchInput");
+      const filters = document.getElementById("filters");
+      const summary = document.getElementById("summary");
+      const status = document.getElementById("status");
+      const results = document.getElementById("results");
+
+      let activeType = "all";
+
+      function esc(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function tileUrl(coordinate) {
+        return "/tile/" + encodeURIComponent(coordinate);
+      }
+
+      function storefrontUrl(coordinate) {
+        return "/merch/?tile=" + encodeURIComponent(coordinate);
+      }
+
+      function imageMarkup(item, label) {
+        if (item.imageUrl) {
+          return `
+            <div class="thumb">
+              <img
+                src="${esc(item.imageUrl)}"
+                alt=""
+                loading="lazy"
+              >
+            </div>
+          `;
+        }
+
+        return `<div class="thumb">${esc(label || "M")}</div>`;
+      }
+
+      function deedBadge(item) {
+        return item.deed
+          ? `<span class="badge">COORDINATE DEED</span>`
+          : "";
+      }
+
+      function coordinateCard(item) {
+        return `
+          <a class="card" href="${tileUrl(item.coordinate)}">
+            ${imageMarkup(item, item.coordinate)}
+            <div class="content">
+              <div class="title">${esc(item.displayName || item.coordinate)}</div>
+              <div class="meta">${esc(item.coordinate)}</div>
+              <div class="desc">${esc(item.ownerTag || "Claimed MONOLITH coordinate")}</div>
+              <div class="badges">
+                ${deedBadge(item)}
+              </div>
+            </div>
+          </a>
+        `;
+      }
+
+      function peopleCard(item) {
+        const handle = item.xHandle || item.handle || "";
+        const description = item.about || handle || item.ownerTag || "";
+
+        return `
+          <a class="card" href="${tileUrl(item.coordinate)}">
+            ${imageMarkup(item, item.displayName)}
+            <div class="content">
+              <div class="title">${esc(item.displayName)}</div>
+              <div class="meta">${esc(item.coordinate)}${handle ? " · " + esc(handle) : ""}</div>
+              <div class="desc">${esc(description)}</div>
+              <div class="badges">
+                ${deedBadge(item)}
+              </div>
+            </div>
+          </a>
+        `;
+      }
+
+      function storefrontCard(item) {
+        const products =
+          item.productCount === 1
+            ? "1 PRODUCT"
+            : `${item.productCount} PRODUCTS`;
+
+        return `
+          <a class="card" href="${storefrontUrl(item.coordinate)}">
+            <div class="thumb">STORE</div>
+            <div class="content">
+              <div class="title">${esc(item.displayName)}</div>
+              <div class="meta">${esc(item.coordinate)} · ${products}</div>
+              <div class="desc">${esc(item.storeDescription || "MONOLITH Merch storefront")}</div>
+              <div class="badges">
+                <span class="badge verified">VERIFIED SELLER</span>
+              </div>
+            </div>
+          </a>
+        `;
+      }
+
+      function placeCard(item) {
+        return `
+          <a class="card" href="${tileUrl(item.coordinate)}">
+            ${imageMarkup(item, item.coordinate)}
+            <div class="content">
+              <div class="title">${esc(item.name)}</div>
+              <div class="meta">${esc(item.coordinate)}</div>
+              <div class="desc">${esc(item.about || item.ownerTag || "MONOLITH place")}</div>
+              <div class="badges">
+                ${deedBadge(item)}
+              </div>
+            </div>
+          </a>
+        `;
+      }
+
+      function renderSection(title, key, items, renderer) {
+        if (!items.length) return "";
+
+        return `
+          <section class="section" id="${key}">
+            <div class="sectionHead">
+              <h2>${title}</h2>
+              <span>${items.length}</span>
+            </div>
+            <div class="grid">
+              ${items.map(renderer).join("")}
+            </div>
+          </section>
+        `;
+      }
+
+      async function search() {
+        const q = input.value.trim();
+
+        status.textContent = "Searching MONOLITH...";
+        results.innerHTML = "";
+
+        const params = new URLSearchParams();
+
+        if (q) params.set("q", q);
+        if (activeType !== "all") params.set("type", activeType);
+
+        try {
+          const response = await fetch(
+            "/api/directory?" + params.toString(),
+            { cache: "no-store" }
+          );
+
+          const data = await response.json();
+
+          if (!response.ok || !data.ok) {
+            throw new Error(data.error || "directory_search_failed");
+          }
+
+          let activeWallLabel = "—";
+
+          try {
+            const wallResponse = await fetch(
+              "/api/wall/stats",
+              { cache: "no-store" }
+            );
+
+            const wallData =
+              await wallResponse.json();
+
+            if (
+              wallResponse.ok &&
+              wallData.ok
+            ) {
+              activeWallLabel =
+                wallData.activeWallLabel ||
+                String(
+                  wallData.activeWallCount ??
+                  "—"
+                );
+            }
+          } catch (_) {}
+
+          summary.innerHTML = `
+            <a href="/monolith.html">${activeWallLabel} Active Tiles</a>
+            <a href="#coordinates">${data.counts.coordinates} Coordinates</a>
+            <a href="#people">${data.counts.people} People</a>
+            <a href="#storefronts">${data.counts.storefronts} Storefronts</a>
+            <a href="#places">${data.counts.places} Places</a>
+          `;
+
+          let html = "";
+
+          html += renderSection(
+            "Coordinates",
+            "coordinates",
+            data.coordinates || [],
+            coordinateCard
+          );
+
+          html += renderSection(
+            "People",
+            "people",
+            data.people || [],
+            peopleCard
+          );
+
+          html += renderSection(
+            "Storefronts",
+            "storefronts",
+            data.storefronts || [],
+            storefrontCard
+          );
+
+          html += renderSection(
+            "Places",
+            "places",
+            data.places || [],
+            placeCard
+          );
+
+          if (!html) {
+            html = `<div class="empty">No MONOLITH Directory results found.</div>`;
+          }
+
+          results.innerHTML = html;
+
+          status.textContent = q
+            ? `Results for "${q}"`
+            : "MONOLITH Directory";
+        } catch (error) {
+          console.error("[directory]", error);
+          summary.innerHTML = "";
+          results.innerHTML = "";
+          status.textContent = "Unable to load the MONOLITH Directory.";
+        }
+      }
+
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        search();
+      });
+
+      filters.addEventListener("click", event => {
+        const button = event.target.closest("[data-type]");
+        if (!button) return;
+
+        activeType = button.dataset.type || "all";
+
+        filters.querySelectorAll(".filter").forEach(item => {
+          item.classList.toggle(
+            "active",
+            item.dataset.type === activeType
+          );
+        });
+
+        search();
+      });
+
+      search();
+    })();
+  </script>
+</body>
+</html>
