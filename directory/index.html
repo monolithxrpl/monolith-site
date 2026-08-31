@@ -182,7 +182,10 @@
       margin:20px 0;
     }
 
-    .summary span{
+    .summary .summaryHud{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
       padding:8px 11px;
       border:1px solid rgba(255,255,255,.07);
       border-radius:10px;
@@ -190,6 +193,14 @@
       background:rgba(255,255,255,.025);
       font-size:10px;
       font-weight:800;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+
+    .summary a.summaryHud:hover{
+      border-color:rgba(130,220,255,.42);
+      color:#eafaff;
+      background:rgba(73,191,255,.10);
     }
 
     .status{
@@ -620,11 +631,13 @@
           } catch (_) {}
 
           summary.innerHTML = `
-            <a href="/monolith.html">${activeWallLabel} Active Tiles</a>
-            <a href="#coordinates">${data.counts.coordinates} Coordinates</a>
-            <a href="#people">${data.counts.people} People</a>
-            <a href="#storefronts">${data.counts.storefronts} Storefronts</a>
-            <a href="#places">${data.counts.places} Places</a>
+            <span class="summaryHud">ENDLESS WALL</span>
+            <span class="summaryHud">Unlimited Coordinates</span>
+            <a class="summaryHud" href="/monolith.html">${activeWallLabel} Active Tiles</a>
+            <a class="summaryHud" href="#coordinates">${data.counts.coordinates} Coordinates</a>
+            <a class="summaryHud" href="#people">${data.counts.people} People</a>
+            <a class="summaryHud" href="#storefronts">${data.counts.storefronts} Storefronts</a>
+            <a class="summaryHud" href="#places">${data.counts.places} Places</a>
           `;
 
           let html = "";
