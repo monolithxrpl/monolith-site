@@ -294,6 +294,37 @@ h1{
     grid-template-columns:1fr;
   }
 }
+
+.shareProductBtn{
+  width:100%;
+  min-height:44px;
+  margin-top:10px;
+  padding:0 16px;
+  border:1px solid #cbdce5;
+  border-radius:10px;
+  background:#f8fcfe;
+  color:#17384a;
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:.04em;
+  cursor:pointer;
+}
+
+.shareProductBtn:hover{
+  border-color:#159fe5;
+  color:#0878af;
+  background:#fff;
+}
+
+.shareStatus{
+  min-height:18px;
+  margin-top:7px;
+  color:#657d89;
+  font-size:10px;
+  font-weight:800;
+  text-align:center;
+}
+
 </style>
 </head>
 <body>
@@ -363,6 +394,11 @@ h1{
           Buy with $XRP
         </button>
       </div>
+
+      <button class="shareProductBtn" id="shareBtn" type="button">
+        Share Product
+      </button>
+      <div class="shareStatus" id="shareStatus" aria-live="polite"></div>
     </div>
     </section>
   </main>
@@ -381,6 +417,8 @@ h1{
   const variantSelect = document.getElementById("variant");
   const addBtn = document.getElementById("addBtn");
   const buyBtn = document.getElementById("buyBtn");
+  const shareBtn = document.getElementById("shareBtn");
+  const shareStatus = document.getElementById("shareStatus");
 
   let product = null;
   let xrpUsd = null;
@@ -480,6 +518,61 @@ h1{
     }
 
     location.href = url.pathname + url.search;
+  }
+
+
+  async function shareProduct(){
+    if (!product) return;
+
+    const title =
+      product.title ||
+      "MONOLITH Product";
+
+    const url =
+      new URL(location.href);
+
+    url.search = "";
+    url.searchParams.set(
+      "id",
+      product.productId
+    );
+
+    const shareData = {
+      title: `${title} | MONOLITH Merch Store`,
+      text: `${title} — Buy with $XRP on MONOLITH`,
+      url: url.toString()
+    };
+
+    if (navigator.share) {
+      try{
+        await navigator.share(shareData);
+        shareStatus.textContent = "";
+        return;
+      }catch(error){
+        if (error && error.name === "AbortError") {
+          return;
+        }
+      }
+    }
+
+    try{
+      await navigator.clipboard.writeText(
+        shareData.url
+      );
+
+      shareStatus.textContent =
+        "Product link copied.";
+
+      window.setTimeout(
+        () => {
+          shareStatus.textContent = "";
+        },
+        2200
+      );
+    }catch(_){
+      shareStatus.textContent =
+        shareData.url;
+    }
   }
 
   async function loadRate(){
@@ -668,6 +761,7 @@ h1{
 
   addBtn.addEventListener("click", () => handoff(false));
   buyBtn.addEventListener("click", () => handoff(true));
+  shareBtn.addEventListener("click", shareProduct);
 
   load();
 })();
