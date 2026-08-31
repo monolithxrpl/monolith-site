@@ -666,6 +666,26 @@
           status.textContent = q
             ? `Results for "${q}"`
             : "MONOLITH Directory";
+
+          const requestedSection =
+            String(location.hash || "")
+              .replace(/^#/, "");
+
+          if (requestedSection) {
+            requestAnimationFrame(() => {
+              const target =
+                document.getElementById(
+                  requestedSection
+                );
+
+              if (target) {
+                target.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start"
+                });
+              }
+            });
+          }
         } catch (error) {
           console.error("[directory]", error);
           summary.innerHTML = "";
@@ -694,6 +714,24 @@
 
         search();
       });
+
+      window.addEventListener(
+        "hashchange",
+        () => {
+          const target =
+            document.getElementById(
+              String(location.hash || "")
+                .replace(/^#/, "")
+            );
+
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }
+        }
+      );
 
       search();
     })();

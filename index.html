@@ -919,6 +919,29 @@ main .row + .entranceV5Hero{
   font-weight:950;
 }
 
+.entranceV5Actions .wallExploreBtn{
+  border-color:rgba(130,220,255,.92)!important;
+  background:
+    linear-gradient(180deg,rgba(73,191,255,.34),rgba(5,49,78,.92))!important;
+  color:#f4fcff!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 0 22px rgba(73,191,255,.32),
+    0 14px 30px rgba(0,0,0,.24)!important;
+  font-weight:1000!important;
+  letter-spacing:.07em;
+}
+
+.entranceV5Actions .wallExploreBtn:hover{
+  border-color:#bfeeff!important;
+  background:
+    linear-gradient(180deg,rgba(92,207,255,.46),rgba(6,61,96,.96))!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.12),
+    0 0 28px rgba(73,191,255,.48),
+    0 16px 34px rgba(0,0,0,.28)!important;
+}
+
 .entranceV5Actions .merchStoreLaunchBtn:hover{
   border-color:rgba(190,238,255,.95)!important;
   box-shadow:
@@ -1154,7 +1177,7 @@ main .row + .entranceV5Hero{
 
       <div class="ctaRow entranceV5Actions" aria-label="Actions">
         <a class="btn primary" href="/claim/">CLAIM A COORDINATE</a>
-        <a class="btn" href="/monolith.html">Explore Wall</a>
+        <a class="btn wallExploreBtn" href="/monolith.html">EXPLORE WALL</a>
         <a class="btn" href="/claim/#trial">Free Trial</a>
         <a class="btn" href="/tile/ORIGIN">Example Tile</a>
         <a class="btn warn" href="/rules.html">Rules</a>
@@ -1170,6 +1193,57 @@ main .row + .entranceV5Hero{
         </div>
       </section>
 
+
+      <section class="monolithDirectoryStage" aria-label="MONOLITH Directory">
+        <div class="monolithDirectoryHead">
+          <div>
+            <span class="monolithDirectoryEyebrow">MONOLITH DIRECTORY</span>
+            <h2>Find your way through MONOLITH.</h2>
+            <p>
+              Coordinates, people, storefronts and places — indexed through one
+              MONOLITH discovery layer.
+            </p>
+          </div>
+
+          <a class="monolithDirectoryStatus" href="/directory/">
+            OPEN
+          </a>
+        </div>
+
+        <div class="monolithDirectoryGrid">
+          <a class="monolithDirectoryLane" href="/directory/#coordinates">
+            <span>01</span>
+            <div>
+              <b>Coordinates</b>
+              <small>Search the Wall by coordinate.</small>
+            </div>
+          </a>
+
+          <a class="monolithDirectoryLane" href="/directory/#people">
+            <span>02</span>
+            <div>
+              <b>People</b>
+              <small>Find owners and verified identities.</small>
+            </div>
+          </a>
+
+          <a class="monolithDirectoryLane" href="/directory/#storefronts">
+            <span>03</span>
+            <div>
+              <b>Storefronts</b>
+              <small>Discover MONOLITH Merch sellers.</small>
+            </div>
+          </a>
+
+          <a class="monolithDirectoryLane" href="/directory/#places">
+            <span>04</span>
+            <div>
+              <b>Places</b>
+              <small>Browse tiles by purpose and community.</small>
+            </div>
+          </a>
+        </div>
+      </section>
 
       <section class="entranceV5Section">
         <div class="entranceV5Title">Your Tile</div>
@@ -1194,56 +1268,7 @@ main .row + .entranceV5Hero{
         </div>
       </section>
 
-      <section class="monolithDirectoryStage" aria-label="MONOLITH Directory">
-        <div class="monolithDirectoryHead">
-          <div>
-            <span class="monolithDirectoryEyebrow">MONOLITH DIRECTORY</span>
-            <h2>Find your way through MONOLITH.</h2>
-            <p>
-              Coordinates, people, storefronts and places — indexed through one
-              MONOLITH discovery layer.
-            </p>
-          </div>
 
-          <a class="monolithDirectoryStatus" href="/directory/">
-            OPEN
-          </a>
-        </div>
-
-        <a class="monolithDirectoryGrid" href="/directory/" aria-label="Open MONOLITH Directory">
-          <div class="monolithDirectoryLane">
-            <span>01</span>
-            <div>
-              <b>Coordinates</b>
-              <small>Search the Wall by coordinate.</small>
-            </div>
-          </div>
-
-          <div class="monolithDirectoryLane">
-            <span>02</span>
-            <div>
-              <b>People</b>
-              <small>Find owners and verified identities.</small>
-            </div>
-          </div>
-
-          <div class="monolithDirectoryLane">
-            <span>03</span>
-            <div>
-              <b>Storefronts</b>
-              <small>Discover MONOLITH Merch sellers.</small>
-            </div>
-          </div>
-
-          <div class="monolithDirectoryLane">
-            <span>04</span>
-            <div>
-              <b>Places</b>
-              <small>Browse tiles by purpose and community.</small>
-            </div>
-          </div>
-        </a>
-      </section>
 
       <section class="entranceV5Section">
         <div class="entranceV5Title">How It Works</div>

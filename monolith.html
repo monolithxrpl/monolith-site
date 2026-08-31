@@ -83,6 +83,19 @@
       color:rgba(245,247,244,.84);
       font-size:12px;
     }
+
+    .wallNavGroup,
+    .wallControlGroup{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .wallControlGroup{
+      padding-left:8px;
+      border-left:1px solid rgba(73,191,255,.22);
+    }
     .pill{
       border:1px solid rgba(73,191,255,.95);
       background:rgba(7,24,39,.72);
@@ -799,16 +812,24 @@ body.view-imageonly .cell .spray{ filter:none; }
     </div>
 
     <div class="kpi">
-      <div class="pill"><span class="dot"></span><span id="kTaken">0</span> active</div>
-      <a class="btn" href="/" aria-label="back to entrance"><span>Back to Entrance</span></a>
-      <a class="btn primary" href="/claim/" aria-label="claim a tile"><span>Claim a Tile</span></a>
-      <a class="btn" href="/edit/" aria-label="edit a tile"><span>Edit Tile</span></a>
-      <button class="btn" id="monolithWallSignIn" type="button"><span>Sign In</span></button>
-      <button class="btn" id="btnCenter" type="button" aria-label="return to center"><span>Return to Center</span></button>
-      <button class="btn" id="btnResetWallStart" type="button" aria-label="reset wall start" style="display:none"><span>Reset Wall Start</span></button>
-      <button class="btn" id="btnNav" type="button" aria-label="navigation view"><span>Navigation View</span></button>
-      <button class="btn" id="btnBrand" type="button" aria-label="brand view"><span>Brand View</span></button>
-      <button class="btn" id="btnSat" type="button" aria-label="satellite view"><span>Satellite View</span></button>
+      <div class="wallNavGroup" aria-label="MONOLITH navigation">
+        <a class="btn" href="/" aria-label="back to entrance"><span>Entrance</span></a>
+        <a class="btn" href="/directory/" aria-label="open directory"><span>Directory</span></a>
+        <a class="btn primary" href="/claim/" aria-label="claim a coordinate"><span>Claim Coordinate</span></a>
+        <a class="btn" href="/market/" aria-label="open tile market"><span>Tile Market</span></a>
+        <a class="btn" href="/merch/" aria-label="open merch store"><span>Merch Store</span></a>
+        <a class="btn" href="/edit/" aria-label="edit a tile"><span>Edit Tile</span></a>
+        <button class="btn" id="monolithWallSignIn" type="button"><span>Sign In</span></button>
+      </div>
+
+      <div class="wallControlGroup" aria-label="Wall controls">
+        <div class="pill"><span class="dot"></span><span id="kTaken">0</span> active</div>
+        <button class="btn" id="btnCenter" type="button" aria-label="return to center"><span>Return to Center</span></button>
+        <button class="btn" id="btnResetWallStart" type="button" aria-label="reset wall start" style="display:none"><span>Reset Wall Start</span></button>
+        <button class="btn" id="btnNav" type="button" aria-label="navigation view"><span>Navigation View</span></button>
+        <button class="btn" id="btnBrand" type="button" aria-label="brand view"><span>Brand View</span></button>
+        <button class="btn" id="btnSat" type="button" aria-label="satellite view"><span>Satellite View</span></button>
+      </div>
     </div>
   </header>
 
