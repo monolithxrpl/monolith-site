@@ -489,6 +489,30 @@ body.view-imageonly .cell .spray{ filter:none; }
 
 
 /* Mobile wall button collapse */
+.mobile-wall-toggle{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-direction:row!important;
+  gap:5px!important;
+  white-space:nowrap!important;
+}
+
+.mobileWallToggleLabel{
+  font-size:7px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  opacity:.58;
+  line-height:1;
+}
+
+.mobileWallToggleArrow{
+  font-size:13px;
+  line-height:1;
+  flex:0 0 auto;
+}
+
 .mobile-wall-toggle{display:none;}
 
 @media (max-width:900px){
@@ -500,8 +524,10 @@ body.view-imageonly .cell .spray{ filter:none; }
     display:flex;
     align-items:center;
     justify-content:center;
-    width:38px;
-    height:38px;
+    width:auto;
+    min-width:68px;
+    height:30px;
+    padding:0 9px;
     border:1px solid rgba(73,191,255,.38);
     border-radius:999px;
     background:rgba(3,12,24,.88);
@@ -517,7 +543,7 @@ body.view-imageonly .cell .spray{ filter:none; }
   }
 
   body.wall-buttons-collapsed .mobile-wall-toggle{
-    transform:rotate(180deg);
+    transform:none;
   }
 }
 
@@ -793,7 +819,7 @@ body.view-imageonly .cell .spray{ filter:none; }
 </style>
 
 <body>
-  <button id="mobileWallToggle" class="mobile-wall-toggle" type="button" aria-label="Toggle wall buttons">⌃</button>
+  <button id="mobileWallToggle" class="mobile-wall-toggle" type="button" aria-label="Collapse wall controls"><span class="mobileWallToggleLabel">Collapse</span><span class="mobileWallToggleArrow">⌃</span></button>
 
   <header class="top">
     <div class="brand">
@@ -2335,7 +2361,28 @@ bindWallZoomButton("wallZoomCenter", function(){
 
   btn.addEventListener("click", () => {
     const collapsed = document.body.classList.toggle("wall-buttons-collapsed");
-    btn.textContent = collapsed ? "⌄" : "⌃";
+
+    const arrow =
+      btn.querySelector(".mobileWallToggleArrow");
+
+    const label =
+      btn.querySelector(".mobileWallToggleLabel");
+
+    if (arrow) {
+      arrow.textContent = collapsed ? "⌄" : "⌃";
+    }
+
+    if (label) {
+      label.textContent =
+        collapsed ? "Expand" : "Collapse";
+    }
+
+    btn.setAttribute(
+      "aria-label",
+      collapsed
+        ? "Expand wall controls"
+        : "Collapse wall controls"
+    );
   });
 })();
 </script>
