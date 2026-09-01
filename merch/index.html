@@ -7528,6 +7528,88 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 }
 </style>
 
+<style id="monolith-merch-discovery-20260901">
+.shopCollections{
+  margin:0 0 24px;
+  padding:18px;
+  border:1px solid var(--retail-line,#d9e5eb);
+  background:var(--retail-surface,#fff);
+}
+
+.shopCollectionGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-top:12px;
+}
+
+.shopCollectionCard{
+  min-height:82px;
+  padding:14px;
+  border:1px solid var(--retail-line,#d9e5eb);
+  background:var(--retail-soft,#eef6fa);
+  color:var(--retail-text,#172b36);
+  text-align:left;
+  cursor:pointer;
+}
+
+.shopCollectionCard strong{
+  display:block;
+  font-size:13px;
+  text-transform:uppercase;
+}
+
+.shopCollectionCard span{
+  display:block;
+  margin-top:6px;
+  color:var(--retail-muted,#687e89);
+  font-size:10px;
+}
+
+.shopCollectionCard:hover,
+.shopCollectionCard.active{
+  border-color:var(--retail-blue,#168fd1);
+}
+
+.marketDiscoveryActions{
+  display:flex;
+  justify-content:center;
+  margin-top:22px;
+}
+
+.marketDiscoveryActions[hidden],
+.shopCollections[hidden]{
+  display:none!important;
+}
+
+#viewAllProductsBtn{
+  min-width:190px;
+}
+
+@media(max-width:900px){
+  .shopCollectionGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:760px){
+  .marketplaceProducts{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+
+  .shopCollectionGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:420px){
+  .marketplaceProducts{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+</style>
+
 </head>
 
 <body class="merchLaunchSoon">
@@ -7801,6 +7883,21 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           </button>
         </div>
 
+        <section
+          class="shopCollections"
+          id="shopCollections"
+          hidden
+        >
+          <div class="sectionKicker">
+            SHOP BY COLLECTION
+          </div>
+
+          <div
+            class="shopCollectionGrid"
+            id="shopCollectionGrid"
+          ></div>
+        </section>
+
         <div
           class="products marketplaceProducts"
           id="products"
@@ -7808,6 +7905,19 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           <div class="emptyProducts">
             Loading marketplace…
           </div>
+        </div>
+
+        <div
+          class="marketDiscoveryActions"
+          id="marketDiscoveryActions"
+        >
+          <button
+            class="sellerSecondaryBtn"
+            id="viewAllProductsBtn"
+            type="button"
+          >
+            View All Products
+          </button>
         </div>
       </section>
     </section>
@@ -8586,6 +8696,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           .toLowerCase();
 
       let marketplaceProducts = [];
+      let marketplaceCollections = [];
+      let activeCollectionId = "";
+      let showAllProducts = false;
       let activeFilter =
         Object.prototype.hasOwnProperty.call(
           MARKETPLACE_CATEGORIES,
@@ -12622,10 +12735,27 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         if (!title) return;
 
         title.textContent =
-          activeFilter === "all"
-            ? "Marketplace"
-            : marketplaceCategoryLabel(
-                activeFilter
+          activeCollectionId
+            ? (
+                marketplaceCollections.find(
+                  item =>
+                    item.collectionId ===
+                    activeCollectionId
+                )?.title ||
+                "Collection"
+              )
+            : (
+                activeFilter === "all" &&
+                !searchTerm &&
+                !showAllProducts
+                  ? "Newest Listings"
+                  : (
+                      activeFilter === "all"
+                        ? "Marketplace"
+                        : marketplaceCategoryLabel(
+                            activeFilter
+                          )
+                    )
               );
       }
 
@@ -12679,6 +12809,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             ? normalized
             : "all";
 
+        activeCollectionId = "";
+        showAllProducts = true;
+
         syncCategoryControls();
         syncCategoryTitle();
 
@@ -12690,12 +12823,37 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       }
 
       function filteredProducts() {
+        const activeCollection =
+          activeCollectionId
+            ? marketplaceCollections.find(
+                collection =>
+                  collection.collectionId ===
+                  activeCollectionId
+              )
+            : null;
+
+        const collectionProductIds =
+          activeCollection
+            ? new Set(
+                (activeCollection.products || [])
+                  .map(product =>
+                    product.productId
+                  )
+              )
+            : null;
+
         return marketplaceProducts.filter(
           product => {
             const categoryMatch =
               activeFilter === "all" ||
               productCategory(product) ===
                 activeFilter;
+
+            const collectionMatch =
+              !collectionProductIds ||
+              collectionProductIds.has(
+                product.productId
+              );
 
             const haystack =
               [
@@ -12718,6 +12876,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
             return (
               categoryMatch &&
+              collectionMatch &&
               searchMatch
             );
           }
@@ -12728,20 +12887,57 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         const visible =
           filteredProducts();
 
+        const newestOnly =
+          !coordinate &&
+          !showAllProducts &&
+          !activeCollectionId &&
+          activeFilter === "all" &&
+          !searchTerm;
+
+        const rendered =
+          newestOnly
+            ? visible.slice(0, 6)
+            : visible;
+
+        const discoveryActions =
+          document.getElementById(
+            "marketDiscoveryActions"
+          );
+
+        if (discoveryActions) {
+          discoveryActions.hidden =
+            coordinate ||
+            !newestOnly;
+        }
+
         document
           .getElementById(
             "resultCount"
           )
           .textContent =
-            `${visible.length} ${
-              visible.length === 1
+            `${rendered.length} ${
+              rendered.length === 1
                 ? "listing"
                 : "listings"
             }`;
 
         renderProducts(
-          visible
+          rendered
         );
+
+        document
+          .querySelectorAll(
+            "[data-collection-id]"
+          )
+          .forEach(item => {
+            item.classList.toggle(
+              "active",
+              item.dataset.collectionId ===
+                activeCollectionId
+            );
+          });
+
+        syncCategoryTitle();
       }
 
       function renderProducts(products) {
@@ -13099,6 +13295,142 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         }
       }
 
+      async function loadMarketplaceCollections() {
+        if (coordinate) return;
+
+        try {
+          const response =
+            await fetch(
+              "/api/merch/collections"
+            );
+
+          const data =
+            await response.json();
+
+          marketplaceCollections =
+            response.ok &&
+            data.ok &&
+            Array.isArray(
+              data.collections
+            )
+              ? data.collections
+              : [];
+        } catch (error) {
+          console.error(
+            "[merch:collections]",
+            error
+          );
+
+          marketplaceCollections = [];
+        }
+
+        const section =
+          document.getElementById(
+            "shopCollections"
+          );
+
+        const root =
+          document.getElementById(
+            "shopCollectionGrid"
+          );
+
+        if (!section || !root) return;
+
+        section.hidden =
+          marketplaceCollections.length === 0;
+
+        root.innerHTML =
+          marketplaceCollections.map(
+            collection => `
+              <button
+                type="button"
+                class="shopCollectionCard"
+                data-collection-id="${
+                  escapeHtml(
+                    collection.collectionId
+                  )
+                }"
+              >
+                <strong>${
+                  escapeHtml(
+                    collection.title
+                  )
+                }</strong>
+                <span>
+                  ${
+                    Number(
+                      collection.productCount
+                    ) || 0
+                  } ${
+                    Number(
+                      collection.productCount
+                    ) === 1
+                      ? "product"
+                      : "products"
+                  }
+                </span>
+              </button>
+            `
+          ).join("");
+
+        root
+          .querySelectorAll(
+            "[data-collection-id]"
+          )
+          .forEach(button => {
+            button.addEventListener(
+              "click",
+              () => {
+                const selectedId =
+                  button.dataset.collectionId ||
+                  "";
+
+                const clearing =
+                  activeCollectionId ===
+                  selectedId;
+
+                activeCollectionId =
+                  clearing
+                    ? ""
+                    : selectedId;
+
+                showAllProducts =
+                  clearing
+                    ? false
+                    : true;
+
+                activeFilter = "all";
+                searchTerm = "";
+
+                const searchInput =
+                  document.getElementById(
+                    "marketSearch"
+                  );
+
+                if (searchInput) {
+                  searchInput.value = "";
+                }
+
+                root
+                  .querySelectorAll(
+                    "[data-collection-id]"
+                  )
+                  .forEach(item => {
+                    item.classList.toggle(
+                      "active",
+                      item.dataset.collectionId ===
+                        activeCollectionId
+                    );
+                  });
+
+                syncCategoryControls();
+                refreshMarketplace();
+              }
+            );
+          });
+      }
+
+
       async function loadMarketplace() {
         try {
           const endpoint =
@@ -13170,6 +13502,10 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   })
                 )
               : [];
+
+          if (!coordinate) {
+            await loadMarketplaceCollections();
+          }
 
           reconcileCartProducts();
           refreshMarketplace();
@@ -19478,6 +19814,9 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         ?.addEventListener(
           "input",
           event => {
+            activeCollectionId = "";
+            showAllProducts = true;
+
             searchTerm =
               String(
                 event.target.value ||
@@ -19507,6 +19846,36 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
             );
           }
         );
+
+      const viewAllProductsBtn =
+        document.getElementById(
+          "viewAllProductsBtn"
+        );
+
+      if (viewAllProductsBtn) {
+        viewAllProductsBtn.addEventListener(
+          "click",
+          () => {
+            showAllProducts = true;
+            activeCollectionId = "";
+            activeFilter = "all";
+            searchTerm = "";
+
+            const searchInput =
+              document.getElementById(
+                "marketSearch"
+              );
+
+            if (searchInput) {
+              searchInput.value = "";
+            }
+
+            syncCategoryControls();
+            syncCategoryTitle();
+            refreshMarketplace();
+          }
+        );
+      }
 
       syncCategoryControls();
       syncCategoryTitle();
