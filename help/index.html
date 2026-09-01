@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>MONOLITH Help & Support</title>
+
+  <meta
+    name="description"
+    content="Help and support for MONOLITH coordinates, deeds, tiles, Xaman, payments, the Tile Market and Merch Store."
+  >
+
+  <link rel="icon" href="/favicon.ico">
+
+  <style>
+    :root{
+      --bg:#07090b;
+      --panel:rgba(10,15,19,.92);
+      --panel2:rgba(14,22,27,.9);
+      --fg:#f5f7f4;
+      --muted:#9fb1bb;
+      --blue:#49bfff;
+      --blue2:#159fe5;
+      --gold:#ffb400;
+      --line:rgba(73,191,255,.32);
+      --soft:rgba(255,255,255,.06);
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      margin:0;
+      font-family:
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Helvetica,
+        Arial;
+      color:var(--fg);
+      background:
+        radial-gradient(
+          900px 600px at 75% 0%,
+          rgba(73,191,255,.09),
+          transparent 60%
+        ),
+        #07090b;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .shell{
+      width:min(1120px,calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:22px 0;
+      border-bottom:1px solid var(--soft);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      font-weight:1000;
+      letter-spacing:.08em;
+    }
+
+    .brand img{
+      width:42px;
+      height:42px;
+      object-fit:contain;
+    }
+
+    .brandText{
+      display:flex;
+      flex-direction:column;
+      line-height:1;
+    }
+
+    .brandText strong{
+      font-size:15px;
+    }
+
+    .brandText small{
+      margin-top:5px;
+      color:#8aa0ab;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.12em;
+    }
+
+    .nav{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:8px;
+    }
+
+    .nav a{
+      padding:9px 11px;
+      border-radius:9px;
+      color:#b6c5cc;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .nav a:hover,
+    .nav a.active{
+      color:#fff;
+      background:rgba(73,191,255,.1);
+    }
+
+    .hero{
+      padding:70px 0 34px;
+    }
+
+    .eyebrow{
+      color:var(--blue);
+      font-size:11px;
+      font-weight:1000;
+      letter-spacing:.16em;
+    }
+
+    h1{
+      max-width:800px;
+      margin:10px 0 16px;
+      font-size:clamp(42px,7vw,78px);
+      line-height:.98;
+      letter-spacing:-.04em;
+    }
+
+    .hero p{
+      max-width:820px;
+      margin:0;
+      color:#9fb1bb;
+      font-size:17px;
+      line-height:1.65;
+    }
+
+    .quickLinks{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-top:26px;
+    }
+
+    .quickLinks a{
+      padding:10px 13px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:rgba(73,191,255,.05);
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .browserNotice{
+      margin:10px 0 36px;
+      padding:17px 19px;
+      border:1px solid rgba(255,180,0,.35);
+      border-radius:14px;
+      background:rgba(255,180,0,.07);
+      color:#d8d1b6;
+      line-height:1.55;
+    }
+
+    .browserNotice strong{
+      display:block;
+      margin-bottom:4px;
+      color:var(--gold);
+    }
+
+    .section{
+      padding:18px 0 42px;
+    }
+
+    .sectionHead{
+      margin-bottom:18px;
+    }
+
+    .sectionHead h2{
+      margin:0 0 7px;
+      font-size:29px;
+    }
+
+    .sectionHead p{
+      max-width:800px;
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:
+        repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .card{
+      padding:23px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(19,28,34,.94),
+          rgba(9,13,16,.96)
+        );
+      box-shadow:
+        0 16px 38px rgba(0,0,0,.16);
+    }
+
+    .card h3{
+      margin:0 0 9px;
+      font-size:19px;
+    }
+
+    .card p{
+      margin:0 0 14px;
+      color:#9fb1bb;
+      line-height:1.65;
+    }
+
+    .card ul{
+      margin:0 0 15px;
+      padding-left:20px;
+      color:#9fb1bb;
+      line-height:1.7;
+    }
+
+    .link{
+      display:inline-flex;
+      align-items:center;
+      min-height:40px;
+      padding:9px 13px;
+      border:1px solid rgba(73,191,255,.7);
+      border-radius:9px;
+      color:#8cd8ff;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .security{
+      padding:24px;
+      border:1px solid rgba(255,180,0,.38);
+      border-radius:16px;
+      background:rgba(255,180,0,.07);
+      color:#d8d1b6;
+      line-height:1.65;
+    }
+
+    .security h3{
+      margin:0 0 10px;
+      color:#ffca45;
+    }
+
+    .contact{
+      margin-top:12px;
+      padding:38px 0 68px;
+      border-top:1px solid var(--soft);
+    }
+
+    .contact h2{
+      margin:0 0 10px;
+      font-size:30px;
+    }
+
+    .contact p{
+      max-width:760px;
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .checklist{
+      padding-left:20px;
+      color:#a7bac4;
+      line-height:1.75;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .footer{
+      padding:24px 0 34px;
+      border-top:1px solid var(--soft);
+      color:#778b95;
+      font-size:12px;
+      text-align:center;
+    }
+
+    .footerLinks{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    @media(max-width:760px){
+      .header{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .nav{
+        justify-content:flex-start;
+      }
+
+      .hero{
+        padding-top:42px;
+      }
+
+      .grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <header class="header">
+      <a class="brand" href="/">
+        <img
+          src="/assets/monolith_icon.webp"
+          alt="MONOLITH"
+        >
+
+        <span class="brandText">
+          <strong>MONOLITH</strong>
+          <small>HELP & SUPPORT</small>
+        </span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">Entrance</a>
+        <a href="/monolith.html">The Wall</a>
+        <a href="/directory/">Directory</a>
+        <a href="/market/">Tile Market</a>
+        <a href="/merch/">Merch</a>
+        <a class="active" href="/help/">Help</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow">MONOLITH SUPPORT CENTER</div>
+
+        <h1>How can we help?</h1>
+
+        <p>
+          Help for MONOLITH coordinates, Coordinate Deeds,
+          Xaman, tiles, profiles, direct $XRP payments,
+          the Tile Market, the Merch Store and common
+          technical issues.
+        </p>
+
+        <div class="quickLinks">
+          <a href="#claims">Claims & Deeds</a>
+          <a href="#tiles">Tiles & Profiles</a>
+          <a href="#market">Tile Market</a>
+          <a href="#payments">$XRP Payments</a>
+          <a href="#merch">Merch Store</a>
+          <a href="#technical">Technical Help</a>
+          <a href="#security">Security</a>
+          <a href="#contact">Contact Support</a>
+        </div>
+      </section>
+
+      <div class="browserNotice">
+        <strong>Mobile users</strong>
+        Open MONOLITH directly in Safari, Chrome or another
+        regular browser. Avoid in-app browsers inside 𝕏,
+        Facebook, Instagram or other apps when using Xaman
+        sign-in or payment flows.
+      </div>
+
+      <section class="section" id="claims">
+        <div class="sectionHead">
+          <h2>Claims & Coordinate Deeds</h2>
+
+          <p>
+            MONOLITH coordinates are wallet-linked digital
+            real estate. A claimed coordinate receives a
+            Coordinate Deed NFT as ownership proof.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>Claim a Coordinate</h3>
+
+            <p>
+              Choose an available coordinate, complete the
+              claim flow and sign the required Xaman request
+              using the wallet that will own the coordinate.
+            </p>
+
+            <a class="link" href="/claim/">
+              Open Claim Page
+            </a>
+          </article>
+
+          <article class="card">
+            <h3>Accept Your Deed</h3>
+
+            <p>
+              After the Coordinate Deed NFT is minted, you
+              may need to accept the NFT offer in Xaman
+              before delivery is complete.
+            </p>
+
+            <p>
+              Open your tile page. If acceptance is still
+              required, MONOLITH displays an
+              <strong>Accept Deed</strong> action.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Deed Not Showing Yet</h3>
+
+            <p>
+              Do not repeat the claim payment. Check the
+              coordinate page first. If the deed is still
+              pending, contact support with the coordinate
+              and relevant XRPL transaction hash.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Free Trial</h3>
+
+            <p>
+              Trial tiles are previews and do not create
+              permanent ownership or a Coordinate Deed NFT.
+            </p>
+
+            <a class="link" href="/claim/#trial">
+              Free Trial
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="tiles">
+        <div class="sectionHead">
+          <h2>Tiles, Profiles & Editing</h2>
+
+          <p>
+            Your tile is the public page attached to your
+            MONOLITH coordinate.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>Edit Your Tile</h3>
+
+            <p>
+              Use the wallet that owns the coordinate when
+              signing into owner tools. MONOLITH verifies
+              wallet control before allowing protected edits.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Images & Media</h3>
+
+            <p>
+              Use supported image formats and stay within the
+              upload limits shown by the editor. If an upload
+              fails, retry from a normal browser before
+              submitting the same file repeatedly.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Find a Coordinate or Person</h3>
+
+            <p>
+              Use the MONOLITH Directory to search
+              coordinates, people, storefronts and places.
+            </p>
+
+            <a class="link" href="/directory/">
+              Open Directory
+            </a>
+          </article>
+
+          <article class="card">
+            <h3>Public Tile Problems</h3>
+
+            <p>
+              If your tile is live but something is missing,
+              first refresh the page or open it in a private
+              browser window. If the issue continues, contact
+              support with the coordinate and a screenshot.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="market">
+        <div class="sectionHead">
+          <h2>Tile Market</h2>
+
+          <p>
+            The Tile Market is where eligible MONOLITH
+            coordinates can be listed and transferred.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>Buying a Tile</h3>
+
+            <p>
+              Review the coordinate, seller and transaction
+              details before signing anything in Xaman.
+            </p>
+
+            <a class="link" href="/market/">
+              Open Tile Market
+            </a>
+          </article>
+
+          <article class="card">
+            <h3>Selling a Tile</h3>
+
+            <p>
+              Seller controls are wallet-protected. Use the
+              wallet that currently owns the coordinate and
+              its deed.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Ownership Changed</h3>
+
+            <p>
+              MONOLITH ownership-sensitive features depend
+              on current wallet ownership. If ownership has
+              changed, protected seller or owner actions may
+              stop until the new state is recognized.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Market Transaction Issue</h3>
+
+            <p>
+              Keep the coordinate, public wallet addresses
+              involved and XRPL transaction hash. Do not
+              repeat a payment simply because the browser
+              has not updated yet.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="payments">
+        <div class="sectionHead">
+          <h2>$XRP Payments & Xaman</h2>
+
+          <p>
+            MONOLITH uses the XRP Ledger for wallet
+            authentication and transaction settlement.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>Xaman Sign-In</h3>
+
+            <p>
+              Signing a MONOLITH sign-in request proves
+              control of the public XRPL wallet. It does not
+              require sharing your seed phrase or private key.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Payment Pending</h3>
+
+            <p>
+              A signed request is not automatically treated
+              as payment. MONOLITH verifies the validated
+              XRPL transaction before completing payment
+              state.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Payment Failed</h3>
+
+            <p>
+              Do not manually send another payment unless
+              the MONOLITH flow specifically tells you to.
+              Keep the transaction hash and contact support
+              if funds were already sent.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Direct Tile Payments</h3>
+
+            <p>
+              Claimed tiles can support direct $XRP payment
+              utilities. Always verify the destination and
+              amount shown in Xaman before signing.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="merch">
+        <div class="sectionHead">
+          <h2>MONOLITH Merch Store</h2>
+
+          <p>
+            Buyers can purchase physical merchandise with
+            $XRP from verified MONOLITH sellers.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>Buyer Help</h3>
+
+            <p>
+              Get help with carts, checkout, orders,
+              shipping, payments and refunds.
+            </p>
+
+            <a class="link" href="/merch/help/">
+              Merch Help Center
+            </a>
+          </article>
+
+          <article class="card">
+            <h3>Seller Help</h3>
+
+            <p>
+              Manage seller verification, products,
+              inventory, shipping, orders, fulfillment
+              and notifications.
+            </p>
+
+            <a class="link" href="/merch/seller/">
+              Seller Center
+            </a>
+          </article>
+
+          <article class="card">
+            <h3>Merch Rules</h3>
+
+            <p>
+              Review product restrictions, seller
+              responsibilities and marketplace rules.
+            </p>
+
+            <a class="link" href="/merch/rules/">
+              Read Merch Rules
+            </a>
+          </article>
+
+          <article class="card">
+            <h3>Seller Payout or Refund Issue</h3>
+
+            <p>
+              Include the MONOLITH order ID and relevant
+              XRPL transaction hash when contacting support.
+              Never send private wallet credentials.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="technical">
+        <div class="sectionHead">
+          <h2>Browser & Technical Help</h2>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>Xaman Doesn't Open</h3>
+
+            <ul>
+              <li>Use Safari, Chrome or another normal browser.</li>
+              <li>Avoid embedded social-media browsers.</li>
+              <li>Make sure Xaman is installed and current.</li>
+              <li>Retry the MONOLITH action from the original page.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Page Looks Outdated</h3>
+
+            <ul>
+              <li>Refresh the page.</li>
+              <li>Close and reopen the browser tab.</li>
+              <li>Try a private or incognito window.</li>
+              <li>Verify that you are on monolithxrpl.com.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Wrong Wallet</h3>
+
+            <p>
+              Protected MONOLITH actions must use the wallet
+              that owns or controls the relevant coordinate,
+              order or seller account.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Unexpected Error</h3>
+
+            <p>
+              Stop before repeating a payment. Capture the
+              exact message shown, the page you were using
+              and any related transaction hash, then contact
+              support.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="security">
+        <div class="security">
+          <h3>MONOLITH Security Rules</h3>
+
+          MONOLITH will never ask for your wallet seed phrase
+          or private key. Review every Xaman request before
+          signing. Verify that you are using
+          <strong>monolithxrpl.com</strong>. Public wallet
+          addresses and XRPL transaction hashes are safe to
+          provide when support needs them to investigate an
+          issue.
+        </div>
+      </section>
+
+      <section class="contact" id="contact">
+        <h2>Contact MONOLITH Support</h2>
+
+        <p>
+          If the Help Center does not solve the problem,
+          send enough information for the issue to be
+          investigated without exposing private wallet
+          credentials.
+        </p>
+
+        <ul class="checklist">
+          <li>The MONOLITH coordinate, order ID or page involved</li>
+          <li>Your public XRPL wallet address if relevant</li>
+          <li>The XRPL transaction hash if money moved</li>
+          <li>A screenshot or the exact error message</li>
+          <li>A short explanation of what you were trying to do</li>
+        </ul>
+
+        <div class="actions">
+          <a
+            class="link"
+            href="mailto:monolith.xrpl@gmail.com"
+          >
+            Email Support
+          </a>
+
+          <a
+            class="link"
+            href="https://x.com/mrcauliman"
+            target="_blank"
+            rel="noopener"
+          >
+            DM @mrcauliman on 𝕏
+          </a>
+
+          <a
+            class="link"
+            href="/"
+          >
+            Return to Entrance
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footerLinks">
+        <a href="/terms.html">Terms</a>
+        <span>•</span>
+        <a href="/privacy.html">Privacy</a>
+        <span>•</span>
+        <a href="/disclaimer.html">Disclaimer</a>
+        <span>•</span>
+        <a href="/rules.html">Rules</a>
+      </div>
+
+      <div>
+        © 2026 House of Cauliman. All rights reserved.
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
