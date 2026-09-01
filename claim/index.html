@@ -640,7 +640,13 @@ return null;
         const data = await r.json().catch(() => ({}));
 
         if(!r.ok || !data.ok){
-          setStatus(data.error || "Claim request failed", true);
+          setStatus(
+            friendlyClaimError(
+              data.error,
+              "Unable to create the claim request. Try again. If the problem continues, contact MONOLITH support."
+            ),
+            true
+          );
           showOutput(data);
           return null;
         }
@@ -668,10 +674,52 @@ return null;
         showOutput(payload);
         return payload;
       }catch(e){
-        setStatus("Claim request failed", true);
+        setStatus(
+          "Unable to reach MONOLITH to create the claim request. Check your connection and try again.",
+          true
+        );
         showOutput({ error:"claim request failed", detail:String(e) });
         return null;
       }
+    }
+
+    function friendlyClaimError(code, fallback){
+      const key = String(code || "").trim();
+
+      const messages = {
+        payment_not_signed:
+          "Payment is still waiting for approval in Xaman. Complete the payment, return here, then press Verify payment again.",
+        trial_not_signed:
+          "The trial sign-in is still waiting for approval in Xaman. Sign in, return here, then verify again.",
+        tile_taken:
+          "That coordinate has already been claimed. Choose another available coordinate.",
+        tile_not_available:
+          "That coordinate is not currently available. Choose another coordinate and try again.",
+        quote_expired:
+          "The price quote expired. Start the claim again to receive a new live quote.",
+        payload_expired:
+          "The Xaman request expired. Start the request again.",
+        payment_payload_expired:
+          "The Xaman payment request expired. Start the claim again to create a new payment request.",
+        invalid_coordinate:
+          "That coordinate is not valid. Check the coordinate and try again.",
+        payment_not_found:
+          "MONOLITH could not find that payment request. Start the claim again or contact support if you already sent $XRP.",
+        payment_amount_mismatch:
+          "The payment amount does not match the current claim. Do not send another payment. Contact MONOLITH support.",
+        payment_destination_mismatch:
+          "The payment destination could not be verified. Do not send another payment. Contact MONOLITH support.",
+        payment_already_used:
+          "That payment has already been used. Do not send another payment. Contact MONOLITH support if this looks incorrect.",
+        trial_already_verified:
+          "This trial sign-in has already been verified.",
+        wallet_trial_already_active:
+          "This wallet already has an active MONOLITH trial."
+      };
+
+      return messages[key] ||
+        fallback ||
+        "Something went wrong. Try again. If $XRP already moved, do not repeat the payment and contact MONOLITH support.";
     }
 
     function htmlEscape(v){
@@ -770,9 +818,10 @@ return null;
         const data = await r.json().catch(() => ({}));
 
         if(!r.ok || !data.ok){
-          const msg = data.error === "payment_not_signed"
-            ? "Payment not signed yet. Open Xaman, sign payment, then verify again."
-            : (data.error || "Payment verification failed");
+          const msg = friendlyClaimError(
+            data.error,
+            "MONOLITH could not verify this payment yet. If you already sent $XRP, do not pay again. Try Verify payment again or contact support."
+          );
           setStatus(msg, true);
           showOutput(data);
           return null;
@@ -782,7 +831,10 @@ return null;
         setStatus("Payment verified. Tile claimed. One final step: accept your Coordinate Deed NFT in Xaman.", false);
         return data;
       }catch(e){
-        setStatus("Payment verification failed", true);
+        setStatus(
+          "MONOLITH could not reach the payment verification service. Do not send another payment. Wait a moment and press Verify payment again.",
+          true
+        );
         showOutput({ error:"payment verification failed", detail:String(e) });
         return null;
       }
@@ -849,7 +901,13 @@ return null;
         const data = await r.json().catch(() => ({}));
 
         if(!r.ok || !data.ok){
-          setStatus(data.error || "Trial request failed", true);
+          setStatus(
+            friendlyClaimError(
+              data.error,
+              "Unable to create the trial sign-in. Try again or contact MONOLITH support if the problem continues."
+            ),
+            true
+          );
           showOutput(data);
           return null;
         }
@@ -872,7 +930,10 @@ return null;
         renderTrialReady(payload);
         return payload;
       }catch(e){
-        setStatus("Trial request failed", true);
+        setStatus(
+          "Unable to reach MONOLITH to create the trial sign-in. Check your connection and try again.",
+          true
+        );
         showOutput({ error:"trial request failed", detail:String(e) });
         return null;
       }
@@ -899,9 +960,10 @@ return null;
         const data = await r.json().catch(() => ({}));
 
         if(!r.ok || !data.ok){
-          const msg = data.error === "trial_not_signed"
-            ? "Trial SignIn not signed yet. Open Xaman, sign in, then verify again."
-            : (data.error || "Trial verification failed");
+          const msg = friendlyClaimError(
+            data.error,
+            "MONOLITH could not verify the trial sign-in yet. Return to Xaman, confirm the sign-in was completed, then try again."
+          );
           setStatus(msg, true);
           showOutput(data);
           return null;
@@ -911,7 +973,10 @@ return null;
         setStatus("3-day trial is active.", false);
         return data;
       }catch(e){
-        setStatus("Trial verification failed", true);
+        setStatus(
+          "MONOLITH could not reach the trial verification service. Wait a moment and verify again.",
+          true
+        );
         showOutput({ error:"trial verification failed", detail:String(e) });
         return null;
       }
