@@ -3834,7 +3834,11 @@ body.tileWallpaperActive .hero{
 <main class="wrap">
   <div class="top">
     <div class="brand"><img src="/assets/monolith_icon.webp" alt="">MONOLITH</div>
-    <a class="btn" href="/monolith.html">View Wall</a>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+      <a class="btn" href="/">Entrance</a>
+      <a class="btn" href="/help/">Help</a>
+      <a class="btn" href="/monolith.html">View Wall</a>
+    </div>
   </div>
 
   <section class="hero">
@@ -5542,6 +5546,63 @@ body.tileWallpaperActive .hero{
 
 
 
+    function friendlyTileEditorError(code,fallback){
+      const raw=String(code||"").trim();
+      const key=raw.toUpperCase();
+
+      const messages={
+        AUTH_NOT_SIGNED:
+          "Owner verification is still waiting for approval in Xaman. Complete it, return here, then try again.",
+        OWNER_SIGNIN_NOT_SIGNED:
+          "Owner verification is still waiting for approval in Xaman. Complete it, return here, then try again.",
+        PAYLOAD_EXPIRED:
+          "Your owner session expired. Start Owner Mode again and retry this change.",
+        WRONG_WALLET:
+          "The wrong wallet signed this request. Re-enter Owner Mode using the wallet that owns this coordinate.",
+        OWNER_WALLET_MISMATCH:
+          "Use the wallet that currently owns this coordinate and sign in again.",
+        OWNER_MISMATCH:
+          "This wallet does not currently own the coordinate. Sign in with the current owner wallet.",
+        INVALID_FILE_TYPE:
+          "That file type is not supported. Choose a supported file and try again.",
+        FILE_TOO_LARGE:
+          "That file is too large. Choose a smaller file and try again.",
+        GALLERY_LIMIT_REACHED:
+          "This Gallery has reached its image limit. Remove an image before uploading another."
+      };
+
+      if(messages[key]) return messages[key];
+
+      const lower=raw.toLowerCase();
+
+      if(
+        lower.includes("signed") ||
+        lower.includes("payload") ||
+        lower.includes("session")
+      ){
+        return "Owner verification could not be confirmed. Check Xaman, then try again. If the session expired, start Owner Mode again.";
+      }
+
+      if(
+        lower.includes("wallet") ||
+        lower.includes("owner") ||
+        lower.includes("unauthorized") ||
+        lower.includes("forbidden")
+      ){
+        return "This change requires the wallet that owns this coordinate. Sign in with the correct wallet and try again.";
+      }
+
+      if(
+        lower.includes("network") ||
+        lower.includes("fetch")
+      ){
+        return "MONOLITH could not be reached. Check your connection and try again.";
+      }
+
+      return fallback ||
+        "MONOLITH could not save this change. Try again. If the problem continues, open Help & Support.";
+    }
+
     function escTablet(v){
       return String(v||"")
         .replace(/&/g,"&amp;")
@@ -5579,7 +5640,13 @@ body.tileWallpaperActive .hero{
       const data=await r.json().catch(()=>({}));
 
       if(!r.ok||!data.ok){
-        setTabletJournalStatus(data.error||"Tablet update failed.",false);
+        setTabletJournalStatus(
+          friendlyTileEditorError(
+            data.error,
+            "Tablet entry could not be updated. Try again."
+          ),
+          false
+        );
         return;
       }
 
@@ -5634,7 +5701,13 @@ body.tileWallpaperActive .hero{
       const data=await r.json().catch(()=>({}));
 
       if(!r.ok||!data.ok){
-        setTabletJournalStatus(data.error||"Unable to load Tablet entries.",false);
+        setTabletJournalStatus(
+          friendlyTileEditorError(
+            data.error,
+            "Tablet entries could not be loaded. Refresh and try again."
+          ),
+          false
+        );
         return;
       }
 
@@ -5671,7 +5744,13 @@ body.tileWallpaperActive .hero{
       const data=await r.json().catch(()=>({}));
 
       if(!r.ok||!data.ok){
-        setTabletJournalStatus(data.error||"Tablet entry failed.", false);
+        setTabletJournalStatus(
+          friendlyTileEditorError(
+            data.error,
+            "Tablet entry could not be saved. Try again."
+          ),
+          false
+        );
         return;
       }
 
@@ -5710,7 +5789,13 @@ body.tileWallpaperActive .hero{
       const data=await r.json().catch(()=>({}));
 
       if(!r.ok||!data.ok){
-        setProfileSongStatus(data.error||"Profile Song save failed.",false);
+        setProfileSongStatus(
+          friendlyTileEditorError(
+            data.error,
+            "Profile Song could not be saved. Try again."
+          ),
+          false
+        );
         return;
       }
 
@@ -5737,7 +5822,13 @@ body.tileWallpaperActive .hero{
       const data=await r.json().catch(()=>({}));
 
       if(!r.ok||!data.ok){
-        setProfileSongStatus(data.error||"Profile Song removal failed.",false);
+        setProfileSongStatus(
+          friendlyTileEditorError(
+            data.error,
+            "Profile Song could not be removed. Try again."
+          ),
+          false
+        );
         return;
       }
 
@@ -5864,7 +5955,10 @@ body.tileWallpaperActive .hero{
 
       if(!r.ok||!data.ok){
         setGalleryOwnerStatus(
-          data.error||"Unable to load Gallery.",
+          friendlyTileEditorError(
+            data.error,
+            "Gallery could not be loaded. Refresh and try again."
+          ),
           false
         );
         return;
@@ -5956,7 +6050,10 @@ body.tileWallpaperActive .hero{
 
       if(!r.ok||!data.ok){
         setGalleryOwnerStatus(
-          data.error||"Gallery upload failed.",
+          friendlyTileEditorError(
+            data.error,
+            "Gallery upload could not be completed. Check the files and try again."
+          ),
           false
         );
         return;
@@ -5999,7 +6096,10 @@ body.tileWallpaperActive .hero{
 
       if(!r.ok||!data.ok){
         setGalleryOwnerStatus(
-          data.error||"Gallery delete failed.",
+          friendlyTileEditorError(
+            data.error,
+            "Gallery image could not be deleted. Try again."
+          ),
           false
         );
         return;
@@ -6052,7 +6152,10 @@ body.tileWallpaperActive .hero{
 
       if(!r.ok||!data.ok){
         setGalleryOwnerStatus(
-          data.error||"Gallery reorder failed.",
+          friendlyTileEditorError(
+            data.error,
+            "Gallery order could not be saved. Try again."
+          ),
           false
         );
         return;
@@ -6229,7 +6332,10 @@ body.tileWallpaperActive .hero{
 
         if(!r.ok||!data.ok){
           setTileVisualsStatus(
-            data.error||("Page Visuals save failed. HTTP "+r.status),
+            friendlyTileEditorError(
+              data.error,
+              "Page Visuals could not be saved. Check the files and try again."
+            ),
             false
           );
           return;
@@ -6257,7 +6363,10 @@ body.tileWallpaperActive .hero{
         setTimeout(syncSidewaysPuzzleLayout,180);
       }catch(e){
         setTileVisualsStatus(
-          "Page Visuals save failed. "+(e.message||"Network error."),
+          friendlyTileEditorError(
+            e&&e.message,
+            "MONOLITH could not reach the server to save Page Visuals. Check your connection and try again."
+          ),
           false
         );
       }
@@ -6400,7 +6509,10 @@ body.tileWallpaperActive .hero{
         if(!r.ok||!data.ok){
           setInlineTextSaveStatus(
             label,
-            data.error||(label+" save failed. HTTP "+r.status),
+            friendlyTileEditorError(
+              data.error,
+              label+" could not be saved. Try again."
+            ),
             false
           );
           return;
@@ -6460,7 +6572,10 @@ body.tileWallpaperActive .hero{
       }catch(e){
         setInlineTextSaveStatus(
           label,
-          label+" save failed. "+(e.message||"Network error."),
+          friendlyTileEditorError(
+            e&&e.message,
+            label+" could not be saved because MONOLITH could not be reached. Check your connection and try again."
+          ),
           false
         );
       }
@@ -6632,14 +6747,26 @@ body.tileWallpaperActive .hero{
         const data=await r.json().catch(()=>({}));
 
         if(!r.ok||!data.ok){
-          setLinksOwnerStatus(data.error||"Links save failed.",false);
+          setLinksOwnerStatus(
+            friendlyTileEditorError(
+              data.error,
+              "Links could not be saved. Try again."
+            ),
+            false
+          );
           return;
         }
 
         renderLinks(payloadUuid);
         setLinksOwnerStatus(msg,true);
       }catch(e){
-        setLinksOwnerStatus("Links save failed. "+(e.message||"Network error."),false);
+        setLinksOwnerStatus(
+          friendlyTileEditorError(
+            e&&e.message,
+            "Links could not be saved because MONOLITH could not be reached. Check your connection and try again."
+          ),
+          false
+        );
       }
     }
 
