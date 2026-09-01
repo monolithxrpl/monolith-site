@@ -174,7 +174,7 @@
         });
         const data = await res.json().catch(()=>({}));
         if(!res.ok || !data.ok){
-          throw new Error(data.error || "Report failed");
+          throw new Error("report_submit_failed");
         }
         status.textContent = "Report received. MONOLITH will review it.";
         status.className = "status ok";
@@ -184,7 +184,14 @@
           reportedLink.value = location.origin + "/tile/" + encodeURIComponent(tile);
         }
       }catch(err){
-        status.textContent = err.message || "Report failed. Try again.";
+        const raw=String(err&&err.message||"").toLowerCase();
+
+        status.textContent =
+          raw.includes("network") ||
+          raw.includes("fetch")
+            ? "MONOLITH could not be reached. Check your connection and try again."
+            : "Your report could not be submitted. Please try again. If the problem continues, contact MONOLITH support.";
+
         status.className = "status bad";
       }finally{
         btn.disabled = false;

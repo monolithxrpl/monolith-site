@@ -837,14 +837,80 @@
       let currentIntent = null;
 
       function errorMessage(error) {
-        if (!error) return "Request failed";
-        return (
-          error.publicMessage ||
+        if (!error) {
+          return "MONOLITH could not complete this request. Please try again.";
+        }
+
+        if (error.publicMessage) {
+          return String(error.publicMessage);
+        }
+
+        const raw = String(
+          error.code ||
           error.error ||
           error.message ||
-          error.code ||
-          "Request failed"
-        );
+          ""
+        ).trim();
+
+        const code = raw.toUpperCase();
+
+        const messages = {
+          AUTH_NOT_SIGNED:
+            "The Xaman Sign-In is still waiting for approval. Complete it in Xaman, return here, then verify again.",
+          PAYMENT_NOT_SIGNED:
+            "The Xaman transaction is still waiting for approval. Complete it in Xaman, return here, then verify again.",
+          PAYLOAD_EXPIRED:
+            "The Xaman request expired. Start this step again to create a new request.",
+          WRONG_WALLET:
+            "The wrong wallet signed this request. Start again using the wallet required for this transaction.",
+          PAYMENT_NOT_FOUND:
+            "The XRPL transaction could not be confirmed yet. If you already sent $XRP, do not send another payment. Try verification again.",
+          PAYMENT_AMOUNT_MISMATCH:
+            "The received $XRP amount does not match this transaction. Do not send another payment. Contact MONOLITH support.",
+          PAYMENT_DESTINATION_MISMATCH:
+            "The XRPL payment destination does not match this transaction. Do not repeat the payment. Contact MONOLITH support.",
+          PAYMENT_ALREADY_USED:
+            "This XRPL payment has already been applied to another transaction. Contact MONOLITH support."
+        };
+
+        if (messages[code]) {
+          return messages[code];
+        }
+
+        const lower = raw.toLowerCase();
+
+        if (
+          lower.includes("signed") ||
+          lower.includes("payload")
+        ) {
+          return "The Xaman request could not be verified. Complete it with the correct wallet, then try verification again.";
+        }
+
+        if (
+          lower.includes("wallet") ||
+          lower.includes("account") ||
+          lower.includes("unauthorized")
+        ) {
+          return "This action requires the correct XRPL wallet. Sign in with the required wallet and try again.";
+        }
+
+        if (
+          lower.includes("payment") ||
+          lower.includes("transaction") ||
+          lower.includes("ledger") ||
+          lower.includes("offer")
+        ) {
+          return "MONOLITH could not confirm the XRPL transaction yet. If $XRP already moved, do not repeat the transaction. Try verification again or contact support.";
+        }
+
+        if (
+          lower.includes("network") ||
+          lower.includes("fetch")
+        ) {
+          return "MONOLITH could not be reached. Check your connection and try again.";
+        }
+
+        return "MONOLITH could not complete this OTC request. Please try again. If an XRPL transaction was already signed or submitted, do not repeat it until its status is confirmed.";
       }
 
       function escapeHtml(value) {
