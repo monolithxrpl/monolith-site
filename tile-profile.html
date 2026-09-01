@@ -4362,7 +4362,77 @@ body.tileWallpaperActive .hero{
   }
 
   function tileMarketRouteError(d,fallback){
-    return (d && (d.error || d.message)) || fallback;
+    const code=String(d&&(d.error||d.message)||"").trim();
+
+    const messages={
+      market_status_failed:
+        "Tile Market status is temporarily unavailable. Refresh the page and try again.",
+      listing_not_found:
+        "This listing is no longer available. Refresh the page to load the current market state.",
+      listing_not_active:
+        "This listing is no longer active. Refresh the page before trying again.",
+      payment_not_signed:
+        "The Xaman request is still waiting for approval. Complete it in Xaman, return here, then verify again.",
+      auth_not_signed:
+        "The owner sign-in is still waiting for approval in Xaman. Complete the sign-in, return here, then verify again.",
+      payload_expired:
+        "The Xaman request expired. Start this step again to create a new request.",
+      wrong_wallet:
+        "This action was signed by the wrong wallet. Use the wallet required for this tile and start the step again.",
+      owner_wallet_mismatch:
+        "Use the wallet that currently owns this coordinate and start the step again.",
+      offer_not_found:
+        "The XRPL offer could not be found. Refresh the market state before trying again.",
+      offer_expired:
+        "The XRPL offer is no longer available. Refresh the market state and restart the transaction.",
+      already_sold:
+        "This coordinate has already been sold. Refresh the page to load the new ownership state."
+    };
+
+    return messages[code] ||
+      fallback ||
+      "The Tile Market could not complete this action. Refresh and try again. If $XRP already moved, do not repeat the transaction and contact MONOLITH support.";
+  }
+
+  function friendlyTilePaymentError(code){
+    const key=String(code||"").trim();
+
+    const messages={
+      invalid_amount:
+        "Enter a valid $XRP amount and try again.",
+      payment_payload_failed:
+        "MONOLITH could not create the Xaman payment request. Try again.",
+      tile_not_claimed:
+        "Direct payments are only available for claimed coordinates.",
+      payments_disabled:
+        "This tile is not currently accepting direct payments.",
+      destination_wallet_missing:
+        "The verified owner wallet is unavailable. Do not send a manual payment. Contact MONOLITH support."
+    };
+
+    return messages[key] ||
+      "MONOLITH could not create the payment request. Try again. Do not send $XRP manually if the payment flow does not complete.";
+  }
+
+  function friendlyOwnerModeError(code,fallback){
+    const key=String(code||"").trim();
+
+    const messages={
+      auth_not_signed:
+        "The owner sign-in is still waiting for approval in Xaman. Complete it, return here, then verify again.",
+      payload_expired:
+        "The owner sign-in expired. Start Owner Mode again to create a new Xaman request.",
+      wrong_wallet:
+        "The wrong wallet signed this request. Start again using the wallet that owns this coordinate.",
+      owner_mismatch:
+        "This wallet does not currently own the coordinate. Sign in with the current owner wallet.",
+      tile_not_found:
+        "This coordinate could not be found. Refresh the page or contact MONOLITH support."
+    };
+
+    return messages[key] ||
+      fallback ||
+      "Owner verification could not be completed. Try again or contact MONOLITH support if the problem continues.";
   }
 
   function setTileMarketBox(id,show){
@@ -4475,7 +4545,7 @@ body.tileWallpaperActive .hero{
 
     let msg="";
     if(tileMarketSaved("list").payloadUuid)msg="Listing signature saved. Finish by tapping Step 2 Verify Listing in Tile Market.";
-    else if(tileMarketSaved("sellOffer").payloadUuid)msg="Deed sale signature saved. Finish by tapping Step 4 Verify Deed Sale in Tile Market.";
+    else if(tileMarketSaved("sell_offer").payloadUuid)msg="Deed sale signature saved. Finish by tapping Step 4 Verify Deed Sale in Tile Market.";
     else if(tileMarketSaved("buy").payloadUuid)msg="Buy signature saved. Finish by tapping Verify Buy in Tile Market.";
     else if(tileMarketSaved("cancel").payloadUuid)msg="Cancel signature saved. Finish by tapping Verify Cancel in Tile Market.";
 
@@ -4518,7 +4588,7 @@ body.tileWallpaperActive .hero{
 
       if(listing){
         const ready=tileMarketListingReady(listing);
-        const pendingSell=tileMarketSaved("sellOffer").payloadUuid;
+        const pendingSell=tileMarketSaved("sell_offer").payloadUuid;
 
         setMarketText("tileMarketStatus",ready
           ? "This coordinate is live for XRPL Deed NFT purchase."
@@ -4576,7 +4646,13 @@ body.tileWallpaperActive .hero{
     const d=await r.json();
 
     if(!d.ok){
-      setMarketText("tileMarketStatus",d.error||"Listing start failed.");
+      setMarketText(
+        "tileMarketStatus",
+        tileMarketRouteError(
+          d,
+          "Unable to start the listing. Try again or refresh the page."
+        )
+      );
       return;
     }
 
@@ -4613,7 +4689,13 @@ body.tileWallpaperActive .hero{
     const d=await r.json();
 
     if(!d.ok){
-      setMarketText("tileMarketStatus",d.error||"Listing verification failed.");
+      setMarketText(
+        "tileMarketStatus",
+        tileMarketRouteError(
+          d,
+          "Listing verification could not be completed. Return to Xaman, confirm the signature, then try Verify Listing again."
+        )
+      );
       return;
     }
 
@@ -4703,8 +4785,6 @@ body.tileWallpaperActive .hero{
 
     if(!listing){
       setMarketText("tileMarketStatus","No active listing found.");
-      return;
-      setMarketText("tileMarketStatus","Buyer wallet required.");
       return;
     }
 
@@ -4797,7 +4877,13 @@ body.tileWallpaperActive .hero{
     const d=await r.json();
 
     if(!d.ok){
-      setMarketText("tileMarketStatus",d.error||"Cancel start failed.");
+      setMarketText(
+        "tileMarketStatus",
+        tileMarketRouteError(
+          d,
+          "Unable to start the cancellation. Refresh and try again."
+        )
+      );
       return;
     }
 
@@ -4832,7 +4918,13 @@ body.tileWallpaperActive .hero{
     const d=await r.json();
 
     if(!d.ok){
-      setMarketText("tileMarketStatus",d.error||"Cancel verification failed.");
+      setMarketText(
+        "tileMarketStatus",
+        tileMarketRouteError(
+          d,
+          "Cancellation verification could not be completed. Confirm the Xaman signature, then try Verify Cancel again."
+        )
+      );
       return;
     }
 
@@ -5293,7 +5385,11 @@ body.tileWallpaperActive .hero{
           setSupportStatus("Xaman payment ready. Review before signing.");
           if(data.signUrl) window.open(data.signUrl,"_blank","noopener");
         }catch(e){
-          setSupportStatus("Payment start failed: "+(e&&e.message?e.message:"unknown_error"));
+          setSupportStatus(
+            friendlyTilePaymentError(
+              e&&e.message ? e.message : ""
+            )
+          );
         }finally{
           supportStart.disabled=false;
         }
@@ -6828,7 +6924,13 @@ body.tileWallpaperActive .hero{
       });
       const data = await r.json().catch(() => ({}));
       if(!r.ok || !data.ok){
-        setOwnerModeStatus(data.error || "Owner sign-in failed.", false);
+        setOwnerModeStatus(
+          friendlyOwnerModeError(
+            data.error,
+            "Unable to create the owner sign-in. Try again or contact MONOLITH support."
+          ),
+          false
+        );
         return;
       }
       const auth = data.auth || {};
@@ -6873,7 +6975,10 @@ body.tileWallpaperActive .hero{
         }
 
         setOwnerModeStatus(
-          data.error||"Owner wallet not verified.",
+          friendlyOwnerModeError(
+            data.error,
+            "Owner wallet could not be verified. Confirm you signed with the coordinate owner wallet, then try again."
+          ),
           false
         );
 
@@ -7048,7 +7153,7 @@ body.tileWallpaperActive .hero{
       setTimeout(
         ()=>verifyOwnerMode().catch(
           ()=>setOwnerModeStatus(
-            "Owner verification failed.",
+            "Owner verification could not be completed. If you already signed in Xaman, try Verify Owner again.",
             false
           )
         ),
