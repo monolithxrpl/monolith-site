@@ -4,29 +4,223 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f4fbff">
-  <title>MONOLITH Merch Help</title>
-  <meta name="description" content="Help and support for MONOLITH Merch Store buyers and sellers.">
+
+  <title>MONOLITH Merch Help & Support</title>
+
+  <meta
+    name="description"
+    content="Help and support for MONOLITH Merch Store buyers and sellers."
+  >
+
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/merch/merch-shell.css">
+
   <style>
-    .helpHero{padding:54px 0 20px}
-    .helpKicker{color:#159fe5;font-size:11px;font-weight:950;letter-spacing:.14em}
-    .helpHero h1{margin:8px 0 12px;font-size:clamp(36px,6vw,64px);line-height:1}
-    .helpHero p{max-width:780px;color:#58707d;font-size:17px;line-height:1.65}
-    .helpGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:18px 0 70px}
-    .helpCard{padding:26px;border:1px solid #d6e4eb;border-radius:16px;background:#fff;box-shadow:0 4px 16px rgba(42,75,92,.04)}
-    .helpCard h2{margin:0 0 10px;font-size:20px}
-    .helpCard p{margin:0 0 16px;color:#58707d;line-height:1.65}
-    .helpLink{display:inline-block;padding:11px 14px;border:1px solid #159fe5;border-radius:10px;color:#0878af;font-weight:900}
-    @media(max-width:760px){.helpGrid{grid-template-columns:1fr}}
+    .helpHero{
+      padding:54px 0 28px;
+    }
+
+    .helpKicker{
+      color:#159fe5;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.14em;
+    }
+
+    .helpHero h1{
+      margin:8px 0 12px;
+      font-size:clamp(36px,6vw,64px);
+      line-height:1;
+    }
+
+    .helpHero p{
+      max-width:820px;
+      margin:0;
+      color:#58707d;
+      font-size:17px;
+      line-height:1.65;
+    }
+
+    .quickLinks{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:24px;
+    }
+
+    .quickLinks a{
+      display:inline-flex;
+      align-items:center;
+      min-height:42px;
+      padding:10px 14px;
+      border:1px solid #d6e4eb;
+      border-radius:10px;
+      background:#fff;
+      color:#20333d;
+      font-weight:900;
+      text-decoration:none;
+    }
+
+    .quickLinks a:hover{
+      border-color:#159fe5;
+      color:#0878af;
+    }
+
+    .supportNotice{
+      margin:6px 0 26px;
+      padding:18px 20px;
+      border:1px solid #b9ddf0;
+      border-radius:14px;
+      background:#eef9ff;
+      color:#24434f;
+      line-height:1.6;
+    }
+
+    .supportNotice strong{
+      display:block;
+      margin-bottom:4px;
+      color:#0878af;
+    }
+
+    .helpSection{
+      padding:10px 0 34px;
+    }
+
+    .sectionHeading{
+      margin-bottom:16px;
+    }
+
+    .sectionHeading h2{
+      margin:0 0 7px;
+      font-size:28px;
+    }
+
+    .sectionHeading p{
+      margin:0;
+      max-width:780px;
+      color:#58707d;
+      line-height:1.6;
+    }
+
+    .helpGrid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+    }
+
+    .helpCard{
+      padding:24px;
+      border:1px solid #d6e4eb;
+      border-radius:16px;
+      background:#fff;
+      box-shadow:0 4px 16px rgba(42,75,92,.04);
+    }
+
+    .helpCard h3{
+      margin:0 0 10px;
+      font-size:19px;
+    }
+
+    .helpCard p{
+      margin:0 0 14px;
+      color:#58707d;
+      line-height:1.65;
+    }
+
+    .helpCard ul{
+      margin:0 0 16px;
+      padding-left:20px;
+      color:#58707d;
+      line-height:1.7;
+    }
+
+    .helpLink{
+      display:inline-flex;
+      align-items:center;
+      min-height:42px;
+      padding:10px 14px;
+      border:1px solid #159fe5;
+      border-radius:10px;
+      color:#0878af;
+      font-weight:900;
+      text-decoration:none;
+    }
+
+    .helpLink + .helpLink{
+      margin-left:8px;
+    }
+
+    .supportChecklist{
+      margin:0;
+      padding-left:20px;
+      color:#405862;
+      line-height:1.75;
+    }
+
+    .securityBox{
+      padding:24px;
+      border:1px solid #e9c665;
+      border-radius:16px;
+      background:#fffaf0;
+      color:#5b4a1a;
+      line-height:1.65;
+    }
+
+    .securityBox h3{
+      margin:0 0 10px;
+    }
+
+    .supportFooter{
+      margin-top:12px;
+      padding:30px 0 70px;
+      border-top:1px solid #dce7ec;
+    }
+
+    .supportFooter h2{
+      margin:0 0 10px;
+      font-size:28px;
+    }
+
+    .supportFooter p{
+      max-width:760px;
+      color:#58707d;
+      line-height:1.65;
+    }
+
+    .supportActions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    @media(max-width:760px){
+      .helpGrid{
+        grid-template-columns:1fr;
+      }
+
+      .helpHero{
+        padding-top:36px;
+      }
+
+      .helpLink + .helpLink{
+        margin-left:0;
+        margin-top:8px;
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="shell">
     <header class="header">
       <a class="brand" href="/merch/">
         <img src="/assets/monolith_icon.webp" alt="MONOLITH">
-        <span class="brandText"><strong>MONOLITH</strong><small>MERCH STORE</small></span>
+
+        <span class="brandText">
+          <strong>MONOLITH</strong>
+          <small>MERCH STORE</small>
+        </span>
       </a>
 
       <nav class="nav">
@@ -39,56 +233,371 @@
       </nav>
 
       <div class="headerActions">
-        <a class="payBtn" href="/merch/"><span>◆</span>Store</a>
+        <a class="payBtn" href="/merch/">
+          <span>◆</span>Store
+        </a>
       </div>
     </header>
 
     <main>
       <section class="helpHero">
         <div class="helpKicker">HELP & SUPPORT</div>
-        <h1>Need Help?</h1>
+
+        <h1>MONOLITH Merch Support</h1>
+
         <p>
-          Use the resources below for MONOLITH Merch Store orders,
-          payments, shipping, seller tools, refunds and marketplace questions.
+          Help for buying, selling, $XRP payments, shipping,
+          orders, seller payouts, refunds and common browser
+          or Xaman issues.
         </p>
+
+        <div class="quickLinks">
+          <a href="#buyers">Buyer Help</a>
+          <a href="#sellers">Seller Help</a>
+          <a href="#payments">Payments</a>
+          <a href="#shipping">Shipping</a>
+          <a href="#refunds">Refunds</a>
+          <a href="#technical">Technical Help</a>
+          <a href="#contact">Contact Support</a>
+        </div>
       </section>
 
-      <section class="helpGrid">
-        <article class="helpCard">
-          <h2>Check an Order</h2>
-          <p>Return to the Merch Store and use Check Order to review the current status of a MONOLITH merchandise order.</p>
-          <a class="helpLink" href="/merch/">Open Merch Store</a>
-        </article>
+      <div class="supportNotice">
+        <strong>Use a regular browser.</strong>
+        For the best MONOLITH and Xaman experience, open the
+        site directly in Safari, Chrome, Firefox or another
+        normal browser instead of an in-app browser inside
+        𝕏, Facebook, Instagram or another app.
+      </div>
 
-        <article class="helpCard">
+      <section class="helpSection" id="buyers">
+        <div class="sectionHeading">
+          <h2>Buyer Help</h2>
+          <p>
+            MONOLITH Merch purchases are paid in $XRP.
+            Buyers do not need to own a MONOLITH coordinate.
+          </p>
+        </div>
+
+        <div class="helpGrid">
+          <article class="helpCard">
+            <h3>How to Buy</h3>
+            <p>
+              Open a product, choose any required options,
+              add it to your cart and continue to checkout.
+              Sign in with Xaman when prompted.
+            </p>
+            <a class="helpLink" href="/merch/">Open Store</a>
+          </article>
+
+          <article class="helpCard">
+            <h3>My Orders</h3>
+            <p>
+              Sign in with the same Xaman wallet used during
+              checkout and open My Orders to review your order,
+              payment and fulfillment status.
+            </p>
+            <a class="helpLink" href="/merch/">View My Orders</a>
+          </article>
+
+          <article class="helpCard">
+            <h3>Order Says Pending Payment</h3>
+            <p>
+              Do not send a second payment unless MONOLITH
+              specifically asks you to. If you already paid,
+              keep the XRPL transaction hash and contact support.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Sold Out or Unavailable</h3>
+            <p>
+              MONOLITH checks current inventory during checkout.
+              A product may become unavailable if another buyer
+              reserves or purchases the remaining inventory first.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="helpSection" id="sellers">
+        <div class="sectionHeading">
           <h2>Seller Help</h2>
-          <p>Manage products, inventory, shipping, orders and seller settings from the MONOLITH Seller Center.</p>
-          <a class="helpLink" href="/merch/seller/">Open Seller Center</a>
-        </article>
+          <p>
+            Seller tools are managed from the MONOLITH Seller Center.
+          </p>
+        </div>
 
-        <article class="helpCard">
-          <h2>Shipping or Delivery</h2>
-          <p>Shipping rates and fulfillment are managed by the seller. Use your order information when contacting support about a shipment or delivery issue.</p>
-          <a class="helpLink" href="mailto:monolith.xrpl@gmail.com">Email Support</a>
-        </article>
+        <div class="helpGrid">
+          <article class="helpCard">
+            <h3>Seller Center</h3>
+            <p>
+              Manage your seller profile, products, inventory,
+              shipping settings, orders and fulfillment.
+            </p>
+            <a class="helpLink" href="/merch/seller/">Open Seller Center</a>
+          </article>
 
-        <article class="helpCard">
-          <h2>Payment or Refund Issue</h2>
-          <p>Include your MONOLITH order ID and any relevant $XRP transaction information so the order can be reviewed accurately.</p>
-          <a class="helpLink" href="mailto:monolith.xrpl@gmail.com">Email Support</a>
-        </article>
+          <article class="helpCard">
+            <h3>Seller Verification</h3>
+            <p>
+              Sellers must complete MONOLITH seller verification
+              before products can be sold publicly.
+            </p>
+          </article>
 
-        <article class="helpCard">
-          <h2>Marketplace Rules</h2>
-          <p>Review the rules governing products, seller responsibilities, fulfillment, legal compliance and marketplace enforcement.</p>
-          <a class="helpLink" href="/merch/rules/">Read Merch Rules</a>
-        </article>
+          <article class="helpCard">
+            <h3>Order Notifications</h3>
+            <p>
+              Email notifications are optional. Add an email address
+              in Order Notifications and enable the notification
+              checkbox to receive an email after a paid order is confirmed.
+            </p>
+          </article>
 
-        <article class="helpCard">
-          <h2>Direct Support</h2>
-          <p>Email MONOLITH at monolith.xrpl@gmail.com. You can also DM @mrcauliman on 𝕏 for current Merch Store support.</p>
-          <a class="helpLink" href="mailto:monolith.xrpl@gmail.com">Contact MONOLITH</a>
-        </article>
+          <article class="helpCard">
+            <h3>Fulfillment</h3>
+            <p>
+              Paid orders appear in the Seller Center. Begin processing
+              the order, add shipping and tracking information when
+              appropriate, and update the fulfillment status.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="helpSection" id="payments">
+        <div class="sectionHeading">
+          <h2>$XRP Payments</h2>
+          <p>
+            MONOLITH verifies payments against the XRP Ledger.
+          </p>
+        </div>
+
+        <div class="helpGrid">
+          <article class="helpCard">
+            <h3>Payment Verification</h3>
+            <p>
+              Signing a Xaman request does not by itself mean an order
+              is paid. MONOLITH verifies the validated XRPL transaction
+              before the order is marked paid.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Wrong or Failed Payment</h3>
+            <p>
+              If payment fails, do not manually send $XRP to a wallet
+              address shown elsewhere on the site. Return to the order
+              or contact support with the order ID.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Seller Payouts</h3>
+            <p>
+              MONOLITH records the seller proceeds for a paid order
+              and processes the seller payout separately after the
+              buyer payment is validated.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Transaction Hashes</h3>
+            <p>
+              When contacting support about a payment, include the
+              XRPL transaction hash when available. Never send your
+              seed phrase or private key.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="helpSection" id="shipping">
+        <div class="sectionHeading">
+          <h2>Shipping & Delivery</h2>
+          <p>
+            Shipping options are determined by each seller's
+            configured shipping profile.
+          </p>
+        </div>
+
+        <div class="helpGrid">
+          <article class="helpCard">
+            <h3>No Shipping Rate Available</h3>
+            <p>
+              The seller may not currently ship to your destination.
+              Check the destination information you entered and try again.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Tracking</h3>
+            <p>
+              When a seller marks an order shipped, tracking information
+              can be attached to the fulfillment record.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Delivery Problem</h3>
+            <p>
+              Keep your order ID, tracking number and any carrier
+              information. Contact the seller when possible and contact
+              MONOLITH support if the issue cannot be resolved.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Shipping Questions for Sellers</h3>
+            <p>
+              Review your product shipping profile, supported countries,
+              rates and packaging information before publishing products.
+            </p>
+            <a class="helpLink" href="/merch/seller/">Seller Center</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="helpSection" id="refunds">
+        <div class="sectionHeading">
+          <h2>Cancellations & Refunds</h2>
+          <p>
+            Cancellation and refund behavior depends on whether
+            the $XRP payment has already been validated.
+          </p>
+        </div>
+
+        <div class="helpGrid">
+          <article class="helpCard">
+            <h3>Unpaid Orders</h3>
+            <p>
+              An unpaid checkout can be cancelled before payment
+              is received. Any inventory reservation associated
+              with that checkout is released.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Paid Orders</h3>
+            <p>
+              Paid orders cannot be cancelled as unpaid orders.
+              They must use the MONOLITH refund process.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Refund Review</h3>
+            <p>
+              Refunds are tied to the original validated payment.
+              MONOLITH verifies the refund transaction on the XRP Ledger
+              before the order is recorded as refunded.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Marketplace Rules</h3>
+            <p>
+              Review seller responsibilities, prohibited products,
+              fulfillment expectations and marketplace enforcement.
+            </p>
+            <a class="helpLink" href="/merch/rules/">Read Merch Rules</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="helpSection" id="technical">
+        <div class="sectionHeading">
+          <h2>Browser & Xaman Help</h2>
+        </div>
+
+        <div class="helpGrid">
+          <article class="helpCard">
+            <h3>Xaman Doesn't Open</h3>
+            <ul>
+              <li>Use Safari, Chrome or another regular browser.</li>
+              <li>Avoid embedded social-media browsers.</li>
+              <li>Make sure Xaman is installed and up to date.</li>
+              <li>Retry the MONOLITH sign-in or payment request.</li>
+            </ul>
+          </article>
+
+          <article class="helpCard">
+            <h3>Page Looks Outdated</h3>
+            <ul>
+              <li>Refresh the page.</li>
+              <li>Close and reopen the browser tab.</li>
+              <li>Try a private/incognito browser window.</li>
+              <li>Make sure you are using monolithxrpl.com.</li>
+            </ul>
+          </article>
+
+          <article class="helpCard">
+            <h3>Sign-In Problems</h3>
+            <p>
+              Use the same Xaman wallet associated with the action
+              you are trying to manage. Seller tools require the
+              verified seller wallet.
+            </p>
+          </article>
+
+          <article class="helpCard">
+            <h3>Something Isn't Acting Right</h3>
+            <p>
+              MONOLITH is actively maintained. If a page or action
+              produces an unexpected result, capture the message shown
+              on screen and contact support before repeating a payment.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="helpSection">
+        <div class="securityBox">
+          <h3>Security Warning</h3>
+
+          MONOLITH will never ask you to send your wallet seed phrase
+          or private key. Xaman requests should always be reviewed
+          before signing. Verify that you are using
+          <strong>monolithxrpl.com</strong> before interacting with
+          MONOLITH.
+        </div>
+      </section>
+
+      <section class="supportFooter" id="contact">
+        <h2>Contact MONOLITH Support</h2>
+
+        <p>
+          If the information above doesn't solve the issue, send enough
+          information for the problem to be investigated without exposing
+          private wallet credentials.
+        </p>
+
+        <ul class="supportChecklist">
+          <li>Your MONOLITH order ID, product or coordinate if applicable</li>
+          <li>Your public XRPL wallet address if the issue involves your wallet</li>
+          <li>The XRPL transaction hash if the issue involves a payment</li>
+          <li>A screenshot or exact error message if something failed</li>
+          <li>A short description of what you were trying to do</li>
+        </ul>
+
+        <div class="supportActions">
+          <a
+            class="helpLink"
+            href="mailto:monolith.xrpl@gmail.com"
+          >
+            Email Support
+          </a>
+
+          <a
+            class="helpLink"
+            href="https://x.com/mrcauliman"
+            target="_blank"
+            rel="noopener"
+          >
+            DM @mrcauliman on 𝕏
+          </a>
+        </div>
       </section>
     </main>
   </div>
