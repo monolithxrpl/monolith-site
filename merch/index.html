@@ -10332,11 +10332,11 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           ORDER_CREATE_FAILED:
             "We could not create your order. Please review your information and try again.",
           PAYMENT_PAYLOAD_FAILED:
-            "We could not open the Xaman payment. Please try again.",
+            "We could not create the Xaman payment request. Please try again. Do not send $XRP manually.",
           PAYMENT_VERIFY_FAILED:
-            "The payment has not been confirmed on the XRPL yet. Please try verification again.",
+            "The payment has not been confirmed on the XRPL yet. Do not pay again. Please try verification again.",
           MERCH_PAYMENT_NOT_VALIDATED:
-            "The payment has not been confirmed on the XRPL yet.",
+            "The payment has not been confirmed on the XRPL yet. Do not pay again. Please try verification again.",
           MERCH_ORDER_NOT_FOUND:
             "We could not find that order.",
           ORDER_STATUS_FAILED:
@@ -10389,7 +10389,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           lower.includes("xaman") ||
           lower.includes("payload")
         ) {
-          return "We could not open Xaman right now. Please try again.";
+          return "We could not open Xaman right now. Please try again. Do not send $XRP manually.";
         }
 
         if (
@@ -10397,7 +10397,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
           lower.includes("payment") ||
           lower.includes("transaction")
         ) {
-          return "We could not confirm the $XRP payment yet. Please try verification again.";
+          return "We could not confirm the $XRP payment yet. Do not pay again. Please try verification again.";
         }
 
         if (

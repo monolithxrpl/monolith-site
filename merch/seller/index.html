@@ -13292,7 +13292,9 @@ body.merchSellerPage #orderStatusBtn{
             );
 
           error.code =
-            data.code || "";
+            data.code ||
+            data.error ||
+            "";
 
           error.status =
             response.status;
@@ -13301,6 +13303,100 @@ body.merchSellerPage #orderStatusBtn{
         }
 
         return data;
+      }
+
+      function sellerSafeError(
+        error,
+        fallback =
+          "MONOLITH could not complete this action. Please try again."
+      ) {
+        const raw =
+          String(
+            error?.code ||
+            error?.message ||
+            error ||
+            ""
+          ).trim();
+
+        const code =
+          raw.toUpperCase();
+
+        const messages = {
+          MERCH_REQUEST_FAILED:
+            "MONOLITH could not complete this request. Please try again.",
+          MERCH_SELLER_NOT_FOUND:
+            "The seller profile could not be found. Sign in again or contact MONOLITH support.",
+          MERCH_SELLER_UNAUTHORIZED:
+            "This wallet is not authorized for this seller account. Sign in with the wallet that owns the coordinate.",
+          MERCH_SELLER_FORBIDDEN:
+            "This wallet is not authorized for this seller account. Sign in with the coordinate owner wallet.",
+          MERCH_OWNER_REQUIRED:
+            "Sign in with the wallet that owns this MONOLITH coordinate.",
+          OWNER_SIGNIN_NOT_SIGNED:
+            "The owner Sign-In is still waiting for approval in Xaman. Complete it, return here, then check the Sign-In again.",
+          AUTH_NOT_SIGNED:
+            "The Xaman Sign-In is still waiting for approval. Complete it in Xaman, return here, then verify again.",
+          PAYLOAD_EXPIRED:
+            "The Xaman request expired. Start the Sign-In again to create a new request.",
+          WRONG_WALLET:
+            "The wrong wallet signed this request. Start again using the wallet that owns this coordinate.",
+          OWNER_WALLET_MISMATCH:
+            "Use the wallet that currently owns this coordinate and sign in again.",
+          MERCH_VERIFICATION_FEE_NOT_SIGNED:
+            "The identity verification payment is still waiting for approval in Xaman. Complete it, return here, then verify the payment again.",
+          MERCH_PAYMENT_NOT_VALIDATED:
+            "The $XRP payment has not been confirmed on the ledger yet. Do not pay again. Try verification again.",
+          PAYMENT_VERIFY_FAILED:
+            "The $XRP payment could not be confirmed yet. Do not pay again. Try verification again.",
+          PAYMENT_PAYLOAD_FAILED:
+            "MONOLITH could not create the Xaman payment request. Try again. Do not send $XRP manually.",
+          STRIPE_IDENTITY_NOT_CONFIGURED:
+            "Seller identity verification is temporarily unavailable. Please try again later or contact MONOLITH support."
+        };
+
+        if (messages[code]) {
+          return messages[code];
+        }
+
+        const lower =
+          String(
+            error?.message ||
+            error ||
+            ""
+          ).toLowerCase();
+
+        if (
+          lower.includes("signed") ||
+          lower.includes("payload")
+        ) {
+          return "The Xaman request could not be verified. Confirm it was completed with the correct wallet, then try again.";
+        }
+
+        if (
+          lower.includes("wallet") ||
+          lower.includes("owner") ||
+          lower.includes("unauthorized") ||
+          lower.includes("forbidden")
+        ) {
+          return "This action requires the wallet that owns the MONOLITH coordinate. Sign in with the correct wallet and try again.";
+        }
+
+        if (
+          lower.includes("payment") ||
+          lower.includes("ledger") ||
+          lower.includes("transaction")
+        ) {
+          return "MONOLITH could not confirm the $XRP payment yet. Do not pay again. Try verification again or contact support.";
+        }
+
+        if (
+          lower.includes("network") ||
+          lower.includes("fetch")
+        ) {
+          return "MONOLITH could not be reached. Check your connection and try again.";
+        }
+
+        return fallback;
       }
 
       async function loadSellerProfile() {
@@ -13587,8 +13683,10 @@ body.merchSellerPage #orderStatusBtn{
           );
 
           sellerMessage(
-            error.message ||
-            "Unable to load seller setup.",
+            sellerSafeError(
+              error,
+              "Unable to load seller setup. Try again or open Merch Help if the problem continues."
+            ),
             "error"
           );
         }
@@ -13656,8 +13754,10 @@ body.merchSellerPage #orderStatusBtn{
               }
             } catch (error) {
               sellerMessage(
-                error.message ||
-                "Unable to create Xaman Sign-In.",
+                sellerSafeError(
+                  error,
+                  "Unable to create the Xaman Sign-In. Try again."
+                ),
                 "error"
               );
             }
@@ -13683,8 +13783,10 @@ body.merchSellerPage #orderStatusBtn{
                   result.error ===
                     "owner_signin_not_signed"
                     ? "The Sign-In is still waiting for your approval in Xaman."
-                    : result.error ||
-                      "Owner Sign-In was not verified.",
+                    : sellerSafeError(
+                        result.error,
+                        "Owner Sign-In was not verified. Confirm the correct wallet signed it, then try again."
+                      ),
                   "error"
                 );
 
@@ -13697,8 +13799,10 @@ body.merchSellerPage #orderStatusBtn{
               await refreshSellerFlow();
             } catch (error) {
               sellerMessage(
-                error.message ||
-                "Unable to verify owner Sign-In.",
+                sellerSafeError(
+                  error,
+                  "Unable to verify the owner Sign-In. Confirm it was completed in Xaman, then try again."
+                ),
                 "error"
               );
             }
@@ -13775,8 +13879,10 @@ body.merchSellerPage #orderStatusBtn{
               renderSellerFlow();
             } catch (error) {
               sellerMessage(
-                error.message ||
-                "Unable to create storefront.",
+                sellerSafeError(
+                  error,
+                  "Unable to create the storefront. Try again or contact MONOLITH support."
+                ),
                 "error"
               );
             } finally {
@@ -13842,8 +13948,10 @@ body.merchSellerPage #orderStatusBtn{
               );
             } catch (error) {
               sellerMessage(
-                error.message ||
-                "Unable to save notification settings.",
+                sellerSafeError(
+                  error,
+                  "Unable to save notification settings. Try again."
+                ),
                 "error"
               );
             } finally {
@@ -13935,8 +14043,10 @@ body.merchSellerPage #orderStatusBtn{
               }
             } catch (error) {
               sellerMessage(
-                error.message ||
-                "Unable to create verification payment.",
+                sellerSafeError(
+                  error,
+                  "Unable to create the verification payment. Try again. Do not send $XRP manually."
+                ),
                 "error"
               );
             } finally {
@@ -13994,8 +14104,10 @@ body.merchSellerPage #orderStatusBtn{
                 error.code ===
                   "MERCH_VERIFICATION_FEE_NOT_SIGNED"
                   ? "The identity verification payment has not been completed in Xaman yet."
-                  : error.message ||
-                    "Unable to verify seller payment.",
+                  : sellerSafeError(
+                      error,
+                      "Unable to verify the seller payment. Do not pay again. Try verification again."
+                    ),
                 "error"
               );
             } finally {
@@ -14081,8 +14193,10 @@ body.merchSellerPage #orderStatusBtn{
                 error.code ===
                   "STRIPE_IDENTITY_NOT_CONFIGURED"
                   ? "Seller identity verification is being finalized for launch."
-                  : error.message ||
-                    "Unable to start identity verification.",
+                  : sellerSafeError(
+                      error,
+                      "Unable to start identity verification. Try again or contact MONOLITH support."
+                    ),
                 "error"
               );
             } finally {
@@ -14139,8 +14253,10 @@ body.merchSellerPage #orderStatusBtn{
                 error.code ===
                   "STRIPE_IDENTITY_NOT_CONFIGURED"
                   ? "Seller identity verification is being finalized for launch."
-                  : error.message ||
-                    "Unable to check identity verification.",
+                  : sellerSafeError(
+                      error,
+                      "Unable to check identity verification. Try again later or contact MONOLITH support."
+                    ),
                 "error"
               );
             } finally {
