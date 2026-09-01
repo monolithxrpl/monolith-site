@@ -2307,6 +2307,67 @@
       grid-column:1/-1;
     }
 
+    .sellerNotificationSettings{
+      margin-top:16px;
+      padding:18px;
+      border:1px solid #b9dceb;
+      border-radius:10px;
+      background:#eef8fd;
+      color:#173446;
+      display:grid;
+      gap:14px;
+    }
+
+    .sellerNotificationSettings > strong{
+      color:#12394d;
+      font-size:14px;
+    }
+
+    .sellerNotificationSettings label{
+      display:grid;
+      gap:7px;
+    }
+
+    .sellerNotificationSettings label > span{
+      color:#405965;
+      font-size:11px;
+      font-weight:800;
+    }
+
+    .sellerNotificationSettings input[type="email"]{
+      width:100%;
+      min-height:43px;
+      padding:0 12px;
+      border:1px solid #c5dce7;
+      border-radius:9px;
+      color:#173446;
+      background:#fff;
+      font:inherit;
+      font-size:12px;
+    }
+
+    .sellerNotificationSettings input[type="email"]::placeholder{
+      color:#71838d;
+      opacity:1;
+    }
+
+    .sellerNotificationToggle{
+      display:flex !important;
+      align-items:center;
+      gap:9px !important;
+      color:#405965;
+    }
+
+    .sellerNotificationToggle input{
+      width:auto;
+      flex:0 0 auto;
+    }
+
+    .sellerNotificationToggle span{
+      color:#405965;
+    }
+
+
     .sellerActions{
       display:flex;
       flex-wrap:wrap;
@@ -8337,6 +8398,41 @@ body.merchSellerPage #orderStatusBtn{
               </p>
             </div>
           </div>
+
+          <div
+            class="sellerNotificationSettings"
+            id="sellerNotificationSettings"
+            hidden
+          >
+            <strong>Order Notifications</strong>
+
+            <label>
+              <span>Email Address</span>
+              <input
+                id="sellerNotificationEmail"
+                type="email"
+                maxlength="320"
+                autocomplete="email"
+                placeholder="you@example.com"
+              >
+            </label>
+
+            <label class="sellerNotificationToggle">
+              <input
+                id="sellerEmailOnNewOrder"
+                type="checkbox"
+              >
+              <span>Email me when I receive a new order</span>
+            </label>
+
+            <button
+              class="sellerSecondaryBtn"
+              id="sellerSaveNotificationsBtn"
+              type="button"
+            >
+              Save Notification Settings
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -13042,6 +13138,22 @@ body.merchSellerPage #orderStatusBtn{
         verified:
           document.getElementById(
             "sellerVerifiedPanel"
+          ),
+        notificationSettings:
+          document.getElementById(
+            "sellerNotificationSettings"
+          ),
+        notificationEmail:
+          document.getElementById(
+            "sellerNotificationEmail"
+          ),
+        emailOnNewOrder:
+          document.getElementById(
+            "sellerEmailOnNewOrder"
+          ),
+        saveNotifications:
+          document.getElementById(
+            "sellerSaveNotificationsBtn"
           )
       };
 
@@ -13088,6 +13200,7 @@ body.merchSellerPage #orderStatusBtn{
         );
 
         sellerUi.verified.hidden = true;
+        sellerUi.notificationSettings.hidden = true;
       }
 
       function ownerSession() {
@@ -13322,6 +13435,17 @@ body.merchSellerPage #orderStatusBtn{
 
           sellerUi.verified.hidden =
             false;
+
+          sellerUi.notificationSettings.hidden =
+            false;
+
+          sellerUi.notificationEmail.value =
+            sellerProfile.notificationEmail || "";
+
+          sellerUi.emailOnNewOrder.checked =
+            Boolean(
+              sellerProfile.emailOnNewOrder
+            );
 
           sellerMessage(
             `Seller verification complete for ${sellerProfile.coordinate}.`,
@@ -13646,6 +13770,73 @@ body.merchSellerPage #orderStatusBtn{
               );
             } finally {
               sellerUi.create.disabled =
+                false;
+            }
+          }
+        );
+
+      sellerUi.saveNotifications
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!sellerProfile) return;
+
+            const notificationEmail =
+              String(
+                sellerUi.notificationEmail.value || ""
+              ).trim();
+
+            if (
+              sellerUi.emailOnNewOrder.checked &&
+              !notificationEmail
+            ) {
+              sellerMessage(
+                "Enter an email address to enable order notifications.",
+                "error"
+              );
+              return;
+            }
+
+            sellerUi.saveNotifications.disabled =
+              true;
+
+            try {
+              const data =
+                await merchJson(
+                  `/api/merch/seller/${
+                    encodeURIComponent(
+                      sellerProfile.sellerId
+                    )
+                  }`,
+                  {
+                    method: "POST",
+                    body: {
+                      payloadUuid:
+                        sellerPayload(),
+                      notificationEmail,
+                      emailOnNewOrder:
+                        sellerUi.emailOnNewOrder.checked
+                    }
+                  }
+                );
+
+              sellerProfile =
+                data.seller;
+
+              renderSellerFlow();
+
+              sellerMessage(
+                "Order notification settings saved.",
+                "success"
+              );
+            } catch (error) {
+              sellerMessage(
+                error.message ||
+                "Unable to save notification settings.",
+                "error"
+              );
+            } finally {
+              sellerUi.saveNotifications.disabled =
                 false;
             }
           }
