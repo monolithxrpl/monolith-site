@@ -882,7 +882,12 @@ async function startConsoleListing(){
   const data = await res.json();
 
   if (!data.ok){
-    setListConsole(data.error || "Listing start failed.");
+    setListConsole(
+      routeError(
+        data,
+        "Unable to start the listing. Try again or reload the market."
+      )
+    );
     return;
   }
 
@@ -928,7 +933,12 @@ async function verifyConsoleListing(){
   const data = await res.json();
 
   if (!data.ok){
-    setListConsole(data.error || "Listing verification failed.");
+    setListConsole(
+      routeError(
+        data,
+        "Listing verification could not be completed. Confirm the Xaman signature, then try Verify Listing again."
+      )
+    );
     return;
   }
 
@@ -973,7 +983,36 @@ function listingBuyReady(item){
 }
 
 function routeError(data, fallback){
-  return (data && (data.error || data.message)) || fallback;
+  const code = String(
+    data && (data.error || data.message) || ""
+  ).trim();
+
+  const messages = {
+    listing_not_found:
+      "This listing is no longer available. Reload the market to get the current state.",
+    listing_not_active:
+      "This listing is no longer active. Reload the market before trying again.",
+    auth_not_signed:
+      "The Xaman sign-in is still waiting for approval. Complete it in Xaman, return here, then verify again.",
+    payment_not_signed:
+      "The Xaman transaction is still waiting for approval. Complete it, return here, then verify again.",
+    payload_expired:
+      "The Xaman request expired. Start this step again to create a new request.",
+    wrong_wallet:
+      "The wrong wallet signed this request. Start again with the wallet required for this transaction.",
+    owner_wallet_mismatch:
+      "Use the wallet that currently owns this coordinate and start again.",
+    offer_not_found:
+      "The XRPL offer could not be found. Reload the market before trying again.",
+    offer_expired:
+      "The XRPL offer is no longer available. Reload the market and restart the transaction.",
+    already_sold:
+      "This coordinate has already been sold. Reload the market to see the current owner."
+  };
+
+  return messages[code] ||
+    fallback ||
+    "The Tile Market could not complete this action. Reload and try again. If $XRP already moved, do not repeat the transaction and contact MONOLITH support.";
 }
 
 async function startConsoleSellOffer(){
@@ -1074,9 +1113,7 @@ async function startListingBuy(listingId){
   const item = listingById(listingId);
 
   if (!item){
-    setListConsole("Listing not found.");
-    return;
-    setListConsole("Buyer wallet required.");
+    setListConsole("This listing is no longer available. Reload the market to get the current state.");
     return;
   }
 
@@ -1219,7 +1256,12 @@ async function startConsoleCancel(){
   const data = await res.json();
 
   if (!data.ok){
-    setListConsole(data.error || "Cancel start failed.");
+    setListConsole(
+      routeError(
+        data,
+        "Unable to start the cancellation. Reload and try again."
+      )
+    );
     return;
   }
 
@@ -1263,7 +1305,12 @@ async function verifyConsoleCancel(){
   const data = await res.json();
 
   if (!data.ok){
-    setListConsole(data.error || "Cancel verification failed.");
+    setListConsole(
+      routeError(
+        data,
+        "Cancellation verification could not be completed. Confirm the Xaman signature, then try Verify Cancel again."
+      )
+    );
     return;
   }
 

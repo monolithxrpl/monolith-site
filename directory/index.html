@@ -702,8 +702,15 @@
         } catch (error) {
           console.error("[directory]", error);
           summary.innerHTML = "";
-          results.innerHTML = "";
-          status.textContent = "Unable to load the MONOLITH Directory.";
+          results.innerHTML = `
+            <div class="empty">
+              MONOLITH Directory could not be loaded.
+              Refresh the page and try again.
+              If the problem continues,
+              <a href="/help/">open Help & Support</a>.
+            </div>
+          `;
+          status.textContent = "Directory temporarily unavailable.";
         }
       }
 
