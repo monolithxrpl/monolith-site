@@ -8720,7 +8720,14 @@ body.merchSellerPage #orderStatusBtn{
                   id="productOptionName"
                   type="text"
                   maxlength="120"
-                  placeholder="Option name, e.g. Size"
+                  placeholder="Option Name, e.g. Size"
+                >
+
+                <input
+                  id="productOptionValues"
+                  type="text"
+                  maxlength="1000"
+                  placeholder="Values, e.g. S, M, L, XL, 2XL, 3XL"
                 >
 
                 <button
@@ -8732,7 +8739,7 @@ body.merchSellerPage #orderStatusBtn{
                 </button>
 
                 <span class="productAdvancedNotice">
-                  Use a label like Size, Color or Scent. Add the actual choices after creating the option.
+                  Name the option, then enter its choices separated by commas. Custom values are allowed.
                 </span>
               </div>
             </section>
@@ -14468,6 +14475,10 @@ body.merchSellerPage #orderStatusBtn{
           document.getElementById(
             "productOptionName"
           ),
+        optionValues:
+          document.getElementById(
+            "productOptionValues"
+          ),
         addOption:
           document.getElementById(
             "productAddOptionBtn"
@@ -15850,17 +15861,36 @@ body.merchSellerPage #orderStatusBtn{
             ""
           ).trim();
 
+        const values =
+          String(
+            productUi.optionValues.value ||
+            ""
+          )
+            .split(",")
+            .map(value => value.trim())
+            .filter(Boolean);
+
         if (!name) {
           productMessage(
             "Enter an option name.",
             "error"
           );
+          productUi.optionName.focus();
+          return;
+        }
+
+        if (!values.length) {
+          productMessage(
+            "Enter at least one option value.",
+            "error"
+          );
+          productUi.optionValues.focus();
           return;
         }
 
         if (name.includes(",")) {
           productMessage(
-            "That looks like a list of values. Use an option name like Size, then add S, M, L, XL as values.",
+            "Use a single option name like Size. Put the choices in the Values field.",
             "error"
           );
           productUi.optionName.focus();
@@ -15887,17 +15917,66 @@ body.merchSellerPage #orderStatusBtn{
               }
             );
 
+          const createdOption =
+            Array.isArray(data.product?.options)
+              ? data.product.options.find(
+                  option =>
+                    option.name === name
+                )
+              : null;
+
+          if (!createdOption?.optionId) {
+            throw new Error(
+              "Created option could not be resolved."
+            );
+          }
+
+          let latestProduct =
+            data.product;
+
+          for (const value of values) {
+            const valueData =
+              await merchJson(
+                `/api/merch/product/${
+                  encodeURIComponent(
+                    editingProduct.productId
+                  )
+                }/option/${
+                  encodeURIComponent(
+                    createdOption.optionId
+                  )
+                }/value`,
+                {
+                  method:"POST",
+                  body:{
+                    payloadUuid:
+                      sellerPayload(),
+                    value
+                  }
+                }
+              );
+
+            latestProduct =
+              valueData.product ||
+              latestProduct;
+          }
+
           productUi.optionName.value =
+            "";
+
+          productUi.optionValues.value =
             "";
 
           resetVariantEditor();
 
           await refreshEditingProduct(
-            data.product
+            latestProduct
           );
 
           productMessage(
-            "Product option added.",
+            values.length > 1
+              ? `Option added with ${values.length} values.`
+              : "Option added with 1 value.",
             "success"
           );
         } catch (error) {
