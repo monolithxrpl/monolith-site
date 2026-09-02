@@ -201,6 +201,15 @@ h1{
   box-shadow:0 0 0 3px rgba(21,159,229,.1);
 }
 
+#optionsField{
+  margin-top:18px;
+}
+
+.optionSelectors{
+  display:grid;
+  gap:12px;
+}
+
 .description{
   margin-top:25px;
   padding-top:24px;
@@ -378,11 +387,8 @@ h1{
       <div class="xrp" id="xrp"></div>
       <div class="stock" id="stock"></div>
 
-      <div class="field" id="variantField" hidden>
-        <label for="variant">Choose an option</label>
-        <select id="variant">
-          <option value="">Select an option</option>
-        </select>
+      <div id="optionsField" hidden>
+        <div class="optionSelectors" id="optionSelectors"></div>
       </div>
 
       <div class="description" id="description"></div>
@@ -415,8 +421,8 @@ h1{
   const productRoot = document.getElementById("product");
   const heroImage = document.getElementById("heroImage");
   const thumbs = document.getElementById("thumbs");
-  const variantField = document.getElementById("variantField");
-  const variantSelect = document.getElementById("variant");
+  const optionsField = document.getElementById("optionsField");
+  const optionSelectors = document.getElementById("optionSelectors");
   const addBtn = document.getElementById("addBtn");
   const buyBtn = document.getElementById("buyBtn");
   const shareBtn = document.getElementById("shareBtn");
@@ -434,14 +440,194 @@ h1{
       .replaceAll("'","&#039;");
   }
 
-  function selectedVariant(){
-    if (!variantSelect.value) return null;
+  function productOptionSelects(){
+    return Array.from(
+      optionSelectors.querySelectorAll(
+        "[data-product-option]"
+      )
+    );
+  }
 
-    return Array.isArray(product?.variants)
-      ? product.variants.find(
-          variant => String(variant.variantId) === variantSelect.value
-        ) || null
-      : null;
+  function variantMatchesSelections(
+    variant,
+    selections
+  ){
+    const values =
+      Array.isArray(variant?.optionValues)
+        ? variant.optionValues
+        : [];
+
+    return selections.every(
+      selection =>
+        values.some(
+          item =>
+            String(item.optionId) ===
+              String(selection.optionId) &&
+            String(item.valueId) ===
+              String(selection.valueId)
+        )
+    );
+  }
+
+  function selectedVariant(){
+    const variants =
+      Array.isArray(product?.variants)
+        ? product.variants
+        : [];
+
+    if (!variants.length) return null;
+
+    const selects = productOptionSelects();
+
+    if (
+      !selects.length ||
+      selects.some(select => !select.value)
+    ) {
+      return null;
+    }
+
+    const selections =
+      selects.map(select => ({
+        optionId:
+          select.dataset.productOption,
+        valueId:
+          select.value
+      }));
+
+    return variants.find(
+      variant =>
+        variantMatchesSelections(
+          variant,
+          selections
+        )
+    ) || null;
+  }
+
+  function syncOptionAvailability(){
+    const variants =
+      Array.isArray(product?.variants)
+        ? product.variants
+        : [];
+
+    const selects = productOptionSelects();
+
+    for (let pass = 0; pass < 2; pass += 1) {
+      selects.forEach(select => {
+        Array.from(select.options)
+          .slice(1)
+          .forEach(option => {
+            const selections = [];
+
+            selects.forEach(other => {
+              const valueId =
+                other === select
+                  ? option.value
+                  : other.value;
+
+              if (valueId) {
+                selections.push({
+                  optionId:
+                    other.dataset.productOption,
+                  valueId
+                });
+              }
+            });
+
+            option.disabled =
+              !variants.some(
+                variant =>
+                  variant.available !== false &&
+                  variantMatchesSelections(
+                    variant,
+                    selections
+                  )
+              );
+          });
+      });
+
+      selects.forEach(select => {
+        if (
+          select.value &&
+          select.selectedOptions[0]?.disabled
+        ) {
+          select.value = "";
+        }
+      });
+    }
+  }
+
+  function renderProductOptions(){
+    const options =
+      Array.isArray(product?.options)
+        ? [...product.options].sort(
+            (a,b) =>
+              Number(a.sortOrder || 0) -
+              Number(b.sortOrder || 0)
+          )
+        : [];
+
+    const variants =
+      Array.isArray(product?.variants)
+        ? product.variants
+        : [];
+
+    if (!options.length || !variants.length) {
+      optionsField.hidden = true;
+      optionSelectors.innerHTML = "";
+      return;
+    }
+
+    optionsField.hidden = false;
+
+    optionSelectors.innerHTML =
+      options.map(option => {
+        const values =
+          Array.isArray(option.values)
+            ? [...option.values].sort(
+                (a,b) =>
+                  Number(a.sortOrder || 0) -
+                  Number(b.sortOrder || 0)
+              )
+            : [];
+
+        return `
+          <div class="field">
+            <label>
+              ${esc(option.name)}
+            </label>
+
+            <select
+              data-product-option="${esc(option.optionId)}"
+              aria-label="${esc(option.name)}"
+            >
+              <option value="">
+                Select ${esc(option.name)}
+              </option>
+
+              ${values.map(value => `
+                <option value="${esc(value.valueId)}">
+                  ${esc(value.value)}
+                </option>
+              `).join("")}
+            </select>
+          </div>
+        `;
+      }).join("");
+
+    productOptionSelects().forEach(
+      select => {
+        select.addEventListener(
+          "change",
+          () => {
+            syncOptionAvailability();
+            renderPrice();
+            renderAvailability();
+          }
+        );
+      }
+    );
+
+    syncOptionAvailability();
   }
 
   function effectiveUsd(){
@@ -467,17 +653,34 @@ h1{
   }
 
   function renderAvailability(){
+    const variants =
+      Array.isArray(product?.variants)
+        ? product.variants
+        : [];
+
     const variant = selectedVariant();
+    const stock = document.getElementById("stock");
+
+    if (variants.length && !variant) {
+      stock.textContent = "SELECT OPTIONS";
+      stock.classList.remove("out");
+      addBtn.disabled = true;
+      buyBtn.disabled = true;
+      return;
+    }
 
     const available =
       variant
         ? variant.available !== false
         : product.available !== false;
 
-    const stock = document.getElementById("stock");
+    stock.textContent =
+      available ? "AVAILABLE" : "SOLD OUT";
 
-    stock.textContent = available ? "AVAILABLE" : "SOLD OUT";
-    stock.classList.toggle("out", !available);
+    stock.classList.toggle(
+      "out",
+      !available
+    );
 
     addBtn.disabled = !available;
     buyBtn.disabled = !available;
@@ -494,7 +697,12 @@ h1{
     const variant = selectedVariant();
 
     if (variants.length && !variant) {
-      variantSelect.focus();
+      const firstIncomplete =
+        productOptionSelects().find(
+          select => !select.value
+        );
+
+      firstIncomplete?.focus();
       return;
     }
 
@@ -710,61 +918,7 @@ h1{
         }
       }
 
-      const variants =
-        Array.isArray(product.variants)
-          ? product.variants
-          : [];
-
-      if (variants.length) {
-        variantField.hidden = false;
-
-        variantSelect.innerHTML =
-          `<option value="">Select an option</option>` +
-          variants.map(
-            variant => {
-              const label =
-                variant.title ||
-                (
-                  Array.isArray(variant.optionValues)
-                    ? variant.optionValues
-                        .map(item => item.value)
-                        .filter(Boolean)
-                        .join(" / ")
-                    : ""
-                ) ||
-                "Option";
-
-              return `
-                <option
-                  value="${esc(variant.variantId)}"
-                  ${variant.available === false ? "disabled" : ""}
-                >
-                  ${esc(label)}
-                  ${variant.available === false ? " — Sold Out" : ""}
-                </option>
-              `;
-            }
-          ).join("");
-
-        const available =
-          variants.filter(
-            variant => variant.available !== false
-          );
-
-        if (available.length === 1) {
-          variantSelect.value =
-            String(available[0].variantId);
-        }
-
-        variantSelect.addEventListener(
-          "change",
-          () => {
-            renderPrice();
-            renderAvailability();
-          }
-        );
-      }
-
+      renderProductOptions();
       renderPrice();
       renderAvailability();
 
