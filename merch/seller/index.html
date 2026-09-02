@@ -18757,60 +18757,136 @@ body.merchSellerPage #orderStatusBtn{
                 editingProduct?.productId ||
                 null;
 
-              const profileData =
-                await merchJson(
-                  "/api/merch/shipping/profile",
-                  {
-                    method:"POST",
-                    body:{
-                      payloadUuid:
-                        sellerPayload(),
-                      sellerId:
-                        sellerProfile.sellerId,
-                      name,
-                      rateMode:"manual",
-                      enabledCarriers:
-                        carrier
-                          ? [carrier]
-                          : []
+              let profileId =
+                editingProduct?.shippingProfile ||
+                productUi.shippingProfile.value ||
+                "";
+
+              let profile =
+                sellerShippingProfiles.find(
+                  item =>
+                    item.shippingProfileId ===
+                    profileId
+                );
+
+              if (profile) {
+                const profileData =
+                  await merchJson(
+                    `/api/merch/shipping/profile/${
+                      encodeURIComponent(
+                        profileId
+                      )
+                    }`,
+                    {
+                      method:"POST",
+                      body:{
+                        payloadUuid:
+                          sellerPayload(),
+                        name,
+                        rateMode:"manual",
+                        enabledCarriers:
+                          carrier
+                            ? [carrier]
+                            : []
+                      }
                     }
-                  }
-                );
+                  );
 
-              const profileId =
-                profileData
-                  .shippingProfile
-                  ?.shippingProfileId;
+                profile =
+                  profileData.shippingProfile ||
+                  profile;
+              } else {
+                const profileData =
+                  await merchJson(
+                    "/api/merch/shipping/profile",
+                    {
+                      method:"POST",
+                      body:{
+                        payloadUuid:
+                          sellerPayload(),
+                        sellerId:
+                          sellerProfile.sellerId,
+                        name,
+                        rateMode:"manual",
+                        enabledCarriers:
+                          carrier
+                            ? [carrier]
+                            : []
+                      }
+                    }
+                  );
 
-              if (!profileId) {
-                throw new Error(
-                  "shipping_profile_id_missing"
-                );
+                profileId =
+                  profileData
+                    .shippingProfile
+                    ?.shippingProfileId;
+
+                if (!profileId) {
+                  throw new Error(
+                    "shipping_profile_id_missing"
+                  );
+                }
+
+                profile =
+                  profileData.shippingProfile;
               }
 
-              const zoneData =
-                await merchJson(
-                  `/api/merch/shipping/profile/${
-                    encodeURIComponent(
-                      profileId
-                    )
-                  }/zone`,
-                  {
-                    method:"POST",
-                    body:{
-                      payloadUuid:
-                        sellerPayload(),
-                      name:
-                        countries.join(", "),
-                      countries
+              let zone =
+                (profile?.zones || [])
+                  .find(
+                    item =>
+                      item.status !== "archived"
+                  );
+
+              if (zone) {
+                const zoneData =
+                  await merchJson(
+                    `/api/merch/shipping/zone/${
+                      encodeURIComponent(
+                        zone.shippingZoneId
+                      )
+                    }`,
+                    {
+                      method:"POST",
+                      body:{
+                        payloadUuid:
+                          sellerPayload(),
+                        name:
+                          countries.join(", "),
+                        countries
+                      }
                     }
-                  }
-                );
+                  );
+
+                zone =
+                  zoneData.shippingZone ||
+                  zone;
+              } else {
+                const zoneData =
+                  await merchJson(
+                    `/api/merch/shipping/profile/${
+                      encodeURIComponent(
+                        profileId
+                      )
+                    }/zone`,
+                    {
+                      method:"POST",
+                      body:{
+                        payloadUuid:
+                          sellerPayload(),
+                        name:
+                          countries.join(", "),
+                        countries
+                      }
+                    }
+                  );
+
+                zone =
+                  zoneData.shippingZone;
+              }
 
               const zoneId =
-                zoneData
-                  .shippingZone
-                  ?.shippingZoneId;
+                zone?.shippingZoneId;
 
               if (!zoneId) {
                 throw new Error(
@@ -18818,24 +18894,52 @@ body.merchSellerPage #orderStatusBtn{
                 );
               }
 
-              await merchJson(
-                `/api/merch/shipping/zone/${
-                  encodeURIComponent(
-                    zoneId
-                  )
-                }/rate`,
-                {
-                  method:"POST",
-                  body:{
-                    payloadUuid:
-                      sellerPayload(),
-                    name:
-                      `${carrier} ${service} — ${packageLabel}`,
-                    rateUsd,
-                    freeOverUsd:null
+              let rate =
+                (zone?.rates || [])
+                  .find(
+                    item =>
+                      item.status !== "archived"
+                  );
+
+              if (rate) {
+                await merchJson(
+                  `/api/merch/shipping/rate/${
+                    encodeURIComponent(
+                      rate.shippingRateId
+                    )
+                  }`,
+                  {
+                    method:"POST",
+                    body:{
+                      payloadUuid:
+                        sellerPayload(),
+                      name:
+                        `${carrier} ${service} — ${packageLabel}`,
+                      rateUsd,
+                      freeOverUsd:null
+                    }
                   }
-                }
-              );
+                );
+              } else {
+                await merchJson(
+                  `/api/merch/shipping/zone/${
+                    encodeURIComponent(
+                      zoneId
+                    )
+                  }/rate`,
+                  {
+                    method:"POST",
+                    body:{
+                      payloadUuid:
+                        sellerPayload(),
+                      name:
+                        `${carrier} ${service} — ${packageLabel}`,
+                      rateUsd,
+                      freeOverUsd:null
+                    }
+                  }
+                );
+              }
 
               productUi.shippingProfile.value =
                 profileId;
