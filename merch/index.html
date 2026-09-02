@@ -9427,7 +9427,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 checkoutShippingQuote.subtotalXrp
               ).toLocaleString(
                 undefined,
-                { maximumFractionDigits:6 }
+                { maximumFractionDigits:2 }
               )} $XRP`
             : `$${subtotalUsd.toFixed(2)}`;
 
@@ -9441,7 +9441,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                       rate.shippingXrp || 0
                     ).toLocaleString(
                       undefined,
-                      { maximumFractionDigits:6 }
+                      { maximumFractionDigits:2 }
                     )} $XRP`
                   : "Select rate"
               )
@@ -9479,11 +9479,11 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 totalUsd != null
                   ? `$${totalUsd.toFixed(2)} · ≈ ${authoritativeTotal.toLocaleString(
                       undefined,
-                      { maximumFractionDigits:6 }
+                      { maximumFractionDigits:2 }
                     )} $XRP`
                   : `${authoritativeTotal.toLocaleString(
                       undefined,
-                      { maximumFractionDigits:6 }
+                      { maximumFractionDigits:2 }
                     )} $XRP`
               )
             : "Calculating…";
@@ -10119,7 +10119,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                   <span class="checkoutRatePrice">
                     $${escapeHtml(rate.amountUsd || "0.00")}
                     <small>
-                      ≈ ${escapeHtml(rate.shippingXrp)} $XRP
+                      ≈ ${Number(rate.shippingXrp || 0).toLocaleString(undefined,{maximumFractionDigits:2})} $XRP
                     </small>
                   </span>
                 </label>
