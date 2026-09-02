@@ -13060,7 +13060,12 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                           )
                         }"
                       >
-                        Add
+                        ${
+                          Array.isArray(product.variants) &&
+                          product.variants.length
+                            ? "Choose Options"
+                            : "Add to Cart"
+                        }
                       </button>
                     </div>
                   </div>
@@ -19837,20 +19842,8 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         ?.addEventListener(
           "click",
           () => {
-            const search =
-              document.getElementById(
-                "marketSearch"
-              );
-
-            search?.scrollIntoView({
-              behavior:"smooth",
-              block:"center"
-            });
-
-            window.setTimeout(
-              () => search?.focus(),
-              300
-            );
+            window.location.href =
+              "/directory/";
           }
         );
 
@@ -19866,25 +19859,18 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
                 "cartBar"
               );
 
-            if (cart.length) {
-              updateCart();
+            updateCart(false);
 
-              cartBar?.scrollIntoView({
-                behavior:"smooth",
-                block:"center"
-              });
-
-              return;
+            if (!cart.length) {
+              cartBar?.classList.add(
+                "show"
+              );
             }
 
-            document
-              .getElementById(
-                "products"
-              )
-              ?.scrollIntoView({
-                behavior:"smooth",
-                block:"start"
-              });
+            cartBar?.scrollIntoView({
+              behavior:"smooth",
+              block:"center"
+            });
           }
         );
 
