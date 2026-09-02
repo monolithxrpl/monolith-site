@@ -19784,7 +19784,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       checkoutUi.button
         ?.addEventListener(
           "click",
-          openCheckout
+          () => openCheckout(false)
         );
 
       checkoutUi.close
@@ -19884,13 +19884,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         )
         ?.addEventListener(
           "click",
-          async () => {
-            if (!cart.length) {
-              return;
-            }
-
-            await openCheckout();
-          }
+          () => openCheckout(false)
         );
 
       document
