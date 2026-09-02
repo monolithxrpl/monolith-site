@@ -658,11 +658,19 @@ h1{
         ? product.variants
         : [];
 
+    const options =
+      Array.isArray(product?.options)
+        ? product.options
+        : [];
+
     const variant = selectedVariant();
     const stock = document.getElementById("stock");
 
-    if (variants.length && !variant) {
-      stock.textContent = "SELECT OPTIONS";
+    if (options.length && !variant) {
+      stock.textContent =
+        variants.length
+          ? "SELECT OPTIONS"
+          : "OPTIONS UNAVAILABLE";
       stock.classList.remove("out");
       addBtn.disabled = true;
       buyBtn.disabled = true;
@@ -694,9 +702,14 @@ h1{
         ? product.variants
         : [];
 
+    const options =
+      Array.isArray(product.options)
+        ? product.options
+        : [];
+
     const variant = selectedVariant();
 
-    if (variants.length && !variant) {
+    if (options.length && !variant) {
       const firstIncomplete =
         productOptionSelects().find(
           select => !select.value
