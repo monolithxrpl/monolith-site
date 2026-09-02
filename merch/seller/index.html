@@ -8730,6 +8730,10 @@ body.merchSellerPage #orderStatusBtn{
                 >
                   Add Option
                 </button>
+
+                <span class="productAdvancedNotice">
+                  Use a label like Size, Color or Scent. Add the actual choices after creating the option.
+                </span>
               </div>
             </section>
 
@@ -15297,7 +15301,7 @@ body.merchSellerPage #orderStatusBtn{
                         option.optionId
                       )
                     }"
-                    placeholder="Add value"
+                    placeholder="Add value or comma-separated values"
                   >
 
                   <button
@@ -15854,6 +15858,15 @@ body.merchSellerPage #orderStatusBtn{
           return;
         }
 
+        if (name.includes(",")) {
+          productMessage(
+            "That looks like a list of values. Use an option name like Size, then add S, M, L, XL as values.",
+            "error"
+          );
+          productUi.optionName.focus();
+          return;
+        }
+
         try {
           await ensureEditingProductDraft();
 
@@ -15909,43 +15922,62 @@ body.merchSellerPage #orderStatusBtn{
               `[data-option-value-input="${CSS.escape(optionId)}"]`
             );
 
-        const value =
+        const raw =
           String(
             input?.value || ""
           ).trim();
 
-        if (!value) return;
+        if (!raw) return;
+
+        const values =
+          raw
+            .split(",")
+            .map(value => value.trim())
+            .filter(Boolean);
+
+        if (!values.length) return;
 
         try {
-          const data =
-            await merchJson(
-              `/api/merch/product/${
-                encodeURIComponent(
-                  editingProduct.productId
-                )
-              }/option/${
-                encodeURIComponent(
-                  optionId
-                )
-              }/value`,
-              {
-                method:"POST",
-                body:{
-                  payloadUuid:
-                    sellerPayload(),
-                  value
+          let latestProduct = null;
+
+          for (const value of values) {
+            const data =
+              await merchJson(
+                `/api/merch/product/${
+                  encodeURIComponent(
+                    editingProduct.productId
+                  )
+                }/option/${
+                  encodeURIComponent(
+                    optionId
+                  )
+                }/value`,
+                {
+                  method:"POST",
+                  body:{
+                    payloadUuid:
+                      sellerPayload(),
+                    value
+                  }
                 }
-              }
-            );
+              );
+
+            latestProduct =
+              data.product || latestProduct;
+          }
+
+          input.value = "";
 
           resetVariantEditor();
 
           await refreshEditingProduct(
-            data.product
+            latestProduct
           );
 
           productMessage(
-            "Option value added.",
+            values.length > 1
+              ? `${values.length} option values added.`
+              : "Option value added.",
             "success"
           );
         } catch (error) {
