@@ -3067,6 +3067,33 @@
       font-size:8px;
     }
 
+    .variantRowMeta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px 10px;
+      margin-top:5px;
+      font-size:9px;
+    }
+
+    .variantRowOption{
+      color:#d7e4ea;
+      font-weight:900;
+    }
+
+    .variantRowSku{
+      color:#f0c96f;
+    }
+
+    .variantRowQty{
+      color:#8be0ff;
+    }
+
+    .variantRowSku b,
+    .variantRowQty b{
+      color:#ffffff;
+      font-weight:900;
+    }
+
     .variantRowPrice{
       color:#79d3fb;
       font-size:9px;
@@ -8792,6 +8819,7 @@ body.merchSellerPage #orderStatusBtn{
                       id="variantTitle"
                       type="text"
                       maxlength="240"
+                      autocomplete="off"
                       placeholder="Optional"
                     >
                   </label>
@@ -8812,6 +8840,9 @@ body.merchSellerPage #orderStatusBtn{
                       id="variantSku"
                       type="text"
                       maxlength="160"
+                      autocomplete="off"
+                      autocapitalize="off"
+                      spellcheck="false"
                       placeholder="Optional"
                     >
                   </label>
@@ -8824,6 +8855,7 @@ body.merchSellerPage #orderStatusBtn{
                       min="0"
                       step="1"
                       value="0"
+                      autocomplete="off"
                     >
                   </label>
                 </div>
@@ -15487,24 +15519,28 @@ body.merchSellerPage #orderStatusBtn{
                       }
                     </strong>
 
-                    <span>
-                      ${
-                        escapeHtml(
-                          combination
-                        )
-                      }
+                    <div class="variantRowMeta">
+                      <span class="variantRowOption">
+                        ${escapeHtml(combination)}
+                      </span>
+
                       ${
                         variant.sku
-                          ? ` · SKU ${escapeHtml(variant.sku)}`
+                          ? `<span class="variantRowSku">
+                               <b>SKU</b> ${escapeHtml(variant.sku)}
+                             </span>`
                           : ""
                       }
-                      · Qty ${
-                        Number(
-                          variant.inventoryQuantity ||
-                          0
-                        )
-                      }
-                    </span>
+
+                      <span class="variantRowQty">
+                        <b>Qty</b> ${
+                          Number(
+                            variant.inventoryQuantity ||
+                            0
+                          )
+                        }
+                      </span>
+                    </div>
                   </div>
 
                   <span class="variantRowPrice">
