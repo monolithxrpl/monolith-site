@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>MONOLITH CITY</title>
+  <style>
+    html,body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#050505;
+      color:#fff;
+      font-family:Arial,sans-serif;
+    }
+
+    #city{
+      position:fixed;
+      inset:0;
+    }
+
+    canvas{
+      display:block;
+      width:100%;
+      height:100%;
+    }
+
+    .hud{
+      position:fixed;
+      top:18px;
+      left:18px;
+      z-index:10;
+      padding:12px 14px;
+      background:rgba(0,0,0,.68);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:12px;
+      backdrop-filter:blur(8px);
+    }
+
+    .hud strong{
+      display:block;
+      font-size:18px;
+      letter-spacing:.08em;
+    }
+
+    .hud span{
+      display:block;
+      margin-top:4px;
+      font-size:12px;
+      opacity:.7;
+    }
+
+    #mobile-controls{
+      display:none;
+    }
+
+    @media (pointer:coarse){
+      #mobile-controls{
+        display:block;
+      }
+
+      .stick{
+        position:fixed;
+        left:24px;
+        bottom:28px;
+        width:120px;
+        height:120px;
+        border-radius:50%;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.2);
+        touch-action:none;
+        z-index:20;
+      }
+
+      .knob{
+        position:absolute;
+        left:35px;
+        top:35px;
+        width:50px;
+        height:50px;
+        border-radius:50%;
+        background:rgba(255,255,255,.35);
+        pointer-events:none;
+      }
+
+      #look-zone{
+        position:fixed;
+        right:0;
+        bottom:0;
+        width:55vw;
+        height:70vh;
+        z-index:15;
+        touch-action:none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="city"></div>
+
+  <div class="hud">
+    <strong>MONOLITH CITY</strong>
+    <span id="coord">ORIGIN · 0,0</span>
+  </div>
+
+  <div id="mobile-controls">
+    <div id="move-stick" class="stick">
+      <div id="move-knob" class="knob"></div>
+    </div>
+    <div id="look-zone"></div>
+  </div>
+
+  <script type="module">
+    import * as THREE from "./vendor/three.module.min.js";
+
+    const mount = document.getElementById("city");
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x050505);
+
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      innerWidth / innerHeight,
+      0.1,
+      5000
+    );
+
+    camera.position.set(420, 360, 520);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true
+    });
+
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    mount.appendChild(renderer.domElement);
+
+    const ambient = new THREE.HemisphereLight(
+      0xffffff,
+      0x202020,
+      2.2
+    );
+    scene.add(ambient);
+
+    const sun = new THREE.DirectionalLight(
+      0xffffff,
+      2.5
+    );
+    sun.position.set(300, 600, 250);
+    scene.add(sun);
+
+    const CITY_STEP = 320;
+    const LOT_SIZE = 240;
+
+    const coordEl = document.getElementById("coord");
+
+    const player = {
+      x: 0,
+      z: 0,
+      y: 72,
+      yaw: 0,
+      pitch: -0.28,
+      speed: 260
+    };
+
+    const keys = new Set();
+
+    addEventListener("keydown", e => keys.add(e.code));
+    addEventListener("keyup", e => keys.delete(e.code));
+
+    let mouseLooking = false;
+
+    renderer.domElement.addEventListener("mousedown", () => {
+      mouseLooking = true;
+    });
+
+    addEventListener("mouseup", () => {
+      mouseLooking = false;
+    });
+
+    addEventListener("mousemove", e => {
+      if (!mouseLooking) return;
+
+      player.yaw -= e.movementX * 0.0025;
+      player.pitch -= e.movementY * 0.0025;
+
+      player.pitch = Math.max(
+        -1.25,
+        Math.min(0.65, player.pitch)
+      );
+    });
+
+    let moveX = 0;
+    let moveY = 0;
+
+    const stick = document.getElementById("move-stick");
+    const knob = document.getElementById("move-knob");
+
+    function resetStick(){
+      moveX = 0;
+      moveY = 0;
+      knob.style.transform = "translate(0px,0px)";
+    }
+
+    stick.addEventListener("pointerdown", e => {
+      stick.setPointerCapture(e.pointerId);
+    });
+
+    stick.addEventListener("pointermove", e => {
+      if (!stick.hasPointerCapture(e.pointerId)) return;
+
+      const r = stick.getBoundingClientRect();
+      let dx = e.clientX - (r.left + r.width / 2);
+      let dy = e.clientY - (r.top + r.height / 2);
+
+      const max = 35;
+      const len = Math.hypot(dx, dy);
+
+      if (len > max) {
+        dx = dx / len * max;
+        dy = dy / len * max;
+      }
+
+      moveX = dx / max;
+      moveY = dy / max;
+
+      knob.style.transform =
+        `translate(${dx}px,${dy}px)`;
+    });
+
+    stick.addEventListener("pointerup", resetStick);
+    stick.addEventListener("pointercancel", resetStick);
+
+    const lookZone = document.getElementById("look-zone");
+
+    let lookPointer = null;
+    let lookLastX = 0;
+    let lookLastY = 0;
+
+    lookZone.addEventListener("pointerdown", e => {
+      lookPointer = e.pointerId;
+      lookLastX = e.clientX;
+      lookLastY = e.clientY;
+      lookZone.setPointerCapture(e.pointerId);
+    });
+
+    lookZone.addEventListener("pointermove", e => {
+      if (e.pointerId !== lookPointer) return;
+
+      const dx = e.clientX - lookLastX;
+      const dy = e.clientY - lookLastY;
+
+      lookLastX = e.clientX;
+      lookLastY = e.clientY;
+
+      player.yaw -= dx * 0.006;
+      player.pitch -= dy * 0.006;
+
+      player.pitch = Math.max(
+        -1.25,
+        Math.min(0.65, player.pitch)
+      );
+    });
+
+    lookZone.addEventListener("pointerup", e => {
+      if (e.pointerId === lookPointer) lookPointer = null;
+    });
+
+    lookZone.addEventListener("pointercancel", e => {
+      if (e.pointerId === lookPointer) lookPointer = null;
+    });
+
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(
+        CITY_STEP * 9,
+        CITY_STEP * 9
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0x161616
+      })
+    );
+
+    ground.rotation.x = -Math.PI / 2;
+    scene.add(ground);
+
+    const lotMaterial = new THREE.MeshStandardMaterial({
+      color: 0x242424
+    });
+
+    for (let gy = -4; gy <= 4; gy++) {
+      for (let gx = -4; gx <= 4; gx++) {
+        const lot = new THREE.Mesh(
+          new THREE.BoxGeometry(
+            LOT_SIZE,
+            6,
+            LOT_SIZE
+          ),
+          lotMaterial
+        );
+
+        lot.position.set(
+          gx * CITY_STEP,
+          3,
+          -gy * CITY_STEP
+        );
+
+        scene.add(lot);
+      }
+    }
+
+    const origin = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        150,
+        180,
+        150
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0xb9b9b9
+      })
+    );
+
+    origin.position.set(0, 93, 0);
+    scene.add(origin);
+
+    const grid = new THREE.GridHelper(
+      CITY_STEP * 9,
+      9,
+      0xffffff,
+      0x444444
+    );
+
+    grid.position.y = 7;
+    scene.add(grid);
+
+    const clock = new THREE.Clock();
+
+    function render(){
+      const dt = Math.min(clock.getDelta(), 0.05);
+
+      let forward = 0;
+      let strafe = 0;
+
+      if (keys.has("KeyW") || keys.has("ArrowUp")) forward += 1;
+      if (keys.has("KeyS") || keys.has("ArrowDown")) forward -= 1;
+      if (keys.has("KeyD") || keys.has("ArrowRight")) strafe += 1;
+      if (keys.has("KeyA") || keys.has("ArrowLeft")) strafe -= 1;
+
+      forward += -moveY;
+      strafe += moveX;
+
+      const len = Math.hypot(forward, strafe);
+
+      if (len > 1) {
+        forward /= len;
+        strafe /= len;
+      }
+
+      const sin = Math.sin(player.yaw);
+      const cos = Math.cos(player.yaw);
+
+      player.x += (
+        -sin * forward +
+         cos * strafe
+      ) * player.speed * dt;
+
+      player.z += (
+        -cos * forward -
+         sin * strafe
+      ) * player.speed * dt;
+
+      camera.position.set(
+        player.x,
+        player.y,
+        player.z
+      );
+
+      const lookDistance = 100;
+
+      camera.lookAt(
+        player.x - Math.sin(player.yaw) * Math.cos(player.pitch) * lookDistance,
+        player.y + Math.sin(player.pitch) * lookDistance,
+        player.z - Math.cos(player.yaw) * Math.cos(player.pitch) * lookDistance
+      );
+
+      const gx = Math.round(player.x / CITY_STEP);
+      const gy = Math.round(-player.z / CITY_STEP);
+
+      let coordinate = "ORIGIN";
+
+      if (gx !== 0 || gy !== 0) {
+        const ns = gy > 0 ? `N${gy}` : gy < 0 ? `S${Math.abs(gy)}` : "";
+        const ew = gx > 0 ? `E${gx}` : gx < 0 ? `W${Math.abs(gx)}` : "";
+        coordinate = ns + ew;
+      }
+
+      coordEl.textContent = `${coordinate} · ${gx},${gy}`;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(render);
+    }
+
+    render();
+
+    addEventListener("resize", () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>
