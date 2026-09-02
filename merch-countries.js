@@ -20,14 +20,27 @@ TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI
 VN VU WF WS YE YT ZA ZM ZW
   `.trim().split(/\s+/);
 
-  const names =
-    typeof Intl !== "undefined" &&
-    typeof Intl.DisplayNames === "function"
-      ? new Intl.DisplayNames(
-          [navigator.language || "en"],
-          { type:"region" }
-        )
-      : null;
+  let names = null;
+
+  try {
+    if (
+      typeof Intl !== "undefined" &&
+      typeof Intl.DisplayNames === "function"
+    ) {
+      const locale =
+        typeof navigator !== "undefined" &&
+        navigator.language
+          ? navigator.language
+          : "en";
+
+      names = new Intl.DisplayNames(
+        [locale],
+        { type:"region" }
+      );
+    }
+  } catch (error) {
+    names = null;
+  }
 
   const countries =
     codes
