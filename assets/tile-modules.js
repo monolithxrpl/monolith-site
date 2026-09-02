@@ -324,7 +324,12 @@
                      )}"
                      loading="lazy"
                    >`
-                : "";
+                : `<span class="commerceMerchImageFallback">
+                     ${escapeHtml(
+                       product.title ||
+                       "Merch"
+                     )}
+                   </span>`;
 
             return `
               <a
@@ -334,18 +339,12 @@
                     product.productId
                   )
                 }"
+                aria-label="Open ${escapeHtml(
+                  product.title ||
+                  "merch product"
+                )}"
               >
                 ${image}
-
-                <div class="commerceMerchProductCopy">
-                  <strong>
-                    ${escapeHtml(product.title)}
-                  </strong>
-
-                  <span>
-                    $${escapeHtml(product.priceUsd)}
-                  </span>
-                </div>
               </a>
             `;
           }).join("")}

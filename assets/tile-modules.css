@@ -58,20 +58,19 @@
 
 .commerceMerchGrid{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(6,minmax(0,1fr));
   gap:10px;
   margin-top:4px;
 }
 
 .commerceMerchProduct{
-  display:flex;
-  flex-direction:column;
+  display:block;
   min-width:0;
+  padding:4px;
   overflow:hidden;
-  border:1px solid rgba(130,220,255,.22);
-  border-radius:12px;
-  background:rgba(5,19,32,.88);
-  color:#eaf7ff;
+  border:1px solid var(--line);
+  background:#fff;
+  color:inherit;
 }
 
 .commerceMerchProduct:hover{
@@ -80,34 +79,31 @@
 
 .commerceMerchImage{
   width:100%;
+  max-width:none;
   aspect-ratio:1 / 1;
   display:block;
   object-fit:cover;
   background:#07111c;
 }
 
-.commerceMerchProductCopy{
+.commerceMerchImageFallback{
+  width:100%;
+  aspect-ratio:1 / 1;
   display:flex;
-  flex-direction:column;
-  gap:5px;
-  padding:10px;
+  align-items:center;
+  justify-content:center;
+  padding:8px;
+  overflow:hidden;
+  color:#9fc7dd;
+  background:#07111c;
+  font-size:9px;
+  line-height:1.25;
+  text-align:center;
 }
 
-.commerceMerchProductCopy strong{
-  color:#ffffff;
-  font-size:12px;
-  line-height:1.35;
-}
-
-.commerceMerchProductCopy span{
-  color:#f7c96d;
-  font-size:12px;
-  font-weight:900;
-}
-
-@media(max-width:520px){
+@media(max-width:760px){
   .commerceMerchGrid{
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(3,minmax(0,1fr));
   }
 }
 
