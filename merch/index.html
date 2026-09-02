@@ -9846,13 +9846,18 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         }
       }
 
-      async function openCheckout() {
+      async function openCheckout(
+        requireSession = false
+      ) {
         if (!cart.length) return;
 
         const session =
           buyerSession();
 
-        if (!session) {
+        if (
+          requireSession &&
+          !session
+        ) {
           try {
             await startBuyerSignIn(
               "/merch/?buyerCheckout=1"
@@ -9871,7 +9876,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
 
         if (checkoutUi?.buyerWallet) {
           checkoutUi.buyerWallet.value =
-            session.wallet;
+            session?.wallet || "";
         }
 
         const groups =
@@ -11294,6 +11299,32 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
       }
 
       async function createCheckoutOrder() {
+        const session =
+          buyerSession();
+
+        if (!session) {
+          try {
+            await startBuyerSignIn(
+              "/merch/?buyerCheckout=1"
+            );
+          } catch (error) {
+            checkoutMessage(
+              buyerSafeError(
+                error,
+                "Unable to start Xaman Sign-In."
+              ),
+              "error"
+            );
+          }
+
+          return;
+        }
+
+        if (checkoutUi?.buyerWallet) {
+          checkoutUi.buyerWallet.value =
+            session.wallet;
+        }
+
         let payload;
 
         try {
@@ -13297,7 +13328,7 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         );
 
         if (buyNow) {
-          await openCheckout();
+          await openCheckout(true);
         }
       }
 
@@ -19853,24 +19884,12 @@ body.merchLaunchSoon .sellerCenterNav a[href="#sellerShipping"]{
         )
         ?.addEventListener(
           "click",
-          () => {
-            const cartBar =
-              document.getElementById(
-                "cartBar"
-              );
-
-            updateCart(false);
-
+          async () => {
             if (!cart.length) {
-              cartBar?.classList.add(
-                "show"
-              );
+              return;
             }
 
-            cartBar?.scrollIntoView({
-              behavior:"smooth",
-              block:"center"
-            });
+            await openCheckout();
           }
         );
 
