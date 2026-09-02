@@ -19425,9 +19425,26 @@ body.merchSellerPage #orderStatusBtn{
             productUi.shippingProfileName.value =
               savedShippingProfile.name || "";
 
-            productUi.shippingCountries.value =
-              (savedZone?.countries || [])
-                .join(", ");
+            const savedCountries =
+              new Set(
+                (savedZone?.countries || [])
+                  .map(country =>
+                    String(country || "")
+                      .trim()
+                      .toUpperCase()
+                  )
+              );
+
+            Array.from(
+              productUi.shippingCountries.options
+            ).forEach(option => {
+              option.selected =
+                savedCountries.has(
+                  String(option.value || "")
+                    .trim()
+                    .toUpperCase()
+                );
+            });
 
             if (savedRate) {
               productUi.shippingCostUsd.value =
