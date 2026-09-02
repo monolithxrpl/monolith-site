@@ -647,7 +647,7 @@ h1{
     document.getElementById("xrp").textContent =
       xrpUsd && xrpUsd > 0
         ? `≈ ${(usd / xrpUsd).toLocaleString(undefined,{
-            maximumFractionDigits:6
+            maximumFractionDigits:2
           })} $XRP`
         : "$XRP payment through MONOLITH";
   }
