@@ -69,6 +69,36 @@
       font-weight:900;
     }
 
+    .enterWall{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      min-height:64px;
+      margin:0 0 18px;
+      border:1px solid rgba(73,191,255,.92);
+      border-radius:18px;
+      color:#ffffff;
+      background:
+        radial-gradient(circle at top,rgba(73,191,255,.38),transparent 52%),
+        linear-gradient(180deg,rgba(8,55,91,.98),rgba(3,12,23,.98));
+      box-shadow:
+        0 0 22px rgba(73,191,255,.42),
+        0 14px 34px rgba(0,0,0,.28);
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      text-decoration:none;
+    }
+
+    .enterWall:hover{
+      border-color:#bfeeff;
+      box-shadow:
+        0 0 28px rgba(73,191,255,.58),
+        0 16px 36px rgba(0,0,0,.30);
+    }
+
     .hero{
       position:relative;
       overflow:hidden;
@@ -404,6 +434,10 @@
 
       <a class="back" href="/">Entrance</a>
     </div>
+
+    <a class="enterWall" href="/monolith.html">
+      ENTER THE WALL
+    </a>
 
     <section class="hero">
       <div class="heroInner">
