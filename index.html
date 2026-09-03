@@ -964,6 +964,57 @@ main .row + .entranceV5Hero{
 </style>
 
 
+<style id="monolith-entrance-final-layout-20260902">
+/* Final Entrance launcher layout */
+.entranceV5Actions{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+
+/* Directory spans both columns but stays secondary */
+.entranceV5Actions .entranceDirectoryBtn{
+  grid-column:1 / -1!important;
+  min-height:58px!important;
+  border-color:rgba(130,220,255,.34)!important;
+  color:#cfeeff!important;
+  background:
+    linear-gradient(180deg,rgba(10,30,53,.62),rgba(3,12,23,.88))!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.20)!important;
+  letter-spacing:.10em!important;
+}
+
+/* Explore Wall remains the primary visual attraction */
+.entranceV5Actions .wallExploreBtn{
+  border-color:rgba(73,191,255,.98)!important;
+  color:#ffffff!important;
+  background:
+    radial-gradient(circle at top,rgba(73,191,255,.44),transparent 52%),
+    linear-gradient(180deg,rgba(8,55,91,.98),rgba(3,12,23,.98))!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.10),
+    0 0 24px rgba(73,191,255,.58),
+    0 0 48px rgba(73,191,255,.24),
+    0 16px 38px rgba(0,0,0,.34)!important;
+}
+
+@media(max-width:900px){
+  .entranceV5Actions{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
+@media(max-width:520px){
+  .entranceV5Actions{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .entranceV5Actions .entranceDirectoryBtn{
+    grid-column:1 / -1!important;
+    min-height:54px!important;
+  }
+}
+</style>
+
+
 <style id="monolith-directory-stage-20260823">
 .monolithDirectoryStage{
   position:relative;
@@ -1176,13 +1227,18 @@ main .row + .entranceV5Hero{
       </div>
 
       <div class="ctaRow entranceV5Actions" aria-label="Actions">
+        <a class="btn entranceDirectoryBtn" href="/directory/">DIRECTORY</a>
+
         <a class="btn primary" href="/claim/">CLAIM A COORDINATE</a>
         <a class="btn wallExploreBtn" href="/monolith.html">EXPLORE WALL</a>
-        <a class="btn" href="/claim/#trial">Free Trial</a>
-        <a class="btn" href="/tile/ORIGIN">Example Tile</a>
-        <a class="btn warn" href="/rules.html">Rules</a>
+
         <a class="btn merchStoreLaunchBtn" href="/merch/">Merch Store</a>
         <a class="btn warn marketGoldBtn" href="/market/">Tile Market</a>
+
+        <a class="btn" href="/claim/#trial">Free Trial</a>
+        <a class="btn" href="/tile/ORIGIN">Example Tile</a>
+
+        <a class="btn warn" href="/rules.html">Rules</a>
         <a class="btn" href="/help/">Help & Support</a>
       </div>
 
