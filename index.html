@@ -964,6 +964,105 @@ main .row + .entranceV5Hero{
 </style>
 
 
+<style id="monolith-wall-chaos-20260902">
+@keyframes monolithWallChaos{
+  0%{
+    opacity:1;
+    filter:brightness(1.05);
+  }
+  5%{
+    opacity:.18;
+    filter:brightness(.25);
+  }
+  8%{
+    opacity:1;
+    filter:brightness(1.7);
+  }
+  12%{
+    opacity:.55;
+    filter:brightness(.65);
+  }
+  15%{
+    opacity:1;
+    filter:brightness(1.3);
+  }
+  22%{
+    opacity:.08;
+    filter:brightness(.18);
+  }
+  25%{
+    opacity:1;
+    filter:brightness(2);
+  }
+  31%{
+    opacity:.74;
+    filter:brightness(.8);
+  }
+  34%{
+    opacity:1;
+    filter:brightness(1.55);
+  }
+  43%{
+    opacity:.22;
+    filter:brightness(.35);
+  }
+  46%{
+    opacity:1;
+    filter:brightness(1.9);
+  }
+  52%{
+    opacity:.92;
+    filter:brightness(1.05);
+  }
+  58%{
+    opacity:.12;
+    filter:brightness(.2);
+  }
+  61%{
+    opacity:1;
+    filter:brightness(2.1);
+  }
+  68%{
+    opacity:.48;
+    filter:brightness(.55);
+  }
+  72%{
+    opacity:1;
+    filter:brightness(1.45);
+  }
+  79%{
+    opacity:.06;
+    filter:brightness(.12);
+  }
+  82%{
+    opacity:1;
+    filter:brightness(2.2);
+  }
+  88%{
+    opacity:.7;
+    filter:brightness(.72);
+  }
+  91%{
+    opacity:1;
+    filter:brightness(1.65);
+  }
+  100%{
+    opacity:1;
+    filter:brightness(1.05);
+  }
+}
+
+.entranceV5Actions .wallExploreBtn{
+  transform-origin:center;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .entranceV5Actions .wallExploreBtn{
+    animation:none!important;
+  }
+}
+</style>
+
 <style id="monolith-entrance-final-layout-20260902">
 /* Final Entrance launcher layout */
 .entranceV5Actions{
@@ -996,7 +1095,7 @@ main .row + .entranceV5Hero{
     0 0 24px rgba(73,191,255,.58),
     0 0 48px rgba(73,191,255,.24),
     0 16px 38px rgba(0,0,0,.34)!important;
-  animation:monolithClaimsPillPulse 2.8s ease-in-out infinite!important;
+  animation:monolithWallChaos .95s steps(1,end) infinite!important;
 }
 
 @media(max-width:900px){
