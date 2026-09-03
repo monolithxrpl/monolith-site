@@ -3887,7 +3887,7 @@
 
     .shippingRateForm{
       display:grid;
-      grid-template-columns:1fr .8fr 1fr auto;
+      grid-template-columns:1fr .8fr .7fr .7fr 1fr auto;
       gap:7px;
     }
 
@@ -17290,6 +17290,20 @@ body.merchSellerPage #orderStatusBtn{
 
                                             <span>
                                               ${
+                                                rate.minQuantity == null &&
+                                                rate.maxQuantity == null
+                                                  ? "All quantities"
+                                                  : rate.minQuantity != null &&
+                                                    rate.maxQuantity != null
+                                                    ? `${escapeHtml(rate.minQuantity)}–${escapeHtml(rate.maxQuantity)} items`
+                                                    : rate.minQuantity != null
+                                                      ? `${escapeHtml(rate.minQuantity)}+ items`
+                                                      : `Up to ${escapeHtml(rate.maxQuantity)} items`
+                                              }
+                                            </span>
+
+                                            <span>
+                                              ${
                                                 rate.freeOverUsd
                                                   ? `Free over $${escapeHtml(rate.freeOverUsd)}`
                                                   : "No free-shipping threshold"
@@ -17322,8 +17336,9 @@ body.merchSellerPage #orderStatusBtn{
                                 <strong>Add Shipping Rate</strong>
 
                                 <p>
-                                  Set the shipping charge in USD.
-                                  Free-over threshold is optional.
+                                  Set the shipping charge in USD and optionally
+                                  limit it to an order quantity range.
+                                  Leave both quantity fields blank for all quantities.
                                 </p>
 
                                 <div class="shippingRateForm">
@@ -17343,6 +17358,28 @@ body.merchSellerPage #orderStatusBtn{
                                     inputmode="decimal"
                                     placeholder="Rate USD"
                                     data-rate-usd="${
+                                      escapeHtml(
+                                        zone.shippingZoneId
+                                      )
+                                    }"
+                                  >
+
+                                  <input
+                                    type="text"
+                                    inputmode="numeric"
+                                    placeholder="Min qty (optional)"
+                                    data-rate-min-quantity="${
+                                      escapeHtml(
+                                        zone.shippingZoneId
+                                      )
+                                    }"
+                                  >
+
+                                  <input
+                                    type="text"
+                                    inputmode="numeric"
+                                    placeholder="Max qty (blank = and up)"
+                                    data-rate-max-quantity="${
                                       escapeHtml(
                                         zone.shippingZoneId
                                       )
@@ -19184,6 +19221,22 @@ body.merchSellerPage #orderStatusBtn{
             ""
           ).trim();
 
+        const minQuantity =
+          String(
+            card?.querySelector(
+              `[data-rate-min-quantity="${CSS.escape(zoneId)}"]`
+            )?.value ||
+            ""
+          ).trim();
+
+        const maxQuantity =
+          String(
+            card?.querySelector(
+              `[data-rate-max-quantity="${CSS.escape(zoneId)}"]`
+            )?.value ||
+            ""
+          ).trim();
+
         const freeOverUsd =
           String(
             card?.querySelector(
@@ -19195,6 +19248,50 @@ body.merchSellerPage #orderStatusBtn{
         if (!name || rateUsd === "") {
           shippingMessage(
             "Enter a rate name and USD shipping amount.",
+            "error"
+          );
+          return;
+        }
+
+        const quantityPattern =
+          /^\d+$/;
+
+        if (
+          minQuantity &&
+          (
+            !quantityPattern.test(minQuantity) ||
+            Number(minQuantity) < 1
+          )
+        ) {
+          shippingMessage(
+            "Minimum quantity must be a positive whole number.",
+            "error"
+          );
+          return;
+        }
+
+        if (
+          maxQuantity &&
+          (
+            !quantityPattern.test(maxQuantity) ||
+            Number(maxQuantity) < 1
+          )
+        ) {
+          shippingMessage(
+            "Maximum quantity must be a positive whole number.",
+            "error"
+          );
+          return;
+        }
+
+        if (
+          minQuantity &&
+          maxQuantity &&
+          Number(maxQuantity) <
+            Number(minQuantity)
+        ) {
+          shippingMessage(
+            "Maximum quantity cannot be lower than minimum quantity.",
             "error"
           );
           return;
@@ -19214,6 +19311,10 @@ body.merchSellerPage #orderStatusBtn{
                   sellerPayload(),
                 name,
                 rateUsd,
+                minQuantity:
+                  minQuantity || null,
+                maxQuantity:
+                  maxQuantity || null,
                 freeOverUsd:
                   freeOverUsd || null
               }
