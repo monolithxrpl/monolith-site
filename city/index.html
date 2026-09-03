@@ -113,6 +113,7 @@
 
   <script type="module">
     import * as THREE from "./vendor/three.module.min.js";
+    import { GLTFLoader } from "./vendor/GLTFLoader.js";
 
     const mount = document.getElementById("city");
 
@@ -151,8 +152,8 @@
     sun.position.set(300, 600, 250);
     scene.add(sun);
 
-    const CITY_STEP = 320;
-    const LOT_SIZE = 240;
+    const CITY_STEP = 640;
+    const LOT_SIZE = 400;
 
     const coordEl = document.getElementById("coord");
 
@@ -162,7 +163,7 @@
       y: 72,
       yaw: 0,
       pitch: -0.28,
-      speed: 260
+      speed: 520
     };
 
     const keys = new Set();
@@ -171,6 +172,19 @@
     addEventListener("keyup", e => keys.delete(e.code));
 
     let mouseLooking = false;
+
+    let zoomDistance = 0;
+
+    renderer.domElement.addEventListener("wheel", e => {
+      e.preventDefault();
+
+      zoomDistance += e.deltaY * 0.18;
+
+      zoomDistance = Math.max(
+        -50,
+        Math.min(420, zoomDistance)
+      );
+    }, { passive: false });
 
     renderer.domElement.addEventListener("mousedown", () => {
       mouseLooking = true;
@@ -472,6 +486,390 @@
     origin.position.set(0, 93, 0);
     scene.add(origin);
 
+    const roadLoader = new THREE.TextureLoader();
+
+    const roadDiffuse = roadLoader.load(
+      "./assets/realism/road/asphalt_02_diff_2k.jpg"
+    );
+    const roadRough = roadLoader.load(
+      "./assets/realism/road/asphalt_02_rough_2k.jpg"
+    );
+    const roadNormal = roadLoader.load(
+      "./assets/realism/road/asphalt_02_nor_gl_2k.jpg"
+    );
+
+    roadDiffuse.colorSpace = THREE.SRGBColorSpace;
+
+    for (const tex of [roadDiffuse, roadRough, roadNormal]) {
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(18, 18);
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    }
+
+    const roadMaterial = new THREE.MeshStandardMaterial({
+      map: roadDiffuse,
+      roughnessMap: roadRough,
+      normalMap: roadNormal,
+      roughness: 1.0,
+      metalness: 0.0
+    });
+
+    const sidewalkLoader = new THREE.TextureLoader();
+
+    const sidewalkPhoto = sidewalkLoader.load(
+      "./assets/terrain/sidewalk/concrete_floor_worn_001_diff_2k.jpg"
+    );
+
+    sidewalkPhoto.colorSpace = THREE.SRGBColorSpace;
+    sidewalkPhoto.wrapS = THREE.RepeatWrapping;
+    sidewalkPhoto.wrapT = THREE.RepeatWrapping;
+
+    const sidewalkMaterial = new THREE.MeshStandardMaterial({
+      map: sidewalkPhoto,
+      roughness: 0.95
+    });
+
+    const roadWidth = CITY_STEP - LOT_SIZE;
+    const sidewalkWidth = 28;
+
+    for (let i = -4; i <= 4; i++) {
+      const northSouth = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+          roadWidth,
+          CITY_STEP * 9
+        ),
+        roadMaterial
+      );
+
+      northSouth.rotation.x = -Math.PI / 2;
+      northSouth.position.set(
+        i * CITY_STEP + CITY_STEP / 2,
+        7.2,
+        0
+      );
+
+      scene.add(northSouth);
+
+      const eastWest = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+          CITY_STEP * 9,
+          roadWidth
+        ),
+        roadMaterial
+      );
+
+      eastWest.rotation.x = -Math.PI / 2;
+      eastWest.position.set(
+        0,
+        7.21,
+        -(i * CITY_STEP + CITY_STEP / 2)
+      );
+
+      scene.add(eastWest);
+    }
+
+    const sidewalkDepth = 28;
+    const slabLength = 56;
+
+    function addConnectedSidewalkRun(cx, cz, length, horizontal) {
+      let used = 0;
+
+      while (used < length) {
+        const thisLength = Math.min(slabLength, length - used);
+
+        const geometry = horizontal
+          ? new THREE.PlaneGeometry(thisLength, sidewalkDepth)
+          : new THREE.PlaneGeometry(sidewalkDepth, thisLength);
+
+        const mesh = new THREE.Mesh(
+          geometry,
+          sidewalkMaterial
+        );
+
+        mesh.rotation.x = -Math.PI / 2;
+
+        if (horizontal) {
+          mesh.position.set(
+            cx - length / 2 + used + thisLength / 2,
+            9,
+            cz
+          );
+        } else {
+          mesh.position.set(
+            cx,
+            9,
+            cz - length / 2 + used + thisLength / 2
+          );
+        }
+
+        scene.add(mesh);
+        used += thisLength;
+      }
+    }
+
+    for (let gy = -4; gy <= 4; gy++) {
+      for (let gx = -4; gx <= 4; gx++) {
+        const cx = gx * CITY_STEP;
+        const cz = -gy * CITY_STEP;
+
+        addConnectedSidewalkRun(
+          cx,
+          cz - LOT_SIZE / 2 - sidewalkDepth / 2,
+          LOT_SIZE + sidewalkDepth * 2,
+          true
+        );
+
+        addConnectedSidewalkRun(
+          cx,
+          cz + LOT_SIZE / 2 + sidewalkDepth / 2,
+          LOT_SIZE + sidewalkDepth * 2,
+          true
+        );
+
+        addConnectedSidewalkRun(
+          cx - LOT_SIZE / 2 - sidewalkDepth / 2,
+          cz,
+          LOT_SIZE,
+          false
+        );
+
+        addConnectedSidewalkRun(
+          cx + LOT_SIZE / 2 + sidewalkDepth / 2,
+          cz,
+          LOT_SIZE,
+          false
+        );
+      }
+    }
+
+    const laneMaterial = new THREE.MeshStandardMaterial({
+      color: 0xf3f0df,
+      roughness: 0.9,
+      metalness: 0.0
+    });
+
+    const yellowLaneMaterial = new THREE.MeshStandardMaterial({
+      color: 0xd8b13b,
+      roughness: 0.9,
+      metalness: 0.0
+    });
+
+    const curbMaterial = sidewalkMaterial;
+
+    const markingY = 7.36;
+    const curbY = 8.25;
+
+    function addRoadMarking(width, length, x, z, material) {
+      const mesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(width, length),
+        material
+      );
+
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.set(x, markingY, z);
+      scene.add(mesh);
+    }
+
+    function addCrosswalk(cx, cz, horizontalRoad) {
+      const stripeWidth = 7;
+      const stripeGap = 7;
+      const stripeLength = 34;
+
+      const crosswalkSpan =
+        CITY_STEP - LOT_SIZE - (sidewalkDepth * 2) - 8;
+
+      const stripeCount = Math.floor(
+        (crosswalkSpan + stripeGap) /
+        (stripeWidth + stripeGap)
+      );
+
+      const usedSpan =
+        stripeCount * stripeWidth +
+        (stripeCount - 1) * stripeGap;
+
+      for (let i = 0; i < stripeCount; i++) {
+        const offset =
+          -usedSpan / 2 +
+          stripeWidth / 2 +
+          i * (stripeWidth + stripeGap);
+
+        if (horizontalRoad) {
+          addRoadMarking(
+            stripeWidth,
+            stripeLength,
+            cx + offset,
+            cz,
+            laneMaterial
+          );
+        } else {
+          addRoadMarking(
+            stripeLength,
+            stripeWidth,
+            cx,
+            cz + offset,
+            laneMaterial
+          );
+        }
+      }
+    }
+
+    // Centerlines stop well before every intersection.
+    const intersectionClearance = 195;
+    const centerlineSegmentLength =
+      CITY_STEP - intersectionClearance * 2;
+
+    for (let i = -4; i <= 4; i++) {
+      const roadCenter = i * CITY_STEP + CITY_STEP / 2;
+
+      for (let gy = -4; gy <= 4; gy++) {
+        const z = -gy * CITY_STEP;
+
+        addRoadMarking(
+          4,
+          centerlineSegmentLength,
+          roadCenter,
+          z,
+          yellowLaneMaterial
+        );
+      }
+
+      for (let gx = -4; gx <= 4; gx++) {
+        const x = gx * CITY_STEP;
+
+        addRoadMarking(
+          centerlineSegmentLength,
+          4,
+          x,
+          -roadCenter,
+          yellowLaneMaterial
+        );
+      }
+    }
+
+    // Crosswalks sit outside the intersection itself.
+    const crosswalkSetback = 150;
+
+    for (let gy = -3; gy <= 3; gy++) {
+      for (let gx = -3; gx <= 3; gx++) {
+        if ((gx + gy) % 2 !== 0) continue;
+
+        const ix = gx * CITY_STEP + CITY_STEP / 2;
+        const iz = -(gy * CITY_STEP + CITY_STEP / 2);
+
+        addCrosswalk(ix, iz - crosswalkSetback, true);
+        addCrosswalk(ix, iz + crosswalkSetback, true);
+        addCrosswalk(ix - crosswalkSetback, iz, false);
+        addCrosswalk(ix + crosswalkSetback, iz, false);
+      }
+    }
+
+    // Continuous curb faces around each lot.
+    const curbDepth = 4;
+    const curbHeight = 3;
+    const curbOuter = LOT_SIZE + sidewalkDepth * 2;
+    const curbSpan = curbOuter + curbDepth * 2;
+
+    for (let gy = -4; gy <= 4; gy++) {
+      for (let gx = -4; gx <= 4; gx++) {
+        const cx = gx * CITY_STEP;
+        const cz = -gy * CITY_STEP;
+
+        const northCurb = new THREE.Mesh(
+          new THREE.BoxGeometry(curbSpan, curbHeight, curbDepth),
+          curbMaterial
+        );
+        northCurb.position.set(
+          cx,
+          curbY,
+          cz - LOT_SIZE / 2 - sidewalkDepth - curbDepth / 2
+        );
+        scene.add(northCurb);
+
+        const southCurb = northCurb.clone();
+        southCurb.position.z =
+          cz + LOT_SIZE / 2 + sidewalkDepth + curbDepth / 2;
+        scene.add(southCurb);
+
+        const westCurb = new THREE.Mesh(
+          new THREE.BoxGeometry(curbDepth, curbHeight, curbSpan),
+          curbMaterial
+        );
+        westCurb.position.set(
+          cx - LOT_SIZE / 2 - sidewalkDepth - curbDepth / 2,
+          curbY,
+          cz
+        );
+        scene.add(westCurb);
+
+        const eastCurb = westCurb.clone();
+        eastCurb.position.x =
+          cx + LOT_SIZE / 2 + sidewalkDepth + curbDepth / 2;
+        scene.add(eastCurb);
+      }
+    }
+
+    const streetLightLoader = new GLTFLoader();
+    const streetLightPositions = [];
+
+    const cornerOffset =
+      LOT_SIZE / 2 + sidewalkDepth / 2;
+
+    for (let gy = -4; gy <= 4; gy++) {
+      for (let gx = -4; gx <= 4; gx++) {
+        const cx = gx * CITY_STEP;
+        const cz = -gy * CITY_STEP;
+
+        if ((gx + gy) % 2 === 0) {
+          streetLightPositions.push(
+            [cx - cornerOffset, cz - cornerOffset],
+            [cx + cornerOffset, cz + cornerOffset]
+          );
+        }
+      }
+    }
+
+    streetLightLoader.load(
+      "./assets/models/street_lamp_01/street_lamp_01_2k.gltf",
+      (gltf) => {
+        const sourceLamp = gltf.scene;
+
+        sourceLamp.traverse((obj) => {
+          if (obj.isMesh) {
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+          }
+        });
+
+        const box = new THREE.Box3().setFromObject(sourceLamp);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+
+        // Poly Haven model is approximately 3.9 m tall.
+        // CITY uses a much larger world scale, so normalize it
+        // to a believable street-light height here.
+        const targetHeight = 54;
+        const scale = targetHeight / size.y;
+        sourceLamp.scale.setScalar(scale);
+
+        // Recompute bounds after scaling and place base at ground level.
+        const scaledBox = new THREE.Box3().setFromObject(sourceLamp);
+        sourceLamp.position.y = -scaledBox.min.y;
+
+        for (const [x, z] of streetLightPositions) {
+          const lamp = sourceLamp.clone(true);
+          lamp.position.x += x;
+          lamp.position.y += 9;
+          lamp.position.z += z;
+          scene.add(lamp);
+        }
+      },
+      undefined,
+      (error) => {
+        console.error("Street lamp model failed to load:", error);
+      }
+    );
+
     const grid = new THREE.GridHelper(
       CITY_STEP * 9,
       9,
@@ -479,7 +877,7 @@
       0x444444
     );
 
-    grid.position.y = 7;
+    grid.position.y = 7.3;
     scene.add(grid);
 
     const clock = new THREE.Clock();
@@ -518,10 +916,19 @@
          sin * strafe
       ) * player.speed * dt;
 
+      const viewX =
+        -Math.sin(player.yaw) * Math.cos(player.pitch);
+
+      const viewY =
+        Math.sin(player.pitch);
+
+      const viewZ =
+        -Math.cos(player.yaw) * Math.cos(player.pitch);
+
       camera.position.set(
-        player.x,
-        player.y,
-        player.z
+        player.x - viewX * zoomDistance,
+        player.y - viewY * zoomDistance,
+        player.z - viewZ * zoomDistance
       );
 
       const lookDistance = 100;
