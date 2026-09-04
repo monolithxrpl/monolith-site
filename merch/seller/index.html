@@ -9373,6 +9373,23 @@ body.merchSellerPage #orderStatusBtn{
         line-height:1.2;
       }
 
+
+      .sellerOrderBadgeGroup{
+        display:flex;
+        align-items:center;
+        justify-content:flex-end;
+        flex-wrap:wrap;
+        gap:6px;
+      }
+
+      .sellerOrderBadge.testing{
+        background:#fff4cf;
+        border-color:#e1b949;
+        color:#7a5710;
+        font-weight:900;
+        letter-spacing:.05em;
+      }
+
 </style>
 
     <section
@@ -19826,6 +19843,89 @@ body.merchSellerPage #orderStatusBtn{
           );
       }
 
+      function sellerOrderDisplayStatus(
+        order
+      ) {
+        if (!order) {
+          return "Unknown";
+        }
+
+        if (!order.isTest) {
+          return String(
+            order.status ||
+            "Unknown"
+          );
+        }
+
+        const paymentStatus =
+          String(
+            order.paymentStatus ||
+            ""
+          ).trim().toLowerCase();
+
+        const orderStatus =
+          String(
+            order.status ||
+            ""
+          ).trim().toLowerCase();
+
+        if (
+          paymentStatus === "refunded" ||
+          orderStatus === "refunded"
+        ) {
+          return "REFUNDED";
+        }
+
+        if (
+          orderStatus === "cancelled" ||
+          paymentStatus === "failed"
+        ) {
+          return "CANCELLED";
+        }
+
+        if (paymentStatus === "paid") {
+          return "PAID";
+        }
+
+        return String(
+          order.status ||
+          "Unknown"
+        ).toUpperCase();
+      }
+
+      function sellerOrderDisplayState(
+        order
+      ) {
+        return sellerOrderState(
+          sellerOrderDisplayStatus(
+            order
+          )
+        );
+      }
+
+      function sellerOrderFieldLabel(
+        value,
+        fallback = "Unknown"
+      ) {
+        const text =
+          String(
+            value ||
+            fallback
+          )
+            .trim()
+            .replaceAll("_", " ");
+
+        return text
+          .split(" ")
+          .filter(Boolean)
+          .map(
+            word =>
+              word.charAt(0).toUpperCase() +
+              word.slice(1).toLowerCase()
+          )
+          .join(" ");
+      }
+
       function sellerOrderMessage(
         message,
         type = ""
@@ -19939,20 +20039,33 @@ body.merchSellerPage #orderStatusBtn{
               </span>
             </div>
 
-            <span
-              class="sellerOrderBadge ${
-                escapeHtml(
-                  sellerOrderState(
-                    order.status
+            <div class="sellerOrderBadgeGroup">
+              ${
+                order.isTest
+                  ? `
+                    <span class="sellerOrderBadge testing">
+                      TESTING
+                    </span>
+                  `
+                  : ""
+              }
+
+              <span
+                class="sellerOrderBadge ${
+                  escapeHtml(
+                    sellerOrderDisplayState(
+                      order
+                    )
                   )
-                )
-              }"
-            >
-              ${escapeHtml(
-                order.status ||
-                "Unknown"
-              )}
-            </span>
+                }"
+              >
+                ${escapeHtml(
+                  sellerOrderDisplayStatus(
+                    order
+                  )
+                )}
+              </span>
+            </div>
           </div>
 
           <div class="sellerOrderMetrics">
@@ -19960,8 +20073,10 @@ body.merchSellerPage #orderStatusBtn{
               <span>Payment</span>
               <strong>
                 ${escapeHtml(
-                  order.paymentStatus ||
-                  "Unknown"
+                  sellerOrderFieldLabel(
+                    order.paymentStatus,
+                    "Unknown"
+                  )
                 )}
               </strong>
             </div>
@@ -19970,8 +20085,10 @@ body.merchSellerPage #orderStatusBtn{
               <span>Fulfillment</span>
               <strong>
                 ${escapeHtml(
-                  order.fulfillmentStatus ||
-                  "Unfulfilled"
+                  sellerOrderFieldLabel(
+                    order.fulfillmentStatus,
+                    "Not started"
+                  )
                 )}
               </strong>
             </div>
@@ -20209,8 +20326,10 @@ body.merchSellerPage #orderStatusBtn{
                           <span>
                             ${
                               escapeHtml(
-                                fulfillment.status ||
-                                "processing"
+                                sellerOrderFieldLabel(
+                                  fulfillment.status,
+                                  "Not started"
+                                )
                               )
                             }
                             ${
@@ -20239,8 +20358,10 @@ body.merchSellerPage #orderStatusBtn{
                       <strong>
                         ${
                           escapeHtml(
-                            order.fulfillmentStatus ||
-                            "Unfulfilled"
+                            sellerOrderFieldLabel(
+                              order.fulfillmentStatus,
+                              "Not started"
+                            )
                           )
                         }
                       </strong>
@@ -20429,7 +20550,8 @@ body.merchSellerPage #orderStatusBtn{
                               "processing",
                               "fulfilled",
                               "shipped",
-                              "delivered"
+                              "delivered",
+                              "cancelled"
                             ].map(
                               status => `
                                 <option
@@ -20444,7 +20566,7 @@ body.merchSellerPage #orderStatusBtn{
                                       : ""
                                   }
                                 >
-                                  ${status}
+                                  ${sellerOrderFieldLabel(status)}
                                 </option>
                               `
                             ).join("")
@@ -20697,20 +20819,33 @@ body.merchSellerPage #orderStatusBtn{
                     )}
                   </strong>
 
-                  <span
-                    class="sellerOrderBadge ${
-                      escapeHtml(
-                        sellerOrderState(
-                          order.status
+                  <div class="sellerOrderBadgeGroup">
+                    ${
+                      order.isTest
+                        ? `
+                          <span class="sellerOrderBadge testing">
+                            TESTING
+                          </span>
+                        `
+                        : ""
+                    }
+
+                    <span
+                      class="sellerOrderBadge ${
+                        escapeHtml(
+                          sellerOrderDisplayState(
+                            order
+                          )
                         )
-                      )
-                    }"
-                  >
-                    ${escapeHtml(
-                      order.status ||
-                      "Unknown"
-                    )}
-                  </span>
+                      }"
+                    >
+                      ${escapeHtml(
+                        sellerOrderDisplayStatus(
+                          order
+                        )
+                      )}
+                    </span>
+                  </div>
                 </div>
 
                 <div class="sellerOrderListMeta">
@@ -20723,16 +20858,27 @@ body.merchSellerPage #orderStatusBtn{
                   </span>
 
                   <span>
-                    ${escapeHtml(
-                      order.paymentStatus ||
-                      "Unknown payment"
+                    Payment: ${escapeHtml(
+                      sellerOrderFieldLabel(
+                        order.paymentStatus,
+                        "Unknown"
+                      )
                     )}
                   </span>
 
                   <span>
-                    ${escapeHtml(
+                    Payout: ${escapeHtml(
                       sellerPayoutLabel(
                         order.payout
+                      )
+                    )}
+                  </span>
+
+                  <span>
+                    Fulfillment: ${escapeHtml(
+                      sellerOrderFieldLabel(
+                        order.fulfillmentStatus,
+                        "Not started"
                       )
                     )}
                   </span>
