@@ -9177,6 +9177,41 @@ body.merchSellerPage #orderStatusBtn{
                   <option value="cm">cm</option>
                 </select>
               </label>
+
+              <label class="productWideField">
+                <span>Carrier Packaging</span>
+                <select id="productCarrierPackaging">
+                  <option value="custom">Custom Packaging</option>
+                  <option value="usps_flat_rate_envelope">USPS Flat Rate Envelope</option>
+                  <option value="usps_padded_flat_rate_envelope">USPS Padded Flat Rate Envelope</option>
+                  <option value="usps_legal_flat_rate_envelope">USPS Legal Flat Rate Envelope</option>
+                  <option value="usps_small_flat_rate_box">USPS Small Flat Rate Box</option>
+                  <option value="usps_medium_flat_rate_box">USPS Medium Flat Rate Box</option>
+                  <option value="usps_large_flat_rate_box">USPS Large Flat Rate Box</option>
+                </select>
+
+                <small>
+                  Select USPS packaging only when you will actually ship this product using that USPS package.
+                </small>
+              </label>
+            </div>
+
+            <div class="productChecks">
+              <label>
+                <input
+                  id="productMediaMailEligible"
+                  type="checkbox"
+                >
+                Eligible for USPS Media Mail
+              </label>
+
+              <label>
+                <input
+                  id="productLibraryMailEligible"
+                  type="checkbox"
+                >
+                Eligible for USPS Library Mail
+              </label>
             </div>
 
           </section>
@@ -14553,6 +14588,18 @@ body.merchSellerPage #orderStatusBtn{
           document.getElementById(
             "productDimensionUnit"
           ),
+        carrierPackaging:
+          document.getElementById(
+            "productCarrierPackaging"
+          ),
+        mediaMailEligible:
+          document.getElementById(
+            "productMediaMailEligible"
+          ),
+        libraryMailEligible:
+          document.getElementById(
+            "productLibraryMailEligible"
+          ),
         shippingProfile:
           document.getElementById(
             "productShippingProfile"
@@ -15276,6 +15323,22 @@ body.merchSellerPage #orderStatusBtn{
             productUi
               .dimensionUnit
               .value,
+          carrierPackaging:
+            productUi
+              .carrierPackaging
+              .value,
+          mediaMailEligible:
+            Boolean(
+              productUi
+                .mediaMailEligible
+                .checked
+            ),
+          libraryMailEligible:
+            Boolean(
+              productUi
+                .libraryMailEligible
+                .checked
+            ),
           shippingProfile:
             productUi
               .shippingProfile
@@ -19521,6 +19584,12 @@ body.merchSellerPage #orderStatusBtn{
         productUi.packageWidth.value = "";
         productUi.packageHeight.value = "";
         productUi.dimensionUnit.value = "";
+        productUi.carrierPackaging.value =
+          "custom";
+        productUi.mediaMailEligible.checked =
+          false;
+        productUi.libraryMailEligible.checked =
+          false;
         productUi.shippingProfile.value = "";
         productUi.tags.value = "";
         productUi.trackInventory.checked =
@@ -19622,6 +19691,20 @@ body.merchSellerPage #orderStatusBtn{
 
         productUi.dimensionUnit.value =
           product.dimensionUnit || "";
+
+        productUi.carrierPackaging.value =
+          product.carrierPackaging ||
+          "custom";
+
+        productUi.mediaMailEligible.checked =
+          Boolean(
+            product.mediaMailEligible
+          );
+
+        productUi.libraryMailEligible.checked =
+          Boolean(
+            product.libraryMailEligible
+          );
 
         productUi.shippingProfile.value =
           product.shippingProfile || "";
