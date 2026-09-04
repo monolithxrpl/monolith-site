@@ -9446,40 +9446,14 @@ body.merchSellerPage #orderStatusBtn{
           </p>
 
           <div class="shippingLaunchNotice">
-            <strong>Manual Shipping — Launch Mode</strong>
+            <strong>Live Carrier Shipping</strong>
             <span>
-              Automated carrier rates are coming. For now, use the official
-              carrier pricing tools below to estimate your shipping costs,
-              then set the amount you want buyers to pay. You control the
-              destinations you serve. MONOLITH does not take
-              its 3% marketplace fee from shipping charges, so the full
-              shipping amount is included in your seller proceeds.
-              For international orders, account for your own shipping costs
-              and clearly communicate whether you are covering any customs,
-              duties, VAT, GST or brokerage charges. Unless you state
-              otherwise, destination import charges are the buyer's
-              responsibility.
+              MONOLITH can quote eligible USPS shipping services directly
+              from USPS at checkout. Add your ship-from information and
+              product package details, then buyers receive live shipping
+              options automatically. Manual rates remain available only
+              when you choose to use them as a fallback.
             </span>
-
-            <div class="shippingCarrierLinks">
-              <a
-                href="https://postcalc.usps.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >USPS Rates</a>
-
-              <a
-                href="https://wwwapps.ups.com/ctc/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >UPS Rates</a>
-
-              <a
-                href="https://www.fedex.com/en-us/shipping/how-to-estimate-shipping-cost.html"
-                target="_blank"
-                rel="noopener noreferrer"
-              >FedEx Rates</a>
-            </div>
           </div>
         </div>
 
@@ -9496,7 +9470,7 @@ body.merchSellerPage #orderStatusBtn{
         class="shippingStatus sellerStatus"
         id="shippingStatus"
       >
-        Create a shipping profile, add destinations, then set $XRP shipping rates.
+        Create a shipping profile and add your ship-from information to enable live carrier rates.
       </div>
 
       <div
@@ -17515,17 +17489,32 @@ body.merchSellerPage #orderStatusBtn{
                         <label>
                           Shipping rate mode
                           <select data-rate-mode="${escapeHtml(profile.shippingProfileId)}">
-                            <option value="manual" selected>
+                            <option
+                              value="live"
+                              ${profile.rateMode === "live" ? "selected" : ""}
+                            >
+                              Live Carrier Rates
+                            </option>
+                            <option
+                              value="manual"
+                              ${profile.rateMode === "manual" ? "selected" : ""}
+                            >
                               Seller-Set Rates
+                            </option>
+                            <option
+                              value="hybrid"
+                              ${profile.rateMode === "hybrid" ? "selected" : ""}
+                            >
+                              Live + Backup Rates
                             </option>
                           </select>
                         </label>
                       </div>
 
                       <div class="shippingLiveNotice">
-                        Set the shipping options you charge buyers for each
-                        destination. Rates are stored in USD and converted
-                        into the checkout settlement automatically.
+                        Live Carrier Rates automatically quote eligible
+                        shipping services at checkout. Seller-Set Rates are
+                        available only when you want a manual fallback.
                       </div>
                     </div>
 
@@ -17534,9 +17523,8 @@ body.merchSellerPage #orderStatusBtn{
                       profile.rateMode === "hybrid"
                         ? `
                           <div class="shippingLiveNotice">
-                            Live USPS, UPS and FedEx pricing is built into MONOLITH.
-                            Carrier quoting will activate once the shipping provider
-                            account finishes verification.
+                            Live carrier pricing is enabled for supported
+                            carriers. USPS rates are quoted directly from USPS.
                           </div>
                         `
                         : ""
@@ -18118,7 +18106,10 @@ body.merchSellerPage #orderStatusBtn{
               ?.value || ""
           ).trim();
 
-        draft.rateMode = "manual";
+        draft.rateMode =
+          value(
+            `[data-rate-mode="${CSS.escape(profileId)}"]`
+          ) || "manual";
 
         draft.shipFrom = {
           name:
@@ -18797,7 +18788,10 @@ body.merchSellerPage #orderStatusBtn{
                 sellerId:
                   sellerProfile.sellerId,
                 name,
-                rateMode:"manual",
+                rateMode:
+                  carrier === "USPS"
+                    ? "live"
+                    : "manual",
                 enabledCarriers:[
                   carrier
                 ]
