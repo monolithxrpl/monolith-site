@@ -17896,11 +17896,12 @@ body.merchSellerPage #orderStatusBtn{
 
         shippingUi.profiles
           .querySelectorAll(
-            "[data-ship-name], [data-ship-company], [data-ship-address1], [data-ship-address2], [data-ship-city], [data-ship-region], [data-ship-postal], [data-ship-country]"
+            "[data-rate-mode], [data-ship-name], [data-ship-company], [data-ship-address1], [data-ship-address2], [data-ship-city], [data-ship-region], [data-ship-postal], [data-ship-country]"
           )
           .forEach(
             field => {
               const profileId =
+                field.dataset.rateMode ||
                 field.dataset.shipName ||
                 field.dataset.shipCompany ||
                 field.dataset.shipAddress1 ||
