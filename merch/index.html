@@ -7697,11 +7697,68 @@ body.merchLaunchSoon .checkoutStatus{
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
+.merchShippingStatus{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:5000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  flex-wrap:wrap;
+  box-sizing:border-box;
+  padding:14px 20px;
+  background:#f5fbff;
+  border-bottom:2px solid #168fd1;
+  box-shadow:0 8px 24px rgba(22,143,209,.16);
+  color:#0f2433;
+  text-align:center;
+}
+
+.merchShippingStatus strong{
+  font-size:14px;
+  letter-spacing:.08em;
+  color:#0877b4;
+}
+
+.merchShippingStatus span{
+  font-size:15px;
+  font-weight:600;
+  color:#203847;
+}
+
+body.merchLaunchSoon{
+  padding-top:64px;
+}
+
+@media(max-width:760px){
+  .merchShippingStatus{
+    gap:6px;
+    padding:12px 14px;
+  }
+
+  .merchShippingStatus strong,
+  .merchShippingStatus span{
+    width:100%;
+  }
+
+  body.merchLaunchSoon{
+    padding-top:88px;
+  }
+}
+
 </style>
 
 </head>
 
 <body class="merchLaunchSoon">
+  <div class="merchShippingStatus" role="status" aria-live="polite">
+    <strong>SHIPPING APIS ARE BEING CONFIGURED</strong>
+    <span>The MONOLITH Merch Store will reopen for business in a few hours.</span>
+  </div>
+
   <main class="shell">
 
     <header class="header">
