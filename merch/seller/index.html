@@ -19564,6 +19564,9 @@ body.merchSellerPage #orderStatusBtn{
         productUi.editorStatus.className =
           "productEditorStatus";
 
+        productUi.saveDraft.textContent =
+          "Save Draft";
+
         productUi.title.value = "";
         productUi.price.value = "";
         productUi.comparePrice.value = "";
@@ -19640,6 +19643,11 @@ body.merchSellerPage #orderStatusBtn{
               ? "active"
               : ""
           }`.trim();
+
+        productUi.saveDraft.textContent =
+          product.status === "active"
+            ? "Save Changes"
+            : "Save Draft";
 
         productUi.title.value =
           product.title || "";
@@ -21720,7 +21728,9 @@ body.merchSellerPage #orderStatusBtn{
         ?.addEventListener(
           "click",
           () => saveProduct(
-            "draft"
+            editingProduct?.status === "active"
+              ? "active"
+              : "draft"
           )
         );
 
