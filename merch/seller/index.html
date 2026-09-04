@@ -9257,7 +9257,123 @@ body.merchSellerPage #orderStatusBtn{
         text-decoration:none;
         font-weight:700;
       }
-    </style>
+    
+      /* SHIPPING MANAGEMENT SECTION SEPARATION */
+      .sellerCenterShell .shippingCurrentOptionsHead{
+        margin-top:18px;
+        padding:14px 16px;
+        border:1px solid #b8dff0;
+        border-bottom:0;
+        border-radius:12px 12px 0 0;
+        background:#eef9fd;
+      }
+
+      .sellerCenterShell .shippingCurrentOptionsHead strong{
+        display:block;
+        color:#153847;
+        font-size:12px;
+        font-weight:900;
+      }
+
+      .sellerCenterShell .shippingCurrentOptionsHead span{
+        display:block;
+        margin-top:4px;
+        color:#476b7a;
+        font-size:10px;
+        line-height:1.45;
+      }
+
+      .sellerCenterShell .shippingRates{
+        margin-top:0 !important;
+        padding:12px !important;
+        border:1px solid #b8dff0 !important;
+        border-radius:0 0 12px 12px !important;
+        background:#fff !important;
+      }
+
+      .sellerCenterShell .shippingRateRow{
+        padding:14px 10px !important;
+        border-bottom:1px solid #dceef5 !important;
+      }
+
+      .sellerCenterShell .shippingRateRow:last-child{
+        border-bottom:0 !important;
+      }
+
+      .sellerCenterShell .shippingRateCreate{
+        margin-top:18px !important;
+        padding:16px !important;
+        border:2px solid #9fd8f0 !important;
+        border-radius:12px !important;
+        background:#f7fcff !important;
+      }
+
+      .sellerCenterShell .shippingRateCreate > strong{
+        display:block;
+        margin-bottom:5px;
+        color:#153847 !important;
+        font-size:12px;
+        font-weight:900;
+      }
+
+      .sellerCenterShell .shippingRateCreate > p{
+        margin:0 0 12px;
+        color:#476b7a !important;
+        font-size:10px;
+        line-height:1.5;
+      }
+
+      .sellerCenterShell .shippingDraftActions{
+        display:flex;
+        align-items:center;
+        justify-content:flex-end;
+        flex-wrap:wrap;
+        gap:10px;
+        margin-top:20px !important;
+        padding:16px !important;
+        border:1px solid #9fd8f0;
+        border-radius:12px;
+        background:#f7fcff;
+      }
+
+      .sellerCenterShell .shippingDraftState{
+        margin-right:auto;
+        color:#365563;
+        font-size:12px;
+        font-weight:800;
+      }
+
+      @media(max-width:680px){
+        .sellerCenterShell .shippingDraftActions{
+          align-items:stretch;
+          flex-direction:column;
+        }
+
+        .sellerCenterShell .shippingDraftState{
+          margin-right:0;
+        }
+
+        .sellerCenterShell .shippingDraftActions button{
+          width:100%;
+        }
+      }
+
+
+      .sellerCenterShell .shippingRateField{
+        display:flex;
+        flex-direction:column;
+        gap:5px;
+        min-width:0;
+      }
+
+      .sellerCenterShell .shippingRateField > span{
+        color:#365563;
+        font-size:9px;
+        font-weight:900;
+        line-height:1.2;
+      }
+
+</style>
 
     <section
       class="section sellerShippingManager"
@@ -17208,9 +17324,9 @@ body.merchSellerPage #orderStatusBtn{
                 <div class="shippingProfileBody">
                   <div class="shippingProfileSettings">
                     <div class="shippingSettingsTitle">
-                      <strong>Shipping Setup</strong>
+                      <strong>Seller Shipping Information</strong>
                       <span>
-                        Ship-from details and manual shipping rates
+                        Your ship-from name, address, and location used for shipping orders.
                       </span>
                     </div>
 
@@ -17346,15 +17462,6 @@ body.merchSellerPage #orderStatusBtn{
                         : ""
                     }
 
-                    <div class="shippingSettingsActions">
-                      <button
-                        class="sellerPrimaryBtn"
-                        type="button"
-                        data-update-profile="${escapeHtml(profile.shippingProfileId)}"
-                      >
-                        Update Shipping Setup
-                      </button>
-                    </div>
                   </div>
 
                   ${
@@ -17443,6 +17550,13 @@ body.merchSellerPage #orderStatusBtn{
                                 </button>
                               </div>
 
+                              <div class="shippingCurrentOptionsHead">
+                                <strong>Current Shipping Options</strong>
+                                <span>
+                                  These are the shipping charges and quantity rules currently configured for this destination.
+                                </span>
+                              </div>
+
                               <div class="shippingRates">
                                 ${
                                   (zone.rates || [])
@@ -17461,40 +17575,52 @@ body.merchSellerPage #orderStatusBtn{
                                             )
                                           }"
                                         >
-                                          <input
-                                            type="text"
-                                            inputmode="decimal"
-                                            value="${escapeHtml(rate.rateUsd || "")}"
-                                            data-edit-rate-usd="${escapeHtml(rate.shippingRateId)}"
-                                            aria-label="Shipping rate USD"
-                                          >
+                                          <label class="shippingRateField">
+                                            <span>Rate USD</span>
+                                            <input
+                                              type="text"
+                                              inputmode="decimal"
+                                              value="${escapeHtml(rate.rateUsd || "")}"
+                                              data-edit-rate-usd="${escapeHtml(rate.shippingRateId)}"
+                                              aria-label="Shipping rate USD"
+                                            >
+                                          </label>
 
-                                          <input
-                                            type="text"
-                                            inputmode="numeric"
-                                            value="${escapeHtml(rate.minQuantity ?? "")}"
-                                            placeholder="Min qty"
-                                            data-edit-rate-min="${escapeHtml(rate.shippingRateId)}"
-                                            aria-label="Minimum quantity"
-                                          >
+                                          <label class="shippingRateField">
+                                            <span>Min Qty</span>
+                                            <input
+                                              type="text"
+                                              inputmode="numeric"
+                                              value="${escapeHtml(rate.minQuantity ?? "")}"
+                                              placeholder="Optional"
+                                              data-edit-rate-min="${escapeHtml(rate.shippingRateId)}"
+                                              aria-label="Minimum quantity"
+                                            >
+                                          </label>
 
-                                          <input
-                                            type="text"
-                                            inputmode="numeric"
-                                            value="${escapeHtml(rate.maxQuantity ?? "")}"
-                                            placeholder="Max qty"
-                                            data-edit-rate-max="${escapeHtml(rate.shippingRateId)}"
-                                            aria-label="Maximum quantity"
-                                          >
+                                          <label class="shippingRateField">
+                                            <span>Max Qty</span>
+                                            <input
+                                              type="text"
+                                              inputmode="numeric"
+                                              value="${escapeHtml(rate.maxQuantity ?? "")}"
+                                              placeholder="Blank = and up"
+                                              data-edit-rate-max="${escapeHtml(rate.shippingRateId)}"
+                                              aria-label="Maximum quantity"
+                                            >
+                                          </label>
 
-                                          <input
-                                            type="text"
-                                            inputmode="decimal"
-                                            value="${escapeHtml(rate.freeOverUsd ?? "")}"
-                                            placeholder="Free over USD"
-                                            data-edit-rate-free="${escapeHtml(rate.shippingRateId)}"
-                                            aria-label="Free shipping threshold"
-                                          >
+                                          <label class="shippingRateField">
+                                            <span>Free Over USD</span>
+                                            <input
+                                              type="text"
+                                              inputmode="decimal"
+                                              value="${escapeHtml(rate.freeOverUsd ?? "")}"
+                                              placeholder="Optional"
+                                              data-edit-rate-free="${escapeHtml(rate.shippingRateId)}"
+                                              aria-label="Free shipping threshold"
+                                            >
+                                          </label>
 
                                           <button
                                             class="sellerSecondaryBtn"
@@ -17702,15 +17828,64 @@ body.merchSellerPage #orderStatusBtn{
 
         shippingUi.profiles
           .querySelectorAll(
-            "[data-update-profile]"
+            "[data-ship-name], [data-ship-company], [data-ship-address1], [data-ship-address2], [data-ship-city], [data-ship-region], [data-ship-postal], [data-ship-country]"
           )
           .forEach(
-            button => {
-              button.addEventListener(
-                "click",
-                () => updateShippingProfileDraftUi(
-                  button.dataset.updateProfile
-                )
+            field => {
+              const profileId =
+                field.dataset.shipName ||
+                field.dataset.shipCompany ||
+                field.dataset.shipAddress1 ||
+                field.dataset.shipAddress2 ||
+                field.dataset.shipCity ||
+                field.dataset.shipRegion ||
+                field.dataset.shipPostal ||
+                field.dataset.shipCountry;
+
+              const syncDraft = () => {
+                syncShippingProfileFieldsToDraft(
+                  profileId
+                );
+
+                shippingDirtyProfiles.add(
+                  profileId
+                );
+
+                const state =
+                  shippingUi.profiles.querySelector(
+                    ".shippingDraftState"
+                  );
+
+                if (state) {
+                  state.textContent =
+                    "Unsaved changes";
+                }
+
+                shippingUi.profiles
+                  .querySelector(
+                    `[data-save-draft="${CSS.escape(profileId)}"]`
+                  )
+                  ?.removeAttribute(
+                    "disabled"
+                  );
+
+                shippingUi.profiles
+                  .querySelector(
+                    `[data-cancel-draft="${CSS.escape(profileId)}"]`
+                  )
+                  ?.removeAttribute(
+                    "disabled"
+                  );
+              };
+
+              field.addEventListener(
+                "input",
+                syncDraft
+              );
+
+              field.addEventListener(
+                "change",
+                syncDraft
               );
             }
           );
@@ -17839,7 +18014,7 @@ body.merchSellerPage #orderStatusBtn{
           );
       }
 
-      function updateShippingProfileDraftUi(
+      function syncShippingProfileFieldsToDraft(
         profileId
       ) {
         const card =
@@ -17899,20 +18074,6 @@ body.merchSellerPage #orderStatusBtn{
               `[data-ship-country="${CSS.escape(profileId)}"]`
             ).toUpperCase()
         };
-
-        markShippingDraftDirty(
-          profileId
-        );
-
-        managedShippingProfileId =
-          profileId;
-
-        renderShippingProfiles();
-
-        shippingMessage(
-          "Shipping setup updated locally. Select Save Changes to commit it.",
-          "success"
-        );
       }
 
       function renderShippingLockedPreview() {
@@ -19201,6 +19362,10 @@ body.merchSellerPage #orderStatusBtn{
           );
 
         if (!draft) return;
+
+        syncShippingProfileFieldsToDraft(
+          profileId
+        );
 
         try {
           const data =
