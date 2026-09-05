@@ -17883,7 +17883,10 @@ body.merchSellerPage #orderStatusBtn{
                                             tier.shippingTierId
                                           )}"
                                         >
+                                          <option value="usps_flat_rate_envelope" ${tier.carrierPackaging === "usps_flat_rate_envelope" ? "selected" : ""}>USPS Flat Rate Envelope</option>
                                           <option value="usps_padded_flat_rate_envelope" ${tier.carrierPackaging === "usps_padded_flat_rate_envelope" ? "selected" : ""}>USPS Padded Flat Rate Envelope</option>
+                                          <option value="usps_legal_flat_rate_envelope" ${tier.carrierPackaging === "usps_legal_flat_rate_envelope" ? "selected" : ""}>USPS Legal Flat Rate Envelope</option>
+                                          <option value="usps_small_flat_rate_box" ${tier.carrierPackaging === "usps_small_flat_rate_box" ? "selected" : ""}>USPS Small Flat Rate Box</option>
                                           <option value="usps_medium_flat_rate_box" ${tier.carrierPackaging === "usps_medium_flat_rate_box" ? "selected" : ""}>USPS Medium Flat Rate Box</option>
                                           <option value="usps_large_flat_rate_box" ${tier.carrierPackaging === "usps_large_flat_rate_box" ? "selected" : ""}>USPS Large Flat Rate Box</option>
                                         </select>
@@ -17941,7 +17944,10 @@ body.merchSellerPage #orderStatusBtn{
                                   profile.shippingProfileId
                                 )}"
                               >
+                                <option value="usps_flat_rate_envelope">USPS Flat Rate Envelope</option>
                                 <option value="usps_padded_flat_rate_envelope">USPS Padded Flat Rate Envelope</option>
+                                <option value="usps_legal_flat_rate_envelope">USPS Legal Flat Rate Envelope</option>
+                                <option value="usps_small_flat_rate_box">USPS Small Flat Rate Box</option>
                                 <option value="usps_medium_flat_rate_box">USPS Medium Flat Rate Box</option>
                                 <option value="usps_large_flat_rate_box">USPS Large Flat Rate Box</option>
                               </select>
