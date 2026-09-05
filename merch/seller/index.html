@@ -14971,7 +14971,10 @@ body.merchSellerPage #orderStatusBtn{
                   tier.minQuantity,
                 maxQuantity:
                   tier.maxQuantity ??
-                  null
+                  null,
+                carrierPackaging:
+                  tier.carrierPackaging ||
+                  "custom"
               })),
           destinations:
             (profile.zones || [])
@@ -17825,7 +17828,7 @@ body.merchSellerPage #orderStatusBtn{
 
                           <p>
                             USPS calculates the actual shipping price.
-                            These tiers control which order quantities are allowed.
+                            These tiers control which order quantities are allowed and which USPS package is used.
                           </p>
 
                           <div class="shippingRates">
@@ -17871,6 +17874,19 @@ body.merchSellerPage #orderStatusBtn{
                                             tier.shippingTierId
                                           )}"
                                         >
+                                      </label>
+
+                                      <label class="shippingRateField">
+                                        <span>Package</span>
+                                        <select
+                                          data-live-tier-package="${escapeHtml(
+                                            tier.shippingTierId
+                                          )}"
+                                        >
+                                          <option value="usps_padded_flat_rate_envelope" ${tier.carrierPackaging === "usps_padded_flat_rate_envelope" ? "selected" : ""}>USPS Padded Flat Rate Envelope</option>
+                                          <option value="usps_medium_flat_rate_box" ${tier.carrierPackaging === "usps_medium_flat_rate_box" ? "selected" : ""}>USPS Medium Flat Rate Box</option>
+                                          <option value="usps_large_flat_rate_box" ${tier.carrierPackaging === "usps_large_flat_rate_box" ? "selected" : ""}>USPS Large Flat Rate Box</option>
+                                        </select>
                                       </label>
 
                                       <button
@@ -17919,6 +17935,16 @@ body.merchSellerPage #orderStatusBtn{
                                   profile.shippingProfileId
                                 )}"
                               >
+
+                              <select
+                                data-live-tier-new-package="${escapeHtml(
+                                  profile.shippingProfileId
+                                )}"
+                              >
+                                <option value="usps_padded_flat_rate_envelope">USPS Padded Flat Rate Envelope</option>
+                                <option value="usps_medium_flat_rate_box">USPS Medium Flat Rate Box</option>
+                                <option value="usps_large_flat_rate_box">USPS Large Flat Rate Box</option>
+                              </select>
 
                               <button
                                 class="sellerSecondaryBtn"
@@ -19330,6 +19356,13 @@ body.merchSellerPage #orderStatusBtn{
             )?.value || ""
           ).trim();
 
+        const carrierPackaging =
+          String(
+            card?.querySelector(
+              `[data-live-tier-new-package="${CSS.escape(profileId)}"]`
+            )?.value || ""
+          ).trim();
+
         if (
           !/^\d+$/.test(min) ||
           Number(min) < 1 ||
@@ -19357,6 +19390,7 @@ body.merchSellerPage #orderStatusBtn{
           minQuantity:Number(min),
           maxQuantity:
             max ? Number(max) : null,
+          carrierPackaging,
           status:"active"
         });
 
@@ -19440,6 +19474,13 @@ body.merchSellerPage #orderStatusBtn{
             )?.value || ""
           ).trim();
 
+        const carrierPackaging =
+          String(
+            row.querySelector(
+              `[data-live-tier-package="${CSS.escape(tierId)}"]`
+            )?.value || ""
+          ).trim();
+
         if (
           !/^\d+$/.test(min) ||
           Number(min) < 1 ||
@@ -19463,6 +19504,9 @@ body.merchSellerPage #orderStatusBtn{
 
         tier.maxQuantity =
           max ? Number(max) : null;
+
+        tier.carrierPackaging =
+          carrierPackaging;
 
         markShippingDraftDirty(
           profile.shippingProfileId
