@@ -14946,6 +14946,33 @@ body.merchSellerPage #orderStatusBtn{
               profile.shipFrom?.country ||
               ""
             ).toUpperCase(),
+          liveTiers:
+            (profile.liveTiers || [])
+              .filter(
+                tier =>
+                  tier.status !==
+                  "archived"
+              )
+              .map(tier => ({
+                ...(
+                  String(
+                    tier.shippingTierId ||
+                    ""
+                  ).startsWith(
+                    "drafttier_"
+                  )
+                    ? {}
+                    : {
+                        shippingTierId:
+                          tier.shippingTierId
+                      }
+                ),
+                minQuantity:
+                  tier.minQuantity,
+                maxQuantity:
+                  tier.maxQuantity ??
+                  null
+              })),
           destinations:
             (profile.zones || [])
               .filter(
@@ -17793,8 +17820,117 @@ body.merchSellerPage #orderStatusBtn{
                   </div>
                   `
                       : `
-                        <div class="shippingEmpty">
-                          Manual destinations are disabled while this profile uses Live Carrier Rates.
+                        <div class="shippingZoneCreate">
+                          <strong>Live Quantity Tiers</strong>
+
+                          <p>
+                            USPS calculates the actual shipping price.
+                            These tiers control which order quantities are allowed.
+                          </p>
+
+                          <div class="shippingRates">
+                            ${
+                              (profile.liveTiers || [])
+                                .filter(
+                                  tier =>
+                                    tier.status !==
+                                    "archived"
+                                )
+                                .map(
+                                  tier => `
+                                    <div
+                                      class="shippingRateRow"
+                                      data-live-tier="${escapeHtml(
+                                        tier.shippingTierId
+                                      )}"
+                                    >
+                                      <label class="shippingRateField">
+                                        <span>Min Qty</span>
+                                        <input
+                                          type="text"
+                                          inputmode="numeric"
+                                          value="${escapeHtml(
+                                            tier.minQuantity ?? ""
+                                          )}"
+                                          data-live-tier-min="${escapeHtml(
+                                            tier.shippingTierId
+                                          )}"
+                                        >
+                                      </label>
+
+                                      <label class="shippingRateField">
+                                        <span>Max Qty</span>
+                                        <input
+                                          type="text"
+                                          inputmode="numeric"
+                                          value="${escapeHtml(
+                                            tier.maxQuantity ?? ""
+                                          )}"
+                                          placeholder="Blank = and up"
+                                          data-live-tier-max="${escapeHtml(
+                                            tier.shippingTierId
+                                          )}"
+                                        >
+                                      </label>
+
+                                      <button
+                                        class="sellerSecondaryBtn"
+                                        type="button"
+                                        data-update-live-tier="${escapeHtml(
+                                          tier.shippingTierId
+                                        )}"
+                                      >
+                                        Update
+                                      </button>
+
+                                      <button
+                                        class="shippingArchiveBtn"
+                                        type="button"
+                                        data-archive-live-tier="${escapeHtml(
+                                          tier.shippingTierId
+                                        )}"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  `
+                                ).join("")
+                            }
+                          </div>
+
+                          <div class="shippingRateCreate">
+                            <strong>Add Live Quantity Tier</strong>
+
+                            <div class="shippingRateForm">
+                              <input
+                                type="text"
+                                inputmode="numeric"
+                                placeholder="Min qty"
+                                data-live-tier-new-min="${escapeHtml(
+                                  profile.shippingProfileId
+                                )}"
+                              >
+
+                              <input
+                                type="text"
+                                inputmode="numeric"
+                                placeholder="Max qty"
+                                data-live-tier-new-max="${escapeHtml(
+                                  profile.shippingProfileId
+                                )}"
+                              >
+
+                              <button
+                                class="sellerSecondaryBtn"
+                                type="button"
+                                data-add-live-tier="${escapeHtml(
+                                  profile.shippingProfileId
+                                )}"
+                              >
+                                Add Tier
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       `
                   }
@@ -17955,6 +18091,54 @@ body.merchSellerPage #orderStatusBtn{
               field.addEventListener(
                 "change",
                 syncDraft
+              );
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-add-live-tier]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () =>
+                  createLiveShippingTierUi(
+                    button.dataset.addLiveTier
+                  )
+              );
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-update-live-tier]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () =>
+                  updateLiveShippingTierUi(
+                    button.dataset.updateLiveTier
+                  )
+              );
+            }
+          );
+
+        shippingUi.profiles
+          .querySelectorAll(
+            "[data-archive-live-tier]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                () =>
+                  archiveLiveShippingTierUi(
+                    button.dataset.archiveLiveTier
+                  )
               );
             }
           );
@@ -19117,6 +19301,174 @@ body.merchSellerPage #orderStatusBtn{
           "Shipping option added locally. Select Save Changes to commit it.",
           "success"
         );
+      }
+
+      function createLiveShippingTierUi(
+        profileId
+      ) {
+        const draft =
+          shippingDraftFor(profileId);
+
+        if (!draft) return;
+
+        const card =
+          shippingUi.profiles.querySelector(
+            `[data-shipping-profile="${CSS.escape(profileId)}"]`
+          );
+
+        const min =
+          String(
+            card?.querySelector(
+              `[data-live-tier-new-min="${CSS.escape(profileId)}"]`
+            )?.value || ""
+          ).trim();
+
+        const max =
+          String(
+            card?.querySelector(
+              `[data-live-tier-new-max="${CSS.escape(profileId)}"]`
+            )?.value || ""
+          ).trim();
+
+        if (
+          !/^\d+$/.test(min) ||
+          Number(min) < 1 ||
+          (
+            max &&
+            (
+              !/^\d+$/.test(max) ||
+              Number(max) < Number(min)
+            )
+          )
+        ) {
+          shippingMessage(
+            "Enter a valid live shipping quantity range.",
+            "error"
+          );
+          return;
+        }
+
+        draft.liveTiers =
+          draft.liveTiers || [];
+
+        draft.liveTiers.push({
+          shippingTierId:
+            shippingDraftId("drafttier"),
+          minQuantity:Number(min),
+          maxQuantity:
+            max ? Number(max) : null,
+          status:"active"
+        });
+
+        markShippingDraftDirty(profileId);
+        renderShippingProfiles();
+      }
+
+      function archiveLiveShippingTierUi(
+        tierId
+      ) {
+        const profile =
+          Array.from(
+            sellerShippingDrafts.values()
+          ).find(
+            item =>
+              (item.liveTiers || []).some(
+                tier =>
+                  tier.shippingTierId ===
+                  tierId
+              )
+          );
+
+        if (!profile) return;
+
+        profile.liveTiers =
+          (profile.liveTiers || []).filter(
+            tier =>
+              tier.shippingTierId !==
+              tierId
+          );
+
+        markShippingDraftDirty(
+          profile.shippingProfileId
+        );
+
+        renderShippingProfiles();
+      }
+
+      function updateLiveShippingTierUi(
+        tierId
+      ) {
+        const profile =
+          Array.from(
+            sellerShippingDrafts.values()
+          ).find(
+            item =>
+              (item.liveTiers || []).some(
+                tier =>
+                  tier.shippingTierId ===
+                  tierId
+              )
+          );
+
+        if (!profile) return;
+
+        const tier =
+          (profile.liveTiers || []).find(
+            item =>
+              item.shippingTierId ===
+              tierId
+          );
+
+        const row =
+          shippingUi.profiles.querySelector(
+            `[data-live-tier="${CSS.escape(tierId)}"]`
+          );
+
+        if (!tier || !row) return;
+
+        const min =
+          String(
+            row.querySelector(
+              `[data-live-tier-min="${CSS.escape(tierId)}"]`
+            )?.value || ""
+          ).trim();
+
+        const max =
+          String(
+            row.querySelector(
+              `[data-live-tier-max="${CSS.escape(tierId)}"]`
+            )?.value || ""
+          ).trim();
+
+        if (
+          !/^\d+$/.test(min) ||
+          Number(min) < 1 ||
+          (
+            max &&
+            (
+              !/^\d+$/.test(max) ||
+              Number(max) < Number(min)
+            )
+          )
+        ) {
+          shippingMessage(
+            "Enter a valid live shipping quantity range.",
+            "error"
+          );
+          return;
+        }
+
+        tier.minQuantity =
+          Number(min);
+
+        tier.maxQuantity =
+          max ? Number(max) : null;
+
+        markShippingDraftDirty(
+          profile.shippingProfileId
+        );
+
+        renderShippingProfiles();
       }
 
       async function archiveShippingProfileUi(
