@@ -16614,11 +16614,11 @@ body.merchLaunchSoon{
                         <label>
                           Shipping rate mode
                           <select data-rate-mode="${escapeHtml(profile.shippingProfileId)}">
-                            <option value="manual" selected>
-                              Manual — Launch Mode
+                            <option value="manual">
+                              Manual Shipping Rates
                             </option>
-                            <option value="live" disabled>
-                              Live Carrier Rates — Coming Soon
+                            <option value="live" selected>
+                              USPS Live Shipping Quotes
                             </option>
                             <option value="hybrid" disabled>
                               Hybrid — Coming Soon
@@ -16628,9 +16628,8 @@ body.merchLaunchSoon{
                       </div>
 
                       <div class="shippingLiveNotice">
-                        Automated USPS, UPS and FedEx rates are coming.
-                        Use the official carrier pricing links above while
-                        MONOLITH launches with seller-set manual shipping.
+                        USPS shipping quotes are LIVE and calculated at checkout.
+                        UPS and FedEx integrations are still being wired in.
                       </div>
                     </div>
 
