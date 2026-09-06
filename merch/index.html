@@ -7943,6 +7943,16 @@ body.merchLaunchSoon{
             All Products
           </button>
 
+          <button
+            class="marketNavItem"
+            id="browseStoresBtn"
+            type="button"
+            data-view="stores"
+          >
+            <span class="marketNavIcon">S</span>
+            Browse All Stores
+          </button>
+
           <button class="marketNavItem" type="button" data-filter="apparel">
             <span class="marketNavIcon">A</span>
             Apparel
@@ -8038,13 +8048,6 @@ body.merchLaunchSoon{
               href="/merch/"
             >
               MONOLITH Marketplace
-            </a>
-
-            <a
-              class="marketStoresLink"
-              href="/directory/#storefronts"
-            >
-              Browse All Stores
             </a>
 
             <a
@@ -8918,6 +8921,15 @@ body.merchLaunchSoon{
 
       let marketplaceProducts = [];
       let marketplaceCollections = [];
+      let marketplaceStores = [];
+
+      let marketplaceMode =
+        !coordinate &&
+        new URLSearchParams(
+          window.location.search
+        ).get("view") === "stores"
+          ? "stores"
+          : "products";
       let activeCollectionId = "";
       let showAllProducts = false;
       let activeFilter =
@@ -12969,11 +12981,25 @@ body.merchLaunchSoon{
             item => {
               item.classList.toggle(
                 "active",
+                marketplaceMode ===
+                  "products" &&
                 item.dataset.filter ===
                   activeFilter
               );
             }
           );
+
+        const storesButton =
+          document.getElementById(
+            "browseStoresBtn"
+          );
+
+        if (storesButton) {
+          storesButton.classList.toggle(
+            "active",
+            marketplaceMode === "stores"
+          );
+        }
       }
 
       function syncCategoryTitle() {
@@ -12985,6 +13011,12 @@ body.merchLaunchSoon{
           );
 
         if (!title) return;
+
+        if (marketplaceMode === "stores") {
+          title.textContent =
+            "MONOLITH Stores";
+          return;
+        }
 
         title.textContent =
           activeCollectionId
@@ -13135,7 +13167,300 @@ body.merchLaunchSoon{
         );
       }
 
+      async function loadMarketplaceStores() {
+        try {
+          const response =
+            await fetch(
+              "/api/merch/stores"
+            );
+
+          const data =
+            await response.json();
+
+          if (
+            !response.ok ||
+            !data.ok
+          ) {
+            throw new Error(
+              data.error ||
+              "stores_load_failed"
+            );
+          }
+
+          marketplaceStores =
+            Array.isArray(data.stores)
+              ? data.stores
+              : [];
+        } catch (error) {
+          console.error(
+            "[merch:stores]",
+            error
+          );
+
+          marketplaceStores = [];
+        }
+      }
+
+      function renderMarketplaceStores() {
+        const visible =
+          marketplaceStores.filter(
+            store => {
+              const haystack =
+                [
+                  store.displayName,
+                  store.coordinate,
+                  store.storeDescription
+                ]
+                  .filter(Boolean)
+                  .join(" ")
+                  .toLowerCase();
+
+              return (
+                !searchTerm ||
+                haystack.includes(
+                  searchTerm
+                )
+              );
+            }
+          );
+
+        const categoryChips =
+          document.querySelector(
+            ".categoryChips"
+          );
+
+        if (categoryChips) {
+          categoryChips.hidden = true;
+        }
+
+        const collections =
+          document.getElementById(
+            "shopCollections"
+          );
+
+        if (collections) {
+          collections.hidden = true;
+        }
+
+        const discoveryActions =
+          document.getElementById(
+            "marketDiscoveryActions"
+          );
+
+        if (discoveryActions) {
+          discoveryActions.hidden = true;
+        }
+
+        document
+          .getElementById(
+            "resultCount"
+          )
+          .textContent =
+            `${visible.length} ${
+              visible.length === 1
+                ? "store"
+                : "stores"
+            }`;
+
+        if (!visible.length) {
+          productsRoot.innerHTML = `
+            <div class="emptyProducts">
+              <strong>
+                No MONOLITH stores found.
+              </strong>
+            </div>
+          `;
+          return;
+        }
+
+        productsRoot.innerHTML =
+          visible.map(
+            store => `
+              <article
+                class="productCard"
+                data-store-open="${
+                  escapeHtml(
+                    store.coordinate
+                  )
+                }"
+                role="link"
+                tabindex="0"
+              >
+                <div class="productMedia">
+                  <img
+                    class="productPlaceholder"
+                    src="/assets/monolith_icon.webp"
+                    alt=""
+                  >
+
+                  <div class="productBadge">
+                    VERIFIED STORE
+                  </div>
+                </div>
+
+                <div class="productBody">
+                  <div class="productMeta">
+                    MONOLITH STOREFRONT
+                  </div>
+
+                  <h3>
+                    ${
+                      escapeHtml(
+                        store.displayName ||
+                        store.coordinate
+                      )
+                    }
+                  </h3>
+
+                  <div class="productDesc">
+                    ${
+                      escapeHtml(
+                        store.storeDescription ||
+                        "Verified MONOLITH storefront."
+                      ).slice(0,220)
+                    }
+                  </div>
+
+                  <div class="sellerLine">
+                    ${
+                      escapeHtml(
+                        store.coordinate
+                      )
+                    }
+                  </div>
+
+                  <div class="productFooter">
+                    <div class="price">
+                      ${
+                        Number(
+                          store.productCount ||
+                          0
+                        )
+                      } ${
+                        Number(
+                          store.productCount ||
+                          0
+                        ) === 1
+                          ? "PRODUCT"
+                          : "PRODUCTS"
+                      }
+
+                      <small>
+                        VERIFIED MONOLITH SELLER
+                      </small>
+                    </div>
+
+                    <button
+                      class="addBtn"
+                      type="button"
+                      data-visit-store="${
+                        escapeHtml(
+                          store.coordinate
+                        )
+                      }"
+                    >
+                      Visit Store
+                    </button>
+                  </div>
+                </div>
+              </article>
+            `
+          ).join("");
+
+        const openStore =
+          coordinateValue => {
+            window.location.href =
+              `/merch/?tile=${
+                encodeURIComponent(
+                  coordinateValue
+                )
+              }`;
+          };
+
+        productsRoot
+          .querySelectorAll(
+            "[data-visit-store]"
+          )
+          .forEach(
+            button => {
+              button.addEventListener(
+                "click",
+                event => {
+                  event.stopPropagation();
+
+                  openStore(
+                    button.dataset
+                      .visitStore
+                  );
+                }
+              );
+            }
+          );
+
+        productsRoot
+          .querySelectorAll(
+            "[data-store-open]"
+          )
+          .forEach(
+            card => {
+              card.addEventListener(
+                "click",
+                event => {
+                  if (
+                    event.target.closest(
+                      "button, a, input, select, textarea"
+                    )
+                  ) {
+                    return;
+                  }
+
+                  openStore(
+                    card.dataset.storeOpen
+                  );
+                }
+              );
+
+              card.addEventListener(
+                "keydown",
+                event => {
+                  if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                  ) {
+                    event.preventDefault();
+
+                    openStore(
+                      card.dataset.storeOpen
+                    );
+                  }
+                }
+              );
+            }
+          );
+      }
+
+
       function refreshMarketplace() {
+        syncCategoryControls();
+        syncCategoryTitle();
+
+        if (
+          marketplaceMode === "stores" &&
+          !coordinate
+        ) {
+          renderMarketplaceStores();
+          return;
+        }
+
+        const categoryChips =
+          document.querySelector(
+            ".categoryChips"
+          );
+
+        if (categoryChips) {
+          categoryChips.hidden = false;
+        }
+
         const visible =
           filteredProducts();
 
@@ -13771,6 +14096,13 @@ body.merchLaunchSoon{
 
           if (!coordinate) {
             await loadMarketplaceCollections();
+
+            if (
+              marketplaceMode ===
+              "stores"
+            ) {
+              await loadMarketplaceStores();
+            }
           }
 
           reconcileCartProducts();
@@ -20117,6 +20449,24 @@ body.merchLaunchSoon{
             control.addEventListener(
               "click",
               () => {
+                marketplaceMode =
+                  "products";
+
+                const next =
+                  new URL(
+                    window.location.href
+                  );
+
+                next.searchParams.delete(
+                  "view"
+                );
+
+                history.replaceState(
+                  {},
+                  "",
+                  next
+                );
+
                 applyMarketplaceCategory(
                   control.dataset.filter ||
                   "all"
@@ -20125,6 +20475,54 @@ body.merchLaunchSoon{
             );
           }
         );
+
+      const browseStoresBtn =
+        document.getElementById(
+          "browseStoresBtn"
+        );
+
+      if (browseStoresBtn) {
+        browseStoresBtn.addEventListener(
+          "click",
+          async () => {
+            if (coordinate) {
+              window.location.href =
+                "/merch/?view=stores";
+              return;
+            }
+
+            marketplaceMode = "stores";
+            activeCollectionId = "";
+            activeFilter = "all";
+            showAllProducts = true;
+
+            const next =
+              new URL(
+                window.location.href
+              );
+
+            next.searchParams.set(
+              "view",
+              "stores"
+            );
+
+            next.searchParams.delete(
+              "category"
+            );
+
+            history.replaceState(
+              {},
+              "",
+              next
+            );
+
+            await loadMarketplaceStores();
+
+            syncCategoryControls();
+            refreshMarketplace();
+          }
+        );
+      }
 
       const viewAllProductsBtn =
         document.getElementById(
