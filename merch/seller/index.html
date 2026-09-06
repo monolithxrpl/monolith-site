@@ -17829,8 +17829,11 @@ body.merchSellerPage #orderStatusBtn{
                           <strong>Live Quantity Tiers</strong>
 
                           <p>
-                            USPS calculates the actual shipping price.
-                            These tiers control which order quantities are allowed and which USPS package is used.
+                            ${escapeHtml(
+                              liveTierCarrierCopy(
+                                profile
+                              )
+                            )}
                           </p>
 
                           <div class="shippingRates">
@@ -17885,14 +17888,59 @@ body.merchSellerPage #orderStatusBtn{
                                             tier.shippingTierId
                                           )}"
                                         >
-                                          <option value="usps_flat_rate_envelope" ${tier.carrierPackaging === "usps_flat_rate_envelope" ? "selected" : ""}>USPS Flat Rate Envelope</option>
-                                          <option value="usps_padded_flat_rate_envelope" ${tier.carrierPackaging === "usps_padded_flat_rate_envelope" ? "selected" : ""}>USPS Padded Flat Rate Envelope</option>
-                                          <option value="usps_legal_flat_rate_envelope" ${tier.carrierPackaging === "usps_legal_flat_rate_envelope" ? "selected" : ""}>USPS Legal Flat Rate Envelope</option>
-                                          <option value="usps_small_flat_rate_box" ${tier.carrierPackaging === "usps_small_flat_rate_box" ? "selected" : ""}>USPS Small Flat Rate Box</option>
-                                          <option value="usps_medium_flat_rate_box" ${tier.carrierPackaging === "usps_medium_flat_rate_box" ? "selected" : ""}>USPS Medium Flat Rate Box</option>
-                                          <option value="usps_large_flat_rate_box" ${tier.carrierPackaging === "usps_large_flat_rate_box" ? "selected" : ""}>USPS Large Flat Rate Box</option>
+                                          ${liveTierPackageOptions(
+                                            profile,
+                                            tier.carrierPackaging || "custom"
+                                          )}
                                         </select>
                                       </label>
+
+                                      <div
+                                        data-live-tier-dimensions="${escapeHtml(
+                                          tier.shippingTierId
+                                        )}"
+                                        ${tier.carrierPackaging !== "custom" ? "hidden" : ""}
+                                      >
+                                        <label class="shippingRateField">
+                                          <span>Length</span>
+                                          <input
+                                            type="text"
+                                            inputmode="decimal"
+                                            value="${escapeHtml(tier.packageLength ?? "")}"
+                                            data-live-tier-length="${escapeHtml(tier.shippingTierId)}"
+                                          >
+                                        </label>
+
+                                        <label class="shippingRateField">
+                                          <span>Width</span>
+                                          <input
+                                            type="text"
+                                            inputmode="decimal"
+                                            value="${escapeHtml(tier.packageWidth ?? "")}"
+                                            data-live-tier-width="${escapeHtml(tier.shippingTierId)}"
+                                          >
+                                        </label>
+
+                                        <label class="shippingRateField">
+                                          <span>Height</span>
+                                          <input
+                                            type="text"
+                                            inputmode="decimal"
+                                            value="${escapeHtml(tier.packageHeight ?? "")}"
+                                            data-live-tier-height="${escapeHtml(tier.shippingTierId)}"
+                                          >
+                                        </label>
+
+                                        <label class="shippingRateField">
+                                          <span>Unit</span>
+                                          <select
+                                            data-live-tier-unit="${escapeHtml(tier.shippingTierId)}"
+                                          >
+                                            <option value="in" ${tier.dimensionUnit === "in" ? "selected" : ""}>in</option>
+                                            <option value="cm" ${tier.dimensionUnit === "cm" ? "selected" : ""}>cm</option>
+                                          </select>
+                                        </label>
+                                      </div>
 
                                       <button
                                         class="sellerSecondaryBtn"
@@ -17946,13 +17994,45 @@ body.merchSellerPage #orderStatusBtn{
                                   profile.shippingProfileId
                                 )}"
                               >
-                                <option value="usps_flat_rate_envelope">USPS Flat Rate Envelope</option>
-                                <option value="usps_padded_flat_rate_envelope">USPS Padded Flat Rate Envelope</option>
-                                <option value="usps_legal_flat_rate_envelope">USPS Legal Flat Rate Envelope</option>
-                                <option value="usps_small_flat_rate_box">USPS Small Flat Rate Box</option>
-                                <option value="usps_medium_flat_rate_box">USPS Medium Flat Rate Box</option>
-                                <option value="usps_large_flat_rate_box">USPS Large Flat Rate Box</option>
+                                ${liveTierPackageOptions(
+                                  profile,
+                                  "custom"
+                                )}
                               </select>
+
+                              <div
+                                data-live-tier-new-dimensions="${escapeHtml(
+                                  profile.shippingProfileId
+                                )}"
+                              >
+                                <input
+                                  type="text"
+                                  inputmode="decimal"
+                                  placeholder="Length"
+                                  data-live-tier-new-length="${escapeHtml(profile.shippingProfileId)}"
+                                >
+
+                                <input
+                                  type="text"
+                                  inputmode="decimal"
+                                  placeholder="Width"
+                                  data-live-tier-new-width="${escapeHtml(profile.shippingProfileId)}"
+                                >
+
+                                <input
+                                  type="text"
+                                  inputmode="decimal"
+                                  placeholder="Height"
+                                  data-live-tier-new-height="${escapeHtml(profile.shippingProfileId)}"
+                                >
+
+                                <select
+                                  data-live-tier-new-unit="${escapeHtml(profile.shippingProfileId)}"
+                                >
+                                  <option value="in">in</option>
+                                  <option value="cm">cm</option>
+                                </select>
+                              </div>
 
                               <button
                                 class="sellerSecondaryBtn"
@@ -18002,6 +18082,10 @@ body.merchSellerPage #orderStatusBtn{
             ).join("")
           }
         `;
+
+        syncLiveTierDimensionVisibility(
+          shippingUi.profiles
+        );
 
         shippingUi.profiles
           .querySelector(
@@ -18923,6 +19007,96 @@ body.merchSellerPage #orderStatusBtn{
         ]
       };
 
+      function shippingProfileCarrier(
+        profile
+      ) {
+        return String(
+          profile?.enabledCarriers?.[0] ||
+          ""
+        ).trim();
+      }
+
+      function liveTierPackageOptions(
+        profile,
+        selected = "custom"
+      ) {
+        const carrier =
+          shippingProfileCarrier(
+            profile
+          );
+
+        const option = (
+          value,
+          label
+        ) => `
+          <option
+            value="${escapeHtml(value)}"
+            ${selected === value ? "selected" : ""}
+          >
+            ${escapeHtml(label)}
+          </option>
+        `;
+
+        if (carrier === "USPS") {
+          return [
+            option(
+              "custom",
+              "Your Own Packaging"
+            ),
+            option(
+              "usps_flat_rate_envelope",
+              "USPS Flat Rate Envelope"
+            ),
+            option(
+              "usps_padded_flat_rate_envelope",
+              "USPS Padded Flat Rate Envelope"
+            ),
+            option(
+              "usps_legal_flat_rate_envelope",
+              "USPS Legal Flat Rate Envelope"
+            ),
+            option(
+              "usps_small_flat_rate_box",
+              "USPS Small Flat Rate Box"
+            ),
+            option(
+              "usps_medium_flat_rate_box",
+              "USPS Medium Flat Rate Box"
+            ),
+            option(
+              "usps_large_flat_rate_box",
+              "USPS Large Flat Rate Box"
+            )
+          ].join("");
+        }
+
+        return option(
+          "custom",
+          carrier === "UPS"
+            ? "Your Own Packaging"
+            : "Custom Packaging"
+        );
+      }
+
+      function liveTierCarrierCopy(
+        profile
+      ) {
+        const carrier =
+          shippingProfileCarrier(
+            profile
+          );
+
+        if (carrier === "USPS") {
+          return "USPS calculates the live shipping price. Choose USPS Flat Rate packaging or Your Own Packaging for each optional quantity tier.";
+        }
+
+        if (carrier === "UPS") {
+          return "UPS calculates the live shipping price from the shipment weight and package dimensions. Optional quantity tiers can use different package sizes.";
+        }
+
+        return "Optional quantity tiers can use different package sizes for live carrier pricing.";
+      }
+
       function renderShippingProfileServices() {
         if (
           !shippingUi.profileCarrier ||
@@ -18956,6 +19130,68 @@ body.merchSellerPage #orderStatusBtn{
             `
           ).join("");
       }
+
+      function syncLiveTierDimensionVisibility(
+        root = document
+      ) {
+        root.querySelectorAll(
+          "[data-live-tier-package]"
+        ).forEach(
+          select => {
+            const tierId =
+              select.getAttribute(
+                "data-live-tier-package"
+              );
+
+            const box =
+              root.querySelector(
+                `[data-live-tier-dimensions="${CSS.escape(tierId)}"]`
+              );
+
+            if (box) {
+              box.hidden =
+                select.value !== "custom";
+            }
+          }
+        );
+
+        root.querySelectorAll(
+          "[data-live-tier-new-package]"
+        ).forEach(
+          select => {
+            const profileId =
+              select.getAttribute(
+                "data-live-tier-new-package"
+              );
+
+            const box =
+              root.querySelector(
+                `[data-live-tier-new-dimensions="${CSS.escape(profileId)}"]`
+              );
+
+            if (box) {
+              box.hidden =
+                select.value !== "custom";
+            }
+          }
+        );
+      }
+
+      shippingUi.profiles
+        ?.addEventListener(
+          "change",
+          event => {
+            if (
+              event.target.matches(
+                "[data-live-tier-package], [data-live-tier-new-package]"
+              )
+            ) {
+              syncLiveTierDimensionVisibility(
+                shippingUi.profiles
+              );
+            }
+          }
+        );
 
       shippingUi.profileCarrier
         ?.addEventListener(
@@ -19372,6 +19608,34 @@ body.merchSellerPage #orderStatusBtn{
             )?.value || ""
           ).trim();
 
+        const packageLength =
+          String(
+            card?.querySelector(
+              `[data-live-tier-new-length="${CSS.escape(profileId)}"]`
+            )?.value || ""
+          ).trim();
+
+        const packageWidth =
+          String(
+            card?.querySelector(
+              `[data-live-tier-new-width="${CSS.escape(profileId)}"]`
+            )?.value || ""
+          ).trim();
+
+        const packageHeight =
+          String(
+            card?.querySelector(
+              `[data-live-tier-new-height="${CSS.escape(profileId)}"]`
+            )?.value || ""
+          ).trim();
+
+        const dimensionUnit =
+          String(
+            card?.querySelector(
+              `[data-live-tier-new-unit="${CSS.escape(profileId)}"]`
+            )?.value || ""
+          ).trim();
+
         if (
           !/^\d+$/.test(min) ||
           Number(min) < 1 ||
@@ -19400,6 +19664,22 @@ body.merchSellerPage #orderStatusBtn{
           maxQuantity:
             max ? Number(max) : null,
           carrierPackaging,
+          packageLength:
+            carrierPackaging === "custom"
+              ? packageLength
+              : null,
+          packageWidth:
+            carrierPackaging === "custom"
+              ? packageWidth
+              : null,
+          packageHeight:
+            carrierPackaging === "custom"
+              ? packageHeight
+              : null,
+          dimensionUnit:
+            carrierPackaging === "custom"
+              ? dimensionUnit
+              : null,
           status:"active"
         });
 
@@ -19490,6 +19770,34 @@ body.merchSellerPage #orderStatusBtn{
             )?.value || ""
           ).trim();
 
+        const packageLength =
+          String(
+            row.querySelector(
+              `[data-live-tier-length="${CSS.escape(tierId)}"]`
+            )?.value || ""
+          ).trim();
+
+        const packageWidth =
+          String(
+            row.querySelector(
+              `[data-live-tier-width="${CSS.escape(tierId)}"]`
+            )?.value || ""
+          ).trim();
+
+        const packageHeight =
+          String(
+            row.querySelector(
+              `[data-live-tier-height="${CSS.escape(tierId)}"]`
+            )?.value || ""
+          ).trim();
+
+        const dimensionUnit =
+          String(
+            row.querySelector(
+              `[data-live-tier-unit="${CSS.escape(tierId)}"]`
+            )?.value || ""
+          ).trim();
+
         if (
           !/^\d+$/.test(min) ||
           Number(min) < 1 ||
@@ -19516,6 +19824,26 @@ body.merchSellerPage #orderStatusBtn{
 
         tier.carrierPackaging =
           carrierPackaging;
+
+        tier.packageLength =
+          carrierPackaging === "custom"
+            ? packageLength
+            : null;
+
+        tier.packageWidth =
+          carrierPackaging === "custom"
+            ? packageWidth
+            : null;
+
+        tier.packageHeight =
+          carrierPackaging === "custom"
+            ? packageHeight
+            : null;
+
+        tier.dimensionUnit =
+          carrierPackaging === "custom"
+            ? dimensionUnit
+            : null;
 
         markShippingDraftDirty(
           profile.shippingProfileId
