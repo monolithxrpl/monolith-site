@@ -17545,8 +17545,8 @@ body.merchSellerPage #orderStatusBtn{
 
                       <div class="shippingLiveNotice">
                         Live Carrier Rates automatically quote supported
-                        shipping services at checkout. USPS automatic rates
-                        are live now. UPS and FedEx currently use Seller-Set Rates.
+                        shipping services at checkout. USPS and UPS automatic
+                        rates are live now. FedEx currently uses Seller-Set Rates.
                       </div>
                     </div>
 
@@ -18487,9 +18487,9 @@ body.merchSellerPage #orderStatusBtn{
                 </div>
 
                 <div class="shippingLiveNotice">
-                  USPS automatic shipping-rate quotes are live.
-                  UPS and FedEx are currently available with Seller-Set Rates
-                  while direct automatic carrier quoting is being completed.
+                  USPS and UPS automatic shipping-rate quotes are live.
+                  FedEx is currently available with Seller-Set Rates while
+                  direct automatic FedEx quoting is being completed.
                 </div>
 
                 <div class="shippingSettingsActions">
@@ -19008,7 +19008,8 @@ body.merchSellerPage #orderStatusBtn{
                   sellerProfile.sellerId,
                 name,
                 rateMode:
-                  carrier === "USPS"
+                  carrier === "USPS" ||
+                  carrier === "UPS"
                     ? "live"
                     : "manual",
                 enabledCarriers:[
