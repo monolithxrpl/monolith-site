@@ -3587,8 +3587,22 @@
 
     .shippingInlineForm{
       display:grid;
-      grid-template-columns:minmax(0,1fr) auto auto;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;
       gap:8px;
+      align-items:start;
+    }
+
+    .shippingCreateActions{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      gap:6px;
+    }
+
+    .shippingCreateCancelBtn{
+      min-height:28px !important;
+      padding:0 12px !important;
+      font-size:9px !important;
     }
 
     .shippingInlineForm input,
@@ -7290,42 +7304,6 @@ body.merchLaunchSoon .marketHeroMark img{
   color:#056999;
 }
 
-.sellerCenterShell .shippingProfileSwitcher{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:12px 14px;
-  border:1px solid #d8e7ee;
-  border-radius:12px;
-  background:#f8fbfc;
-}
-
-.sellerCenterShell .shippingProfileSwitcher label{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  color:#5f7b8a;
-  font-size:10px;
-  font-weight:900;
-}
-
-.sellerCenterShell .shippingProfileSwitcher select{
-  min-height:36px;
-  padding:0 10px;
-  border:1px solid #d4e2e9;
-  border-radius:8px;
-  background:#fff;
-  color:#173847;
-  font:inherit;
-  font-size:10px;
-}
-
-.sellerCenterShell .shippingProfileSwitcher span{
-  color:#718a98;
-  font-size:9px;
-}
-
 .sellerCenterShell
 .shippingProfileCard:not(.is-managed)
 .shippingProfileBody{
@@ -9499,21 +9477,23 @@ body.merchSellerPage #orderStatusBtn{
             <option value="">Choose a service</option>
           </select>
 
-          <button
-            class="sellerPrimaryBtn"
-            id="shippingCreateProfileBtn"
-            type="button"
-          >
-            Create Shipping Profile
-          </button>
+          <div class="shippingCreateActions">
+            <button
+              class="sellerPrimaryBtn"
+              id="shippingCreateProfileBtn"
+              type="button"
+            >
+              Create Shipping Profile
+            </button>
 
-          <button
-            class="sellerSecondaryBtn"
-            id="shippingCancelProfileBtn"
-            type="button"
-          >
-            Cancel
-          </button>
+            <button
+              class="sellerSecondaryBtn shippingCreateCancelBtn"
+              id="shippingCancelProfileBtn"
+              type="button"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
 
@@ -14726,7 +14706,6 @@ body.merchSellerPage #orderStatusBtn{
       let sellerProducts = [];
       let sellerCollections = [];
       let sellerShippingProfiles = [];
-      let activeShippingProfileId = "";
       let sellerOrders = [];
       let selectedSellerOrder = null;
       let editingProduct = null;
@@ -17274,77 +17253,18 @@ body.merchSellerPage #orderStatusBtn{
           return;
         }
 
-        if (
-          !activeShippingProfileId ||
-          !profiles.some(
+        const renderedProfiles =
+          profiles.map(
             profile =>
-              profile.shippingProfileId ===
-              activeShippingProfileId
-          )
-        ) {
-          activeShippingProfileId =
-            profiles[0].shippingProfileId;
-        }
-
-        const savedActiveProfile =
-          profiles.find(
-            profile =>
-              profile.shippingProfileId ===
-              activeShippingProfileId
-          ) || profiles[0];
-
-        const activeProfile =
-          shippingDraftFor(
-            savedActiveProfile
-              .shippingProfileId
-          ) ||
-          savedActiveProfile;
-
-        const activeProfileDirty =
-          shippingDirtyProfiles.has(
-            activeProfile
-              .shippingProfileId
+              shippingDraftFor(
+                profile.shippingProfileId
+              ) ||
+              profile
           );
 
         shippingUi.profiles.innerHTML = `
           ${
-            profiles.length > 1
-              ? `
-                <div class="shippingProfileSwitcher">
-                  <label>
-                    Shipping profile
-
-                    <select data-shipping-profile-select>
-                      ${
-                        profiles.map(
-                          profile => `
-                            <option
-                              value="${escapeHtml(profile.shippingProfileId)}"
-                              ${
-                                profile.shippingProfileId ===
-                                activeProfile.shippingProfileId
-                                  ? "selected"
-                                  : ""
-                              }
-                            >
-                              ${escapeHtml(profile.name)}
-                            </option>
-                          `
-                        ).join("")
-                      }
-                    </select>
-                  </label>
-
-                  <span>
-                    ${profiles.length} saved profiles
-                  </span>
-                </div>
-              `
-              : ""
-          }
-
-          ${
-            [activeProfile].map(
+            renderedProfiles.map(
               profile => `
               <article
                 class="shippingProfileCard${
@@ -18053,7 +17973,9 @@ body.merchSellerPage #orderStatusBtn{
                   <div class="shippingSettingsActions shippingDraftActions">
                     <span class="shippingDraftState">
                       ${
-                        activeProfileDirty
+                        shippingDirtyProfiles.has(
+                          profile.shippingProfileId
+                        )
                           ? "Unsaved changes"
                           : "All changes saved"
                       }
@@ -18063,7 +17985,13 @@ body.merchSellerPage #orderStatusBtn{
                       class="sellerPrimaryBtn"
                       type="button"
                       data-save-draft="${escapeHtml(profile.shippingProfileId)}"
-                      ${activeProfileDirty ? "" : "disabled"}
+                      ${
+                        shippingDirtyProfiles.has(
+                          profile.shippingProfileId
+                        )
+                          ? ""
+                          : "disabled"
+                      }
                     >
                       Save Changes
                     </button>
@@ -18072,7 +18000,13 @@ body.merchSellerPage #orderStatusBtn{
                       class="sellerSecondaryBtn"
                       type="button"
                       data-cancel-draft="${escapeHtml(profile.shippingProfileId)}"
-                      ${activeProfileDirty ? "" : "disabled"}
+                      ${
+                        shippingDirtyProfiles.has(
+                          profile.shippingProfileId
+                        )
+                          ? ""
+                          : "disabled"
+                      }
                     >
                       Cancel Changes
                     </button>
@@ -18087,23 +18021,6 @@ body.merchSellerPage #orderStatusBtn{
         syncLiveTierDimensionVisibility(
           shippingUi.profiles
         );
-
-        shippingUi.profiles
-          .querySelector(
-            "[data-shipping-profile-select]"
-          )
-          ?.addEventListener(
-            "change",
-            event => {
-              activeShippingProfileId =
-                String(
-                  event.target.value ||
-                  ""
-                );
-
-              renderShippingProfiles();
-            }
-          );
 
         shippingUi.profiles
           .querySelectorAll(
