@@ -4101,6 +4101,24 @@
       background:#eef8fd;
     }
 
+    .marketStoresLink{
+      padding:7px 10px;
+      border:1px solid #d4af37;
+      border-radius:999px;
+      color:#0b668f;
+      background:#fff8e7;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-decoration:none;
+    }
+
+    .marketStoresLink:hover{
+      border-color:#c49a2c;
+      background:#fff2c9;
+      color:#074f71;
+    }
+
     .marketAllStores{
       padding:7px 10px;
       border:1px solid #d4af37;
@@ -7922,7 +7940,7 @@ body.merchLaunchSoon{
         >
           <button class="marketNavItem active" type="button" data-filter="all">
             <span class="marketNavIcon">⌂</span>
-            Browse All
+            All Products
           </button>
 
           <button class="marketNavItem" type="button" data-filter="apparel">
@@ -8023,12 +8041,19 @@ body.merchLaunchSoon{
             </a>
 
             <a
+              class="marketStoresLink"
+              href="/directory/#storefronts"
+            >
+              Browse All Stores
+            </a>
+
+            <a
               class="marketAllStores"
               id="marketAllStores"
               href="/merch/"
               hidden
             >
-              ← Browse All Stores
+              ← Back to Marketplace
             </a>
           </div>
         </div>
