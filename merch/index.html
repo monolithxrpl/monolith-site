@@ -4101,6 +4101,24 @@
       background:#eef8fd;
     }
 
+    .marketAllStores{
+      padding:7px 10px;
+      border:1px solid #d4af37;
+      border-radius:999px;
+      color:#f5d76e;
+      background:#0b3149;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-decoration:none;
+    }
+
+    .marketAllStores:hover{
+      border-color:#f0cf63;
+      background:#0d4364;
+      color:#fff1ae;
+    }
+
 
     /* -------------------------------------------------------
        QUICK CATEGORY CHIPS
@@ -8002,6 +8020,15 @@ body.merchLaunchSoon{
               href="/merch/"
             >
               MONOLITH Marketplace
+            </a>
+
+            <a
+              class="marketAllStores"
+              id="marketAllStores"
+              href="/merch/"
+              hidden
+            >
+              ← Browse All Stores
             </a>
           </div>
         </div>
@@ -13691,6 +13718,15 @@ body.merchLaunchSoon{
                   data.seller.coordinate
                 )
               }`;
+
+            const allStores =
+              document.getElementById(
+                "marketAllStores"
+              );
+
+            if (allStores) {
+              allStores.hidden = false;
+            }
           }
 
           marketplaceProducts =
