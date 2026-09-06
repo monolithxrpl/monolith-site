@@ -2779,6 +2779,55 @@
       font-size:9px;
     }
 
+    .sellerStoreImagePanel{
+      display:grid;
+      grid-template-columns:72px 1fr;
+      gap:14px;
+      align-items:center;
+      margin-top:15px;
+      padding:14px;
+      border:1px solid rgba(210,178,110,.18);
+      border-radius:9px;
+      background:rgba(210,178,110,.035);
+    }
+
+    .sellerStoreImagePreview{
+      width:72px;
+      height:72px;
+      object-fit:cover;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:10px;
+      background:#111;
+    }
+
+    .sellerStoreImageBody{
+      display:grid;
+      gap:8px;
+      min-width:0;
+    }
+
+    .sellerStoreImageBody strong{
+      color:#dcc17e;
+      font-size:10px;
+    }
+
+    .sellerStoreImageBody span{
+      color:#756e5c;
+      font-size:8px;
+      line-height:1.45;
+    }
+
+    .sellerStoreImageBody input{
+      color:#8d979d;
+      font-size:9px;
+    }
+
+    .sellerStoreImageActions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
     .productImagePanel{
       display:grid;
       grid-template-columns:1fr minmax(220px,auto) auto;
@@ -8517,6 +8566,52 @@ body.merchSellerPage #orderStatusBtn{
           </div>
 
           <div
+            class="sellerStoreImagePanel"
+            id="sellerStoreImagePanel"
+            hidden
+          >
+            <img
+              class="sellerStoreImagePreview"
+              id="sellerStoreImagePreview"
+              src="/assets/monolith_icon.webp"
+              alt="Store Profile Image"
+            >
+
+            <div class="sellerStoreImageBody">
+              <div>
+                <strong>Store Profile Image</strong>
+                <span id="sellerStoreImageNote">
+                  Your store uses your coordinate profile image unless you upload a custom store image.
+                </span>
+              </div>
+
+              <input
+                id="sellerStoreImageInput"
+                type="file"
+                accept=".png,.jpg,.jpeg,.webp,.gif,image/png,image/jpeg,image/webp,image/gif"
+              >
+
+              <div class="sellerStoreImageActions">
+                <button
+                  class="sellerSecondaryBtn"
+                  id="sellerStoreImageUploadBtn"
+                  type="button"
+                >
+                  Upload Store Image
+                </button>
+
+                <button
+                  class="sellerSecondaryBtn"
+                  id="sellerStoreImageResetBtn"
+                  type="button"
+                >
+                  Reset to Coordinate Image
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div
             class="sellerVerifiedPanel"
             id="sellerVerifiedPanel"
             hidden
@@ -13271,6 +13366,30 @@ body.merchSellerPage #orderStatusBtn{
           document.getElementById(
             "sellerDescription"
           ),
+        storeImagePanel:
+          document.getElementById(
+            "sellerStoreImagePanel"
+          ),
+        storeImagePreview:
+          document.getElementById(
+            "sellerStoreImagePreview"
+          ),
+        storeImageInput:
+          document.getElementById(
+            "sellerStoreImageInput"
+          ),
+        storeImageUpload:
+          document.getElementById(
+            "sellerStoreImageUploadBtn"
+          ),
+        storeImageReset:
+          document.getElementById(
+            "sellerStoreImageResetBtn"
+          ),
+        storeImageNote:
+          document.getElementById(
+            "sellerStoreImageNote"
+          ),
         status:
           document.getElementById(
             "sellerStatus"
@@ -13369,6 +13488,45 @@ body.merchSellerPage #orderStatusBtn{
           `sellerStateBadge ${type}`.trim();
       }
 
+      function renderSellerStoreImage() {
+        if (
+          !sellerProfile ||
+          !sellerUi.storeImagePanel
+        ) {
+          if (sellerUi.storeImagePanel) {
+            sellerUi.storeImagePanel.hidden = true;
+          }
+
+          return;
+        }
+
+        sellerUi.storeImagePanel.hidden = false;
+
+        const resolved =
+          sellerProfile.resolvedStoreImageUrl ||
+          "/assets/monolith_icon.webp";
+
+        sellerUi.storeImagePreview.src =
+          resolved;
+
+        if (sellerProfile.storeImageUrl) {
+          sellerUi.storeImageNote.textContent =
+            "Custom Store Profile Image active. Reset to return to the coordinate profile image.";
+        } else if (
+          sellerProfile.coordinateProfileImageUrl
+        ) {
+          sellerUi.storeImageNote.textContent =
+            "Using the profile image from your MONOLITH coordinate.";
+        } else {
+          sellerUi.storeImageNote.textContent =
+            "No coordinate profile image is set. MONOLITH is using the default store image.";
+        }
+
+        sellerUi.storeImageReset.disabled =
+          !sellerProfile.storeImageUrl;
+      }
+
+
       function hideSellerActions() {
         [
           sellerUi.connect,
@@ -13389,6 +13547,10 @@ body.merchSellerPage #orderStatusBtn{
 
         sellerUi.verified.hidden = true;
         sellerUi.notificationSettings.hidden = true;
+
+        if (sellerUi.storeImagePanel) {
+          sellerUi.storeImagePanel.hidden = true;
+        }
       }
 
       function ownerSession() {
@@ -13701,6 +13863,8 @@ body.merchSellerPage #orderStatusBtn{
         sellerUi.description.value =
           sellerProfile.storeDescription ||
           "";
+
+        renderSellerStoreImage();
 
         if (
           sellerProfile.status ===
@@ -22427,6 +22591,180 @@ body.merchSellerPage #orderStatusBtn{
             );
           }
         );
+
+      sellerUi.storeImageUpload
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!sellerProfile) {
+              return;
+            }
+
+            const file =
+              sellerUi.storeImageInput
+                ?.files?.[0];
+
+            if (!file) {
+              sellerMessage(
+                "Choose a Store Profile Image first.",
+                "error"
+              );
+              return;
+            }
+
+            sellerUi.storeImageUpload.disabled =
+              true;
+
+            try {
+              const form =
+                new FormData();
+
+              form.append(
+                "image",
+                file
+              );
+
+              form.append(
+                "payloadUuid",
+                sellerPayload()
+              );
+
+              const response =
+                await fetch(
+                  `/api/merch/seller/${
+                    encodeURIComponent(
+                      sellerProfile.sellerId
+                    )
+                  }/store-image`,
+                  {
+                    method:"POST",
+                    body:form
+                  }
+                );
+
+              const data =
+                await response
+                  .json()
+                  .catch(() => ({}));
+
+              if (
+                !response.ok ||
+                !data.ok ||
+                !data.seller
+              ) {
+                throw new Error(
+                  data.error ||
+                  "store_image_upload_failed"
+                );
+              }
+
+              sellerProfile =
+                data.seller;
+
+              sellerUi.storeImageInput.value =
+                "";
+
+              renderSellerStoreImage();
+
+              sellerMessage(
+                "Store Profile Image updated.",
+                "success"
+              );
+            } catch (error) {
+              sellerMessage(
+                sellerSafeError(
+                  error,
+                  "Unable to upload the Store Profile Image."
+                ),
+                "error"
+              );
+            } finally {
+              sellerUi.storeImageUpload.disabled =
+                false;
+            }
+          }
+        );
+
+
+      sellerUi.storeImageReset
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (
+              !sellerProfile ||
+              !sellerProfile.storeImageUrl
+            ) {
+              return;
+            }
+
+            sellerUi.storeImageReset.disabled =
+              true;
+
+            try {
+              const response =
+                await fetch(
+                  `/api/merch/seller/${
+                    encodeURIComponent(
+                      sellerProfile.sellerId
+                    )
+                  }/store-image/reset`,
+                  {
+                    method:"POST",
+                    headers:{
+                      "Content-Type":
+                        "application/json"
+                    },
+                    body:JSON.stringify({
+                      payloadUuid:
+                        sellerPayload()
+                    })
+                  }
+                );
+
+              const data =
+                await response
+                  .json()
+                  .catch(() => ({}));
+
+              if (
+                !response.ok ||
+                !data.ok ||
+                !data.seller
+              ) {
+                throw new Error(
+                  data.error ||
+                  "store_image_reset_failed"
+                );
+              }
+
+              sellerProfile =
+                data.seller;
+
+              if (sellerUi.storeImageInput) {
+                sellerUi.storeImageInput.value =
+                  "";
+              }
+
+              renderSellerStoreImage();
+
+              sellerMessage(
+                "Store Profile Image reset to the coordinate image.",
+                "success"
+              );
+            } catch (error) {
+              sellerMessage(
+                sellerSafeError(
+                  error,
+                  "Unable to reset the Store Profile Image."
+                ),
+                "error"
+              );
+
+              renderSellerStoreImage();
+            }
+          }
+        );
+
 
       productUi.uploadImage
         ?.addEventListener(

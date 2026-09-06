@@ -653,6 +653,14 @@
       filter:grayscale(.85) contrast(1.05);
     }
 
+    .storeProfileImage{
+      width:100%!important;
+      height:100%!important;
+      object-fit:cover!important;
+      opacity:1!important;
+      filter:none!important;
+    }
+
     .productPlaceholder{
       width:110px!important;
       height:110px!important;
@@ -4061,6 +4069,23 @@
       border:0;
       border-bottom:1px solid #dce7ec;
       background:transparent;
+    }
+
+    .marketStoreHeading{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .marketStoreProfileImage{
+      width:58px;
+      height:58px;
+      flex:0 0 58px;
+      object-fit:cover;
+      border:1px solid #d8e6ec;
+      border-radius:12px;
+      background:#ffffff;
     }
 
     .marketTopbar .sectionKicker{
@@ -8024,14 +8049,24 @@ body.merchLaunchSoon{
 
       <section class="marketContent">
         <div class="marketTopbar">
-          <div>
-            <div class="sectionKicker">
-              MARKETPLACE
-            </div>
+          <div class="marketStoreHeading">
+            <img
+              class="marketStoreProfileImage"
+              id="marketStoreProfileImage"
+              src="/assets/monolith_icon.webp"
+              alt="MONOLITH Store"
+              hidden
+            >
 
-            <h2 id="productsTitle">
-              Today's Picks
-            </h2>
+            <div>
+              <div class="sectionKicker">
+                MARKETPLACE
+              </div>
+
+              <h2 id="productsTitle">
+                Today's Picks
+              </h2>
+            </div>
           </div>
 
           <div class="marketTopActions">
@@ -13288,9 +13323,24 @@ body.merchLaunchSoon{
               >
                 <div class="productMedia">
                   <img
-                    class="productPlaceholder"
-                    src="/assets/monolith_icon.webp"
-                    alt=""
+                    class="${
+                      store.resolvedStoreImageUrl
+                        ? "storeProfileImage"
+                        : "productPlaceholder"
+                    }"
+                    src="${
+                      escapeHtml(
+                        store.resolvedStoreImageUrl ||
+                        "/assets/monolith_icon.webp"
+                      )
+                    }"
+                    alt="${
+                      escapeHtml(
+                        store.displayName ||
+                        store.coordinate ||
+                        "MONOLITH Store"
+                      )
+                    }"
                   >
 
                   <div class="productBadge">
@@ -14053,6 +14103,26 @@ body.merchLaunchSoon{
               )
               .textContent =
                 `${data.seller.displayName} Products`;
+
+            const storeProfileImage =
+              document.getElementById(
+                "marketStoreProfileImage"
+              );
+
+            if (storeProfileImage) {
+              storeProfileImage.src =
+                data.seller
+                  .resolvedStoreImageUrl ||
+                "/assets/monolith_icon.webp";
+
+              storeProfileImage.alt =
+                data.seller.displayName ||
+                data.seller.coordinate ||
+                "MONOLITH Store";
+
+              storeProfileImage.hidden =
+                false;
+            }
 
             const context =
               document.getElementById(
