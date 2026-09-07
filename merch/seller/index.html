@@ -8497,6 +8497,22 @@ body.merchSellerPage #orderStatusBtn{
               Check Xaman Sign-In
             </button>
 
+            <div
+              id="sellerVerificationFeeNotice"
+              style="
+                margin:12px 0;
+                padding:12px 14px;
+                border:1px solid rgba(255,255,255,.14);
+                border-radius:10px;
+                font-size:13px;
+                line-height:1.5;
+              "
+              hidden
+            >
+              <strong>Seller verification required</strong><br>
+              A $1.50 Stripe identity verification fee is required after storefront creation to complete seller verification.
+            </div>
+
             <button
               class="sellerPrimaryBtn"
               id="sellerCreateBtn"
@@ -13548,6 +13564,16 @@ body.merchSellerPage #orderStatusBtn{
         sellerUi.verified.hidden = true;
         sellerUi.notificationSettings.hidden = true;
 
+        const verificationFeeNotice =
+          document.getElementById(
+            "sellerVerificationFeeNotice"
+          );
+
+        if (verificationFeeNotice) {
+          verificationFeeNotice.hidden =
+            true;
+        }
+
         if (sellerUi.storeImagePanel) {
           sellerUi.storeImagePanel.hidden = true;
         }
@@ -13889,6 +13915,16 @@ body.merchSellerPage #orderStatusBtn{
 
           sellerUi.create.hidden =
             false;
+
+          const verificationFeeNotice =
+            document.getElementById(
+              "sellerVerificationFeeNotice"
+            );
+
+          if (verificationFeeNotice) {
+            verificationFeeNotice.hidden =
+              false;
+          }
 
           if (session.sourceCoordinate) {
             sellerMessage(
