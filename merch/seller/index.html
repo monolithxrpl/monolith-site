@@ -13554,9 +13554,53 @@ body.merchSellerPage #orderStatusBtn{
       }
 
       function ownerSession() {
-        return window.MonolithSession
-          ? window.MonolithSession.get()
-          : null;
+        const coordinateSession =
+          window.MonolithSession
+            ? window.MonolithSession.get()
+            : null;
+
+        try {
+          const raw =
+            localStorage.getItem(
+              "monolithMerchSellerAuth"
+            );
+
+          const session =
+            raw
+              ? JSON.parse(raw)
+              : null;
+
+          if (
+            coordinateSession?.ownerVerified
+          ) {
+            return coordinateSession;
+          }
+
+          if (
+            !session ||
+            !session.ownerVerified ||
+            !session.payloadUuid ||
+            !session.ownerWallet
+          ) {
+            return coordinateSession;
+          }
+
+          if (
+            session.createdAt &&
+            Date.now() -
+              Number(session.createdAt) >
+              12 * 60 * 60 * 1000
+          ) {
+            localStorage.removeItem(
+              "monolithMerchSellerAuth"
+            );
+            return null;
+          }
+
+          return session;
+        } catch (_) {
+          return null;
+        }
       }
 
       function sellerPayload() {
@@ -13846,10 +13890,17 @@ body.merchSellerPage #orderStatusBtn{
           sellerUi.create.hidden =
             false;
 
-          sellerMessage(
-            `Wallet ownership verified for ${session.sourceCoordinate}. Add your store name and create the storefront.`,
-            "success"
-          );
+          if (session.sourceCoordinate) {
+            sellerMessage(
+              `Wallet ownership verified for ${session.sourceCoordinate}. Add your store name and create the storefront.`,
+              "success"
+            );
+          } else {
+            sellerMessage(
+              "Wallet verified. Enter the MONOLITH coordinate you want to use, add your store name, and create the storefront.",
+              "success"
+            );
+          }
 
           return;
         }
@@ -14163,12 +14214,29 @@ body.merchSellerPage #orderStatusBtn{
                 ""
               ).trim();
 
+            const coordinateValue =
+              String(
+                sellerUi.coordinate.value ||
+                session?.sourceCoordinate ||
+                ""
+              )
+                .trim()
+                .toUpperCase();
+
             if (
               !session ||
               !session.ownerVerified
             ) {
               sellerMessage(
                 "Verify coordinate ownership first.",
+                "error"
+              );
+              return;
+            }
+
+            if (!coordinateValue) {
+              sellerMessage(
+                "Enter the MONOLITH coordinate you want to use.",
                 "error"
               );
               return;
@@ -14201,7 +14269,7 @@ body.merchSellerPage #orderStatusBtn{
                       sellerWallet:
                         session.ownerWallet,
                       coordinate:
-                        session.sourceCoordinate,
+                        coordinateValue,
                       displayName,
                       storeDescription:
                         String(
@@ -14216,6 +14284,33 @@ body.merchSellerPage #orderStatusBtn{
 
               sellerProfile =
                 data.seller;
+
+              if (
+                window.MonolithSession &&
+                sellerProfile?.coordinate
+              ) {
+                window.MonolithSession.set({
+                  sourceCoordinate:
+                    sellerProfile.coordinate,
+                  payloadUuid:
+                    session.payloadUuid,
+                  signUrl:"",
+                  ownerVerified:true,
+                  ownerWallet:
+                    session.ownerWallet,
+                  createdAt:
+                    session.createdAt ||
+                    Date.now(),
+                  verifiedAt:
+                    session.verifiedAt ||
+                    Date.now(),
+                  merchSellerAuth:true
+                });
+
+                localStorage.removeItem(
+                  "monolithMerchSellerAuth"
+                );
+              }
 
               renderSellerFlow();
             } catch (error) {
@@ -23402,6 +23497,25 @@ body.merchSellerPage #orderStatusBtn{
             ? window.MonolithSession.get()
             : null;
 
+        let temporarySellerAuth =
+          null;
+
+        try {
+          temporarySellerAuth =
+            JSON.parse(
+              localStorage.getItem(
+                "monolithMerchSellerAuth"
+              ) || "null"
+            );
+        } catch (_) {}
+
+        if (
+          temporarySellerAuth &&
+          temporarySellerAuth.ownerVerified
+        ) {
+          return;
+        }
+
         if (
           session &&
           session.ownerVerified
@@ -23498,11 +23612,45 @@ body.merchSellerPage #orderStatusBtn{
 
   if (!ownerBtn) return;
 
-  function syncSellerAuthButton() {
-    const current =
+  function temporarySellerAuth() {
+    try {
+      const raw =
+        localStorage.getItem(
+          "monolithMerchSellerAuth"
+        );
+
+      return raw
+        ? JSON.parse(raw)
+        : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function currentSellerAuth() {
+    const coordinateSession =
       window.MonolithSession
         ? window.MonolithSession.get()
         : null;
+
+    const temporary =
+      temporarySellerAuth();
+
+    if (coordinateSession?.ownerVerified) {
+      return coordinateSession;
+    }
+
+    if (temporary?.ownerVerified) {
+      return temporary;
+    }
+
+    return coordinateSession ||
+      temporary;
+  }
+
+  function syncSellerAuthButton() {
+    const current =
+      currentSellerAuth();
 
     ownerBtn.innerHTML =
       current && current.ownerVerified
@@ -23563,9 +23711,25 @@ body.merchSellerPage #orderStatusBtn{
         : [];
 
     if (!sellers.length) {
-      throw new Error(
-        "No MONOLITH seller account is registered to this wallet."
+      localStorage.setItem(
+        "monolithMerchSellerAuth",
+        JSON.stringify({
+          payloadUuid,
+          ownerVerified:true,
+          ownerWallet:
+            data.wallet || "",
+          createdAt:
+            Date.now(),
+          verifiedAt:
+            Date.now(),
+          merchSellerAuth:true
+        })
       );
+
+      window.location.replace(
+        "/merch/seller/"
+      );
+      return;
     }
 
     if (sellers.length > 1) {
@@ -23607,15 +23771,20 @@ body.merchSellerPage #orderStatusBtn{
     "click",
     async () => {
       const current =
-        window.MonolithSession
-          ? window.MonolithSession.get()
-          : null;
+        currentSellerAuth();
 
       if (
         current &&
         current.ownerVerified
       ) {
-        window.MonolithSession.clear();
+        if (window.MonolithSession) {
+          window.MonolithSession.clear();
+        }
+
+        localStorage.removeItem(
+          "monolithMerchSellerAuth"
+        );
+
         window.location.href =
           "/merch/seller/";
         return;
