@@ -2255,6 +2255,19 @@
       background:rgba(105,216,155,.05);
     }
 
+    .sellerStatus.payment{
+      margin-bottom:20px;
+      padding:16px 18px;
+      border:2px solid rgba(210,178,110,.55);
+      border-left:4px solid #d2b26e;
+      border-radius:10px;
+      color:#f2f5f7;
+      background:rgba(210,178,110,.10);
+      font-size:13px;
+      font-weight:700;
+      line-height:1.55;
+    }
+
     .sellerFields{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -14111,7 +14124,8 @@ body.merchSellerPage #orderStatusBtn{
           false;
 
         sellerMessage(
-          "Complete the $1.50 USD-equivalent identity verification cost in $XRP through Xaman, then verify the payment here."
+          "$1.50 SELLER VERIFICATION FEE REQUIRED — Complete the $1.50 USD-equivalent identity verification cost in $XRP through Xaman, then verify the payment here.",
+          "payment"
         );
       }
 
