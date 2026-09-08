@@ -8481,6 +8481,16 @@ body.merchSellerPage #orderStatusBtn{
             </label>
           </div>
 
+          <button
+            class="sellerPrimaryBtn"
+            id="sellerSaveDetailsBtn"
+            type="button"
+            hidden
+            style="margin-top:14px;"
+          >
+            Save Store Details
+          </button>
+
           <div class="sellerActions">
             <button
               class="sellerPrimaryBtn"
@@ -13419,6 +13429,10 @@ body.merchSellerPage #orderStatusBtn{
           document.getElementById(
             "sellerDescription"
           ),
+        saveDetails:
+          document.getElementById(
+            "sellerSaveDetailsBtn"
+          ),
         storeImagePanel:
           document.getElementById(
             "sellerStoreImagePanel"
@@ -13586,6 +13600,7 @@ body.merchSellerPage #orderStatusBtn{
           sellerUi.openXaman,
           sellerUi.verifySignIn,
           sellerUi.create,
+          sellerUi.saveDetails,
           sellerUi.fee,
           sellerUi.openFeeXaman,
           sellerUi.verifyFee,
@@ -13987,6 +14002,9 @@ body.merchSellerPage #orderStatusBtn{
         sellerUi.description.value =
           sellerProfile.storeDescription ||
           "";
+
+        sellerUi.saveDetails.hidden =
+          false;
 
         renderSellerStoreImage();
 
@@ -14420,6 +14438,82 @@ body.merchSellerPage #orderStatusBtn{
               );
             } finally {
               sellerUi.create.disabled =
+                false;
+            }
+          }
+        );
+
+      sellerUi.saveDetails
+        ?.addEventListener(
+          "click",
+          async () => {
+            if (!sellerProfile) return;
+
+            const displayName =
+              String(
+                sellerUi.displayName.value ||
+                ""
+              ).trim();
+
+            const storeDescription =
+              String(
+                sellerUi.description.value ||
+                ""
+              ).trim();
+
+            if (!displayName) {
+              sellerMessage(
+                "Enter a store name.",
+                "error"
+              );
+              return;
+            }
+
+            sellerUi.saveDetails.disabled =
+              true;
+
+            sellerMessage(
+              "Saving store details…"
+            );
+
+            try {
+              const data =
+                await merchJson(
+                  `/api/merch/seller/${
+                    encodeURIComponent(
+                      sellerProfile.sellerId
+                    )
+                  }`,
+                  {
+                    method: "POST",
+                    body: {
+                      payloadUuid:
+                        sellerPayload(),
+                      displayName,
+                      storeDescription
+                    }
+                  }
+                );
+
+              sellerProfile =
+                data.seller;
+
+              renderSellerFlow();
+
+              sellerMessage(
+                "Store details saved.",
+                "success"
+              );
+            } catch (error) {
+              sellerMessage(
+                sellerSafeError(
+                  error,
+                  "Unable to save store details. Try again."
+                ),
+                "error"
+              );
+            } finally {
+              sellerUi.saveDetails.disabled =
                 false;
             }
           }
