@@ -9254,14 +9254,36 @@ body.merchSellerPage #orderStatusBtn{
 
             <div class="productAdvancedHead productPackageDetailsHead">
               <div>
-                <strong>Package Details</strong>
+                <strong>Packaging</strong>
                 <span>
-                  Used for fulfillment and future automatic carrier pricing.
+                  Choose the package you will use to ship this product.
                 </span>
               </div>
             </div>
 
             <div class="productFields">
+              <label class="productWideField">
+                <span>Carrier Packaging</span>
+                <select id="productCarrierPackaging">
+                  <option value="custom">Custom Packaging</option>
+                  <option value="usps_flat_rate_envelope">USPS Flat Rate Envelope</option>
+                  <option value="usps_padded_flat_rate_envelope">USPS Padded Flat Rate Envelope</option>
+                  <option value="usps_legal_flat_rate_envelope">USPS Legal Flat Rate Envelope</option>
+                  <option value="usps_small_flat_rate_box">USPS Small Flat Rate Box</option>
+                  <option value="usps_medium_flat_rate_box">USPS Medium Flat Rate Box</option>
+                  <option value="usps_large_flat_rate_box">USPS Large Flat Rate Box</option>
+                </select>
+
+                <small>
+                  Choose Custom Packaging only when you need to enter your own package weight and dimensions.
+                </small>
+              </label>
+            </div>
+
+            <div
+              class="productFields"
+              id="productCustomPackageDetails"
+            >
               <label>
                 <span>Weight</span>
                 <input
@@ -9320,23 +9342,6 @@ body.merchSellerPage #orderStatusBtn{
                   <option value="in">in</option>
                   <option value="cm">cm</option>
                 </select>
-              </label>
-
-              <label class="productWideField">
-                <span>Carrier Packaging</span>
-                <select id="productCarrierPackaging">
-                  <option value="custom">Custom Packaging</option>
-                  <option value="usps_flat_rate_envelope">USPS Flat Rate Envelope</option>
-                  <option value="usps_padded_flat_rate_envelope">USPS Padded Flat Rate Envelope</option>
-                  <option value="usps_legal_flat_rate_envelope">USPS Legal Flat Rate Envelope</option>
-                  <option value="usps_small_flat_rate_box">USPS Small Flat Rate Box</option>
-                  <option value="usps_medium_flat_rate_box">USPS Medium Flat Rate Box</option>
-                  <option value="usps_large_flat_rate_box">USPS Large Flat Rate Box</option>
-                </select>
-
-                <small>
-                  Select USPS packaging only when you will actually ship this product using that USPS package.
-                </small>
               </label>
             </div>
 
@@ -9398,6 +9403,23 @@ body.merchSellerPage #orderStatusBtn{
         </div>
       </div>
     </section>
+
+    <style id="monolith-merch-product-shipping-ui-20260908">
+      #productShippingProfile{
+        min-height:52px;
+        padding:12px 14px;
+        font-size:15px;
+        font-weight:700;
+      }
+
+      .productShippingManageRow{
+        gap:8px;
+      }
+
+      #productCustomPackageDetails[hidden]{
+        display:none !important;
+      }
+    </style>
 
     <style id="monolith-merch-manual-shipping-launch-20260825">
       .shippingLaunchNotice{
@@ -15213,6 +15235,10 @@ body.merchSellerPage #orderStatusBtn{
           document.getElementById(
             "productCarrierPackaging"
           ),
+        customPackageDetails:
+          document.getElementById(
+            "productCustomPackageDetails"
+          ),
         mediaMailEligible:
           document.getElementById(
             "productMediaMailEligible"
@@ -17615,6 +17641,22 @@ body.merchSellerPage #orderStatusBtn{
 
         return unique;
       }
+
+      function refreshProductPackageDetails() {
+        if (!productUi.customPackageDetails) {
+          return;
+        }
+
+        productUi.customPackageDetails.hidden =
+          productUi.carrierPackaging.value !==
+          "custom";
+      }
+
+      productUi.carrierPackaging
+        ?.addEventListener(
+          "change",
+          refreshProductPackageDetails
+        );
 
       productUi.manageShippingProfiles
         ?.addEventListener(
@@ -20899,6 +20941,8 @@ body.merchSellerPage #orderStatusBtn{
         productUi.dimensionUnit.value = "";
         productUi.carrierPackaging.value =
           "custom";
+        refreshProductPackageDetails();
+
         productUi.mediaMailEligible.checked =
           false;
         productUi.libraryMailEligible.checked =
@@ -21013,6 +21057,7 @@ body.merchSellerPage #orderStatusBtn{
         productUi.carrierPackaging.value =
           product.carrierPackaging ||
           "custom";
+        refreshProductPackageDetails();
 
         productUi.mediaMailEligible.checked =
           Boolean(
@@ -22866,16 +22911,24 @@ body.merchSellerPage #orderStatusBtn{
 
           const missingOrigin =
             !String(
-              shipFrom.address1 || ""
+              shipFrom.address1 ||
+              profile.shipFromAddress1 ||
+              ""
             ).trim() ||
             !String(
-              shipFrom.city || ""
+              shipFrom.city ||
+              profile.shipFromCity ||
+              ""
             ).trim() ||
             !String(
-              shipFrom.postalCode || ""
+              shipFrom.postalCode ||
+              profile.shipFromPostalCode ||
+              ""
             ).trim() ||
             !String(
-              shipFrom.country || ""
+              shipFrom.country ||
+              profile.shipFromCountry ||
+              ""
             ).trim();
 
           const missingCarrier =
