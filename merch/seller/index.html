@@ -14112,20 +14112,43 @@ body.merchSellerPage #orderStatusBtn{
           return;
         }
 
+        const verificationFeePaid =
+          Boolean(
+            verification.verificationFeeTxHash &&
+            verification.verificationFeePaidAt
+          );
+
         sellerUi.title.textContent =
           "Seller verification";
 
+        if (!verificationFeePaid) {
+          setSellerBadge(
+            "VERIFICATION REQUIRED",
+            "pending"
+          );
+
+          sellerUi.fee.hidden =
+            false;
+
+          sellerMessage(
+            "$1.50 STRIPE IDENTITY VERIFICATION FEE REQUIRED — Start identity verification to create a current $XRP payment request in Xaman. After payment is confirmed, MONOLITH will continue automatically to Stripe.",
+            "payment"
+          );
+
+          return;
+        }
+
         setSellerBadge(
-          "PAYMENT PENDING",
+          "IDENTITY REQUIRED",
           "pending"
         );
 
-        sellerUi.verifyFee.hidden =
+        sellerUi.identity.hidden =
           false;
 
         sellerMessage(
-          "$1.50 STRIPE IDENTITY VERIFICATION FEE REQUIRED — Complete the $1.50 USD-equivalent Stripe identity verification fee in $XRP through Xaman, then verify the payment here.",
-          "payment"
+          "Your $1.50 Stripe identity verification fee is confirmed. Continue to Stripe identity verification.",
+          "success"
         );
       }
 
