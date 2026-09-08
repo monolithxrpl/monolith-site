@@ -14199,6 +14199,113 @@ body.merchSellerPage #orderStatusBtn{
         }
       }
 
+      function clearSellerVerificationReturn() {
+        const url =
+          new URL(
+            window.location.href
+          );
+
+        url.searchParams.delete(
+          "sellerVerification"
+        );
+
+        url.searchParams.delete(
+          "payload"
+        );
+
+        window.history.replaceState(
+          {},
+          "",
+          `${url.pathname}${url.search}${url.hash}`
+        );
+      }
+
+      async function handleSellerVerificationReturn() {
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+        const source =
+          String(
+            params.get(
+              "sellerVerification"
+            ) ||
+            ""
+          ).toLowerCase();
+
+        if (
+          source !== "xaman" &&
+          source !== "stripe"
+        ) {
+          return false;
+        }
+
+        await refreshSellerFlow();
+
+        if (!sellerProfile) {
+          return true;
+        }
+
+        if (source === "xaman") {
+          sellerMessage(
+            "Payment returned from Xaman. Confirming the $XRP payment and continuing to Stripe…"
+          );
+
+          await autoContinueSellerVerification();
+          return true;
+        }
+
+        sellerMessage(
+          "Stripe verification returned. Checking your verification status…"
+        );
+
+        try {
+          await merchJson(
+            `/api/merch/seller/${
+              encodeURIComponent(
+                sellerProfile.sellerId
+              )
+            }/verification/identity/sync`,
+            {
+              method: "POST",
+              body: {
+                payloadUuid:
+                  sellerPayload()
+              }
+            }
+          );
+
+          await refreshSellerFlow();
+          clearSellerVerificationReturn();
+
+          if (
+            sellerProfile?.status ===
+              "verified" &&
+            sellerProfile
+              ?.verificationStatus ===
+              "verified"
+          ) {
+            sellerMessage(
+              "Seller verification complete.",
+              "success"
+            );
+          }
+
+          return true;
+        } catch (error) {
+          sellerMessage(
+            sellerSafeError(
+              error,
+              "Unable to confirm the Stripe verification automatically. Use Check Verification to continue."
+            ),
+            "error"
+          );
+
+          return true;
+        }
+      }
+
       sellerUi.connect
         ?.addEventListener(
           "click",
@@ -14760,13 +14867,10 @@ body.merchSellerPage #orderStatusBtn{
               );
 
               if (payment.signUrl) {
-                window.open(
-                  payment.signUrl,
-                  "_blank",
-                  "noopener"
+                window.location.assign(
+                  payment.signUrl
                 );
-
-                autoContinueSellerVerification();
+                return;
               }
             } catch (error) {
               sellerMessage(
@@ -15004,8 +15108,13 @@ body.merchSellerPage #orderStatusBtn{
       );
 
       setTimeout(
-        () => {
-          refreshSellerFlow();
+        async () => {
+          const handled =
+            await handleSellerVerificationReturn();
+
+          if (!handled) {
+            await refreshSellerFlow();
+          }
         },
         0
       );
