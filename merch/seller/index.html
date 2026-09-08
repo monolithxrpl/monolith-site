@@ -14471,6 +14471,104 @@ body.merchSellerPage #orderStatusBtn{
           }
         );
 
+      async function autoContinueSellerVerification() {
+        if (!sellerProfile) return;
+
+        const sellerId =
+          encodeURIComponent(
+            sellerProfile.sellerId
+          );
+
+        for (let attempt = 0; attempt < 120; attempt += 1) {
+          try {
+            sellerMessage(
+              "Waiting for the $XRP verification payment to complete in Xaman…"
+            );
+
+            await merchJson(
+              `/api/merch/seller/${sellerId}/verification/fee/verify`,
+              {
+                method: "POST",
+                body: {
+                  payloadUuid:
+                    sellerPayload()
+                }
+              }
+            );
+
+            sellerMessage(
+              "Payment confirmed on XRPL. Opening Stripe identity verification…",
+              "success"
+            );
+
+            const data =
+              await merchJson(
+                `/api/merch/seller/${sellerId}/verification/identity/start`,
+                {
+                  method: "POST",
+                  body: {
+                    payloadUuid:
+                      sellerPayload()
+                  }
+                }
+              );
+
+            const verification =
+              data.verification || {};
+
+            if (
+              verification.status ===
+              "verified"
+            ) {
+              await refreshSellerFlow();
+              return;
+            }
+
+            if (verification.url) {
+              window.location.assign(
+                verification.url
+              );
+              return;
+            }
+
+            await refreshSellerFlow();
+            return;
+          } catch (error) {
+            if (
+              error.code ===
+              "MERCH_VERIFICATION_FEE_NOT_SIGNED"
+            ) {
+              await new Promise(
+                resolve =>
+                  setTimeout(resolve, 2000)
+              );
+              continue;
+            }
+
+            sellerUi.verifyFee.hidden =
+              false;
+
+            sellerMessage(
+              sellerSafeError(
+                error,
+                "Automatic verification could not continue. Do not pay again. Use Verify Payment to continue."
+              ),
+              "error"
+            );
+
+            return;
+          }
+        }
+
+        sellerUi.verifyFee.hidden =
+          false;
+
+        sellerMessage(
+          "The payment is taking longer than expected to confirm. Do not pay again. Use Verify Payment to continue.",
+          "error"
+        );
+      }
+
       sellerUi.fee
         ?.addEventListener(
           "click",
@@ -14540,8 +14638,8 @@ body.merchSellerPage #orderStatusBtn{
 
               sellerMessage(
                 quotedXrp
-                  ? `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent. Pay ${quotedXrp} $XRP in Xaman at the quoted rate, then return here and verify the payment.`
-                  : `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent, paid in $XRP through Xaman. Complete the payment, then return here and verify it.`
+                  ? `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent. Pay ${quotedXrp} $XRP in Xaman. MONOLITH will continue automatically to Stripe identity verification after the payment is confirmed.`
+                  : `Identity verification costs $${quotedUsd.toFixed(2)} USD equivalent, paid in $XRP through Xaman. MONOLITH will continue automatically to Stripe identity verification after the payment is confirmed.`
               );
 
               if (payment.signUrl) {
@@ -14550,6 +14648,8 @@ body.merchSellerPage #orderStatusBtn{
                   "_blank",
                   "noopener"
                 );
+
+                autoContinueSellerVerification();
               }
             } catch (error) {
               sellerMessage(
