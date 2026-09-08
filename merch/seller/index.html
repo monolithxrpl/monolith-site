@@ -18059,6 +18059,7 @@ body.merchSellerPage #orderStatusBtn{
                     <div class="shippingFieldGrid">
                       <label>
                         Ship-from name
+                        <span class="shippingFieldHint">Name or company required</span>
                         <input
                           type="text"
                           maxlength="160"
@@ -18070,6 +18071,7 @@ body.merchSellerPage #orderStatusBtn{
 
                       <label>
                         Company
+                        <span class="shippingFieldHint">Name or company required</span>
                         <input
                           type="text"
                           maxlength="160"
@@ -18080,7 +18082,8 @@ body.merchSellerPage #orderStatusBtn{
                       </label>
 
                       <label class="wide">
-                        Address
+                        Street address
+                        <span class="shippingFieldHint">Optional · kept private</span>
                         <input
                           type="text"
                           maxlength="240"
@@ -18154,6 +18157,13 @@ body.merchSellerPage #orderStatusBtn{
                           }
                         </select>
                       </label>
+                    </div>
+
+                    <div class="shippingLiveNotice">
+                      Privacy: You may use either your personal name or company name.
+                      Street address is optional and is not displayed publicly.
+                      If you do not provide a return address, returned or undeliverable
+                      shipments may not be returned to you.
                     </div>
 
                     <div class="shippingModeRow">
@@ -22922,15 +22932,28 @@ body.merchSellerPage #orderStatusBtn{
           const shipFrom =
             profile.shipFrom || {};
 
-          const missingOrigin =
+          const missingIdentity =
             !String(
-              shipFrom.address1 ||
-              profile.shipFromAddress1 ||
+              shipFrom.name ||
+              profile.shipFromName ||
               ""
-            ).trim() ||
+            ).trim() &&
+            !String(
+              shipFrom.company ||
+              profile.shipFromCompany ||
+              ""
+            ).trim();
+
+          const missingOrigin =
+            missingIdentity ||
             !String(
               shipFrom.city ||
               profile.shipFromCity ||
+              ""
+            ).trim() ||
+            !String(
+              shipFrom.region ||
+              profile.shipFromRegion ||
               ""
             ).trim() ||
             !String(
@@ -22954,7 +22977,7 @@ body.merchSellerPage #orderStatusBtn{
             missingOrigin ||
             missingCarrier
           ) {
-            return "Shipping Profile incomplete. Add your ship-from address and carrier settings before publishing.";
+            return "Shipping Profile incomplete. Add a ship-from name or company, city, state or region, postal code, country, and carrier settings before publishing.";
           }
         }
 
