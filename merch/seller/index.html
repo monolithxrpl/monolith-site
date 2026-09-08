@@ -9265,6 +9265,7 @@ body.merchSellerPage #orderStatusBtn{
               <label class="productWideField">
                 <span>Carrier Packaging</span>
                 <select id="productCarrierPackaging">
+                  <option value="">SELECT PACKAGING</option>
                   <option value="custom">Custom Packaging</option>
                   <option value="usps_flat_rate_envelope">USPS Flat Rate Envelope</option>
                   <option value="usps_padded_flat_rate_envelope">USPS Padded Flat Rate Envelope</option>
@@ -9418,6 +9419,18 @@ body.merchSellerPage #orderStatusBtn{
 
       #productCustomPackageDetails[hidden]{
         display:none !important;
+      }
+
+      #productStatusMessage.publishSuccess{
+        display:block;
+        margin-top:14px;
+        padding:14px 16px;
+        border:1px solid rgba(34,160,95,.38);
+        border-radius:12px;
+        background:rgba(34,160,95,.10);
+        font-size:14px;
+        font-weight:900;
+        line-height:1.5;
       }
     </style>
 
@@ -20940,7 +20953,7 @@ body.merchSellerPage #orderStatusBtn{
         productUi.packageHeight.value = "";
         productUi.dimensionUnit.value = "";
         productUi.carrierPackaging.value =
-          "custom";
+          "";
         refreshProductPackageDetails();
 
         productUi.mediaMailEligible.checked =
@@ -21056,7 +21069,7 @@ body.merchSellerPage #orderStatusBtn{
 
         productUi.carrierPackaging.value =
           product.carrierPackaging ||
-          "custom";
+          "";
         refreshProductPackageDetails();
 
         productUi.mediaMailEligible.checked =
@@ -23041,12 +23054,19 @@ body.merchSellerPage #orderStatusBtn{
           productUi.uploadImage.textContent =
             "Upload Images";
 
-          productMessage(
+          if (
             status === "active"
-              ? "Product published to the MONOLITH marketplace."
-              : "Draft saved.",
-            "success"
-          );
+          ) {
+            productMessage(
+              "PRODUCT PUBLISHED ✓ Your product is live in the MONOLITH marketplace.",
+              "publishSuccess"
+            );
+          } else {
+            productMessage(
+              "Draft saved.",
+              "success"
+            );
+          }
 
           loadMarketplace();
 
