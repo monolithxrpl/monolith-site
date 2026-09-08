@@ -9223,28 +9223,33 @@ body.merchSellerPage #orderStatusBtn{
             </div>
 
             <div class="productFields">
+              <div class="productWideField productShippingManageRow">
+                <span>Shipping Profiles</span>
+
+                <small>
+                  Create or finish your shipping setup before assigning a profile to this product.
+                </small>
+
+                <button
+                  class="sellerSecondaryBtn"
+                  id="productManageShippingProfilesBtn"
+                  type="button"
+                >
+                  Manage / Create Shipping Profiles
+                </button>
+              </div>
+
               <label class="productWideField">
-                <span>Shipping Profile</span>
+                <span>Choose Shipping Profile</span>
 
                 <select id="productShippingProfile">
                   <option value="">No shipping profile selected</option>
                 </select>
 
                 <small>
-                  Shipping Profiles control destinations, buyer shipping charges,
-                  and quantity-based shipping rules.
+                  Choose the completed profile that controls shipping for this product.
                 </small>
               </label>
-
-              <div class="productWideField productShippingManageRow">
-                <button
-                  class="sellerSecondaryBtn"
-                  id="productManageShippingProfilesBtn"
-                  type="button"
-                >
-                  Manage Shipping Profiles
-                </button>
-              </div>
             </div>
 
             <div class="productAdvancedHead productPackageDetailsHead">
@@ -22825,6 +22830,71 @@ body.merchSellerPage #orderStatusBtn{
         );
       }
 
+      function productShippingPublishIssue() {
+        if (
+          !productUi.requiresShipping.checked
+        ) {
+          return "";
+        }
+
+        const profileId =
+          String(
+            productUi.shippingProfile.value ||
+            ""
+          ).trim();
+
+        if (!profileId) {
+          return "Choose or create a Shipping Profile before publishing.";
+        }
+
+        const profile =
+          sellerShippingProfiles.find(
+            item =>
+              item.shippingProfileId ===
+              profileId
+          );
+
+        if (!profile) {
+          return "The selected Shipping Profile is unavailable. Choose another profile or manage your shipping setup.";
+        }
+
+        if (
+          profile.rateMode === "live"
+        ) {
+          const shipFrom =
+            profile.shipFrom || {};
+
+          const missingOrigin =
+            !String(
+              shipFrom.address1 || ""
+            ).trim() ||
+            !String(
+              shipFrom.city || ""
+            ).trim() ||
+            !String(
+              shipFrom.postalCode || ""
+            ).trim() ||
+            !String(
+              shipFrom.country || ""
+            ).trim();
+
+          const missingCarrier =
+            !Array.isArray(
+              profile.enabledCarriers
+            ) ||
+            !profile.enabledCarriers.length;
+
+          if (
+            missingOrigin ||
+            missingCarrier
+          ) {
+            return "Shipping Profile incomplete. Add your ship-from address and carrier settings before publishing.";
+          }
+        }
+
+        return "";
+      }
+
       async function saveProduct(
         status
       ) {
@@ -22855,20 +22925,28 @@ body.merchSellerPage #orderStatusBtn{
         }
 
         if (
-          status === "active" &&
-          productUi.requiresShipping.checked &&
-          !String(
-            productUi.shippingProfile.value ||
-            ""
-          ).trim()
+          status === "active"
         ) {
-          productMessage(
-            "Shipping is required before this product can be published. Assign a Shipping Profile first.",
-            "error"
-          );
+          const shippingIssue =
+            productShippingPublishIssue();
 
-          productUi.shippingProfile.focus();
-          return null;
+          if (shippingIssue) {
+            productMessage(
+              shippingIssue,
+              "error"
+            );
+
+            if (
+              !String(
+                productUi.shippingProfile.value ||
+                ""
+              ).trim()
+            ) {
+              productUi.shippingProfile.focus();
+            }
+
+            return null;
+          }
         }
 
         productUi.saveDraft.disabled =
