@@ -1657,6 +1657,76 @@ a{
 }
 </style>
 
+
+<style id="MONOLITH_V2_LINK_SPACING_FIX_V1">
+.linksCard .tagRow,
+#links{
+  display:flex;
+  flex-wrap:wrap;
+  column-gap:12px;
+  row-gap:12px;
+  align-items:flex-start;
+}
+
+.linksCard .tag,
+#links .tag{
+  display:inline-flex;
+  align-items:center;
+  min-height:42px;
+  padding:9px 14px;
+  line-height:1.25;
+  margin:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+@media(max-width:620px){
+  .linksCard .tagRow,
+  #links{
+    column-gap:9px;
+    row-gap:10px;
+  }
+
+  .linksCard .tag,
+  #links .tag{
+    min-height:40px;
+    padding:8px 12px;
+    font-size:15px;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_V2_MERCH_GRID_3X2_V1">
+#merchProducts{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+#merchProducts .merchProduct{
+  min-width:0;
+}
+
+#merchProducts .merchProductImage{
+  width:100%;
+  aspect-ratio:1 / 1;
+  object-fit:cover;
+}
+
+#merchProducts .merchEmptyState{
+  grid-column:1 / -1;
+}
+
+@media(max-width:620px){
+  #merchProducts{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -1866,29 +1936,7 @@ a{
         </div>
 
         <div class="merchProducts" id="merchProducts">
-          <div class="merchProduct">
-            <div class="merchProductImage"></div>
-            <div class="merchProductCopy">
-              <strong>Product</strong>
-              <span>$XRP</span>
-            </div>
-          </div>
-
-          <div class="merchProduct">
-            <div class="merchProductImage"></div>
-            <div class="merchProductCopy">
-              <strong>Product</strong>
-              <span>$XRP</span>
-            </div>
-          </div>
-
-          <div class="merchProduct">
-            <div class="merchProductImage"></div>
-            <div class="merchProductCopy">
-              <strong>Product</strong>
-              <span>$XRP</span>
-            </div>
-          </div>
+          <div class="merchEmptyState">Loading storefront...</div>
         </div>
 
         <div class="utilityFooter">

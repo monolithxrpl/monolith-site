@@ -8,7 +8,7 @@
 
   const coord=String(
     qs.get("tile") ||
-    (parts[0]==="tile-v2" ? parts[1] : "") ||
+    ((parts[0]==="tile-v2" || parts[0]==="tile") ? parts[1] : "") ||
     "ORIGIN"
   ).trim().toUpperCase();
 
@@ -1216,6 +1216,91 @@
 
 
 
+
+  /* MONOLITH_V2_LIVE_MERCH_STOREFRONT_V1 */
+  async function loadLiveMerch(){
+    const slot=$("merchProducts");
+    if(!slot) return;
+
+    slot.innerHTML="";
+
+    try{
+      const r=await fetch(
+        "/api/merch/storefront/"+
+        encodeURIComponent(String(coord||"ORIGIN").toUpperCase())+
+        "?cb="+Date.now(),
+        {cache:"no-store"}
+      );
+
+      const data=await r.json();
+      const products=
+        data && Array.isArray(data.products)
+          ? data.products
+          : [];
+
+      if(!r.ok || !data.ok || !products.length){
+        const empty=document.createElement("div");
+        empty.className="merchEmptyState";
+        empty.textContent="No live merchandise listed yet.";
+        slot.appendChild(empty);
+        return;
+      }
+
+      products.slice(0,6).forEach(product=>{
+        const link=document.createElement("a");
+        link.className="merchProduct";
+        link.href=
+          "/merch/product/?id="+
+          encodeURIComponent(product.productId||"");
+
+        const media=
+          Array.isArray(product.media)
+            ? product.media[0]
+            : null;
+
+        if(media && media.url){
+          const img=document.createElement("img");
+          img.className="merchProductImage";
+          img.src=media.url;
+          img.alt=
+            media.altText ||
+            product.title ||
+            "Merch product";
+          img.loading="lazy";
+          link.appendChild(img);
+        }else{
+          const fallback=document.createElement("div");
+          fallback.className="merchProductImage merchProductFallback";
+          fallback.textContent=product.title||"Merch";
+          link.appendChild(fallback);
+        }
+
+        const copy=document.createElement("div");
+        copy.className="merchProductCopy";
+
+        const title=document.createElement("strong");
+        title.textContent=product.title||"Product";
+
+        copy.appendChild(title);
+        link.appendChild(copy);
+
+        link.addEventListener("click",e=>{
+          e.stopPropagation();
+        });
+
+        slot.appendChild(link);
+      });
+
+    }catch(e){
+      console.error("[v2-merch-storefront]",e);
+
+      const error=document.createElement("div");
+      error.className="merchEmptyState";
+      error.textContent="Merch storefront temporarily unavailable.";
+      slot.appendChild(error);
+    }
+  }
+
   /* MONOLITH_V2_PUBLIC_ACTIONS_V1 */
   function wirePublicActions(){
     const favoriteBtn=$("favoriteBtn");
@@ -1846,6 +1931,7 @@
 
   wireGalleryLightbox();
   wirePublicActions();
+  loadLiveMerch();
 
   setInterval(unlock,500);
   setTimeout(unlock,100);
