@@ -2007,7 +2007,7 @@ a{
   const qs=new URLSearchParams(location.search);
 
   const pathCoord=
-    pathParts[0]==="tile-v2" && pathParts[1]
+    (pathParts[0]==="tile-v2" || pathParts[0]==="tile") && pathParts[1]
       ? pathParts[1]
       : "";
 
