@@ -304,6 +304,21 @@ h1{
   }
 }
 
+.productCondition{
+  margin-top:10px;
+  padding:9px 12px;
+  border:1px solid #d9e6ec;
+  border-radius:9px;
+  background:#f8fbfc;
+  color:#314f5e;
+  font-size:12px;
+  font-weight:800;
+}
+
+.productCondition strong{
+  color:#17384a;
+}
+
 .shareProductBtn{
   width:100%;
   min-height:44px;
@@ -393,6 +408,7 @@ h1{
       </div>
 
       <div class="description" id="description"></div>
+      <div class="productCondition" id="condition"></div>
       <div class="shipping" id="shipping"></div>
 
       <div class="actions">
@@ -439,6 +455,18 @@ h1{
       .replaceAll(">","&gt;")
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
+  }
+
+  function conditionLabel(value){
+    const labels = {
+      new: "New",
+      used: "Used",
+      refurbished: "Refurbished",
+      open_box: "Open Box",
+      for_parts: "For Parts / Not Working"
+    };
+
+    return labels[String(value || "new")] || "New";
   }
 
   function productOptionSelects(){
@@ -879,6 +907,11 @@ h1{
       document.getElementById("description").textContent =
         product.description ||
         "No product description provided.";
+
+      document.getElementById("condition").innerHTML =
+        `<strong>Condition:</strong> ${esc(
+          conditionLabel(product.condition)
+        )}`;
 
       document.getElementById("shipping").textContent =
         product.requiresShipping

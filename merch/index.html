@@ -13590,6 +13590,14 @@ body.merchLaunchSoon{
           return;
         }
 
+        const productConditionLabel = value => ({
+          new: "New",
+          used: "Used",
+          refurbished: "Refurbished",
+          open_box: "Open Box",
+          for_parts: "For Parts / Not Working"
+        })[String(value || "new")] || "New";
+
         productsRoot.innerHTML =
           products.map(
             product => {
@@ -13655,6 +13663,16 @@ body.merchLaunchSoon{
                           product.description ||
                           ""
                         ).slice(0,180)
+                      }
+                    </div>
+
+                    <div class="sellerLine">
+                      Condition: ${
+                        escapeHtml(
+                          productConditionLabel(
+                            product.condition
+                          )
+                        )
                       }
                     </div>
 
