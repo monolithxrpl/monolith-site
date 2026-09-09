@@ -2,2462 +2,3425 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MONOLITH Tile Profile</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MONOLITH Coordinate</title>
+
 <style>
-:root{
-  --bg:#020713;
-  --top:#071a33;
-  --blue:#38bdf8;
-  --soft:#d9f2ff;
-  --panel:#07111f;
-  --card:#0b1728;
-  --line:#1f5f86;
-  --text:#eaf8ff;
-  --muted:#8fb9d1;
+*{
+  box-sizing:border-box;
 }
-*{box-sizing:border-box}
+
+:root{
+  --bg:#020710;
+  --panel:#061522;
+  --panel2:#03101b;
+  --line:rgba(104,205,255,.28);
+  --lineStrong:rgba(104,205,255,.58);
+  --text:#ecf8ff;
+  --muted:#99bfd4;
+  --cyan:#69d6ff;
+  --blue:#1478bd;
+
+  --green:#42d88b;
+  --money:#0b3b2a;
+  --gold:#e5bd62;
+
+  --merch:#efac48;
+  --nft:#ae72ff;
+  --otc:#43d4ce;
+  --tile:#dbad52;
+
+  --radius:18px;
+}
+
+html{
+  background:var(--bg);
+}
+
 body{
   margin:0;
-  background:linear-gradient(180deg,#020713,#050914 48%,#01030a);
+  min-height:100vh;
   color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:
+    radial-gradient(circle at 15% 0%,rgba(20,120,189,.17),transparent 30%),
+    radial-gradient(circle at 85% 10%,rgba(85,180,235,.08),transparent 24%),
+    linear-gradient(180deg,#020811,#01050b 72%);
 }
-.wrap{max-width:1120px;margin:0 auto;padding:18px}
-.top{
-  background:linear-gradient(180deg,#0b2f5a,#06192f);
-  border:1px solid #1d6c9b;
-  border-radius:10px;
-  padding:10px 14px;
+
+button,
+a,
+input{
+  font:inherit;
+}
+
+a{
+  color:inherit;
+}
+
+.wrap{
+  width:min(1240px,calc(100% - 32px));
+  margin:0 auto;
+  padding:18px 0 64px;
+}
+
+/* HEADER */
+
+.topbar{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  margin-bottom:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  justify-content:space-between;
+  gap:18px;
+  padding:10px 0 18px;
 }
+
 .brand{
-  font-weight:900;
-  letter-spacing:.08em;
-  color:var(--soft);
   display:flex;
   align-items:center;
   gap:10px;
+  font-weight:1000;
+  letter-spacing:.08em;
 }
-.brand img{width:30px;height:30px;object-fit:contain}
-.btn{
-  border:1px solid #2b8cc4;
-  background:linear-gradient(180deg,#123a66,#08213b);
-  color:var(--soft);
-  border-radius:6px;
-  padding:9px 12px;
-  text-decoration:none;
-  display:inline-flex;
-  cursor:pointer;
-  font-weight:700;
+
+.brand img{
+  width:34px;
+  height:34px;
+  border-radius:8px;
 }
-.hero{
-  border:1px solid var(--line);
-  border-radius:10px;
-  overflow:hidden;
-  background:#050b16;
-  box-shadow:0 24px 70px rgba(0,0,0,.35);
-}
-.banner{
-  height:190px;
-  background:
-    linear-gradient(rgba(2,7,19,.30),rgba(2,7,19,.78)),
-    radial-gradient(circle at top,#123f73,#061225 70%);
+
+.topActions{
   display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.btn{
+  min-height:40px;
+  display:inline-flex;
   align-items:center;
   justify-content:center;
-  color:#bdeaff;
-  font-weight:900;
-  letter-spacing:.14em;
+  padding:8px 13px;
+  border:1px solid var(--lineStrong);
+  border-radius:10px;
+  color:var(--text);
+  background:linear-gradient(180deg,#126fae,#064b79);
+  text-decoration:none;
+  font-weight:850;
+  cursor:pointer;
+  box-shadow:
+    0 0 16px rgba(80,190,255,.12),
+    inset 0 0 14px rgba(80,190,255,.05);
+}
+
+.btn.secondary{
+  background:rgba(4,20,34,.84);
+  border-color:var(--line);
+  color:#ccecff;
+}
+
+.btn:hover{
+  border-color:rgba(145,226,255,.9);
+}
+
+/* PERSONAL COORDINATE */
+
+.identityHero{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--lineStrong);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 85% 0%,rgba(73,191,255,.14),transparent 34%),
+    linear-gradient(145deg,rgba(8,31,52,.98),rgba(2,10,19,.99));
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.40),
+    0 0 32px rgba(73,191,255,.08);
+}
+
+.identityBanner{
+  height:210px;
+  background:
+    linear-gradient(180deg,transparent,rgba(2,9,17,.90)),
+    radial-gradient(circle at 20% 30%,rgba(57,178,242,.24),transparent 32%),
+    linear-gradient(120deg,#07182a,#061221 54%,#020911);
   border-bottom:1px solid var(--line);
 }
-.body{
-  padding:14px;
+
+.identityMain{
+  position:relative;
   display:grid;
-  grid-template-columns:300px minmax(0,1fr) 220px;
-  gap:14px;
+  grid-template-columns:190px minmax(0,1fr) auto;
+  gap:22px;
+  align-items:end;
+  padding:0 24px 24px;
+  margin-top:-70px;
 }
-.profile{
-  display:block;
-  margin:0;
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:8px;
-  padding:12px;
-}
+
 .avatar{
-  width:100%;
-  height:280px;
-  border-radius:6px;
-  border:1px solid var(--line);
-  background:#020713;
-  object-fit:contain;
-  padding:8px;
+  width:190px;
+  height:190px;
+  border-radius:22px;
+  object-fit:cover;
+  background:#071725;
+  border:2px solid rgba(113,218,255,.72);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.46),
+    0 0 26px rgba(73,191,255,.18);
 }
-h1{margin:10px 0 4px;font-size:30px;color:var(--soft)}
-.muted{color:var(--muted)}
-.bio{
-  grid-column:2;
-  grid-row:1;
-  border:1px solid var(--line);
-  background:var(--card);
+
+.identityCopy{
+  min-width:0;
+  padding-top:78px;
+}
+
+.identityHudRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:8px;
+}
+
+.hud{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:5px 9px;
   border-radius:8px;
-  padding:14px;
-  font-size:16px;
-  line-height:1.55;
-  margin-top:0;
-}
-.grid,.socialGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:10px;
-  margin-top:0;
-}
-.grid{grid-column:1;grid-template-columns:1fr;grid-row:3}
-.socialGrid{grid-column:2 / 4;grid-row:2;align-self:start}.socialGrid .box{margin-top:0}
-.card,.box{
-  border:1px solid var(--line);
-  background:var(--card);
-  border-radius:8px;
-  padding:12px;
-}
-.k{
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  color:#74d6ff;
-  margin-bottom:6px;
+  border:1px solid rgba(93,201,250,.42);
+  background:rgba(3,17,29,.86);
+  color:#b9eaff;
+  font-size:10px;
   font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
 }
-.v{word-break:break-word}
-.write{
-  color:var(--text);
+
+.hud.verified{
+  border-color:rgba(66,216,139,.58);
+  color:#8af0b8;
+}
+
+.identityCopy h1{
+  margin:0;
+  color:#fff;
+  font-size:clamp(30px,5vw,52px);
+  line-height:1;
+  letter-spacing:-.035em;
+}
+
+.handle{
+  display:inline-flex;
+  margin-top:9px;
+  color:#91dcff;
+  font-weight:850;
+  text-decoration:none;
+}
+
+.identityBio{
+  max-width:720px;
+  margin:12px 0 0;
+  color:#c5dfea;
+  font-size:14px;
   line-height:1.55;
-  white-space:pre-wrap;
 }
-.actions{
-  grid-column:1;
+
+.identityActions{
   display:flex;
   flex-direction:column;
   gap:8px;
-  margin-top:0;
-}
-.topTilesBox{
-  grid-column:2 / 4;
-  grid-row:3;
-  margin-top:0;
-}
-.galleryBox{
-  grid-column:2 / 4;
-  grid-row:4;
-  margin-top:0;
-}
-.topTiles{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:10px;
-  margin-top:10px;
-}
-.tileMini{
-  border:1px solid var(--line);
-  background:#fff;
-  color:var(--ink);
-  border-radius:4px;
-  padding:8px;
-  text-decoration:none;
-  display:block;
-}
-.tileMini img{
-  width:100%;
-  aspect-ratio:1/1;
-  object-fit:contain;
-  background:#020713;
-  border:1px solid var(--line);
-}
-.tileMini strong{display:block;margin-top:6px}
-.tileMini span{display:block;font-size:12px;color:#31556b}
-.musicRail{grid-column:1;grid-row:2;margin-top:0}
-.ownerBox{
-  grid-column:3;
-  grid-row:1;
-  margin-top:0;
-  font-size:13px;
-}.ownerBox .actions{margin-top:10px}.ownerBox .btn{padding:7px 9px;font-size:13px}
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:10px;
-  margin-top:10px;
-}
-.gallery img{
-  width:100%;
-  aspect-ratio:1/1;
-  border-radius:6px;
-  border:1px solid var(--line);
-  object-fit:cover;
-  background:#020713;
-}
-@media(max-width:820px){
-  .body{grid-template-columns:1fr}
-  .bio,.grid,.socialGrid,.topTilesBox,.galleryBox,.actions,.ownerBox,.musicRail{grid-column:auto;grid-row:auto}
-  .profile{order:1}
-  .musicRail{order:2}
-  .bio{order:3}
-  .socialGrid{order:4}
-  .galleryBox{order:5}
-  .actions{order:6}
-  .ownerBox{order:100}
-  .grid{order:99}
-  .avatar{height:220px}
+  min-width:150px;
 }
 
-/* MONOLITH_CLASSIC_MYSPACE_THEME_20260519 */
-:root{
-  --bg:#020713;
-  --myspace-blue:#1d6fb8;
-  --myspace-dark:#0b2f5a;
-  --ledger-blue:#38bdf8;
-  --soft-blue:#dff4ff;
-  --paper:#ffffff;
-  --pale:#eaf6ff;
-  --ink:#061827;
-  --line:#2b86bd;
-  --orange:#ff9b21;
+/* PERSONAL CONTENT */
+
+.personalSection{
+  margin-top:18px;
 }
 
-body{
+.sectionEyebrow{
+  color:#69d6ff;
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.sectionTitle{
+  margin:4px 0 14px;
+  font-size:24px;
+}
+
+.personalGrid{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:12px;
+}
+
+.personalCard{
+  min-width:0;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
   background:
-    radial-gradient(circle at top,#062d52 0,#020713 42%,#00040a 100%);
+    linear-gradient(180deg,rgba(7,25,42,.95),rgba(3,11,20,.98));
+  box-shadow:
+    0 16px 38px rgba(0,0,0,.22),
+    inset 0 0 20px rgba(73,191,255,.025);
 }
 
-.top{
-  background:linear-gradient(180deg,var(--myspace-blue),var(--myspace-dark));
-  border:1px solid var(--ledger-blue);
-  border-radius:4px;
-}
-
-.brand{
+.personalCard h3{
+  margin:0 0 9px;
   color:#fff;
-  text-shadow:0 0 10px rgba(56,189,248,.75);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.10em;
 }
 
-.btn{
-  background:linear-gradient(180deg,#ffb24a,var(--orange));
-  border:1px solid #ffcc77;
-  color:#111;
-  border-radius:4px;
+.personalCard p{
+  margin:0;
+  color:#c6dfeb;
+  line-height:1.55;
+  font-size:14px;
+}
+
+.aboutCard{
+  grid-column:span 7;
+}
+
+.statusCard{
+  grid-column:span 5;
+}
+
+.moodCard{
+  grid-column:span 4;
+}
+
+.interestsCard{
+  grid-column:span 8;
+}
+
+.songCard{
+  grid-column:span 5;
+}
+
+.top8Card{
+  grid-column:span 7;
+}
+
+.linksCard{
+  grid-column:span 4;
+}
+
+.galleryCard{
+  grid-column:span 8;
+}
+
+.proofCard{
+  grid-column:span 12;
+}
+
+.statusValue{
+  font-size:18px!important;
+  font-weight:850;
+  color:#eaf8ff!important;
+}
+
+.tagRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.tag{
+  padding:6px 9px;
+  border:1px solid rgba(105,214,255,.25);
+  border-radius:999px;
+  background:rgba(73,191,255,.06);
+  color:#bfeaff;
+  font-size:11px;
+  font-weight:750;
+}
+
+.top8Grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+
+.personMini{
+  aspect-ratio:1;
+  border-radius:12px;
+  border:1px solid rgba(105,214,255,.22);
+  background:
+    radial-gradient(circle,rgba(73,191,255,.16),transparent 55%),
+    #041321;
+}
+
+.galleryGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+
+.galleryTile{
+  aspect-ratio:1.2;
+  border-radius:12px;
+  border:1px solid rgba(105,214,255,.20);
+  background:
+    linear-gradient(145deg,rgba(48,153,213,.15),rgba(3,14,25,.9));
+}
+
+.proofGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+
+.proofItem{
+  padding:11px;
+  border:1px solid rgba(105,214,255,.18);
+  border-radius:12px;
+  background:rgba(2,10,18,.54);
+}
+
+.proofItem span{
+  display:block;
+  color:#79cfee;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.11em;
   font-weight:900;
 }
 
-.hero{
-  background:#030812;
-  border:1px solid var(--ledger-blue);
-  border-radius:4px;
-}
-
-.banner{
-  background:
-    linear-gradient(rgba(2,7,19,.20),rgba(2,7,19,.60)),
-    linear-gradient(135deg,var(--myspace-blue),var(--ledger-blue) 45%,#061225);
-  border-bottom:1px solid var(--ledger-blue);
-  color:#fff;
-}
-
-.profile{
-  background:linear-gradient(180deg,#0b2f5a,#06192f);
-  border:1px solid var(--ledger-blue);
-  border-radius:4px;
-}
-
-.avatar{
-  background:#fff;
-  border:1px solid var(--ledger-blue);
-  border-radius:3px;
-}
-
-h1{
-  color:#fff;
-}
-
-.bio,.card,.box{
-  background:linear-gradient(180deg,var(--paper),var(--pale));
-  color:var(--ink);
-  border:1px solid var(--line);
-  border-radius:4px;
-}
-
-.k{
-  background:linear-gradient(180deg,var(--myspace-blue),#14558e);
-  color:#fff;
-  margin:-12px -12px 10px;
-  padding:6px 8px;
-  border-radius:3px 3px 0 0;
-}
-
-.write,.v{
-  color:var(--ink);
-}
-
-.gallery img{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:3px;
-}
-
-.musicRail audio{
-  filter:drop-shadow(0 0 8px rgba(56,189,248,.25));
-}
-
-
-/* MONOLITH_COMPACT_GALLERIES_20260519 */
-.topTilesBox,.galleryBox{
-  padding:10px;
-}
-.topTiles,.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(92px,110px));
-  gap:8px;
-  align-items:start;
-  justify-content:start;
-}
-.tileMini{
-  padding:6px;
-  font-size:12px;
-}
-.tileMini img,.gallery img{
-  width:100%;
-  aspect-ratio:1/1;
-  max-width:110px;
-  object-fit:cover;
-}
-.tileMini strong{
-  font-size:12px;
-  line-height:1.15;
-}
-.tileMini span{
-  font-size:11px;
-  line-height:1.15;
-}
-@media(max-width:820px){
-  .topTilesBox{order:5}
-  .galleryBox{order:6}
-  .topTiles,.gallery{
-    grid-template-columns:repeat(3,minmax(80px,1fr));
-  }
-}
-
-
-/* MONOLITH_GALLERY_BALANCE_20260519 */
-.topTilesBox{
-  min-height:auto;
-}
-.topTiles{
-  grid-template-columns:repeat(auto-fill,minmax(82px,96px));
-}
-.tileMini img{
-  max-width:96px;
-}
-.galleryBox{
-  min-height:260px;
-}
-.gallery{
-  grid-template-columns:repeat(auto-fill,minmax(150px,180px));
-}
-.gallery img{
-  max-width:180px;
-}
-@media(max-width:820px){
-  .topTiles{grid-template-columns:repeat(3,minmax(72px,1fr))}
-  .gallery{grid-template-columns:repeat(2,minmax(130px,1fr))}
-}
-
-
-/* MONOLITH_TOP6_GALLERY_BALANCE_20260519 */
-.topTilesBox{
-  min-height:0!important;
-  align-self:start;
-  padding:8px;
-}
-.topTiles{
-  grid-template-columns:repeat(auto-fill,minmax(70px,86px));
-  gap:6px;
-}
-.tileMini{
-  padding:4px;
-  font-size:11px;
-}
-.tileMini img{
-  max-width:86px;
-}
-.tileMini strong{
-  font-size:11px;
-}
-.tileMini span{
-  font-size:10px;
-}
-.galleryBox{
-  min-height:420px;
-  align-self:stretch;
-  padding:12px;
-}
-.gallery{
-  grid-template-columns:repeat(auto-fill,minmax(160px,200px));
-  gap:10px;
-}
-.gallery img{
-  max-width:200px;
-}
-@media(max-width:820px){
-  .topTiles{
-    grid-template-columns:repeat(3,minmax(70px,1fr));
-  }
-  .gallery{
-    grid-template-columns:repeat(2,minmax(140px,1fr));
-  }
-  .galleryBox{
-    min-height:320px;
-  }
-}
-
-
-/* MONOLITH_TOP6_GALLERY_FINAL_STACK_20260519 */
-.topTilesBox{
-  grid-column:2 / 4!important;
-  grid-row:3!important;
-  margin:0 0 8px!important;
-  padding:8px!important;
-  min-height:0!important;
-  align-self:start!important;
-}
-.topTiles{
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:8px!important;
-  align-items:start!important;
-}
-.tileMini{
-  min-height:140px!important;
-  padding:6px!important;
-  text-align:center!important;
-}
-.tileMini img{
-  width:100%!important;
-  max-width:118px!important;
-  height:82px!important;
-  object-fit:contain!important;
-  margin:0 auto!important;
-  display:block!important;
-}
-.tileMini strong{
-  font-size:12px!important;
-  line-height:1.15!important;
-  white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-}
-.tileMini span{
-  font-size:10px!important;
-  line-height:1.15!important;
-  white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-}
-.galleryBox{
-  grid-column:2 / 4!important;
-  grid-row:4!important;
-  margin:0!important;
-  padding:12px!important;
-  min-height:420px!important;
-  align-self:start!important;
-}
-.gallery{
-  display:grid!important;
-  grid-template-columns:repeat(auto-fill,minmax(170px,220px))!important;
-  gap:12px!important;
-  justify-content:start!important;
-  align-items:start!important;
-}
-.gallery img{
-  width:100%!important;
-  max-width:220px!important;
-  aspect-ratio:1/1!important;
-  object-fit:cover!important;
-}
-@media(max-width:820px){
-  .topTilesBox{order:5!important}
-  .galleryBox{order:6!important;margin-top:8px!important;min-height:320px!important}
-  .topTiles{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .tileMini img{height:100px!important;max-width:150px!important}
-  .gallery{grid-template-columns:repeat(2,minmax(140px,1fr))!important}
-}
-
-
-/* MONOLITH_GALLERY_PULL_UP_20260519 */
-.body{
-  row-gap:8px!important;
-}
-.topTilesBox{
-  margin-bottom:0!important;
-}
-.galleryBox{
-  grid-column:2 / 4!important;
-  grid-row:4!important;
-  margin-top:-4px!important;
-  padding-top:10px!important;
-}
-@media(max-width:820px){
-  .galleryBox{
-    order:6!important;
-    margin-top:4px!important;
-  }
-}
-
-
-/* MONOLITH_MEDIA_GRID_FINAL_FIX_20260519 */
-.centerMediaStack{
-  grid-column:2 / 4!important;
-  grid-row:3!important;
-  width:100%!important;
-  max-width:none!important;
-  display:flex!important;
-  flex-direction:column!important;
-  gap:8px!important;
-  align-self:start!important;
-  justify-self:stretch!important;
-}
-.centerMediaStack .topTilesBox,
-.centerMediaStack .galleryBox{
-  width:100%!important;
-  max-width:none!important;
-  grid-column:auto!important;
-  grid-row:auto!important;
-  margin:0!important;
-}
-.centerMediaStack .topTiles{
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:8px!important;
-}
-.centerMediaStack .tileMini{
-  min-height:150px!important;
-  padding:8px!important;
-  text-align:center!important;
-}
-.centerMediaStack .tileMini img{
-  width:100%!important;
-  height:92px!important;
-  max-width:130px!important;
-  object-fit:contain!important;
-  margin:0 auto!important;
-  display:block!important;
-}
-.centerMediaStack .galleryBox{
-  min-height:420px!important;
-}
-.centerMediaStack .gallery{
-  display:grid!important;
-  grid-template-columns:repeat(6,minmax(0,1fr))!important;
-  gap:10px!important;
-}
-.galleryItem{
-  border:1px solid var(--line);
-  background:#fff;
-  padding:4px;
-  cursor:pointer;
-}
-.galleryItem img{
-  width:100%!important;
-  max-width:none!important;
-  aspect-ratio:1/1!important;
-  object-fit:cover!important;
+.proofItem strong{
   display:block;
+  margin-top:4px;
+  color:#eaf8ff;
+  font-size:12px;
+  overflow-wrap:anywhere;
 }
-.imageModal{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,.86);
-  z-index:9999;
-  padding:24px;
+
+/* UTILITIES */
+
+.utilitiesSection{
+  margin-top:34px;
+  padding-top:26px;
+  border-top:1px solid rgba(105,214,255,.18);
 }
-.imageModal.open{display:flex}
-.imageModal img{
-  max-width:min(96vw,1200px);
-  max-height:90vh;
-  object-fit:contain;
-  border:2px solid var(--ledger-blue,#38bdf8);
-  background:#000;
+
+.utilitiesHeader{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:14px;
 }
-.imageModalClose{
-  position:fixed;
-  top:16px;
-  right:18px;
+
+.utilitiesHeader p{
+  max-width:650px;
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.utilityControls{
+  display:flex;
+  gap:8px;
+}
+
+.utilityGrid{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:12px;
+}
+
+.utilityCard{
+  --accent:var(--cyan);
+  position:relative;
+  grid-column:span 4;
+  min-width:0;
+  overflow:hidden;
+  padding:18px;
+  border:1px solid color-mix(in srgb,var(--accent) 58%,transparent);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 100% 0%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 38%),
+    linear-gradient(180deg,rgba(7,22,37,.97),rgba(2,10,18,.99));
+  box-shadow:
+    0 18px 44px rgba(0,0,0,.28),
+    inset 0 0 26px color-mix(in srgb,var(--accent) 3%,transparent);
+  cursor:pointer;
+  transition:
+    transform .16s ease,
+    border-color .16s ease,
+    box-shadow .16s ease;
+}
+
+.utilityCard:hover{
+  transform:translateY(-2px);
+  border-color:color-mix(in srgb,var(--accent) 82%,white 8%);
+  box-shadow:
+    0 22px 50px rgba(0,0,0,.34),
+    0 0 24px color-mix(in srgb,var(--accent) 13%,transparent);
+}
+
+.utilityCard::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  background:var(--accent);
+}
+
+.utilityCard.isDragging{
+  opacity:.52;
+  transform:scale(.985);
+}
+
+.utilityTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.utilityIcon{
   width:42px;
   height:42px;
-  border:1px solid #fff;
-  background:#000;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);
+  background:color-mix(in srgb,var(--accent) 10%,transparent);
+  color:var(--accent);
+  font-size:19px;
+  font-weight:1000;
+}
+
+.dragHandle{
+  display:none;
+  color:#9cb9ca;
+  font-weight:1000;
+  letter-spacing:.12em;
+  cursor:grab;
+}
+
+.utilityGrid.editing .dragHandle{
+  display:block;
+}
+
+.utilityCard h3{
+  margin:15px 0 4px;
   color:#fff;
-  font-size:30px;
-  line-height:1;
-  cursor:pointer;
+  font-size:18px;
 }
-@media(max-width:820px){
-  .centerMediaStack{
-    grid-column:auto!important;
-    grid-row:auto!important;
-    order:5!important;
+
+.utilityCard .utilitySub{
+  color:#9fc2d5;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.utilityFooter{
+  margin-top:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.moduleStatus{
+  color:var(--accent);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+
+.moduleOpen{
+  color:#eaf8ff;
+  font-size:12px;
+  font-weight:900;
+}
+
+/* P2P */
+
+.utilityCard.p2p{
+  --accent:var(--gold);
+  grid-column:span 4;
+  border-color:rgba(229,189,98,.76);
+  background:
+    radial-gradient(circle at 100% 0%,rgba(229,189,98,.10),transparent 36%),
+    radial-gradient(circle at 0% 100%,rgba(39,176,105,.16),transparent 38%),
+    linear-gradient(145deg,#0a3326,#041b15 58%,#020c0a);
+}
+
+.utilityCard.p2p .utilityIcon{
+  border-color:rgba(229,189,98,.65);
+  background:rgba(229,189,98,.08);
+  color:#f5d47d;
+}
+
+.utilityCard.p2p .moduleStatus{
+  color:#62e4a2;
+}
+
+/* MERCH */
+
+.utilityCard.merch{
+  --accent:var(--merch);
+  grid-column:span 8;
+}
+
+.merchProducts{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:14px;
+}
+
+.merchProduct{
+  overflow:hidden;
+  border:1px solid rgba(239,172,72,.22);
+  border-radius:12px;
+  background:rgba(2,10,17,.68);
+}
+
+.merchProductImage{
+  height:95px;
+  background:
+    radial-gradient(circle,rgba(239,172,72,.18),transparent 55%),
+    #07121b;
+}
+
+.merchProductCopy{
+  padding:8px;
+}
+
+.merchProductCopy strong{
+  display:block;
+  font-size:11px;
+}
+
+.merchProductCopy span{
+  display:block;
+  margin-top:3px;
+  color:#f4c97d;
+  font-size:10px;
+  font-weight:900;
+}
+
+/* OTHER PALETTES */
+
+.utilityCard.nft{
+  --accent:var(--nft);
+}
+
+.utilityCard.otc{
+  --accent:var(--otc);
+}
+
+.utilityCard.tilemarket{
+  --accent:var(--tile);
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+  .identityBanner{
+    height:160px;
   }
-  .centerMediaStack .topTiles{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+
+  .identityMain{
+    grid-template-columns:120px minmax(0,1fr);
+    align-items:end;
+    padding:0 16px 18px;
+    margin-top:-48px;
   }
-  .centerMediaStack .gallery{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+
+  .avatar{
+    width:120px;
+    height:120px;
+  }
+
+  .identityCopy{
+    padding-top:55px;
+  }
+
+  .identityActions{
+    grid-column:1 / -1;
+    flex-direction:row;
+    flex-wrap:wrap;
+  }
+
+  .personalCard,
+  .aboutCard,
+  .statusCard,
+  .moodCard,
+  .interestsCard,
+  .songCard,
+  .top8Card,
+  .linksCard,
+  .galleryCard,
+  .proofCard{
+    grid-column:span 12;
+  }
+
+  .utilityCard,
+  .utilityCard.p2p,
+  .utilityCard.merch{
+    grid-column:span 12;
+  }
+
+  .proofGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
 
+@media(max-width:620px){
+  .wrap{
+    width:min(100% - 18px,1240px);
+  }
 
-/* MONOLITH_PROFILE_RAIL_LAYOUT_20260520_START */
-.body{
-  display:grid!important;
-  grid-template-columns:300px minmax(0,1fr) 220px!important;
-  gap:12px!important;
-  align-items:start!important;
+  .topbar{
+    align-items:flex-start;
+  }
+
+  .topActions{
+    gap:6px;
+  }
+
+  .topActions .btn{
+    min-height:36px;
+    padding:7px 10px;
+    font-size:11px;
+  }
+
+  .identityMain{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    margin-top:-54px;
+  }
+
+  .identityCopy{
+    padding-top:0;
+  }
+
+  .avatar{
+    width:118px;
+    height:118px;
+  }
+
+  .top8Grid,
+  .galleryGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .merchProducts{
+    grid-template-columns:1fr;
+  }
+
+  .proofGrid{
+    grid-template-columns:1fr;
+  }
+
+  .utilitiesHeader{
+    align-items:flex-start;
+    flex-direction:column;
+  }
 }
 
-.leftRail,.centerRail,.rightRail{
-  min-width:0!important;
-  align-self:start!important;
+<style id="MONOLITH_V2_LEDGER_BLUE_POLISH_V1">
+
+/* Stronger MONOLITH ledger-blue framework */
+
+.identityHero{
+  border-color:rgba(95,205,255,.70);
+  background:
+    radial-gradient(circle at 82% 0%,rgba(73,191,255,.20),transparent 34%),
+    radial-gradient(circle at 8% 100%,rgba(27,103,173,.16),transparent 38%),
+    linear-gradient(
+      145deg,
+      rgba(8,35,62,.99),
+      rgba(3,17,31,.99) 54%,
+      rgba(1,8,17,.99)
+    );
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.42),
+    0 0 34px rgba(73,191,255,.13),
+    inset 0 0 38px rgba(73,191,255,.035);
 }
 
-.leftRail{
-  grid-column:1!important;
-  display:flex!important;
-  flex-direction:column!important;
-  gap:8px!important;
+.identityHero::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:3px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(48,169,229,.72),
+    rgba(119,225,255,.95),
+    rgba(48,169,229,.72),
+    transparent
+  );
+  pointer-events:none;
 }
 
-.centerRail{
+.personalSection{
+  position:relative;
+}
+
+.personalSection::before{
+  content:"";
+  position:absolute;
+  inset:-12px -10px auto;
+  height:220px;
+  pointer-events:none;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(36,137,205,.09),
+      transparent 68%
+    );
+  z-index:-1;
+}
+
+.personalCard{
+  position:relative;
+  overflow:hidden;
+  border-color:rgba(78,184,239,.36);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,31,52,.97),
+      rgba(4,17,31,.985) 55%,
+      rgba(2,10,20,.99)
+    );
+  box-shadow:
+    0 16px 38px rgba(0,0,0,.24),
+    0 0 18px rgba(73,191,255,.055),
+    inset 0 0 22px rgba(73,191,255,.025);
+}
+
+.personalCard::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(
+    180deg,
+    rgba(124,224,255,.88),
+    rgba(34,128,193,.40),
+    transparent
+  );
+}
+
+.personalCard h3{
+  color:#dff6ff;
+  text-shadow:0 0 12px rgba(73,191,255,.15);
+}
+
+.sectionEyebrow{
+  color:#7cdfff;
+  text-shadow:0 0 12px rgba(73,191,255,.18);
+}
+
+.sectionTitle{
+  color:#f4fbff;
+  text-shadow:0 0 16px rgba(73,191,255,.11);
+}
+
+.hud{
+  border-color:rgba(94,205,255,.58);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(9,42,71,.92),
+      rgba(3,18,33,.96)
+    );
+  box-shadow:
+    0 0 14px rgba(73,191,255,.10),
+    inset 0 0 12px rgba(73,191,255,.035);
+}
+
+.proofItem{
+  border-color:rgba(80,190,244,.28);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(7,29,48,.88),
+      rgba(2,12,23,.94)
+    );
+}
+
+.utilitiesSection{
+  border-top-color:rgba(86,195,248,.32);
+}
+
+.utilitiesSection::before{
+  content:"";
+  display:block;
+  width:110px;
+  height:2px;
+  margin:-27px 0 25px;
+  background:linear-gradient(
+    90deg,
+    #40bce9,
+    rgba(105,214,255,.18)
+  );
+  box-shadow:0 0 14px rgba(73,191,255,.26);
+}
+
+/* Utilities retain their individual identities,
+   but live inside the MONOLITH ledger-blue shell. */
+
+.utilityCard{
+  box-shadow:
+    0 18px 44px rgba(0,0,0,.30),
+    0 0 18px rgba(73,191,255,.035),
+    inset 0 0 26px color-mix(in srgb,var(--accent) 3%,transparent);
+}
+
+.utilityCard::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  box-shadow:
+    inset 0 0 0 1px rgba(100,205,255,.055);
+}
+
+</style>
+
+<style id="MONOLITH_V2_IDENTITY_ACTION_HUD_V1">
+
+/* Identity actions belong inside the personal coordinate HUD,
+   not as a vertical button stack. */
+
+.identityMain{
+  grid-template-columns:190px minmax(0,1fr)!important;
+}
+
+.identityActions{
   grid-column:2!important;
-  display:flex!important;
-  flex-direction:column!important;
-  gap:8px!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:7px!important;
+  width:min(650px,100%)!important;
+  min-width:0!important;
+  margin-top:15px!important;
 }
 
-.rightRail{
-  grid-column:3!important;
-  display:flex!important;
-  flex-direction:column!important;
-  gap:8px!important;
+.identityActions .btn{
+  position:relative!important;
+  min-height:42px!important;
+  padding:8px 12px!important;
+  border:1px solid rgba(99,207,255,.44)!important;
+  border-radius:8px!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(9,45,74,.94),
+      rgba(3,21,38,.98)
+    )!important;
+  color:#dff6ff!important;
+  font-size:11px!important;
+  font-weight:1000!important;
+  letter-spacing:.08em!important;
+  text-transform:uppercase!important;
+  box-shadow:
+    inset 0 0 16px rgba(72,190,245,.035),
+    0 0 14px rgba(72,190,245,.055)!important;
 }
 
-.leftRail > *,
-.centerRail > *,
-.rightRail > *{
-  grid-column:auto!important;
-  grid-row:auto!important;
-  align-self:stretch!important;
-  margin-top:0!important;
+.identityActions .btn::before{
+  content:"";
+  position:absolute;
+  top:-1px;
+  left:10px;
+  right:10px;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(122,225,255,.88),
+    transparent
+  );
 }
 
-.profileActionsMain .btn{
-  width:100%!important;
+.identityActions .btn:hover{
+  border-color:rgba(125,225,255,.78)!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(12,62,101,.98),
+      rgba(4,27,48,.98)
+    )!important;
+  box-shadow:
+    inset 0 0 18px rgba(72,190,245,.06),
+    0 0 18px rgba(72,190,245,.12)!important;
+  transform:none!important;
+}
+
+/* PAY ME keeps a subtle money identity without breaking HUD styling */
+
+.identityActions #payMeBtn{
+  border-color:rgba(229,189,98,.56)!important;
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(229,189,98,.08),
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(12,57,39,.96),
+      rgba(4,28,19,.99)
+    )!important;
+  color:#f2dfaa!important;
+}
+
+.identityActions #payMeBtn::before{
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(229,189,98,.92),
+    transparent
+  )!important;
 }
 
 @media(max-width:900px){
-  .body{
-    grid-template-columns:1fr!important;
-  }
-  .leftRail,.centerRail,.rightRail{
-    grid-column:auto!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-  }
-  .leftRail{order:1!important}
-  .centerRail{order:2!important}
-  .rightRail{order:3!important}
-}
-/* MONOLITH_PROFILE_RAIL_LAYOUT_20260520_END */
-
-
-/* MONOLITH_PROFILE_DESKTOP_LEFT_RAIL_GRID_20260520_START */
-/* Desktop only. Mobile portrait stays untouched. */
-@media (min-width:900px){
-  .body{
-    display:block!important;
+  .identityMain{
+    grid-template-columns:120px minmax(0,1fr)!important;
   }
 
-  .body > .leftRail{
-    display:grid!important;
-    grid-template-columns:300px minmax(0,1fr) 230px!important;
-    gap:12px!important;
-    align-items:start!important;
+  .identityActions{
+    grid-column:1 / -1!important;
     width:100%!important;
-  }
-
-  .leftRail > *{
-    margin-top:0!important;
-    align-self:start!important;
-    min-width:0!important;
-  }
-
-  .leftRail .profile{
-    grid-column:1!important;
-    grid-row:1!important;
-  }
-
-  .leftRail .musicRail{
-    grid-column:1!important;
-    grid-row:2!important;
-  }
-
-  .leftRail .profileActionsMain{
-    grid-column:1!important;
-    grid-row:3!important;
-  }
-
-  .leftRail .bio{
-    grid-column:1!important;
-    grid-row:4!important;
-  }
-
-  .leftRail > .grid{
-    grid-column:1!important;
-    grid-row:5!important;
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:8px!important;
-  }
-
-  .leftRail .socialGrid{
-    grid-column:2!important;
-    grid-row:1!important;
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .centerMediaStack{
-    grid-column:2!important;
-    grid-row:2!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-    min-width:0!important;
-  }
-
-  .leftRail .topTilesBox,
-  .leftRail .galleryBox{
-    grid-column:auto!important;
-    grid-row:auto!important;
-    margin-top:0!important;
-  }
-
-  .leftRail .ownerBox{
-    grid-column:3!important;
-    grid-row:1!important;
-    margin-top:0!important;
-  }
-
-  .profileActionsMain .btn{
-    width:100%!important;
-  }
-}
-/* MONOLITH_PROFILE_DESKTOP_LEFT_RAIL_GRID_20260520_END */
-
-
-/* MONOLITH_PROFILE_DESKTOP_POLISH_WALL_LOG_20260520_START */
-/* Desktop polish only. Mobile portrait stays untouched. */
-.tabletBox{
-  display:none;
-}
-
-@media (min-width:900px){
-  .leftRail{
-    gap:8px!important;
-  }
-
-  .leftRail .socialGrid{
-    grid-column:2!important;
-    grid-row:1!important;
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .ownerBox{
-    grid-column:3!important;
-    grid-row:1!important;
-    min-height:auto!important;
-  }
-
-  .leftRail .tabletBox{
-    display:block!important;
-    grid-column:2!important;
-    grid-row:2!important;
-    min-height:112px!important;
-  }
-
-  .leftRail .centerMediaStack{
-    grid-column:2!important;
-    grid-row:3!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-  }
-
-  .leftRail .topTilesBox{
-    min-height:auto!important;
-    margin-top:0!important;
-  }
-
-  .leftRail .galleryBox{
-    min-height:230px!important;
-    margin-top:0!important;
-  }
-
-  .leftRail .topTiles{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .gallery{
     grid-template-columns:repeat(4,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .tileMini img{
-    height:58px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .gallery img{
-    height:72px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .box,
-  .leftRail .card{
-    padding:8px!important;
-  }
-
-  .leftRail > .grid{
-    gap:6px!important;
-  }
-}
-/* MONOLITH_PROFILE_DESKTOP_POLISH_WALL_LOG_20260520_END */
-
-
-/* MONOLITH_PROFILE_TABLET_LABELS_20260520_START */
-/* Tablet label and button descriptions on mobile and desktop. */
-.tabletDesc{
-  color:#9fc5dd;
-  font-size:12px;
-  line-height:1.35;
-  margin:4px 0 8px;
-}
-
-.profileActionsMain .btn[data-desc]{
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:2px!important;
-  line-height:1.1!important;
-  min-height:46px!important;
-  text-align:center!important;
-}
-
-.profileActionsMain .btn[data-desc]::after{
-  content:attr(data-desc);
-  display:block;
-  font-size:10px;
-  font-weight:600;
-  opacity:.68;
-  letter-spacing:0;
-  text-transform:none;
-}
-
-@media (min-width:900px){
-  .leftRail .tabletBox{
-    display:block!important;
-    grid-column:2!important;
-    grid-row:2!important;
-    min-height:112px!important;
-  }
-}
-/* MONOLITH_PROFILE_TABLET_LABELS_20260520_END */
-
-
-/* MONOLITH_PROFILE_TABLET_MOBILE_VISIBLE_20260520_START */
-/* Make THE TABLET visible on mobile and desktop without changing layout order. */
-.tabletBox{
-  display:block!important;
-}
-/* MONOLITH_PROFILE_TABLET_MOBILE_VISIBLE_20260520_END */
-
-
-/* MONOLITH_TABLET_INSIDE_SOCIALGRID_20260520_START */
-/* THE TABLET lives inside About / Status / Interests. Mobile order is DOM-native. */
-.socialGrid > .tabletBox{
-  display:block!important;
-}
-
-@media(max-width:899px){
-  .socialGrid > .tabletBox{
-    order:4!important;
-    width:100%!important;
+    margin-top:2px!important;
   }
 }
 
-@media(min-width:900px){
-  .leftRail .socialGrid > .tabletBox{
-    grid-column:1 / -1!important;
-    grid-row:auto!important;
-    min-height:112px!important;
+@media(max-width:620px){
+  .identityActions{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .identityActions .btn{
+    min-height:40px!important;
   }
 }
-/* MONOLITH_TABLET_INSIDE_SOCIALGRID_20260520_END */
-
-
-
-/* MONOLITH_MOBILE_BIO_ABOVE_MUSIC_FORCE_20260520_START */
-/* Mobile-only: force founder bio directly under profile and above Music. */
-@media (max-width:899px){
-  .leftRail{
-    display:flex!important;
-    flex-direction:column!important;
-  }
-
-  .leftRail .profile{
-    order:1!important;
-  }
-
-  .leftRail .bio{
-    order:2!important;
-    display:block!important;
-  }
-
-  .leftRail .musicRail{
-    order:3!important;
-  }
-}
-/* MONOLITH_MOBILE_BIO_ABOVE_MUSIC_FORCE_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_FILL_CENTER_ONLY_20260520_START */
-/* Desktop only. Mobile layout/order untouched. */
-@media (min-width:900px){
-  .leftRail{
-    grid-template-columns:minmax(280px,300px) minmax(0,1fr) minmax(220px,240px)!important;
-    gap:8px!important;
-    align-items:start!important;
-  }
-
-  .leftRail > *{
-    margin-top:0!important;
-  }
-
-  .leftRail .socialGrid{
-    grid-column:2!important;
-    grid-row:1!important;
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:7px!important;
-    margin:0!important;
-  }
-
-  .leftRail .socialGrid > .box:not(.tabletBox){
-    min-height:110px!important;
-    padding:9px!important;
-  }
-
-  .leftRail .socialGrid > .tabletBox{
-    grid-column:1 / -1!important;
-    min-height:300px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .tabletBox .write{
-    min-height:220px!important;
-    font-size:14px!important;
-    line-height:1.5!important;
-  }
-
-  .leftRail .ownerBox{
-    grid-column:3!important;
-    grid-row:1!important;
-    min-height:160px!important;
-    padding:10px!important;
-    margin:0!important;
-  }
-
-  .leftRail .centerMediaStack{
-    grid-column:2 / 4!important;
-    grid-row:2!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-    margin:0!important;
-    width:100%!important;
-  }
-
-  .leftRail .topTilesBox{
-    min-height:330px!important;
-    padding:10px!important;
-    margin:0!important;
-  }
-
-  .leftRail .galleryBox{
-    min-height:520px!important;
-    padding:10px!important;
-    margin:0!important;
-  }
-
-  .leftRail .topTiles{
-    grid-template-columns:repeat(5,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .gallery{
-    grid-template-columns:repeat(6,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .tileMini img{
-    height:105px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .gallery img{
-    height:115px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .card,
-  .leftRail .box{
-    padding:8px!important;
-  }
-}
-/* MONOLITH_DESKTOP_FILL_CENTER_ONLY_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_PUZZLE_BOARD_20260520_START */
-/* Desktop-only puzzle board. Mobile layout/order untouched. */
-@media (min-width:900px){
-  .body{
-    display:block!important;
-  }
-
-  .leftRail{
-    --mono-left-w: 300px;
-    --mono-right-w: 240px;
-    --mono-gap: 8px;
-    position:relative!important;
-    display:block!important;
-    width:100%!important;
-    min-height:1280px!important;
-  }
-
-  /* Left independent stack */
-  .leftRail .profile,
-  .leftRail .bio,
-  .leftRail .musicRail,
-  .leftRail .profileActionsMain,
-  .leftRail > .grid{
-    position:relative!important;
-    width:var(--mono-left-w)!important;
-    max-width:var(--mono-left-w)!important;
-    margin:0 0 var(--mono-gap) 0!important;
-    grid-column:auto!important;
-    grid-row:auto!important;
-    align-self:auto!important;
-  }
-
-  .leftRail > .grid{
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:5px!important;
-  }
-
-  .leftRail .card{
-    padding:7px!important;
-  }
-
-  .profileActionsMain .btn{
-    width:100%!important;
-  }
-
-  /* Middle top puzzle block */
-  .leftRail .socialGrid{
-    position:absolute!important;
-    top:0!important;
-    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
-    right:calc(var(--mono-right-w) + var(--mono-gap))!important;
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:var(--mono-gap)!important;
-    margin:0!important;
-    grid-column:auto!important;
-    grid-row:auto!important;
-  }
-
-  .leftRail .socialGrid > .box:not(.tabletBox){
-    min-height:112px!important;
-    padding:9px!important;
-  }
-
-  .leftRail .socialGrid > .tabletBox{
-    grid-column:1 / -1!important;
-    min-height:310px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .tabletBox .write{
-    min-height:230px!important;
-    font-size:14px!important;
-    line-height:1.5!important;
-  }
-
-  /* Right top puzzle block */
-  .leftRail .ownerBox{
-    position:absolute!important;
-    top:0!important;
-    right:0!important;
-    width:var(--mono-right-w)!important;
-    min-height:170px!important;
-    padding:10px!important;
-    margin:0!important;
-    grid-column:auto!important;
-    grid-row:auto!important;
-  }
-
-  /* Middle/right lower puzzle block */
-  .leftRail .centerMediaStack{
-    position:absolute!important;
-    top:445px!important;
-    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
-    right:0!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:var(--mono-gap)!important;
-    margin:0!important;
-    width:auto!important;
-    grid-column:auto!important;
-    grid-row:auto!important;
-  }
-
-  .leftRail .topTilesBox{
-    min-height:330px!important;
-    padding:10px!important;
-    margin:0!important;
-    grid-column:auto!important;
-    grid-row:auto!important;
-  }
-
-  .leftRail .galleryBox{
-    min-height:520px!important;
-    padding:10px!important;
-    margin:0!important;
-    grid-column:auto!important;
-    grid-row:auto!important;
-  }
-
-  .leftRail .topTiles{
-    grid-template-columns:repeat(5,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .gallery{
-    grid-template-columns:repeat(6,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .tileMini img{
-    height:105px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .gallery img{
-    height:115px!important;
-    object-fit:cover!important;
-  }
-}
-/* MONOLITH_DESKTOP_PUZZLE_BOARD_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_LEFT_STACK_SLOTS_20260520_START */
-/* Desktop only: lock left column slots so bio/music/buttons cannot slide behind puzzle sections. */
-@media (min-width:900px){
-  .leftRail{
-    min-height:1500px!important;
-  }
-
-  .leftRail .profile,
-  .leftRail .bio,
-  .leftRail .musicRail,
-  .leftRail .profileActionsMain,
-  .leftRail > .grid{
-    position:absolute!important;
-    left:0!important;
-    width:var(--mono-left-w,300px)!important;
-    max-width:var(--mono-left-w,300px)!important;
-    z-index:5!important;
-    margin:0!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .profile{
-    top:0!important;
-  }
-
-  .leftRail .bio{
-    top:350px!important;
-  }
-
-  .leftRail .musicRail{
-    top:455px!important;
-    overflow:hidden!important;
-  }
-
-  .leftRail .musicRail iframe,
-  .leftRail .musicRail audio,
-  .leftRail .musicRail .write,
-  .leftRail .musicRail *{
-    max-width:100%!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .profileActionsMain{
-    top:650px!important;
-  }
-
-  .leftRail > .grid{
-    top:910px!important;
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:5px!important;
-  }
-
-  .leftRail .socialGrid,
-  .leftRail .ownerBox,
-  .leftRail .centerMediaStack{
-    z-index:2!important;
-  }
-}
-/* MONOLITH_DESKTOP_LEFT_STACK_SLOTS_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_BOTTOM_PROOF_LEDGER_20260520_START */
-/* Desktop only: move proof/deed cards into a bottom ledger strip. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail{
-    min-height:1720px!important;
-  }
-
-  /* Keep left side cleaner now that proof cards move down */
-  .leftRail .musicRail{
-    top:435px!important;
-  }
-
-  .leftRail .profileActionsMain{
-    top:645px!important;
-  }
-
-  /* Bottom ledger strip */
-  .leftRail > .grid{
-    position:absolute!important;
-    top:1400px!important;
-    left:0!important;
-    right:0!important;
-    width:auto!important;
-    max-width:none!important;
-    display:grid!important;
-    grid-template-columns:repeat(4,minmax(0,1fr))!important;
-    gap:8px!important;
-    z-index:6!important;
-    margin:0!important;
-  }
-
-  .leftRail > .grid .card{
-    min-height:82px!important;
-    padding:9px!important;
-  }
-
-  .leftRail > .grid .card .v{
-    word-break:break-word!important;
-    overflow-wrap:anywhere!important;
-  }
-
-  /* Make center puzzle sit above the ledger cleanly */
-  .leftRail .centerMediaStack{
-    top:445px!important;
-  }
-
-  .leftRail .topTilesBox{
-    min-height:330px!important;
-  }
-
-  .leftRail .galleryBox{
-    min-height:520px!important;
-  }
-}
-/* MONOLITH_DESKTOP_BOTTOM_PROOF_LEDGER_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_PUZZLE_TIGHTEN_20260520_START */
-/* Desktop-only puzzle tightening. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail{
-    --mono-left-w:300px!important;
-    --mono-right-w:255px!important;
-    --mono-gap:8px!important;
-    min-height:1740px!important;
-  }
-
-  /* Left column spacing */
-  .leftRail .profile{
-    top:0!important;
-  }
-
-  .leftRail .bio{
-    top:350px!important;
-  }
-
-  .leftRail .musicRail{
-    top:470px!important;
-  }
-
-  .leftRail .profileActionsMain{
-    top:700px!important;
-  }
-
-  /* Bottom proof ledger stays clean */
-  .leftRail > .grid{
-    top:1400px!important;
-    grid-template-columns:repeat(4,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  /* Top puzzle pieces */
-  .leftRail .socialGrid{
-    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
-    right:calc(var(--mono-right-w) + var(--mono-gap))!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .socialGrid > .box:not(.tabletBox){
-    min-height:118px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .socialGrid > .tabletBox{
-    min-height:345px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .tabletBox .write{
-    min-height:260px!important;
-    font-size:14px!important;
-    line-height:1.5!important;
-  }
-
-  /* Owner Controls fills the right puzzle space */
-  .leftRail .ownerBox{
-    width:var(--mono-right-w)!important;
-    min-height:471px!important;
-    padding:10px!important;
-  }
-
-  /* Media block locks under tablet/owner like a puzzle */
-  .leftRail .centerMediaStack{
-    top:482px!important;
-    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
-    right:0!important;
-    gap:8px!important;
-  }
-
-  .leftRail .topTilesBox{
-    min-height:345px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .galleryBox{
-    min-height:545px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .topTiles{
-    grid-template-columns:repeat(5,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .gallery{
-    grid-template-columns:repeat(6,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .tileMini img{
-    height:112px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .gallery img{
-    height:122px!important;
-    object-fit:cover!important;
-  }
-}
-/* MONOLITH_DESKTOP_PUZZLE_TIGHTEN_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_PUZZLE_OVERLAP_FIX_20260520_START */
-/* Desktop-only overlap correction. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail{
-    min-height:1800px!important;
-  }
-
-  /* Left column: stop buttons from overlapping Music */
-  .leftRail .bio{
-    top:340px!important;
-  }
-
-  .leftRail .musicRail{
-    top:455px!important;
-  }
-
-  .leftRail .profileActionsMain{
-    top:760px!important;
-  }
-
-  /* Center puzzle: create clean separation between Tablet and media blocks */
-  .leftRail .centerMediaStack{
-    top:510px!important;
-  }
-
-  .leftRail .topTilesBox{
-    min-height:345px!important;
-  }
-
-  .leftRail .galleryBox{
-    min-height:545px!important;
-  }
-
-  /* Bottom ledger clears the gallery */
-  .leftRail > .grid{
-    top:1435px!important;
-  }
-
-  /* Keep the puzzle edges honest */
-  .leftRail .socialGrid,
-  .leftRail .ownerBox,
-  .leftRail .centerMediaStack,
-  .leftRail > .grid{
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .socialGrid > .box,
-  .leftRail .ownerBox,
-  .leftRail .topTilesBox,
-  .leftRail .galleryBox,
-  .leftRail > .grid .card{
-    box-sizing:border-box!important;
-  }
-}
-/* MONOLITH_DESKTOP_PUZZLE_OVERLAP_FIX_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_OWNER_LEFT_EXPAND_CENTER_20260520_START */
-/* Desktop only: move Owner Controls under buttons and expand center sections. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail{
-    min-height:1880px!important;
-  }
-
-  /* Left column stack spacing */
-  .leftRail .bio{
-    top:340px!important;
-  }
-
-  .leftRail .musicRail{
-    top:455px!important;
-  }
-
-  .leftRail .profileActionsMain{
-    top:755px!important;
-  }
-
-  /* Owner Controls moves below public buttons on the left */
-  .leftRail .ownerBox{
-    position:absolute!important;
-    top:1055px!important;
-    left:0!important;
-    right:auto!important;
-    width:var(--mono-left-w,300px)!important;
-    min-height:210px!important;
-    padding:10px!important;
-    margin:0!important;
-    z-index:5!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .ownerBox .actions{
-    margin-top:10px!important;
-  }
-
-  .leftRail .ownerBox .btn{
-    width:100%!important;
-  }
-
-  /* Proof ledger moves lower to clear Owner Controls */
-  .leftRail > .grid{
-    top:1515px!important;
-  }
-
-  /* Center/right now owns the full space after left column */
-  .leftRail .socialGrid{
-    left:calc(var(--mono-left-w,300px) + var(--mono-gap,8px))!important;
-    right:0!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .socialGrid > .box:not(.tabletBox){
-    min-height:125px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .socialGrid > .tabletBox{
-    grid-column:1 / -1!important;
-    min-height:390px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .tabletBox .write{
-    min-height:300px!important;
-    font-size:14px!important;
-    line-height:1.5!important;
-  }
-
-  /* Media stack stretches full center/right width */
-  .leftRail .centerMediaStack{
-    top:545px!important;
-    left:calc(var(--mono-left-w,300px) + var(--mono-gap,8px))!important;
-    right:0!important;
-    gap:8px!important;
-  }
-
-  .leftRail .topTilesBox{
-    min-height:360px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .galleryBox{
-    min-height:585px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .topTiles{
-    grid-template-columns:repeat(6,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .gallery{
-    grid-template-columns:repeat(7,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .tileMini img{
-    height:118px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .gallery img{
-    height:126px!important;
-    object-fit:cover!important;
-  }
-}
-/* MONOLITH_DESKTOP_OWNER_LEFT_EXPAND_CENTER_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_LEFT_RAIL_PUZZLE_FIT_20260520_START */
-/* Desktop only: tune left rail spacing. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail{
-    --mono-left-w:310px!important;
-    min-height:1880px!important;
-  }
-
-  /* Left stack positions */
-  .leftRail .profile{
-    top:0!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:360px!important;
-    overflow:hidden!important;
-  }
-
-  .leftRail .profile .avatar{
-    width:260px!important;
-    height:260px!important;
-    max-width:100%!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .profile h1{
-    font-size:30px!important;
-    line-height:1.05!important;
-    margin-top:8px!important;
-    white-space:normal!important;
-  }
-
-  .leftRail .bio{
-    top:372px!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:92px!important;
-    padding:10px!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .musicRail{
-    top:476px!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:236px!important;
-    padding:10px!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-  }
-
-  .leftRail .profileActionsMain{
-    top:724px!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:7px!important;
-  }
-
-  .leftRail .profileActionsMain .btn{
-    min-height:49px!important;
-    padding:8px 10px!important;
-    width:100%!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .ownerBox{
-    top:1108px!important;
-    left:0!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:230px!important;
-    padding:10px!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .ownerBox .btn{
-    width:100%!important;
-    box-sizing:border-box!important;
-  }
-
-  /* Keep center puzzle aligned after widening left rail */
-  .leftRail .socialGrid{
-    left:calc(var(--mono-left-w,310px) + var(--mono-gap,8px))!important;
-  }
-
-  .leftRail .centerMediaStack{
-    left:calc(var(--mono-left-w,310px) + var(--mono-gap,8px))!important;
-  }
-
-  /* Bottom ledger clears the taller left rail */
-  .leftRail > .grid{
-    top:1548px!important;
-  }
-}
-/* MONOLITH_DESKTOP_LEFT_RAIL_PUZZLE_FIT_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_LEFT_RAIL_SPACING_FIX_20260520_START */
-/* Desktop only: give left rail sections real vertical space. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail{
-    --mono-left-w:310px!important;
-    min-height:1980px!important;
-  }
-
-  .leftRail .profile{
-    top:0!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:372px!important;
-    overflow:visible!important;
-  }
-
-  .leftRail .bio{
-    top:385px!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:116px!important;
-    padding:10px!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .musicRail{
-    top:515px!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:276px!important;
-    padding:10px!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-  }
-
-  .leftRail .profileActionsMain{
-    top:810px!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-  }
-
-  .leftRail .profileActionsMain .btn{
-    min-height:52px!important;
-    padding:9px 10px!important;
-    width:100%!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .ownerBox{
-    top:1245px!important;
-    left:0!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:270px!important;
-    padding:10px!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .ownerBox .btn{
-    width:100%!important;
-    min-height:44px!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .socialGrid{
-    left:calc(var(--mono-left-w,310px) + var(--mono-gap,8px))!important;
-  }
-
-  .leftRail .centerMediaStack{
-    left:calc(var(--mono-left-w,310px) + var(--mono-gap,8px))!important;
-  }
-
-  .leftRail > .grid{
-    top:1600px!important;
-  }
-}
-/* MONOLITH_DESKTOP_LEFT_RAIL_SPACING_FIX_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_LEDGER_GAP_CLOSE_20260520_START */
-/* Desktop only: pull bottom proof ledger upward to close footer gap. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail{
-    min-height:1775px!important;
-  }
-
-  .leftRail > .grid{
-    top:1460px!important;
-  }
-}
-/* MONOLITH_DESKTOP_LEDGER_GAP_CLOSE_20260520_END */
-
-
-
-/* MONOLITH_DESKTOP_GALLERY_LEDGER_ALIGN_20260520_START */
-/* Desktop only: align gallery bottom with Owner Controls and move ledger down. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail{
-    min-height:1845px!important;
-  }
-
-  /* Pull proof ledger down slightly */
-  .leftRail > .grid{
-    top:1535px!important;
-  }
-
-  /* Make Image Gallery bottom line up with Owner Controls bottom */
-  .leftRail .galleryBox{
-    min-height:540px!important;
-  }
-
-  .leftRail .gallery img{
-    height:126px!important;
-    object-fit:cover!important;
-  }
-}
-/* MONOLITH_DESKTOP_GALLERY_LEDGER_ALIGN_20260520_END */
-
-
-
-
-
-
-
-/* MONOLITH_DESKTOP_MUSIC_HEADER_FULL_WIDTH_20260520_START */
-/* Desktop only: force MUSIC header bar to fill the whole music card. Mobile untouched. */
-@media (min-width:900px){
-  .leftRail .musicRail{
-    position:absolute!important;
-    overflow:hidden!important;
-    padding-top:34px!important;
-  }
-
-  .leftRail .musicRail::before{
-    content:""!important;
-    position:absolute!important;
-    top:0!important;
-    left:0!important;
-    right:0!important;
-    height:26px!important;
-    display:block!important;
-    background:linear-gradient(#1777bd,#064d86)!important;
-    z-index:1!important;
-  }
-
-  .leftRail .musicRail > .k{
-    position:absolute!important;
-    top:0!important;
-    left:0!important;
-    right:0!important;
-    height:26px!important;
-    line-height:26px!important;
-    width:auto!important;
-    max-width:none!important;
-    margin:0!important;
-    padding:0 10px!important;
-    background:transparent!important;
-    z-index:2!important;
-    box-sizing:border-box!important;
-  }
-}
-/* MONOLITH_DESKTOP_MUSIC_HEADER_FULL_WIDTH_20260520_END */
-
-
-
-/* MONOLITH_SIDEWAYS_PHONE_DESKTOP_LOCK_20260520_START */
-/* Sideways phone only. Desktop and portrait mobile stay locked. */
-@media (orientation:landscape) and (max-height:520px) and (max-width:950px){
-  html,
-  body{
-    overflow-x:auto!important;
-  }
-
-  .wrap{
-    width:1080px!important;
-    min-width:1080px!important;
-    max-width:none!important;
-  }
-
-  .body{
-    display:block!important;
-  }
-
-  .leftRail{
-    --mono-left-w:310px!important;
-    --mono-gap:8px!important;
-    position:relative!important;
-    display:block!important;
-    width:100%!important;
-    min-height:1845px!important;
-  }
-
-  /* Left column locked order: Profile, Bio, Music, Buttons, Owner Controls */
-  .leftRail .profile,
-  .leftRail .bio,
-  .leftRail .musicRail,
-  .leftRail .profileActionsMain,
-  .leftRail .ownerBox{
-    position:absolute!important;
-    left:0!important;
-    width:var(--mono-left-w)!important;
-    max-width:var(--mono-left-w)!important;
-    margin:0!important;
-    box-sizing:border-box!important;
-    grid-column:auto!important;
-    grid-row:auto!important;
-    z-index:10!important;
-  }
-
-  .leftRail .profile{
-    top:0!important;
-    min-height:350px!important;
-    overflow:visible!important;
-  }
-
-  .leftRail .profile .avatar{
-    width:245px!important;
-    height:245px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .profile h1{
-    font-size:28px!important;
-    line-height:1.05!important;
-    white-space:normal!important;
-  }
-
-  .leftRail .bio{
-    top: 1265px!important;
-    min-height:82px!important;
-    height:auto!important;
-    max-height:none!important;
-    padding:8px!important;
-    font-size:12px!important;
-    line-height:1.25!important;
-    overflow:visible!important;
-  }
-
-  .leftRail .musicRail{
-    top:450px!important;
-    min-height:270px!important;
-    padding:10px!important;
-    padding-top:34px!important;
-    overflow:hidden!important;
-  }
-
-  .leftRail .musicRail::before{
-    content:""!important;
-    position:absolute!important;
-    top:0!important;
-    left:0!important;
-    right:0!important;
-    height:26px!important;
-    display:block!important;
-    background:linear-gradient(#1777bd,#064d86)!important;
-    z-index:1!important;
-  }
-
-  .leftRail .musicRail > .k{
-    position:absolute!important;
-    top:0!important;
-    left:0!important;
-    right:0!important;
-    height:26px!important;
-    line-height:26px!important;
-    width:auto!important;
-    max-width:none!important;
-    margin:0!important;
-    padding:0 10px!important;
-    background:transparent!important;
-    z-index:2!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .profileActionsMain{
-    top:748px!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-  }
-
-  .leftRail .profileActionsMain .btn{
-    min-height:50px!important;
-    width:100%!important;
-    box-sizing:border-box!important;
-  }
-
-  .leftRail .ownerBox{
-    top:1203px!important;
-    min-height:250px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .ownerBox .btn{
-    width:100%!important;
-  }
-
-  /* Center / right puzzle board */
-  .leftRail .socialGrid{
-    position:absolute!important;
-    top:0!important;
-    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
-    right:0!important;
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:8px!important;
-    margin:0!important;
-    z-index:2!important;
-  }
-
-  .leftRail .socialGrid > .box:not(.tabletBox){
-    min-height:125px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .socialGrid > .tabletBox{
-    grid-column:1 / -1!important;
-    min-height:390px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .tabletBox .write{
-    min-height:300px!important;
-    font-size:14px!important;
-    line-height:1.5!important;
-  }
-
-  .leftRail .centerMediaStack{
-    position:absolute!important;
-    top:545px!important;
-    left:calc(var(--mono-left-w) + var(--mono-gap))!important;
-    right:0!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-    margin:0!important;
-    z-index:2!important;
-  }
-
-  .leftRail .topTilesBox{
-    min-height:360px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .galleryBox{
-    min-height:540px!important;
-    padding:10px!important;
-  }
-
-  .leftRail .topTiles{
-    grid-template-columns:repeat(6,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .gallery{
-    grid-template-columns:repeat(7,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  .leftRail .tileMini img{
-    height:118px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail .gallery img{
-    height:126px!important;
-    object-fit:cover!important;
-  }
-
-  .leftRail > .grid{
-    position:absolute!important;
-    top:1535px!important;
-    left:0!important;
-    right:0!important;
-    width:auto!important;
-    max-width:none!important;
-    display:grid!important;
-    grid-template-columns:repeat(4,minmax(0,1fr))!important;
-    gap:8px!important;
-    z-index:6!important;
-  }
-}
-/* MONOLITH_SIDEWAYS_PHONE_DESKTOP_LOCK_20260520_END */
-
-
-
-/* MONOLITH_SIDEWAYS_CONSTRAIN_MEDIA_CENTER_20260520_START */
-/* Sideways phone only: constrain Top 6 and Gallery to center/right, never under left rail. */
-@media (orientation:landscape) and (max-height:520px) and (max-width:950px){
-  .leftRail .centerMediaStack{
-    position:absolute!important;
-    top:545px!important;
-    left:calc(var(--mono-left-w,310px) + var(--mono-gap,8px))!important;
-    right:0!important;
-    width:auto!important;
-    min-width:0!important;
-    max-width:none!important;
-    display:flex!important;
-    flex-direction:column!important;
-    gap:8px!important;
-    margin:0!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-  }
-
-  .leftRail .centerMediaStack .topTilesBox,
-  .leftRail .centerMediaStack .galleryBox{
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    box-sizing:border-box!important;
-    margin:0!important;
-  }
-
-  .leftRail .centerMediaStack .topTiles,
-  .leftRail .centerMediaStack .gallery{
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    box-sizing:border-box!important;
-  }
-}
-/* MONOLITH_SIDEWAYS_CONSTRAIN_MEDIA_CENTER_20260520_END */
-\n
-
-
-\n
-
-
-
-
-
-
-
-
-
-/* MONOLITH_SIDEWAYS_OWNER_FIXED_FINAL_20260520_START */
-/* Sideways phone only: move Owner Controls down and keep it there. */
-@media (orientation:landscape) and (max-height:520px) and (max-width:950px){
-  .leftRail .ownerBox{
-    position:absolute!important;
-    top:1535px!important;
-    bottom:auto!important;
-    left:0!important;
-    right:auto!important;
-    width:var(--mono-left-w,310px)!important;
-    max-width:var(--mono-left-w,310px)!important;
-    min-height:250px!important;
-    z-index:50!important;
-    box-sizing:border-box!important;
-  }
-}
-/* MONOLITH_SIDEWAYS_OWNER_FIXED_FINAL_20260520_END */
-\n
-/* MONOLITH_TEXT_OVERFLOW_SAFETY_20260521_START */
-.socialGrid .write,.ownerBox .write,.tabletBox .write,.grid .v{
-  overflow-wrap:anywhere!important;
-  word-break:break-word!important;
-}
-.socialGrid>.box:not(.tabletBox) .write{max-height:90px!important;overflow:auto!important}
-.ownerBox .write{max-height:155px!important;overflow:auto!important}
-.tabletBox .write{max-height:300px!important;overflow:auto!important}
-.grid .v{max-height:58px!important;overflow:auto!important}
-/* MONOLITH_TEXT_OVERFLOW_SAFETY_20260521_END */
 
 </style>
+
+<style id="MONOLITH_V2_OWNER_EDIT_HUD_V1">
+
+.profileEditHud{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:10px;
+  min-height:28px;
+  padding:5px 10px;
+  border:1px solid rgba(103,213,255,.52);
+  border-radius:7px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,48,80,.96),
+      rgba(3,22,39,.98)
+    );
+  color:#bfeeff;
+  font-size:9px;
+  font-weight:1000;
+  letter-spacing:.12em;
+  cursor:pointer;
+  box-shadow:
+    inset 0 0 12px rgba(73,191,255,.04),
+    0 0 12px rgba(73,191,255,.08);
+}
+
+.profileEditHud:hover{
+  border-color:rgba(130,225,255,.88);
+}
+
+.v2EditModal{
+  width:min(760px,100%);
+}
+
+.v2EditGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.v2EditGrid label{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  color:#9fdcf5;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.05em;
+}
+
+.v2EditGrid .wide{
+  grid-column:1 / -1;
+}
+
+.v2EditGrid input,
+.v2EditGrid textarea{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid rgba(73,191,255,.34);
+  border-radius:10px;
+  background:rgba(2,10,20,.94);
+  color:#eaf7ff;
+  outline:none;
+  resize:vertical;
+}
+
+.v2EditGrid input:focus,
+.v2EditGrid textarea:focus{
+  border-color:rgba(122,211,255,.86);
+  box-shadow:0 0 0 3px rgba(73,191,255,.10);
+}
+
+.v2EditSave{
+  width:100%;
+  margin-top:16px;
+}
+
+.v2EditStatus{
+  min-height:20px;
+  margin-top:10px;
+  color:#9fc5dd;
+  font-size:12px;
+}
+
+#ownerAuthBtn.ownerAuthActive{
+  border-color:rgba(74,224,137,.64)!important;
+  color:#a8f0c7!important;
+}
+
+#ownerAuthBtn.ownerAuthPending{
+  border-color:rgba(229,189,98,.64)!important;
+  color:#f1d994!important;
+}
+
+@media(max-width:620px){
+  .v2EditGrid{
+    grid-template-columns:1fr;
+  }
+
+  .v2EditGrid .wide{
+    grid-column:auto;
+  }
+}
+
+</style>
+</style>
+
+<style id="MONOLITH_V2_OWNER_SPACING_FIX_V1">
+.v2OwnerUnlocked .personalCard{
+  padding-bottom:22px;
+}
+
+.v2OwnerSectionEdit{
+  display:inline-flex;
+  margin-top:10px;
+  margin-bottom:4px;
+}
+
+.v2OwnerEditor{
+  margin-top:14px;
+  padding:16px;
+  border:1px solid rgba(67,190,255,.24);
+  border-radius:12px;
+  background:rgba(2,16,28,.72);
+}
+
+.v2OwnerInput{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  margin:10px 0;
+  padding:11px 12px;
+  border-radius:9px;
+  border:1px solid rgba(90,190,235,.28);
+  background:#03111d;
+  color:#eefaff;
+}
+
+.v2OwnerEditor .v2OwnerBtn{
+  margin-top:8px;
+  margin-right:8px;
+}
+
+.v2OwnerStatus{
+  margin-top:12px;
+  min-height:18px;
+}
+
+.v2IdentityEdit{
+  display:inline-flex;
+  margin:16px 20px 8px;
+}
+
+.v2IdentityEditor{
+  margin:10px 20px 20px;
+  padding:16px;
+  border:1px solid rgba(67,190,255,.28);
+  border-radius:12px;
+  background:rgba(2,16,28,.82);
+}
+
+.v2IdentityEditor .v2OwnerBtn{
+  margin-top:8px;
+  margin-right:8px;
+}
+
+.v2VisualOwnerPanel{
+  margin:18px 20px 22px;
+  padding:16px;
+  border:1px solid rgba(67,190,255,.28);
+  border-radius:12px;
+  background:rgba(2,16,28,.82);
+}
+
+.v2VisualOwnerPanel > strong{
+  display:block;
+  margin-bottom:14px;
+}
+
+.v2VisualOwnerPanel label{
+  display:block;
+  margin:14px 0 7px;
+  color:#ccecff;
+  font-size:12px;
+  font-weight:800;
+}
+
+.v2VisualOwnerPanel input[type="file"]{
+  display:block;
+  width:100%;
+  margin-top:7px;
+  padding:8px 0;
+  color:#a9cee0;
+}
+
+.v2VisualOwnerPanel .v2OwnerBtn{
+  margin-top:8px;
+  margin-right:8px;
+}
+
+#v2VisualSave{
+  display:block;
+  margin-top:18px;
+}
+
+@media(max-width:620px){
+  .v2IdentityEdit{
+    margin:18px 14px 8px;
+  }
+
+  .v2IdentityEditor,
+  .v2VisualOwnerPanel{
+    margin-left:14px;
+    margin-right:14px;
+    padding:14px;
+  }
+
+  .v2OwnerEditor{
+    padding:14px;
+  }
+
+  .v2OwnerEditor .v2OwnerBtn,
+  .v2IdentityEditor .v2OwnerBtn,
+  .v2VisualOwnerPanel .v2OwnerBtn{
+    min-height:36px;
+    padding:9px 12px;
+  }
+
+  .v2OwnerSectionEdit{
+    margin-top:12px;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_V2_UTILITY_ARROW_SPACING_V1">
+.v2UtilityMoveControls{
+  display:flex;
+  gap:10px;
+  padding:12px 14px 14px;
+  margin-top:8px;
+  border-top:1px solid rgba(83,190,235,.12);
+}
+
+.v2UtilityMoveControls .v2OwnerBtn{
+  min-width:42px;
+  min-height:36px;
+  padding:9px 14px;
+  margin:0;
+}
+
+@media(max-width:620px){
+  .v2UtilityMoveControls{
+    padding:14px 12px 16px;
+    gap:12px;
+  }
+
+  .v2UtilityMoveControls .v2OwnerBtn{
+    min-width:46px;
+    min-height:40px;
+    padding:10px 16px;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_V2_PERSONAL_CONTROL_SPACING_GALLERY_FIX_V1">
+
+/* Top 8 + Links owner controls */
+.v2Top8Owner .v2OwnerBtn,
+.v2LinksOwner .v2OwnerBtn{
+  margin-top:10px;
+  margin-right:8px;
+  padding:9px 13px;
+  min-height:36px;
+}
+
+.v2Top8Manager{
+  margin-top:14px;
+}
+
+.v2Top8Manager .v2ManageRow,
+.linksCard .v2ManageRow{
+  padding:12px 0;
+  gap:12px;
+}
+
+.v2Top8Manager .v2RowActions,
+.linksCard .v2RowActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding-top:8px;
+}
+
+.v2Top8Manager .v2RowActions button,
+.linksCard .v2RowActions button{
+  min-width:40px;
+  min-height:34px;
+  padding:8px 11px;
+  border-radius:8px;
+}
+
+/* Gallery owner-mode containment */
+.galleryCard{
+  overflow:hidden;
+}
+
+.galleryCard #galleryGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  width:100%;
+}
+
+.v2GalleryManage{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid rgba(69,190,255,.22);
+  border-radius:12px;
+  background:rgba(2,13,23,.86);
+}
+
+.v2GalleryManage img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:1 / 1;
+  object-fit:cover;
+  object-position:center;
+}
+
+.v2GalleryManage .v2RowActions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:10px;
+}
+
+.v2GalleryManage .v2RowActions button{
+  min-width:38px;
+  min-height:34px;
+  padding:8px 10px;
+  border-radius:8px;
+}
+
+.v2GalleryOwner{
+  margin-top:16px;
+}
+
+.v2GalleryOwner .v2OwnerBtn{
+  margin-top:10px;
+  padding:9px 13px;
+  min-height:36px;
+}
+
+@media(max-width:620px){
+  .v2Top8Manager .v2RowActions button,
+  .linksCard .v2RowActions button{
+    min-height:38px;
+    padding:9px 12px;
+  }
+
+  .galleryCard #galleryGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .v2GalleryManage .v2RowActions{
+    gap:6px;
+    padding:9px 6px;
+  }
+
+  .v2GalleryManage .v2RowActions button{
+    min-width:36px;
+    min-height:36px;
+    padding:8px;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_V2_GALLERY_TOP8_DENSITY_V1">
+
+/* Gallery: 3 across */
+.galleryCard #galleryGrid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+
+.v2GalleryManage img{
+  aspect-ratio:1 / 1;
+  object-fit:cover;
+}
+
+/* Top 8: slightly smaller tiles */
+.top8Card .top8Grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+
+.top8Card .top8Grid > a{
+  max-width:92px;
+  width:100%;
+  justify-self:center;
+}
+
+.top8Card .top8Grid > a img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+@media(max-width:620px){
+  .galleryCard #galleryGrid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .top8Card .top8Grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .top8Card .top8Grid > a{
+    max-width:78px;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_V2_GALLERY_LIGHTBOX_V1">
+#galleryGrid img{
+  cursor:zoom-in;
+}
+
+.v2GalleryLightbox{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(0,7,13,.94);
+  backdrop-filter:blur(8px);
+}
+
+.v2GalleryLightbox.open{
+  display:flex;
+}
+
+.v2GalleryLightboxImage{
+  display:block;
+  max-width:min(94vw,1100px);
+  max-height:88vh;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:14px;
+  border:1px solid rgba(77,204,255,.35);
+  box-shadow:0 0 50px rgba(0,142,210,.18);
+}
+
+.v2GalleryLightboxClose{
+  position:absolute;
+  top:18px;
+  right:18px;
+  width:46px;
+  height:46px;
+  border-radius:10px;
+  border:1px solid rgba(77,204,255,.35);
+  background:#04131f;
+  color:#fff;
+  font-size:30px;
+  cursor:pointer;
+}
+
+.v2GalleryLightboxNav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:48px;
+  height:58px;
+  border-radius:10px;
+  border:1px solid rgba(77,204,255,.30);
+  background:rgba(4,19,31,.88);
+  color:#fff;
+  font-size:38px;
+  cursor:pointer;
+}
+
+.v2GalleryLightboxNav.prev{
+  left:18px;
+}
+
+.v2GalleryLightboxNav.next{
+  right:18px;
+}
+
+@media(max-width:620px){
+  .v2GalleryLightbox{
+    padding:14px;
+  }
+
+  .v2GalleryLightboxNav{
+    width:42px;
+    height:52px;
+  }
+
+  .v2GalleryLightboxNav.prev{
+    left:8px;
+  }
+
+  .v2GalleryLightboxNav.next{
+    right:8px;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_V2_PUBLIC_ACTIONS_V1">
+.v2PublicOverlay{
+  position:fixed;
+  inset:0;
+  z-index:99998;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,7,13,.90);
+  backdrop-filter:blur(8px);
+}
+
+.v2PublicModal{
+  position:relative;
+  width:min(560px,100%);
+  border:1px solid rgba(85,205,255,.38);
+  border-radius:16px;
+  background:#061421;
+  padding:22px;
+  box-shadow:0 24px 70px rgba(0,0,0,.50);
+}
+
+.v2PublicModal h2{
+  margin:4px 0 10px;
+}
+
+.v2PublicClose{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:38px;
+  height:38px;
+  border-radius:9px;
+  border:1px solid rgba(85,205,255,.35);
+  background:#081c2c;
+  color:#fff;
+  font-size:24px;
+  cursor:pointer;
+}
+
+.v2PublicUrl{
+  margin:14px 0;
+  padding:12px;
+  border:1px solid rgba(85,205,255,.20);
+  border-radius:9px;
+  background:#03101a;
+  word-break:break-all;
+}
+
+.v2PublicActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.v2PublicActions button,
+.v2PublicActions a,
+.v2PayStart{
+  min-height:40px;
+  padding:9px 14px;
+  border:1px solid rgba(85,205,255,.35);
+  border-radius:9px;
+  background:#0b2941;
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.v2PayModal label{
+  display:block;
+  margin:12px 0;
+}
+
+.v2PayModal input{
+  display:block;
+  width:100%;
+  margin-top:6px;
+  padding:10px 12px;
+  border:1px solid rgba(85,205,255,.28);
+  border-radius:9px;
+  background:#03101a;
+  color:#fff;
+}
+
+.v2PayStatus{
+  margin-top:10px;
+  min-height:20px;
+  color:#9edaff;
+}
+
+.utilityCard{
+  cursor:pointer;
+}
+
+.utilityGrid.editing .utilityCard{
+  cursor:grab;
+}
+</style>
+
 </head>
+
 <body>
 <main class="wrap">
-  <div class="top">
-    <div class="brand"><img src="/assets/monolith_icon.webp" alt="">MONOLITH</div>
-    <a class="btn" href="/monolith.html">View Wall</a>
-  </div>
 
-  <section class="hero">
-    <div class="banner" aria-label="Tile banner"></div>
-    <div class="body">
-      <div class="leftRail">
-      <div class="profile">
-        <img class="avatar" id="avatar" alt="">
-        <div>
-          <div class="muted" id="coord">Loading...</div>
-          <h1 id="title">Tile</h1>
-          <div class="muted" id="handle"></div>
+  <header class="topbar">
+    <div class="brand">
+      <img src="/assets/monolith_icon.webp" alt="">
+      MONOLITH
+    </div>
+
+    <div class="topActions">
+      <a class="btn secondary" href="/">Entrance</a>
+      <a class="btn secondary" href="/monolith.html">Wall</a>
+      <button class="btn" id="ownerAuthBtn" type="button">Sign In</button>
+      <button class="btn secondary" id="ownerAuthCancelBtn" type="button" style="display:none">Cancel</button>
+    </div>
+  </header>
+
+  <!-- PERSONAL COORDINATE -->
+
+  <section class="identityHero">
+    <div class="identityBanner" id="profileBanner"></div>
+
+    <div class="identityMain">
+      <img
+        class="avatar"
+        id="avatar"
+        src="/assets/monolith_icon.webp"
+        alt=""
+      >
+
+      <div class="identityCopy">
+        <div class="identityHudRow">
+          <div class="hud" id="coordHud">
+            COORDINATE <span id="coord" style="margin-left:6px">ORIGIN</span>
+          </div>
+
+          <div class="hud verified" id="deedHud">
+            ✓ VERIFIED DEED
+          </div>
         </div>
+
+        <h1 id="displayName">Coordinate Profile</h1>
+
+        <button
+          class="profileEditHud"
+          id="profileEditHud"
+          type="button"
+          style="display:none"
+        >
+          EDIT PROFILE
+        </button>
+
+        <a class="handle" id="handle" href="#" target="_blank" rel="noopener">
+          𝕏 @handle
+        </a>
+
+        <p class="identityBio" id="bio">
+          Personal coordinate inside MONOLITH.
+        </p>
       </div>
 
-      <div class="bio" id="bio">Loading tile profile...</div>
-
-      <section class="box musicRail">
-        <div class="k">Music</div>
-        <div class="write" id="musicBox">No track added yet.</div>
-        <audio id="musicPlayer" controls style="display:none;width:100%;margin-top:10px"></audio>
-      </section>
-
-      <div class="actions profileActionsMain">
-        <a class="btn" id="siteLink" href="#" style="display:none" data-desc="Open owner website">Visit Link</a>
-        <a class="btn" id="wallLink" href="#" data-desc="Jump to wall view">View on Wall</a>
-        <button class="btn" id="wallStartBtn" type="button" data-desc="Open wall here">Set Wall Start</button>
-        <button class="btn" id="resetWallStartBtn" type="button" data-desc="Restore default entry">Reset Wall Start</button>
-        <button class="btn" id="favoriteBtn" type="button" data-desc="Save to Top 6">♡ Add to Top 6</button>
-        <button class="btn" id="copyBtn" type="button" data-desc="Copy this page">Copy Page URL</button>
-        <a class="btn" id="reportTileLink" href="#" data-desc="Flag abuse or content">Report Tile</a>
+      <div class="identityActions">
+        <a class="btn" id="wallLink" href="/monolith.html">View on Wall</a>
+        <button class="btn secondary" id="favoriteBtn" type="button">
+          Add to Top 8
+        </button>
+        <button class="btn secondary" id="findMeBtn" type="button">
+          Find Me
+        </button>
+        <button class="btn secondary" id="payMeBtn" type="button">
+          Pay Me
+        </button>
       </div>
-
-      <div class="grid">
-        <div class="card"><div class="k">Wallet Proof</div><div class="v" id="wallet">None</div></div>
-        <div class="card"><div class="k">Deed Status</div><div class="v" id="deed">Checking</div></div>
-        <div class="card"><div class="k">Date</div><div class="v" id="date">None</div></div>
-        <div class="card"><div class="k">Page URL</div><div class="v" id="tileUrl">None</div></div>
-        <div class="card"><div class="k">Tier</div><div class="v" id="tier">None</div></div>
-        <div class="card"><div class="k">Status</div><div class="v" id="status">None</div></div>
-        <div class="card"><div class="k">Claim TX</div><div class="v" id="claimTx">None</div></div>
-        <div class="card"><div class="k">Deed NFT</div><div class="v" id="deedId">None</div></div>
-      </div>
-
-
-      <div class="socialGrid">
-        <section class="box">
-          <div class="k">About</div>
-          <div class="write" id="aboutBox">No about section yet.</div>
-        </section>
-
-        <section class="box">
-          <div class="k">Status</div>
-          <div class="write" id="statusBox">No status yet.</div>
-        </section>
-
-        <section class="box">
-          <div class="k">Interests</div>
-          <div class="write" id="interestsBox">No interests listed yet.</div>
-        </section>
-      
-        <section class="box tabletBox">
-          <div class="k">THE TABLET</div>
-          <div class="tabletDesc">A carved space for owner marks, coordinate updates, milestones, and future entries.</div>
-          <div class="write" id="tabletBox">No entries carved yet.</div>
-        </section>
-      </div>
-
-
-      
-
-      <div class="centerMediaStack">
-        <section class="box topTilesBox">
-          <div class="k">Top 6 Tiles</div>
-          <div class="topTiles" id="topTiles">No favorite tiles yet.</div>
-        </section>
-
-        <section class="box galleryBox">
-          <div class="k">Image Gallery</div>
-          <div class="gallery" id="gallery">No gallery images yet.</div>
-        </section>
-      </div>
-
-      <section class="box ownerBox">
-        <div class="k">Owner Controls</div>
-        <div class="write">Profile edits, wallpaper uploads, profile image uploads, gallery uploads, deletions, and music edits will live behind wallet verification.</div>
-        <div class="actions"><a class="btn" id="ownerEditLink" href="#">Edit Profile & Media</a></div>
-      </section>
     </div>
   </section>
-</main>
 
-  <div class="imageModal" id="imageModal" aria-hidden="true">
-    <button class="imageModalClose" id="imageModalClose" type="button">×</button>
-    <img id="imageModalImg" alt="">
-  </div>
+  <section class="personalSection">
+    <div class="sectionEyebrow">Personal Coordinate</div>
+    <h2 class="sectionTitle">About this coordinate</h2>
+
+    <div class="personalGrid">
+
+      <article class="personalCard aboutCard">
+        <h3>About</h3>
+        <p id="about">
+          This is the coordinate owner's personal space inside MONOLITH.
+        </p>
+      </article>
+
+      <article class="personalCard statusCard">
+        <h3>Status</h3>
+        <p class="statusValue" id="status">
+          No status posted yet.
+        </p>
+      </article>
+
+      <article class="personalCard moodCard">
+        <h3>Mood</h3>
+        <p class="statusValue" id="mood">
+          No mood set.
+        </p>
+      </article>
+
+      <article class="personalCard interestsCard">
+        <h3>Interests</h3>
+        <div class="tagRow" id="interests">
+          <span class="tag">$XRP</span>
+          <span class="tag">XRPL</span>
+          <span class="tag">MONOLITH</span>
+        </div>
+      </article>
+
+      <article class="personalCard songCard">
+        <h3>Profile Song</h3>
+        <div id="profileSong">No profile song added yet.</div>
+        <audio
+          id="musicPlayer"
+          controls
+          style="display:none;width:100%;margin-top:12px"
+        ></audio>
+      </article>
+
+      <article class="personalCard top8Card">
+        <h3>Top 8</h3>
+        <div class="top8Grid" id="top8Grid">
+          <div class="personMini"></div>
+          <div class="personMini"></div>
+          <div class="personMini"></div>
+          <div class="personMini"></div>
+        </div>
+      </article>
+
+      <article class="personalCard linksCard">
+        <h3>Links</h3>
+        <p id="links">No links added yet.</p>
+      </article>
+
+      <article class="personalCard galleryCard">
+        <h3>Gallery</h3>
+        <div class="galleryGrid" id="galleryGrid">
+          <div class="galleryTile"></div>
+          <div class="galleryTile"></div>
+          <div class="galleryTile"></div>
+          <div class="galleryTile"></div>
+        </div>
+      </article>
+
+
+
+    </div>
+  </section>
+
+  <!-- UTILITIES -->
+
+  <section class="utilitiesSection">
+    <div class="utilitiesHeader">
+      <div>
+        <div class="sectionEyebrow">MONOLITH Utilities</div>
+        <h2 class="sectionTitle" style="margin-bottom:0">
+          Utilities connected to this coordinate
+        </h2>
+        <p>
+          The coordinate owner can arrange these modules in the order they want visitors to see them.
+        </p>
+      </div>
+
+      <div class="utilityControls">
+        <button class="btn secondary" id="customizeUtilitiesBtn" type="button">
+          Customize Utilities
+        </button>
+        <button class="btn" id="saveUtilitiesBtn" type="button" hidden>
+          Save Layout
+        </button>
+      </div>
+    </div>
+
+    <div class="utilityGrid" id="utilityGrid">
+
+      <article class="utilityCard p2p" data-module="p2p" draggable="false">
+        <div class="utilityTop">
+          <div class="utilityIcon">$</div>
+          <div class="dragHandle">•••</div>
+        </div>
+
+        <h3>P2P Payments</h3>
+        <div class="utilitySub">
+          Send $XRP directly to this coordinate through MONOLITH.
+        </div>
+
+        <div class="utilityFooter">
+          <span class="moduleStatus">Pay with $XRP</span>
+          <span class="moduleOpen">Open →</span>
+        </div>
+      </article>
+
+      <article class="utilityCard merch" data-module="merch" draggable="false">
+        <div class="utilityTop">
+          <div class="utilityIcon">M</div>
+          <div class="dragHandle">•••</div>
+        </div>
+
+        <h3>Merch Store</h3>
+        <div class="utilitySub">
+          Shop physical products and collectibles from this coordinate.
+        </div>
+
+        <div class="merchProducts" id="merchProducts">
+          <div class="merchProduct">
+            <div class="merchProductImage"></div>
+            <div class="merchProductCopy">
+              <strong>Product</strong>
+              <span>$XRP</span>
+            </div>
+          </div>
+
+          <div class="merchProduct">
+            <div class="merchProductImage"></div>
+            <div class="merchProductCopy">
+              <strong>Product</strong>
+              <span>$XRP</span>
+            </div>
+          </div>
+
+          <div class="merchProduct">
+            <div class="merchProductImage"></div>
+            <div class="merchProductCopy">
+              <strong>Product</strong>
+              <span>$XRP</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="utilityFooter">
+          <span class="moduleStatus">Commerce</span>
+          <span class="moduleOpen">Visit Store →</span>
+        </div>
+      </article>
+
+      <article class="utilityCard nft" data-module="nft" draggable="false">
+        <div class="utilityTop">
+          <div class="utilityIcon">N</div>
+          <div class="dragHandle">•••</div>
+        </div>
+
+        <h3>NFT Market</h3>
+        <div class="utilitySub">
+          Discover and trade NFTs connected to this coordinate.
+        </div>
+
+        <div class="utilityFooter">
+          <span class="moduleStatus">NFT</span>
+          <span class="moduleOpen">Open →</span>
+        </div>
+      </article>
+
+      <article class="utilityCard otc" data-module="otc" draggable="false">
+        <div class="utilityTop">
+          <div class="utilityIcon">O</div>
+          <div class="dragHandle">•••</div>
+        </div>
+
+        <h3>OTC Desk</h3>
+        <div class="utilitySub">
+          MONOLITH peer-to-peer OTC settlement tools.
+        </div>
+
+        <div class="utilityFooter">
+          <span class="moduleStatus">OTC</span>
+          <span class="moduleOpen">Open →</span>
+        </div>
+      </article>
+
+      <article class="utilityCard tilemarket" data-module="tile-market" draggable="false">
+        <div class="utilityTop">
+          <div class="utilityIcon">T</div>
+          <div class="dragHandle">•••</div>
+        </div>
+
+        <h3>Tile Market</h3>
+        <div class="utilitySub">
+          View this coordinate's deed-market status and ownership activity.
+        </div>
+
+        <div class="utilityFooter">
+          <span class="moduleStatus">Coordinate Market</span>
+          <span class="moduleOpen">Open →</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+
+  <section class="personalSection proofBottomSection">
+    <div class="sectionEyebrow">Coordinate Proof</div>
+    <h2 class="sectionTitle">Ownership & Ledger Proof</h2>
+
+    <div class="personalGrid">
+      <article class="personalCard proofCard">
+        <h3>Coordinate Proof</h3>
+
+        <div class="proofGrid">
+          <div class="proofItem">
+            <span>Wallet Proof</span>
+            <strong id="wallet">Not loaded</strong>
+          </div>
+
+          <div class="proofItem">
+            <span>Deed Status</span>
+            <strong id="deed">Checking</strong>
+          </div>
+
+          <div class="proofItem">
+            <span>Tier</span>
+            <strong id="tier">Checking</strong>
+          </div>
+
+          <div class="proofItem">
+            <span>Claim Date</span>
+            <strong id="claimDate">Checking</strong>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</main>
 
 <script>
 (function(){
-  const qs=new URLSearchParams(location.search);
-  const pathParts=location.pathname.split("/").filter(Boolean);
-  const pathTile=(pathParts[0]==="tile"&&pathParts[1])?pathParts[1]:"";
-  const coord=(qs.get("tile")||pathTile||"ORIGIN").trim().toUpperCase();
-  const tileUrl=location.origin+"/tile/"+encodeURIComponent(coord);
   const $=id=>document.getElementById(id);
 
-  $("coord").textContent=coord;
-  $("tileUrl").textContent=tileUrl;
-  $("wallLink").href="/monolith.html?tile="+encodeURIComponent(coord);
-  const reportTileLink=$("reportTileLink"); if(reportTileLink) reportTileLink.href="/report/?tile="+encodeURIComponent(coord);
-  const editLink=$("editLink"); if(editLink) editLink.href="/edit/?edit="+encodeURIComponent(coord);
-  $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(tileUrl);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy Page URL",1200)};
-  const wallStartBtn=$("wallStartBtn");
-  if(wallStartBtn){
+  const v2ProfileState={
+    displayName:"",
+    handle:"",
+    bio:"",
+    about:"",
+    status:"",
+    mood:"",
+    interests:"",
+    links:[],
+    favoriteTiles:[]
+  };
+
+  const pathParts=location.pathname.split("/").filter(Boolean);
+  const qs=new URLSearchParams(location.search);
+
+  const pathCoord=
+    pathParts[0]==="tile-v2" && pathParts[1]
+      ? pathParts[1]
+      : "";
+
+  const coord=
+    (
+      qs.get("tile") ||
+      pathCoord ||
+      "N1W1"
+    )
+    .trim()
+    .toUpperCase();
+
+  function metaOf(t){
     try{
-      if(localStorage.getItem("monolithLandingTile")===coord) wallStartBtn.textContent="Wall Start Set";
-    }catch(e){}
-    wallStartBtn.onclick=()=>{
-      try{
-        localStorage.setItem("monolithLandingTile",coord);
-        wallStartBtn.textContent="Wall Start Set";
-      }catch(e){
-        wallStartBtn.textContent="Set Failed";
-      }
-      setTimeout(()=>{ if(wallStartBtn.textContent==="Set Failed") wallStartBtn.textContent="Set Wall Start"; },1400);
-    };
+      return t.metadata || JSON.parse(t.metadata_json||"{}");
+    }catch(e){
+      return {};
+    }
   }
 
-  const resetWallStartBtn=$("resetWallStartBtn");
-  if(resetWallStartBtn){
-    resetWallStartBtn.onclick=()=>{
-      try{
-        localStorage.removeItem("monolithLandingTile");
-        resetWallStartBtn.textContent="Wall Start Reset";
-        if(wallStartBtn) wallStartBtn.textContent="Set Wall Start";
-      }catch(e){
-        resetWallStartBtn.textContent="Reset Failed";
-      }
-      setTimeout(()=>{ resetWallStartBtn.textContent="Reset Wall Start"; },1400);
-    };
+  function maskWallet(w){
+    w=String(w||"");
+    return w.length>12
+      ? w.slice(0,6)+"..."+w.slice(-6)
+      : w||"None";
   }
 
-
-  function metaOf(t){try{return t.metadata||JSON.parse(t.metadata_json||"{}")}catch(e){return{}}}
-  function maskWallet(w){w=String(w||"");return w.length>12?w.slice(0,6)+"..."+w.slice(-6):w||"None"}
   function coordFromFeed(x){
-    const gx=Number(x.gx)||0,gy=Number(x.gy)||0;
-    if(gx===0&&gy===0)return"ORIGIN";
-    const y=gy>0?"N"+gy:gy<0?"S"+Math.abs(gy):"";
-    const z=gx>0?"E"+gx:gx<0?"W"+Math.abs(gx):"";
+    const gx=Number(x.gx)||0;
+    const gy=Number(x.gy)||0;
+
+    if(gx===0&&gy===0) return "ORIGIN";
+
+    const y=
+      gy>0 ? "N"+gy :
+      gy<0 ? "S"+Math.abs(gy) :
+      "";
+
+    const z=
+      gx>0 ? "E"+gx :
+      gx<0 ? "W"+Math.abs(gx) :
+      "";
+
     return y+z;
   }
 
+  function esc(v){
+    return String(v??"")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;");
+  }
+
+  function normalizeInterestList(value){
+    if(Array.isArray(value)){
+      return value
+        .map(x=>String(x||"").trim())
+        .filter(Boolean);
+    }
+
+    return String(value||"")
+      .split(/[\n,|]+/)
+      .map(x=>x.trim())
+      .filter(Boolean);
+  }
+
+  function renderInterests(value){
+    const list=normalizeInterestList(value);
+
+    $("interests").innerHTML=
+      list.length
+        ? list.map(x=>'<span class="tag">'+esc(x)+'</span>').join("")
+        : '<span class="tag">No interests listed yet.</span>';
+  }
+
+  function renderLinks(list){
+    const links=Array.isArray(list) ? list.filter(Boolean).slice(0,10) : [];
+
+    if(!links.length){
+      $("links").textContent="No links added yet.";
+      return;
+    }
+
+    $("links").innerHTML=links.map(url=>{
+      const clean=String(url||"").trim();
+      let label=clean;
+
+      try{
+        const u=new URL(clean);
+        label=u.hostname.replace(/^www\./,"");
+      }catch(e){}
+
+      return '<a class="tag" style="text-decoration:none" href="'+esc(clean)+'" target="_blank" rel="noopener">'+esc(label)+'</a>';
+    }).join(" ");
+  }
+
+  function renderGallery(list){
+    const gallery=Array.isArray(list) ? list.filter(Boolean).slice(0,8) : [];
+
+    if(!gallery.length){
+      $("galleryGrid").innerHTML=
+        '<div class="galleryTile" style="grid-column:1/-1;aspect-ratio:auto;padding:18px;color:#9fc2d5">No gallery images yet.</div>';
+      return;
+    }
+
+    $("galleryGrid").innerHTML=gallery.map(item=>{
+      const src=
+        typeof item==="string"
+          ? item
+          : (
+              item.url ||
+              item.src ||
+              item.imageUrl ||
+              item.image_url ||
+              ""
+            );
+
+      if(!src) return "";
+
+      return '<img src="'+esc(src)+'" alt="" style="width:100%;aspect-ratio:1.2;object-fit:cover;border-radius:12px;border:1px solid rgba(105,214,255,.20)">';
+    }).join("");
+  }
+
+  function renderTop8(favoriteTiles,feed){
+    const list=Array.isArray(favoriteTiles)
+      ? favoriteTiles.slice(0,8)
+      : [];
+
+    if(!list.length){
+      $("top8Grid").innerHTML=
+        '<div style="grid-column:1/-1;color:#9fc2d5;font-size:13px">No Top 8 selected yet.</div>';
+      return;
+    }
+
+    $("top8Grid").innerHTML=list.map(item=>{
+      const c=
+        typeof item==="string"
+          ? item.toUpperCase()
+          : String(item.coordinate||item.tile||"").toUpperCase();
+
+      const f=Array.isArray(feed)
+        ? feed.find(x=>
+            x &&
+            (
+              String(x.tile||"").toUpperCase()===c ||
+              coordFromFeed(x)===c
+            )
+          )
+        : null;
+
+      const img=
+        (
+          typeof item==="object" &&
+          (item.imageUrl||item.image_url||item.img)
+        ) ||
+        f?.img ||
+        "/assets/RESERVED.webp";
+
+      const label=
+        (
+          typeof item==="object" &&
+          (item.displayName||item.ownerTag||item.owner_tag||item.tag)
+        ) ||
+        f?.tag ||
+        c;
+
+      return (
+        '<a href="/tile-profile-v2.html?tile='+encodeURIComponent(c)+'" '+
+        'style="position:relative;overflow:hidden;aspect-ratio:1;border-radius:12px;border:1px solid rgba(105,214,255,.22);text-decoration:none;background:#041321">'+
+          '<img src="'+esc(img)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block">'+
+          '<span style="position:absolute;left:0;right:0;bottom:0;padding:7px;background:linear-gradient(transparent,rgba(0,0,0,.88));font-size:10px;font-weight:900;color:white">'+
+            esc(label)+
+          '</span>'+
+        '</a>'
+      );
+    }).join("");
+  }
+
+  function setDeedState(t){
+    const deliveryStatus=
+      String(t.deed_delivery_status||"").toLowerCase();
+
+    const delivered=!!(
+      t.deed_delivery_accept_tx_hash ||
+      t.deed_delivery_accepted_at ||
+      deliveryStatus.includes("accepted") ||
+      deliveryStatus.includes("delivered")
+    );
+
+    const pending=!!(
+      t.deed_nft_id &&
+      t.deed_delivery_accept_sign_url &&
+      !delivered
+    );
+
+    if(!t.deed_nft_id){
+      $("deed").textContent="No deed linked";
+      $("deedHud").textContent="NO DEED";
+      $("deedHud").classList.remove("verified");
+      return;
+    }
+
+    if(pending){
+      $("deed").textContent="Pending Owner Accept";
+      $("deedHud").textContent="DEED PENDING";
+      $("deedHud").classList.remove("verified");
+      return;
+    }
+
+    if(delivered){
+      $("deed").textContent="Deed Delivered";
+      $("deedHud").textContent="✓ VERIFIED DEED";
+      $("deedHud").classList.add("verified");
+      return;
+    }
+
+    $("deed").textContent="Coordinate Deed linked";
+    $("deedHud").textContent="DEED LINKED";
+    $("deedHud").classList.add("verified");
+  }
+
+  function setP2PState(t){
+    const card=document.querySelector('.utilityCard[data-module="p2p"]');
+    if(!card) return;
+
+    const walletValid=
+      /^r[1-9A-HJ-NP-Za-km-z]{25,34}$/
+        .test(String(t.owner_wallet||""));
+
+    const status=card.querySelector(".moduleStatus");
+    const open=card.querySelector(".moduleOpen");
+
+    if(walletValid){
+      if(status) status.textContent="Pay with $XRP";
+      if(open) open.textContent="Ready →";
+    }else{
+      if(status) status.textContent="Unavailable";
+      if(open) open.textContent="No Wallet";
+    }
+  }
+
+  async function loadTileMarketState(){
+    const card=document.querySelector('.utilityCard[data-module="tile-market"]');
+    if(!card) return;
+
+    const status=card.querySelector(".moduleStatus");
+    const open=card.querySelector(".moduleOpen");
+
+    try{
+      const r=await fetch(
+        "/api/market/"+encodeURIComponent(coord)+"?cb="+Date.now(),
+        {cache:"no-store"}
+      );
+
+      const data=await r.json();
+
+      if(
+        data &&
+        data.ok &&
+        data.activeListing &&
+        data.activeListing.status==="active"
+      ){
+        if(status){
+          status.textContent=
+            (data.activeListing.askXrp||"--")+" $XRP";
+        }
+
+        if(open){
+          open.textContent="Listed →";
+        }
+
+        return;
+      }
+
+      if(status) status.textContent="Not Listed";
+      if(open) open.textContent="Open →";
+    }catch(e){
+      if(status) status.textContent="Status Unavailable";
+    }
+  }
+
+  function setUtilityTruth(){
+    const nft=document.querySelector('.utilityCard[data-module="nft"]');
+    const otc=document.querySelector('.utilityCard[data-module="otc"]');
+
+    if(nft){
+      const status=nft.querySelector(".moduleStatus");
+      const open=nft.querySelector(".moduleOpen");
+
+      if(status) status.textContent="In Development";
+      if(open) open.textContent="Coming Soon";
+    }
+
+    if(otc){
+      const status=otc.querySelector(".moduleStatus");
+      const open=otc.querySelector(".moduleOpen");
+
+      if(status) status.textContent="Built / Not Live";
+      if(open) open.textContent="Not Live";
+    }
+  }
+
+  $("coord").textContent=coord;
+  document.title=coord+" • MONOLITH";
+
+  $("wallLink").href=
+    "/monolith.html?tile="+encodeURIComponent(coord);
+
+
+
   Promise.all([
-    fetch("/api/tile/"+encodeURIComponent(coord),{cache:"no-store"}).then(r=>r.json()),
-    fetch("/assets/feed.json",{cache:"no-store"}).then(r=>r.json()).catch(()=>[])
-  ]).then(([d,feed])=>{
-    if(!d||!d.ok||!d.tile)throw new Error("not found");
-    const t=d.tile,m=metaOf(t);
-    const f=Array.isArray(feed)?feed.find(x=>x&&(String(x.tile).toUpperCase()===coord||coordFromFeed(x)===coord)):null;
+    fetch(
+      "/api/tile/"+encodeURIComponent(coord),
+      {cache:"no-store"}
+    )
+      .then(r=>r.json())
+      .catch(()=>({ok:false})),
 
-    const tag=t.owner_tag||f?.tag||coord;
-    const img=t.image_url||f?.img||"/assets/RESERVED.webp";
-    const handle=t.handle||t.xHandle||m.handle||m.xHandle||f?.handle||f?.xHandle||"";
-    const note=m.note||t.note||f?.note||"No bio has been added yet.";
-    const link=t.website_url||m.feedLink||m.link||f?.link||"";
-    const date=m.displayDate||t.displayDate||f?.displayDate||t.claimed_at||t.created_at||"None";
-    const banner=m.bannerUrl||m.wallpaperUrl||f?.bannerUrl||f?.wallpaperUrl||"";
-    const about=m.about||m.profileAbout||"";
-    const statusText=m.statusText||m.status||"";
-    const interests=m.interests||"";
-    const musicUrl=m.musicUrl||"";
-    const musicTitle=m.musicTitle||"";
-    const gallery=Array.isArray(m.gallery)?m.gallery:[];
-    const favoriteTiles=Array.isArray(m.favoriteTiles)?m.favoriteTiles.slice(0,6):[];
+    fetch(
+      "/assets/feed.json",
+      {cache:"no-store"}
+    )
+      .then(r=>r.json())
+      .catch(()=>[])
+  ])
+  .then(([d,feed])=>{
+    if(!d || !d.ok || !d.tile){
+      throw new Error("Coordinate not found");
+    }
 
-    document.title=tag+" • MONOLITH";
-    $("title").textContent=tag;
+    const t=d.tile;
+    const m=metaOf(t);
+
+    const f=Array.isArray(feed)
+      ? feed.find(x=>
+          x &&
+          (
+            String(x.tile||"").toUpperCase()===coord ||
+            coordFromFeed(x)===coord
+          )
+        )
+      : null;
+
+    const tag=
+      t.owner_tag ||
+      f?.tag ||
+      coord;
+
+    const displayName=
+      m.displayName ||
+      m.projectName ||
+      t.displayName ||
+      t.display_name ||
+      tag;
+
+    const img=
+      t.image_url ||
+      f?.img ||
+      "/assets/RESERVED.webp";
+
+    const hasSavedXHandle=
+      Object.prototype.hasOwnProperty.call(m,"xHandle");
+
+    const rawHandle=
+      hasSavedXHandle
+        ? (m.xHandle||"")
+        : (
+            t.xHandle ||
+            t.handle ||
+            m.handle ||
+            f?.xHandle ||
+            f?.handle ||
+            ""
+          );
+
+    const handle=
+      rawHandle
+        ? (
+            String(rawHandle).trim().startsWith("@")
+              ? String(rawHandle).trim()
+              : "@"+String(rawHandle).trim()
+          )
+        : "";
+
+    const note=
+      m.note ||
+      t.note ||
+      f?.note ||
+      "No bio has been added yet.";
+
+    const legacyLink=
+      t.website_url ||
+      m.feedLink ||
+      m.link ||
+      f?.link ||
+      "";
+
+    const banner=
+      m.bannerUrl ||
+      f?.bannerUrl ||
+      "";
+
+    const date=
+      m.displayDate ||
+      t.displayDate ||
+      f?.displayDate ||
+      t.claimed_at ||
+      t.created_at ||
+      "None";
+
+    const about=
+      m.about ||
+      m.profileAbout ||
+      "No about section yet.";
+
+    const statusText=
+      m.statusText ||
+      m.status ||
+      "No status posted yet.";
+
+    const moodText=
+      m.mood ||
+      m.moodText ||
+      "No mood set.";
+
+    const interests=
+      m.interests ||
+      "";
+
+    const musicTitle=
+      m.musicTitle ||
+      "";
+
+    const musicUrl=
+      m.musicUrl ||
+      "";
+
+    const gallery=
+      Array.isArray(m.gallery)
+        ? m.gallery
+        : [];
+
+    const favoriteTiles=
+      Array.isArray(m.favoriteTiles)
+        ? m.favoriteTiles.slice(0,8)
+        : [];
+
+    v2ProfileState.displayName=displayName;
+    v2ProfileState.handle=handle;
+    v2ProfileState.bio=note;
+    v2ProfileState.about=about;
+    v2ProfileState.status=statusText;
+    v2ProfileState.mood=moodText;
+    v2ProfileState.interests=interests;
+    v2ProfileState.favoriteTiles=favoriteTiles.slice();
+
+    const hasExplicitLinks=
+      Object.prototype.hasOwnProperty.call(m,"links");
+
+    let links=
+      Array.isArray(m.links)
+        ? m.links.slice(0,10)
+        : [];
+
+    if(
+      !hasExplicitLinks &&
+      legacyLink &&
+      !links.includes(legacyLink)
+    ){
+      links.unshift(legacyLink);
+      links=links.slice(0,10);
+    }
+
+    v2ProfileState.links=links.slice();
+
+    document.title=displayName+" • MONOLITH";
+
+    $("displayName").textContent=displayName;
     $("avatar").src=img;
-    $("handle").textContent=handle;
     $("bio").textContent=note;
-    $("wallet").textContent=maskWallet(t.owner_wallet);
-    $("date").textContent=date;
-    $("deed").textContent=t.deed_nft_id?"Coordinate Deed linked":"No deed linked";
-    $("tier").textContent=t.tier||"None";
-    $("status").textContent=t.status||"None";
-    $("claimTx").textContent=t.claim_tx_hash||"None";
-    $("deedId").textContent=t.deed_nft_id||"None";
-    if(link){$("siteLink").href=link;$("siteLink").style.display="inline-flex"}
-    if(banner){document.querySelector(".banner").style.backgroundImage="linear-gradient(rgba(5,8,5,.35),rgba(5,8,5,.65)),url('"+banner+"')";document.querySelector(".banner").style.backgroundSize="cover";document.querySelector(".banner").style.backgroundPosition="center"}
-    $("aboutBox").textContent=about||note||"No about section yet.";
-    $("statusBox").textContent=statusText||"No status yet.";
-    $("interestsBox").textContent=interests||"No interests listed yet.";
-    $("ownerEditLink").href="/edit/?edit="+encodeURIComponent(coord);
+    $("about").textContent=about;
+    $("status").textContent=statusText;
+    $("mood").textContent=moodText;
+
+    if(banner){
+      $("profileBanner").style.backgroundImage=
+        'linear-gradient(180deg,transparent,rgba(2,9,17,.84)),url("'+
+        String(banner).replace(/"/g,"%22")+
+        '")';
+
+      $("profileBanner").style.backgroundSize="cover";
+      $("profileBanner").style.backgroundPosition="center";
+    }
+
+    if(handle){
+      const cleanHandle=
+        handle.replace(/^@/,"");
+
+      $("handle").textContent="𝕏 "+handle;
+      $("handle").href=
+        "https://x.com/"+encodeURIComponent(cleanHandle);
+      $("handle").style.display="inline-flex";
+    }else{
+      $("handle").style.display="none";
+    }
+
+    renderInterests(interests);
+    renderLinks(links);
+    renderGallery(gallery);
+    renderTop8(favoriteTiles,feed);
+
+    function armFirstTouchProfileSong(player){
+      if(!player) return;
+
+      const events=["touchstart","pointerdown","click","keydown"];
+      let armed=true;
+
+      function cleanup(){
+        if(!armed) return;
+        armed=false;
+
+        events.forEach(event=>{
+          document.removeEventListener(event,start,true);
+        });
+      }
+
+      function start(){
+        if(!armed) return;
+
+        player.play()
+          .then(cleanup)
+          .catch(()=>{});
+      }
+
+      events.forEach(event=>{
+        document.addEventListener(event,start,true);
+      });
+    }
+
+    const musicPlayer=$("musicPlayer");
+
     if(musicUrl){
-      const directAudio=/\.(mp3|wav|ogg|m4a)(\?|#|$)/i.test(musicUrl);
-      const safeUrl=String(musicUrl).replace(/"/g,"&quot;");
-      const safeTitle=String(musicTitle||"Open Track").replace(/</g,"&lt;");
+      const directAudio=
+        /\.(mp3|wav|ogg|m4a)(\?|#|$)/i.test(musicUrl);
+
+      const safeTitle=
+        String(musicTitle||"Open Track")
+          .replace(/&/g,"&amp;")
+          .replace(/</g,"&lt;")
+          .replace(/>/g,"&gt;");
+
       let musicEmbed="";
+
       try{
         const u=new URL(musicUrl);
-        const host=u.hostname.replace(/^www\./i,"").toLowerCase();
+        const host=
+          u.hostname
+            .replace(/^www\./i,"")
+            .toLowerCase();
+
         if(/(^|\.)open\.spotify\.com$/i.test(u.hostname)){
-          const parts=u.pathname.split("/").filter(Boolean);
-          if(parts.length>=2 && /^(track|album|playlist|episode|show|artist)$/.test(parts[0])){
-            const sid=parts[1].replace(/[^A-Za-z0-9]/g,"");
-            if(sid) musicEmbed="https://open.spotify.com/embed/"+parts[0]+"/"+sid+"?utm_source=generator";
+          const parts=
+            u.pathname
+              .split("/")
+              .filter(Boolean);
+
+          if(
+            parts.length>=2 &&
+            /^(track|album|playlist|episode|show|artist)$/.test(parts[0])
+          ){
+            const sid=
+              parts[1]
+                .replace(/[^A-Za-z0-9]/g,"");
+
+            if(sid){
+              musicEmbed=
+                "https://open.spotify.com/embed/"+
+                parts[0]+
+                "/"+
+                sid+
+                "?utm_source=generator";
+            }
           }
-        } else if(host==="soundcloud.com" || host==="on.soundcloud.com"){
-          musicEmbed="https://w.soundcloud.com/player/?url="+encodeURIComponent(musicUrl)+"&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&visual=true";
-        } else if(host==="youtube.com" || host==="m.youtube.com" || host==="youtu.be" || host==="youtube-nocookie.com"){
+
+        }else if(
+          host==="soundcloud.com" ||
+          host==="on.soundcloud.com"
+        ){
+          musicEmbed=
+            "https://w.soundcloud.com/player/?url="+
+            encodeURIComponent(musicUrl)+
+            "&auto_play=false"+
+            "&hide_related=false"+
+            "&show_comments=false"+
+            "&show_user=true"+
+            "&show_reposts=false"+
+            "&visual=true";
+
+        }else if(
+          host==="youtube.com" ||
+          host==="m.youtube.com" ||
+          host==="youtu.be" ||
+          host==="youtube-nocookie.com"
+        ){
           let vid="";
-          let list=u.searchParams.get("list")||"";
-          if(host==="youtu.be"){ vid=u.pathname.split("/").filter(Boolean)[0]||""; }
-          else if(u.pathname.startsWith("/watch")){ vid=u.searchParams.get("v")||""; }
-          else if(u.pathname.startsWith("/shorts/") || u.pathname.startsWith("/embed/")){ vid=u.pathname.split("/").filter(Boolean)[1]||""; }
-          vid=vid.replace(/[^A-Za-z0-9_-]/g,"");
-          list=list.replace(/[^A-Za-z0-9_-]/g,"");
-          if(vid) musicEmbed="https://www.youtube.com/embed/"+vid+"?rel=0";
-          else if(list) musicEmbed="https://www.youtube.com/embed/videoseries?list="+list;
+          let list=
+            u.searchParams.get("list")||"";
+
+          if(host==="youtu.be"){
+            vid=
+              u.pathname
+                .split("/")
+                .filter(Boolean)[0]||"";
+
+          }else if(u.pathname.startsWith("/watch")){
+            vid=
+              u.searchParams.get("v")||"";
+
+          }else if(
+            u.pathname.startsWith("/shorts/") ||
+            u.pathname.startsWith("/embed/")
+          ){
+            vid=
+              u.pathname
+                .split("/")
+                .filter(Boolean)[1]||"";
+          }
+
+          vid=
+            vid.replace(
+              /[^A-Za-z0-9_-]/g,
+              ""
+            );
+
+          list=
+            list.replace(
+              /[^A-Za-z0-9_-]/g,
+              ""
+            );
+
+          if(vid){
+            musicEmbed=
+              "https://www.youtube.com/embed/"+
+              vid+
+              "?rel=0";
+
+          }else if(list){
+            musicEmbed=
+              "https://www.youtube.com/embed/videoseries?list="+
+              list;
+          }
         }
       }catch(e){}
-      const autoplayKey="monolithMusicAutoplay";
-      const autoplayOn=localStorage.getItem(autoplayKey)==="1";
-      const musicLink='<a class="btn" target="_blank" rel="noopener" href="'+safeUrl+'">'+safeTitle+'</a>';
-      const autoplayBtn='<button class="btn" type="button" id="musicAutoplayToggle" style="margin-left:8px">Autoplay: '+(autoplayOn?"ON":"OFF")+'</button>';
-      const musicSrc=musicEmbed+(musicEmbed && autoplayOn ? (musicEmbed.includes("?") ? "&autoplay=1" : "?autoplay=1") : "");
-      const musicFrame=musicEmbed?'<iframe title="MONOLITH music player" src="'+musicSrc+'" width="100%" height="152" style="border:0;border-radius:14px;background:#06111f;margin-top:12px" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>':'';
-      $("musicBox").innerHTML=musicLink+autoplayBtn+musicFrame;
-      const toggle=$("musicAutoplayToggle");
-      if(toggle){toggle.onclick=function(){localStorage.setItem(autoplayKey, autoplayOn ? "0" : "1"); location.reload();};}
-      if(directAudio){$("musicPlayer").src=musicUrl;$("musicPlayer").style.display="block"; if(autoplayOn){$("musicPlayer").autoplay=true;$("musicPlayer").play().catch(()=>{})}}else{$("musicPlayer").style.display="none"}
-    }
-    if(gallery.length){$("gallery").innerHTML=gallery.map(src=>'<button class="galleryItem" type="button"><img src="'+String(src).replace(/"/g,"&quot;")+'" alt=""></button>').join("")}
-    if(favoriteTiles.length){
-      $("topTiles").textContent="Loading tiles...";
-      Promise.all(favoriteTiles.map(c=>fetch("/api/tile/"+encodeURIComponent(c),{cache:"no-store"}).then(r=>r.json()).catch(()=>null))).then(rows=>{
-        const html=rows.map((r,i)=>{
-          const c=String(favoriteTiles[i]||"").toUpperCase();
-          const t=r&&r.ok?r.tile:null;
-          const m=t&&t.metadata?t.metadata:{};
-          const img=(t&&t.image_url)||"/assets/RESERVED.webp";
-          const tag=(t&&t.owner_tag)||c;
-          const handle=(t&&t.xHandle)||m.xHandle||m.handle||"";
-          return '<a class="tileMini" href="/tile-profile.html?tile='+encodeURIComponent(c)+'"><img src="'+String(img).replace(/"/g,"&quot;")+'" alt=""><strong>'+c+'</strong><span>'+String(tag).replace(/</g,"&lt;")+'</span><span>'+String(handle).replace(/</g,"&lt;")+'</span></a>';
-        }).join("");
-        $("topTiles").innerHTML=html||"No favorite tiles yet.";
-      });
+
+      const autoplayOn=
+        Boolean(m.musicAutoplay);
+
+      const nowPlaying=
+        '<div style="display:flex;flex-direction:column;gap:3px">'+
+          '<strong style="font-size:10px;letter-spacing:.12em;color:#69d6ff">NOW PLAYING</strong>'+
+          '<span style="color:#eaf8ff;font-weight:850">'+
+            safeTitle+
+          '</span>'+
+        '</div>';
+
+      const autoplayNote=
+        autoplayOn
+          ? '<div style="margin-top:7px;color:#9fc2d5;font-size:11px">Autoplay enabled. Starts immediately where allowed, otherwise on first touch.</div>'
+          : '';
+
+      const musicSrc=
+        musicEmbed+
+        (
+          musicEmbed && autoplayOn
+            ? (
+                musicEmbed.includes("?")
+                  ? "&autoplay=1"
+                  : "?autoplay=1"
+              )
+            : ""
+        );
+
+      const musicFrame=
+        musicEmbed
+          ? '<iframe title="MONOLITH music player" src="'+
+            musicSrc+
+            '" width="100%" height="152" style="border:0;border-radius:14px;background:#06111f;margin-top:12px" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>'
+          : '';
+
+      $("profileSong").innerHTML=
+        nowPlaying+
+        autoplayNote+
+        musicFrame;
+
+      if(directAudio){
+        musicPlayer.src=musicUrl;
+        musicPlayer.style.display="block";
+        musicPlayer.autoplay=autoplayOn;
+
+        if(autoplayOn){
+          musicPlayer
+            .play()
+            .catch(()=>{
+              armFirstTouchProfileSong(musicPlayer);
+            });
+        }
+
+      }else{
+        musicPlayer.removeAttribute("src");
+        musicPlayer.style.display="none";
+      }
+
+    }else{
+      $("profileSong").textContent=
+        "No profile song added yet.";
+
+      musicPlayer.removeAttribute("src");
+      musicPlayer.style.display="none";
     }
 
-    const modal=$("imageModal");
-    const modalImg=$("imageModalImg");
-    const modalClose=$("imageModalClose");
-    if($("gallery")){
-      $("gallery").addEventListener("click", e=>{
-        const img=e.target&&e.target.closest?e.target.closest(".galleryItem img"):null;
-        if(!img||!modal||!modalImg)return;
-        modalImg.src=img.src;
-        modal.setAttribute("aria-hidden","false");
-        modal.classList.add("open");
-      });
+    $("wallet").textContent=
+      maskWallet(t.owner_wallet);
+
+    $("tier").textContent=
+      t.tier ||
+      "None";
+
+    $("claimDate").textContent=
+      date;
+
+    setDeedState(t);
+    setP2PState(t);
+    setUtilityTruth();
+    loadTileMarketState();
+
+    /*
+      We are intentionally not inventing Merch Store data here.
+      The card remains in the correct position/layout until the
+      existing public Merch Store API is wired in the next pass.
+    */
+  })
+  .catch(err=>{
+    console.error("MONOLITH V2 profile load failed",err);
+
+    $("displayName").textContent=
+      coord+" unavailable";
+
+    $("bio").textContent=
+      "Coordinate data could not be loaded.";
+  });
+
+  /* UTILITY LAYOUT PROTOTYPE */
+
+  const grid=$("utilityGrid");
+  const customizeBtn=$("customizeUtilitiesBtn");
+  const saveBtn=$("saveUtilitiesBtn");
+
+  const orderKey=
+    "monolith_v2_utility_order_"+coord;
+
+  const hiddenKey=
+    "monolith_v2_utility_hidden_"+coord;
+
+  function hiddenModules(){
+    try{
+      const value=JSON.parse(
+        localStorage.getItem(hiddenKey)||"[]"
+      );
+
+      return Array.isArray(value)
+        ? value
+        : [];
+    }catch(e){
+      return [];
     }
-    if(modalClose) modalClose.addEventListener("click", ()=>{
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden","true");
-      if(modalImg) modalImg.src="";
+  }
+
+  function applyUtilityVisibility(){
+    const hidden=hiddenModules();
+
+    [...grid.querySelectorAll(".utilityCard")]
+      .forEach(card=>{
+        const isHidden=
+          hidden.includes(card.dataset.module);
+
+        card.classList.toggle(
+          "utilityHidden",
+          isHidden
+        );
+
+        card.style.display=
+          isHidden && !editing
+            ? "none"
+            : "";
+      });
+  }
+
+  function currentOrder(){
+    return [...grid.querySelectorAll(".utilityCard")]
+      .map(card=>card.dataset.module);
+  }
+
+  function applyOrder(order){
+    if(!Array.isArray(order)) return;
+
+    const cards=new Map(
+      [...grid.querySelectorAll(".utilityCard")]
+        .map(card=>[
+          card.dataset.module,
+          card
+        ])
+    );
+
+    order.forEach(key=>{
+      const card=cards.get(key);
+      if(card) grid.appendChild(card);
     });
-    if(modal) modal.addEventListener("click", e=>{
-      if(e.target===modal){
-        modal.classList.remove("open");
-        modal.setAttribute("aria-hidden","true");
-        if(modalImg) modalImg.src="";
+
+    cards.forEach(card=>{
+      if(!order.includes(card.dataset.module)){
+        grid.appendChild(card);
       }
     });
+  }
 
-  }).catch(()=>{
-    $("title").textContent=coord;
-    $("avatar").src="/assets/RESERVED.webp";
-    $("bio").textContent="This tile is open or not yet published.";
-    $("wallet").textContent="None";
-    $("deed").textContent="No deed";
+  try{
+    const saved=
+      JSON.parse(
+        localStorage.getItem(orderKey)||"null"
+      );
+
+    applyOrder(saved);
+  }catch(e){}
+
+  let editing=false;
+
+  applyUtilityVisibility();
+  let dragged=null;
+
+  customizeBtn.onclick=()=>{
+    editing=!editing;
+
+    grid.classList.toggle(
+      "editing",
+      editing
+    );
+
+    [...grid.querySelectorAll(".utilityCard")]
+      .forEach(card=>{
+        card.draggable=editing;
+      });
+
+    customizeBtn.textContent=
+      editing
+        ? "Cancel Layout"
+        : "Customize Utilities";
+
+    saveBtn.hidden=!editing;
+
+    applyUtilityVisibility();
+  };
+
+  saveBtn.onclick=()=>{
+    localStorage.setItem(
+      orderKey,
+      JSON.stringify(currentOrder())
+    );
+
+    editing=false;
+
+    grid.classList.remove("editing");
+
+    [...grid.querySelectorAll(".utilityCard")]
+      .forEach(card=>{
+        card.draggable=false;
+      });
+
+    saveBtn.textContent="Saved ✓";
+    saveBtn.disabled=true;
+    saveBtn.hidden=false;
+
+    applyUtilityVisibility();
+
+    setTimeout(()=>{
+      customizeBtn.textContent=
+        "Customize Utilities";
+
+      saveBtn.textContent=
+        "Save Layout";
+
+      saveBtn.disabled=false;
+      saveBtn.hidden=true;
+    },900);
+  };
+
+  grid.addEventListener("dragstart",e=>{
+    const card=e.target.closest(".utilityCard");
+
+    if(!editing || !card) return;
+
+    dragged=card;
+    card.classList.add("isDragging");
+  });
+
+  grid.addEventListener("dragend",()=>{
+    if(dragged){
+      dragged.classList.remove("isDragging");
+    }
+
+    dragged=null;
+  });
+
+  grid.addEventListener("dragover",e=>{
+    if(!editing || !dragged) return;
+
+    e.preventDefault();
+
+    const target=
+      e.target.closest(".utilityCard");
+
+    if(!target || target===dragged) return;
+
+    const rect=
+      target.getBoundingClientRect();
+
+    const before=
+      e.clientY <
+      rect.top + rect.height/2;
+
+    grid.insertBefore(
+      dragged,
+      before
+        ? target
+        : target.nextSibling
+    );
   });
 })();
 </script>
-<script src="/monolith-session.js?v=monolith_owner_session_terminal_reset_20260520" defer></script>
-<script src="/tile-favorite.js?v=monolith_owner_session_favorite_20260519" defer></script>
 
 
+<script src="/monolith-session.js?v=monolith_owner_session_terminal_reset_20260520"></script>
+
+<script id="MONOLITH_V2_OWNER_AUTH_V1">
+(function(){
+  const $ = id => document.getElementById(id);
+
+  const params = new URLSearchParams(location.search);
+  const parts = location.pathname.split("/").filter(Boolean);
+
+  const coord = String(
+    params.get("tile") ||
+    (parts[0] === "tile-v2" ? parts[1] : "") ||
+    "ORIGIN"
+  ).trim().toUpperCase();
+
+  const ownerModeKey = "monolith_tile_owner_payload_uuid";
+  const ownerCoordKey = "monolith_tile_owner_coordinate";
+  const sharedOwnerSessionKey = "monolithOwnerSession";
+  const sharedOwnerSessionMaxAge = 12 * 60 * 60 * 1000;
+
+  function readSharedOwnerSession(){
+    try{
+      if(
+        window.MonolithSession &&
+        typeof window.MonolithSession.get === "function"
+      ){
+        return window.MonolithSession.get();
+      }
+    }catch(e){}
+
+    try{
+      const raw = localStorage.getItem(sharedOwnerSessionKey);
+      if(!raw) return null;
+
+      const session = JSON.parse(raw);
+
+      if(!session || !session.payloadUuid){
+        return null;
+      }
+
+      if(
+        session.createdAt &&
+        Date.now() - Number(session.createdAt) > sharedOwnerSessionMaxAge
+      ){
+        localStorage.removeItem(sharedOwnerSessionKey);
+        return null;
+      }
+
+      return session;
+    }catch(e){
+      return null;
+    }
+  }
+
+  function saveSharedOwnerSession({
+    payloadUuid,
+    signUrl = "",
+    ownerVerified = false,
+    ownerWallet = ""
+  }){
+    if(!payloadUuid) return;
+
+    const existing = readSharedOwnerSession() || {};
+
+    const session = {
+      sourceCoordinate: coord,
+      payloadUuid,
+      signUrl: signUrl || existing.signUrl || "",
+      ownerVerified: Boolean(ownerVerified),
+      ownerWallet: ownerWallet || existing.ownerWallet || "",
+      createdAt: existing.createdAt || Date.now()
+    };
+
+    if(ownerVerified){
+      session.verifiedAt = Date.now();
+    }
+
+    try{
+      if(
+        window.MonolithSession &&
+        typeof window.MonolithSession.set === "function"
+      ){
+        window.MonolithSession.set(session);
+      }else{
+        localStorage.setItem(
+          sharedOwnerSessionKey,
+          JSON.stringify(session)
+        );
+      }
+    }catch(e){
+      localStorage.setItem(
+        sharedOwnerSessionKey,
+        JSON.stringify(session)
+      );
+    }
+  }
+
+  function clearLocalOwnerMode(){
+    localStorage.removeItem(ownerModeKey);
+    localStorage.removeItem(ownerCoordKey);
+  }
+
+  function setOwnerAuthState(state){
+    const btn = $("ownerAuthBtn");
+    const cancelBtn = $("ownerAuthCancelBtn");
+    const editHud = $("profileEditHud");
+
+    if(!btn) return;
+
+    btn.classList.remove(
+      "ownerAuthPending",
+      "ownerAuthActive"
+    );
+
+    if(cancelBtn){
+      cancelBtn.style.display = "none";
+      cancelBtn.onclick = null;
+    }
+
+    if(editHud){
+      editHud.style.display =
+        state === "verified"
+          ? "inline-flex"
+          : "none";
+    }
+
+    if(state === "verified"){
+      btn.textContent = "Sign Out";
+      btn.classList.add("ownerAuthActive");
+      btn.onclick = signOutOwnerMode;
+      return;
+    }
+
+    if(state === "pending"){
+      btn.textContent = "Continue Sign-In";
+      btn.classList.add("ownerAuthPending");
+      btn.onclick = continueOwnerSignIn;
+
+      if(cancelBtn){
+        cancelBtn.style.display = "inline-flex";
+        cancelBtn.onclick = cancelOwnerSignIn;
+      }
+
+      return;
+    }
+
+    btn.textContent = "Sign In";
+    btn.onclick = startOwnerMode;
+  }
+
+  function cancelOwnerSignIn(){
+    clearLocalOwnerMode();
+
+    try{
+      if(
+        window.MonolithSession &&
+        typeof window.MonolithSession.clear === "function"
+      ){
+        window.MonolithSession.clear();
+      }
+    }catch(e){}
+
+    localStorage.removeItem(sharedOwnerSessionKey);
+
+    const u = new URL(location.href);
+    u.searchParams.delete("owner");
+
+    history.replaceState(
+      {},
+      "",
+      u.pathname + u.search + u.hash
+    );
+
+    setOwnerAuthState("signed-out");
+  }
+
+  function continueOwnerSignIn(){
+    const session = readSharedOwnerSession();
+
+    if(
+      session &&
+      session.payloadUuid &&
+      session.signUrl &&
+      (
+        !session.sourceCoordinate ||
+        String(session.sourceCoordinate).toUpperCase() === coord
+      )
+    ){
+      window.open(
+        session.signUrl,
+        "_blank",
+        "noopener"
+      );
+
+      return;
+    }
+
+    clearLocalOwnerMode();
+    setOwnerAuthState("signed-out");
+    startOwnerMode();
+  }
+
+  function signOutOwnerMode(){
+    clearLocalOwnerMode();
+
+    try{
+      if(
+        window.MonolithSession &&
+        typeof window.MonolithSession.clear === "function"
+      ){
+        window.MonolithSession.clear();
+      }
+    }catch(e){}
+
+    localStorage.removeItem(sharedOwnerSessionKey);
+    localStorage.removeItem("monolithFavoritePending");
+
+    const u = new URL(location.href);
+    u.searchParams.delete("owner");
+    u.searchParams.set("cb", Date.now());
+
+    location.href = u.toString();
+  }
+
+  async function startOwnerMode(){
+    const btn = $("ownerAuthBtn");
+
+    if(btn){
+      btn.textContent = "Creating Sign-In...";
+    }
+
+    try{
+      const returnUrl = new URL(location.href);
+      returnUrl.searchParams.set("owner", "1");
+      returnUrl.searchParams.set("cb", Date.now());
+
+      const r = await fetch(
+        "/api/tile/edit/start",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            coordinate: coord,
+            returnUrl: returnUrl.toString()
+          })
+        }
+      );
+
+      const data = await r.json().catch(() => ({}));
+
+      if(!r.ok || !data.ok){
+        throw new Error(
+          data.error || "owner_signin_failed"
+        );
+      }
+
+      const auth = data.auth || {};
+
+      if(auth.payloadUuid){
+        localStorage.setItem(
+          ownerModeKey,
+          auth.payloadUuid
+        );
+
+        localStorage.setItem(
+          ownerCoordKey,
+          coord
+        );
+
+        saveSharedOwnerSession({
+          payloadUuid: auth.payloadUuid,
+          signUrl: auth.signUrl || "",
+          ownerVerified: false
+        });
+      }
+
+      if(auth.signUrl){
+        setOwnerAuthState("pending");
+
+        window.open(
+          auth.signUrl,
+          "_blank",
+          "noopener"
+        );
+      }else{
+        setOwnerAuthState("signed-out");
+        alert("Owner sign-in created, but Xaman returned no sign URL.");
+      }
+
+    }catch(e){
+      console.error("V2 owner sign-in failed", e);
+      setOwnerAuthState("signed-out");
+      alert("Unable to create owner sign-in.");
+    }
+  }
+
+  async function verifyOwnerMode(options = {}){
+    const payloadUuid =
+      localStorage.getItem(ownerModeKey) || "";
+
+    const savedCoord =
+      (
+        localStorage.getItem(ownerCoordKey) || ""
+      ).toUpperCase();
+
+    if(
+      !payloadUuid ||
+      savedCoord !== coord
+    ){
+      return false;
+    }
+
+    try{
+      const r = await fetch(
+        "/api/tile/edit/verify",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            coordinate: coord,
+            payloadUuid
+          })
+        }
+      );
+
+      const data = await r.json().catch(() => ({}));
+
+      if(
+        !r.ok ||
+        !data.ok ||
+        !data.ownerVerified
+      ){
+        if(options.silentRestore){
+          clearLocalOwnerMode();
+        }
+
+        return false;
+      }
+
+      saveSharedOwnerSession({
+        payloadUuid,
+        ownerVerified: true,
+        ownerWallet:
+          data.signer ||
+          data.ownerWallet ||
+          ""
+      });
+
+      setOwnerAuthState("verified");
+      return true;
+
+    }catch(e){
+      console.error("V2 owner verify failed", e);
+      return false;
+    }
+  }
+
+  async function restoreOwnerModeFromSharedSession(){
+    const session = readSharedOwnerSession();
+
+    if(
+      !session ||
+      !session.ownerVerified ||
+      !session.payloadUuid
+    ){
+      return false;
+    }
+
+    localStorage.setItem(
+      ownerModeKey,
+      session.payloadUuid
+    );
+
+    localStorage.setItem(
+      ownerCoordKey,
+      coord
+    );
+
+    return verifyOwnerMode({
+      silentRestore: true
+    });
+  }
+
+  async function initializeOwnerAuth(){
+    const ownerReturn =
+      new URLSearchParams(location.search)
+        .get("owner") === "1";
+
+    if(ownerReturn){
+      const verified = await verifyOwnerMode();
+
+      if(!verified){
+        setOwnerAuthState("pending");
+      }
+
+      return;
+    }
+
+    const restored =
+      await restoreOwnerModeFromSharedSession();
+
+    if(restored) return;
+
+    const payloadUuid =
+      localStorage.getItem(ownerModeKey);
+
+    const savedCoord =
+      (
+        localStorage.getItem(ownerCoordKey) || ""
+      ).toUpperCase();
+
+    if(
+      payloadUuid &&
+      savedCoord === coord
+    ){
+      setOwnerAuthState("pending");
+      return;
+    }
+
+    setOwnerAuthState("signed-out");
+  }
+
+  initializeOwnerAuth();
+})();
+</script>
+
+<script src="/tile-profile-v2-owner.js?v=MONOLITH_V2_OWNER_SECTION_EDITING_V1"></script>
+
+<style id="MONOLITH_V2_MOBILE_ZOOM_LOCK_V1">
+html,
+body{
+  touch-action:pan-x pan-y;
+}
+</style>
+
+<script id="MONOLITH_V2_MOBILE_ZOOM_LOCK_V1">
+(function(){
+  document.addEventListener("gesturestart",function(e){
+    e.preventDefault();
+  },{passive:false});
+
+  document.addEventListener("gesturechange",function(e){
+    e.preventDefault();
+  },{passive:false});
+
+  document.addEventListener("gestureend",function(e){
+    e.preventDefault();
+  },{passive:false});
+
+  document.addEventListener("touchmove",function(e){
+    if(e.touches && e.touches.length>1){
+      e.preventDefault();
+    }
+  },{passive:false});
+
+  let lastTouchEnd=0;
+
+  document.addEventListener("touchend",function(e){
+    const now=Date.now();
+
+    if(now-lastTouchEnd<=300){
+      e.preventDefault();
+    }
+
+    lastTouchEnd=now;
+  },{passive:false});
+})();
+</script>
 
 </body>
 </html>
