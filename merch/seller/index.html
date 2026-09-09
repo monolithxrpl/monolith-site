@@ -8880,6 +8880,17 @@ body.merchSellerPage #orderStatusBtn{
               >
             </label>
 
+            <label>
+              <span>Condition</span>
+              <select id="productCondition">
+                <option value="new">New</option>
+                <option value="used">Used</option>
+                <option value="refurbished">Refurbished</option>
+                <option value="open_box">Open Box</option>
+                <option value="for_parts">For Parts / Not Working</option>
+              </select>
+            </label>
+
             <label class="productWideField">
               <span>Description</span>
               <textarea
@@ -15210,6 +15221,10 @@ body.merchSellerPage #orderStatusBtn{
           document.getElementById(
             "productType"
           ),
+        condition:
+          document.getElementById(
+            "productCondition"
+          ),
         description:
           document.getElementById(
             "productDescription"
@@ -15952,6 +15967,9 @@ body.merchSellerPage #orderStatusBtn{
                 .value ||
               ""
             ).trim(),
+          condition:
+            productUi.condition.value ||
+            "new",
           vendor:
             sellerProfile
               ? sellerProfile.displayName
@@ -20955,6 +20973,7 @@ body.merchSellerPage #orderStatusBtn{
         productUi.category.value =
           "apparel";
         productUi.productType.value = "";
+        productUi.condition.value = "new";
         productUi.description.value = "";
         productUi.sku.value = "";
         productUi.inventory.value = "0";
@@ -21048,6 +21067,9 @@ body.merchSellerPage #orderStatusBtn{
 
         productUi.productType.value =
           product.productType || "";
+
+        productUi.condition.value =
+          product.condition || "new";
 
         productUi.description.value =
           product.description || "";
