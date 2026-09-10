@@ -1006,6 +1006,275 @@ table{
 }
 </style>
 
+
+<style id="MONOLITH_TILE_MARKET_SELLER_V2">
+.seller-workspace{
+  padding:28px!important;
+}
+
+.seller-workspace-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:22px;
+}
+
+.seller-workspace-head h2{
+  margin:0;
+  font-size:30px;
+  letter-spacing:-.025em;
+}
+
+.seller-workspace-head p{
+  max-width:680px;
+  margin:8px 0 0;
+  color:var(--muted);
+}
+
+.seller-security{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:34px;
+  padding:7px 11px;
+  border:1px solid rgba(98,215,168,.22);
+  border-radius:999px;
+  background:rgba(98,215,168,.055);
+  color:#aef0d2;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.seller-security-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#62d7a8;
+  box-shadow:0 0 12px rgba(98,215,168,.72);
+}
+
+.seller-steps{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+.seller-step{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:250px;
+  padding:18px;
+  border:1px solid rgba(107,196,255,.15);
+  border-radius:17px;
+  background:
+    radial-gradient(circle at top right,rgba(102,196,255,.055),transparent 34%),
+    rgba(3,10,17,.58);
+}
+
+.seller-step-number{
+  width:34px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  margin-bottom:16px;
+  border:1px solid rgba(216,173,98,.25);
+  border-radius:8px;
+  background:rgba(216,173,98,.06);
+  color:var(--gold2);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+.seller-step-copy{
+  margin-bottom:16px;
+}
+
+.seller-step-copy strong{
+  display:block;
+  color:#edf8ff!important;
+  font-size:17px;
+}
+
+.seller-step-copy span{
+  display:block;
+  margin-top:5px;
+  color:#7899ad;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.seller-fields{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:9px;
+  margin-bottom:12px;
+}
+
+.seller-fields .field{
+  min-width:0;
+}
+
+.seller-fields .field input{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+.seller-step > .seller-primary{
+  margin-top:auto;
+}
+
+.seller-step-actions{
+  display:grid;
+  gap:8px;
+  margin-top:auto;
+}
+
+.seller-primary{
+  width:100%;
+  min-height:44px!important;
+  border-color:rgba(216,173,98,.62)!important;
+  background:linear-gradient(180deg,#efd28f,#b8893f)!important;
+  color:#080b0e!important;
+}
+
+.seller-secondary{
+  width:100%;
+  min-height:44px!important;
+  background:rgba(8,17,28,.88)!important;
+  color:#dceef8!important;
+  border-color:rgba(107,196,255,.24)!important;
+}
+
+.seller-xaman{
+  width:100%;
+  min-height:44px!important;
+  border-color:rgba(102,196,255,.50)!important;
+  background:rgba(102,196,255,.10)!important;
+  color:#cbeaff!important;
+}
+
+.seller-status-bar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:48px;
+  margin-top:12px;
+  padding:10px 13px;
+  border:1px solid rgba(107,196,255,.12);
+  border-radius:12px;
+  background:rgba(2,8,14,.58);
+}
+
+.seller-status-icon{
+  flex:0 0 auto;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#66c4ff;
+  box-shadow:0 0 12px rgba(102,196,255,.65);
+}
+
+.seller-status-bar .console-status{
+  margin:0;
+}
+
+#listConsoleAuth{
+  margin:10px 0 0;
+}
+
+.seller-management{
+  margin-top:12px;
+  padding:14px;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:16px;
+  align-items:center;
+  border:1px solid rgba(216,173,98,.18);
+  border-radius:14px;
+  background:rgba(216,173,98,.045);
+}
+
+.seller-management strong{
+  display:block;
+  color:var(--gold2)!important;
+  font-size:13px;
+}
+
+.seller-management span{
+  display:block;
+  margin-top:3px;
+  color:#7899ad;
+  font-size:11px;
+}
+
+.seller-management-actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:7px;
+}
+
+.seller-management-actions .btn{
+  width:auto;
+}
+
+@media(max-width:960px){
+  .seller-steps{
+    grid-template-columns:1fr;
+  }
+
+  .seller-step{
+    min-height:0;
+  }
+
+  .seller-management{
+    grid-template-columns:1fr;
+  }
+
+  .seller-management-actions{
+    justify-content:flex-start;
+  }
+}
+
+@media(max-width:560px){
+  .seller-workspace{
+    padding:17px!important;
+  }
+
+  .seller-workspace-head{
+    display:block;
+  }
+
+  .seller-security{
+    width:max-content;
+    margin-top:14px;
+  }
+
+  .seller-fields{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  }
+
+  .seller-step{
+    padding:15px;
+  }
+
+  .seller-management-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .seller-management-actions .btn{
+    width:100%;
+  }
+}
+</style>
+
 </head>
 <body>
   <main class="wrap">
@@ -1073,40 +1342,108 @@ table{
       </div>
     </section>
 
-<section class="panel sell-panel" id="listYourTilePanel">
-      <div class="market-head">
-        <div>
-          <h2>Sell a Coordinate</h2>
-          <p>List a claimed MONOLITH coordinate for sale by setting an asking price and locking a verified XRPL Coordinate Deed NFT sell offer through Xaman.</p>
-        </div>
+
+<section class="panel sell-panel seller-workspace" id="listYourTilePanel">
+  <div class="seller-workspace-head">
+    <div>
+      <div class="market-real-estate-eyebrow">OWNER MARKET WORKSPACE</div>
+      <h2>Sell a Coordinate</h2>
+      <p>List your claimed MONOLITH coordinate and lock its Coordinate Deed sale directly on XRPL through Xaman.</p>
+    </div>
+    <div class="seller-security">
+      <span class="seller-security-dot"></span>
+      XRPL VERIFIED
+    </div>
+  </div>
+
+  <div class="seller-steps">
+
+    <div class="seller-step">
+      <div class="seller-step-number">01</div>
+      <div class="seller-step-copy">
+        <strong>Set Your Listing</strong>
+        <span>Choose the coordinate and asking price.</span>
       </div>
 
-      <div class="listing-console">
+      <div class="seller-fields">
         <div class="field">
           <label>Coordinate</label>
           <input id="listCoordinateInput" type="text" placeholder="N1W1">
         </div>
+
         <div class="field">
-          <label>Ask Price</label>
+          <label>Ask Price · XRP</label>
           <input id="listAskInput" type="text" inputmode="decimal" placeholder="589">
         </div>
-        <button class="btn console" id="listStartBtn" type="button">Start Listing</button>
-        <button class="btn console" id="listVerifyBtn" type="button">Verify Listing</button>
-        <button class="btn console" id="sellOfferStartBtn" type="button">Start Deed Sale</button>
-        <button class="btn console" id="sellOfferVerifyBtn" type="button">Verify Deed Sale</button>
-        <a class="btn console" id="listAuthBtn" href="#" target="_blank" rel="noopener" style="display:none">Open Xaman</a>
       </div>
 
-      <div class="console-status" id="listConsoleStatus">Claimed tiles only. Trials and reserved-only coordinates cannot be listed.</div>
-      <a class="console-auth" id="listConsoleAuth" href="#" target="_blank" rel="noopener">Open Xaman Sign-In</a>
+      <button class="btn console seller-primary" id="listStartBtn" type="button">
+        Start Listing
+      </button>
+    </div>
 
-      <div class="listing-console" id="cancelListingConsole" style="display:none;margin-top:12px">
-        <button class="btn console" id="cancelStartBtn" type="button">Cancel Listing</button>
-        <button class="btn console" id="cancelVerifyBtn" type="button">Verify Cancel</button>
-        <a class="btn console" id="cancelAuthBtn" href="#" target="_blank" rel="noopener" style="display:none">Open Xaman</a>
-        <a class="btn console" id="consoleViewTileBtn" href="#">View Tile</a>
+    <div class="seller-step">
+      <div class="seller-step-number">02</div>
+      <div class="seller-step-copy">
+        <strong>Verify Ownership</strong>
+        <span>Sign with the wallet that owns the coordinate.</span>
       </div>
-    </section>
+
+      <div class="seller-step-actions">
+        <a class="btn console seller-xaman" id="listAuthBtn" href="#" target="_blank" rel="noopener" style="display:none">
+          Open Xaman
+        </a>
+
+        <button class="btn console seller-secondary" id="listVerifyBtn" type="button">
+          Verify Ownership
+        </button>
+      </div>
+    </div>
+
+    <div class="seller-step">
+      <div class="seller-step-number">03</div>
+      <div class="seller-step-copy">
+        <strong>Lock the Deed Sale</strong>
+        <span>Create and verify the XRPL NFT sell offer.</span>
+      </div>
+
+      <div class="seller-step-actions">
+        <button class="btn console seller-primary" id="sellOfferStartBtn" type="button">
+          Create Deed Offer
+        </button>
+
+        <button class="btn console seller-secondary" id="sellOfferVerifyBtn" type="button">
+          Verify Deed Offer
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="seller-status-bar">
+    <div class="seller-status-icon"></div>
+    <div class="console-status" id="listConsoleStatus">
+      Claimed tiles only. Trials and reserved-only coordinates cannot be listed.
+    </div>
+  </div>
+
+  <a class="console-auth" id="listConsoleAuth" href="#" target="_blank" rel="noopener">Open Xaman Sign-In</a>
+
+  <div class="seller-management" id="cancelListingConsole" style="display:none">
+    <div>
+      <strong>Active Listing</strong>
+      <span>Manage or remove this coordinate from the market.</span>
+    </div>
+
+    <div class="seller-management-actions">
+      <a class="btn console seller-secondary" id="consoleViewTileBtn" href="#">View Coordinate</a>
+      <button class="btn console seller-secondary" id="cancelStartBtn" type="button">Cancel Listing</button>
+      <button class="btn console seller-secondary" id="cancelVerifyBtn" type="button">Verify Cancel</button>
+      <a class="btn console seller-xaman" id="cancelAuthBtn" href="#" target="_blank" rel="noopener" style="display:none">Open Xaman</a>
+    </div>
+  </div>
+</section>
+
   </main>
 
 <script>
