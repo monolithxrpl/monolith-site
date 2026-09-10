@@ -791,6 +791,34 @@ body.view-imageonly .cell .spray{ filter:none; }
 </style>
 <!-- MONOLITH_TILE_LEDGER_BLUE_20260519_END -->
 
+<style id="MONOLITH_FAR_ZOOM_V1">
+#vp.far-zoom-mode{
+  background-color:var(--bg);
+  background-image:
+    linear-gradient(rgba(73,191,255,.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(73,191,255,.28) 1px, transparent 1px);
+  background-size:
+    var(--far-grid-step) var(--far-grid-step),
+    var(--far-grid-step) var(--far-grid-step);
+  background-position:
+    var(--far-grid-x) var(--far-grid-y),
+    var(--far-grid-x) var(--far-grid-y);
+}
+
+#vp.far-zoom-mode .far-cell{
+  box-shadow:none!important;
+  border-radius:8px!important;
+}
+
+#vp.far-zoom-mode .far-cell .id,
+#vp.far-zoom-mode .far-cell .tag{
+  display:none!important;
+}
+
+#vp.far-zoom-mode .far-cell .spray{
+  filter:none!important;
+}
+</style>
 </head>
 <style>
 @media (max-width: 900px){

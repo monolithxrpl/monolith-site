@@ -66,6 +66,9 @@ let CREATOR_LOGO = "";
     };
 
     const STEP = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--step").trim(), 10) || 128;
+    const DEFAULT_ZOOM = 0.38;
+    const SATELLITE_ZOOM = 0.18;
+    const FAR_ZOOM_THRESHOLD = SATELLITE_ZOOM;
     const TILE = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--tile").trim(), 10) || 118;
 
     const state = {
@@ -939,7 +942,104 @@ const isCreator  = hasCreator && (
       }
     }
 
+    // MONOLITH_FAR_ZOOM_V1
+    function farMeaningfulCoords(){
+      const coords = new Map();
+
+      function add(raw){
+        try{
+          const p = parseQueryToCoords(raw);
+          if(!p || !Number.isFinite(p.gx) || !Number.isFinite(p.gy)) return;
+          const key = `${p.gx},${p.gy}`;
+          if(!coords.has(key)) coords.set(key, { gx:p.gx, gy:p.gy });
+        }catch(_){}
+      }
+
+      add("ORIGIN");
+
+      try{
+        for(const key of state.taken) add(key);
+        for(const key of state.marksByTile.keys()) add(key);
+        for(const key of state.backendMarksByTile.keys()) add(key);
+      }catch(_){}
+
+      return Array.from(coords.values());
+    }
+
+    function updateFarGrid(){
+      const w = vp.clientWidth;
+      const h = vp.clientHeight;
+      const step = STEP * state.zoom;
+      const tx = (w * 0.5) - (state.camX * state.zoom);
+      const ty = (h * 0.5) - (state.camY * state.zoom);
+
+      vp.style.setProperty("--far-grid-step", `${step}px`);
+      vp.style.setProperty("--far-grid-x", `${tx}px`);
+      vp.style.setProperty("--far-grid-y", `${ty}px`);
+    }
+
+    function renderFarPool(){
+      updateFarGrid();
+      vp.classList.add("far-zoom-mode");
+
+      const key = `far:${state.taken.size},${state.marksByTile.size},${state.backendMarksByTile.size}`;
+
+      if(state._farZoomActive && key === state.lastKey) return;
+
+      state._farZoomActive = true;
+      state.lastKey = key;
+      state.cols = 0;
+      state.rows = 0;
+      state.pool = [];
+      world.innerHTML = "";
+
+      const coords = farMeaningfulCoords();
+
+      for(const p of coords){
+        const d = document.createElement("div");
+        d.className = "cell far-cell";
+        d.innerHTML = `<div class="spray"></div><div class="tag"></div><div class="id"></div>`;
+
+        world.appendChild(d);
+        state.pool.push(d);
+        setCell(d, p.gx, p.gy);
+
+        d.addEventListener("click", () => {
+          if(state.moved) return;
+          const gx = parseInt(d.getAttribute("data-gx") || "0", 10);
+          const gy = parseInt(d.getAttribute("data-gy") || "0", 10);
+          const tile = d.getAttribute("data-tile") || tileIdFromCoords(gx, gy);
+          if(goTileProfileFromWallClick(tile, gx, gy)) return;
+          openPanel(tile, gx, gy);
+        }, { passive:true });
+      }
+    }
+
+    function leaveFarZoom(){
+      if(!state._farZoomActive) return;
+
+      state._farZoomActive = false;
+      vp.classList.remove("far-zoom-mode");
+      vp.style.removeProperty("--far-grid-step");
+      vp.style.removeProperty("--far-grid-x");
+      vp.style.removeProperty("--far-grid-y");
+
+      state.pool = [];
+      state.cols = 0;
+      state.rows = 0;
+      state.lastVW = 0;
+      state.lastVH = 0;
+      state.lastKey = "";
+      world.innerHTML = "";
+    }
+
     function renderPool(){
+      if(state.zoom < FAR_ZOOM_THRESHOLD){
+        renderFarPool();
+        return;
+      }
+
+      leaveFarZoom();
       ensurePool();
 
       const w = vp.clientWidth;
@@ -951,7 +1051,7 @@ const isCreator  = hasCreator && (
       const startGX = Math.floor((state.camX - halfW) / STEP) - state.POOL_PAD;
       const startGY = Math.floor((-state.camY - halfH) / STEP) - state.POOL_PAD;
 
-      const key = `${startGX},${startGY},${state.cols},${state.rows},${state.taken.size},${state.marksByTile.size},${state.backendMarksByTile.size},${state.zoom.toFixed(3)}`;
+      const key = `${startGX},${startGY},${state.cols},${state.rows},${state.taken.size},${state.marksByTile.size},${state.backendMarksByTile.size}`;
       if(key === state.lastKey) return;
       state.lastKey = key;
 
@@ -974,7 +1074,7 @@ function centerOriginOnce(){
   state.camX = (STEP * 0.5);
   state.camY = (STEP * 0.5);
 
-  state.zoom = clamp(0.55, state.ZMIN, state.ZMAX);
+  state.zoom = clamp(DEFAULT_ZOOM, state.ZMIN, state.ZMAX);
   updateWorldTransform();
   if(typeof schedulePoolUpdate === "function") schedulePoolUpdate();
 }
@@ -989,7 +1089,7 @@ function applyView(mode){
   // Presets, tune here only
   const PRESET = {
     brand:   { zoom: 0.65, camX: (STEP * 0.5), camY: (STEP * 0.5) },
-    sat:   { zoom: 0.18, camX: (STEP * 0.5), camY: (STEP * 0.5) }
+    sat:   { zoom: SATELLITE_ZOOM, camX: (STEP * 0.5), camY: (STEP * 0.5) }
   };
 
   const key = (mode === "sat") ? "sat" : "brand";
@@ -1025,8 +1125,13 @@ function restoreView(){
 function centerOriginNow(){
   if(state.down || state.pinch || state.dragging) return;
   state._viewMode = "free";
-  try{ document.body.classList.remove("view-default"); document.body.classList.remove("view-brand"); document.body.classList.remove("view-imageonly"); }catch(_){}
-  state.zoom = clamp(0.55, state.ZMIN, state.ZMAX);
+  try{
+    document.body.classList.add("view-default");
+    document.body.classList.remove("view-brand");
+    document.body.classList.remove("view-imageonly");
+  }catch(_){}
+  state.zoom = clamp(DEFAULT_ZOOM, state.ZMIN, state.ZMAX);
+  state.lastKey = "";
   state.camX = (STEP * 0.5);
   state.camY = (STEP * 0.5);
   updateWorldTransform();
@@ -1877,8 +1982,9 @@ monolithExternalWallZoomButton("wallZoomCenter", function(){
 
     // Entry default view only. Navigation View remains original.
     try{ document.body.classList.add("view-default"); }catch(_){}
-    state.zoom = clamp(0.38, state.ZMIN, state.ZMAX);
-    draw();
+    state.zoom = clamp(DEFAULT_ZOOM, state.ZMIN, state.ZMAX);
+    updateWorldTransform();
+    renderPool();
   });
     setInterval(loadFeed, 15000);
     setInterval(() => { loadBackendClaimedTiles(); }, 10000);
