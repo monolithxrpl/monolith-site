@@ -1884,6 +1884,11 @@
       wireSong();
       wireTop8();
       wireLinks();
+      const utilityOwnerControls=$("utilityOwnerControls");
+      if(utilityOwnerControls){
+        utilityOwnerControls.hidden=false;
+      }
+
       wireGallery();
       wireUtilityReorder();
 

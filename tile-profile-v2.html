@@ -1727,6 +1727,13 @@ a{
 }
 </style>
 
+
+<style id="MONOLITH_V2_OWNER_UTILITY_VISIBILITY_V1">
+#utilityOwnerControls[hidden]{
+  display:none!important;
+}
+</style>
+
 </head>
 
 <body>
@@ -1747,6 +1754,39 @@ a{
   </header>
 
   <!-- PERSONAL COORDINATE -->
+
+  <div
+    id="topDeedCompletion"
+    style="
+      display:none;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+      padding:14px 16px;
+      border:1px solid rgba(245,158,11,.55);
+      border-radius:14px;
+      background:rgba(120,53,15,.18);
+    "
+  >
+    <div>
+      <strong>Coordinate Deed Ready</strong>
+      <div style="margin-top:4px;font-size:12px;color:#b8cddd">
+        Final step: accept your Coordinate Deed NFT in Xaman.
+      </div>
+    </div>
+
+    <a
+      id="topDeedAccept"
+      class="btn"
+      href="#"
+      target="_blank"
+      rel="noopener"
+      style="white-space:nowrap"
+    >
+      Accept Deed in Xaman
+    </a>
+  </div>
 
   <section class="identityHero">
     <div class="identityBanner" id="profileBanner"></div>
@@ -1890,12 +1930,9 @@ a{
         <h2 class="sectionTitle" style="margin-bottom:0">
           Utilities connected to this coordinate
         </h2>
-        <p>
-          The coordinate owner can arrange these modules in the order they want visitors to see them.
-        </p>
       </div>
 
-      <div class="utilityControls">
+      <div class="utilityControls" id="utilityOwnerControls" hidden>
         <button class="btn secondary" id="customizeUtilitiesBtn" type="button">
           Customize Utilities
         </button>
@@ -2239,6 +2276,9 @@ a{
     const deliveryStatus=
       String(t.deed_delivery_status||"").toLowerCase();
 
+    const topDeedCompletion=$("topDeedCompletion");
+    const topDeedAccept=$("topDeedAccept");
+
     const delivered=!!(
       t.deed_delivery_accept_tx_hash ||
       t.deed_delivery_accepted_at ||
@@ -2252,6 +2292,14 @@ a{
       !delivered
     );
 
+    if(topDeedCompletion){
+      topDeedCompletion.style.display="none";
+    }
+
+    if(topDeedAccept){
+      topDeedAccept.href="#";
+    }
+
     if(!t.deed_nft_id){
       $("deed").textContent="No deed linked";
       $("deedHud").textContent="NO DEED";
@@ -2263,6 +2311,12 @@ a{
       $("deed").textContent="Pending Owner Accept";
       $("deedHud").textContent="DEED PENDING";
       $("deedHud").classList.remove("verified");
+
+      if(topDeedCompletion && topDeedAccept){
+        topDeedAccept.href=t.deed_delivery_accept_sign_url;
+        topDeedCompletion.style.display="flex";
+      }
+
       return;
     }
 
@@ -3008,7 +3062,7 @@ a{
 
   const coord = String(
     params.get("tile") ||
-    (parts[0] === "tile-v2" ? parts[1] : "") ||
+    ((parts[0] === "tile-v2" || parts[0] === "tile") ? parts[1] : "") ||
     "ORIGIN"
   ).trim().toUpperCase();
 
