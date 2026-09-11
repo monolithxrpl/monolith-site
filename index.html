@@ -1055,14 +1055,28 @@ main .row + .entranceV5Hero{
   border-color:rgba(73,191,255,.98)!important;
   color:#ffffff!important;
   background:
-    radial-gradient(circle at top,rgba(73,191,255,.44),transparent 52%),
-    linear-gradient(180deg,rgba(8,55,91,.98),rgba(3,12,23,.98))!important;
+    linear-gradient(180deg,rgba(8,55,91,.94),rgba(3,12,23,.98))!important;
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.08),
-    0 0 12px rgba(73,191,255,.28),
-    0 0 24px rgba(73,191,255,.10),
-    0 12px 28px rgba(0,0,0,.28)!important;
-  animation:monolithWallChaos 2.1s steps(1,end) infinite!important;
+    inset 0 0 0 1px rgba(255,255,255,.05),
+    0 6px 14px rgba(0,0,0,.22)!important;
+  animation:none!important;
+}
+
+/* Entrance buttons: no outer glow */
+.entranceV5Actions .btn,
+.entranceV5Actions .btn:hover{
+  box-shadow:none!important;
+}
+
+/* Explore Wall: strong ledger-blue edge, no halo */
+.entranceV5Actions .wallExploreBtn{
+  border:2px solid #49bfff!important;
+  box-shadow:none!important;
+}
+
+.entranceV5Actions .wallExploreBtn:hover{
+  border-color:#82dcff!important;
+  box-shadow:none!important;
 }
 
 @media(max-width:900px){
@@ -1266,6 +1280,184 @@ main .row + .entranceV5Hero{
 }
 </style>
 
+
+<style id="MONOLITH_ENTRANCE_NO_GLOW_FINAL_20260911">
+
+/* Remove all launcher-area glow behind buttons */
+.entranceV5Actions{
+  background:none!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+
+/* No halo, glow, or shadow on any entrance button */
+.entranceV5Actions .btn,
+.entranceV5Actions .btn:hover,
+.entranceV5Actions .btn:focus{
+  box-shadow:none!important;
+  filter:none!important;
+  text-shadow:none!important;
+}
+
+/* Default buttons */
+.entranceV5Actions .btn{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,30,53,.82),
+      rgba(3,12,23,.96)
+    )!important;
+}
+
+/* Claim */
+.entranceV5Actions .btn.primary{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,44,74,.88),
+      rgba(3,12,23,.98)
+    )!important;
+}
+
+/* Directory */
+.entranceV5Actions .entranceDirectoryBtn{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,30,53,.72),
+      rgba(3,12,23,.96)
+    )!important;
+}
+
+/* Explore Wall: no glow, strong ledger-blue border */
+.entranceV5Actions .wallExploreBtn,
+.entranceV5Actions .wallExploreBtn:hover{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,55,91,.92),
+      rgba(3,12,23,.98)
+    )!important;
+  border:3px solid #49bfff!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+
+/* Merch Store */
+.entranceV5Actions .merchStoreLaunchBtn,
+.entranceV5Actions .merchStoreLaunchBtn:hover{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,44,74,.88),
+      rgba(3,12,23,.98)
+    )!important;
+  box-shadow:none!important;
+}
+
+/* Tile Market */
+.entranceV5Actions .marketGoldBtn,
+.entranceV5Actions .marketGoldBtn:hover{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(80,54,12,.48),
+      rgba(3,12,23,.98)
+    )!important;
+  box-shadow:none!important;
+}
+
+</style>
+
+
+<style id="MONOLITH_CLAIM_NO_GLOW_FINAL_20260911">
+
+.entranceV5Actions .btn.primary,
+.entranceV5Actions .btn.primary:hover,
+.entranceV5Actions .btn.primary:focus,
+.entranceV5Actions .btn.primary:focus-visible,
+.entranceV5Actions .btn.primary:active{
+  box-shadow:none!important;
+  filter:none!important;
+  text-shadow:none!important;
+  outline:none!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,44,74,.88),
+      rgba(3,12,23,.98)
+    )!important;
+}
+
+.entranceV5Actions .btn.primary::before,
+.entranceV5Actions .btn.primary::after{
+  box-shadow:none!important;
+  filter:none!important;
+}
+
+</style>
+
+
+<style id="MONOLITH_ENTRANCE_MARKET_STATUS_BADGES_20260911">
+
+/* Tile Market now matches the standard MONOLITH button theme */
+.entranceV5Actions .tileMarketLiveBtn,
+.entranceV5Actions .tileMarketLiveBtn:hover,
+.entranceV5Actions .tileMarketLiveBtn:focus{
+  position:relative!important;
+  color:#eaf7ff!important;
+  border:1px solid rgba(130,220,255,.34)!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,30,53,.82),
+      rgba(3,12,23,.96)
+    )!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+
+/* Tile Market LIVE badge */
+.entranceV5Actions .tileMarketLiveBtn::after{
+  content:"LIVE";
+  position:absolute;
+  right:7px;
+  top:7px;
+  padding:3px 5px;
+  border:1px solid rgba(123,255,171,.58);
+  border-radius:999px;
+  color:#9dffbc;
+  background:rgba(4,34,16,.74);
+  font-size:6px;
+  line-height:1;
+  letter-spacing:.08em;
+  font-weight:950;
+}
+
+/* NFT Market coming-soon treatment */
+.entranceV5Actions .nftMarketComingSoonBtn{
+  position:relative!important;
+}
+
+/* NFT Market COMING SOON badge */
+.entranceV5Actions .nftMarketComingSoonBtn::after{
+  content:"COMING SOON";
+  position:absolute;
+  right:7px;
+  top:7px;
+  padding:3px 5px;
+  border:1px solid rgba(130,220,255,.42);
+  border-radius:999px;
+  color:#9fcfe8;
+  background:rgba(7,29,47,.82);
+  font-size:6px;
+  line-height:1;
+  letter-spacing:.07em;
+  font-weight:950;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -1303,8 +1495,8 @@ main .row + .entranceV5Hero{
         <a class="btn primary" href="/claim/">CLAIM A COORDINATE</a>
 
         <a class="btn merchStoreLaunchBtn" href="/merch/">Merch Store</a>
-        <a class="btn" href="/nft-market/">NFT Market</a>
-        <a class="btn warn marketGoldBtn" href="/market/">Tile Market</a>
+        <a class="btn nftMarketComingSoonBtn" href="/nft-market/">NFT Market</a>
+        <a class="btn tileMarketLiveBtn" href="/market/">Tile Market</a>
 
         <a class="btn" href="/claim/#trial">Free Trial</a>
         <a class="btn" href="/tile/ORIGIN">Example Tile</a>
