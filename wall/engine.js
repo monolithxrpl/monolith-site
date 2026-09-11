@@ -60,6 +60,8 @@ let CREATOR_LOGO = "";
       vBody: document.getElementById("vBody"),
 
       btnCenter: document.getElementById("btnCenter"),
+      btnSetCenter: document.getElementById("btnSetCenter"),
+      btnResetCenter: document.getElementById("btnResetCenter"),
       btnNav: document.getElementById("btnNav"),
       btnBrand: document.getElementById("btnBrand"),
       btnSat: document.getElementById("btnSat")
@@ -1122,6 +1124,89 @@ function restoreView(){
   renderPool();
 }
 
+const WALL_DEFAULT_CENTER_KEY = "monolithWallDefaultCenter";
+
+function getSavedWallCenter(){
+  try{
+    const raw = localStorage.getItem(WALL_DEFAULT_CENTER_KEY) || "";
+    if(!raw) return null;
+    return parseQueryToCoords(raw);
+  }catch(_){
+    return null;
+  }
+}
+
+function updateResetCenterButton(){
+  if(!el.btnResetCenter) return;
+  el.btnResetCenter.style.display = getSavedWallCenter() ? "" : "none";
+}
+
+function centerDefaultNow(){
+  const saved = getSavedWallCenter();
+
+  if(!saved){
+    centerOriginNow();
+    return false;
+  }
+
+  state._viewMode = "free";
+
+  try{
+    document.body.classList.add("view-default");
+    document.body.classList.remove("view-brand");
+    document.body.classList.remove("view-imageonly");
+  }catch(_){}
+
+  state.zoom = clamp(DEFAULT_ZOOM, state.ZMIN, state.ZMAX);
+  state.lastKey = "";
+
+  centerOn(saved.gx, saved.gy);
+  updateWorldTransform();
+  renderPool();
+
+  return true;
+}
+
+function setDefaultCenter(){
+  const current = getSavedWallCenter();
+  const initial = current ? current.tile : "";
+
+  const raw = window.prompt(
+    "Enter the coordinate you want as your default Wall center:",
+    initial
+  );
+
+  if(raw === null) return;
+
+  const parsed = parseQueryToCoords(raw);
+
+  if(!parsed){
+    toastShow("invalid coordinate", "bad");
+    return;
+  }
+
+  try{
+    localStorage.setItem(WALL_DEFAULT_CENTER_KEY, parsed.tile);
+  }catch(_){
+    toastShow("could not save center", "bad");
+    return;
+  }
+
+  updateResetCenterButton();
+  centerDefaultNow();
+  toastShow("center saved " + parsed.tile, "good");
+}
+
+function resetDefaultCenter(){
+  try{
+    localStorage.removeItem(WALL_DEFAULT_CENTER_KEY);
+  }catch(_){}
+
+  updateResetCenterButton();
+  centerOriginNow();
+  toastShow("center reset", "good");
+}
+
 function centerOriginNow(){
   if(state.down || state.pinch || state.dragging) return;
   state._viewMode = "free";
@@ -1586,7 +1671,14 @@ function onWheel(e){
         try{ startTile = localStorage.getItem("monolithLandingTile") || ""; }catch(_){}
       }
 
-      if(!startTile) return;
+      if(!startTile){
+        const savedCenter = getSavedWallCenter();
+        if(savedCenter){
+          centerDefaultNow();
+          toastShow("saved center " + savedCenter.tile, "good");
+        }
+        return;
+      }
 
       const p = parseQueryToCoords(startTile);
       if(!p) return;
@@ -1934,10 +2026,24 @@ monolithExternalWallZoomButton("wallZoomCenter", function(){
 
     if(el.btnCenter){
       el.btnCenter.addEventListener("click", () => {
-        centerOriginNow();
-        toastShow("centered", "good");
+        const custom = centerDefaultNow();
+        toastShow(custom ? "returned to saved center" : "centered", "good");
       }, { passive:true });
     }
+
+    if(el.btnSetCenter){
+      el.btnSetCenter.addEventListener("click", () => {
+        setDefaultCenter();
+      }, { passive:true });
+    }
+
+    if(el.btnResetCenter){
+      el.btnResetCenter.addEventListener("click", () => {
+        resetDefaultCenter();
+      }, { passive:true });
+    }
+
+    updateResetCenterButton();
 
     if(el.btnNav){
       el.btnNav.addEventListener("click", () => {

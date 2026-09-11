@@ -924,6 +924,8 @@ body.view-imageonly .cell .spray{ filter:none; }
   }
 
   #btnCenter,
+  #btnSetCenter,
+  #btnResetCenter,
   #btnNav,
   #btnBrand,
   #btnSat{
@@ -949,6 +951,8 @@ body.view-imageonly .cell .spray{ filter:none; }
   }
 
   #btnCenter::before,
+  #btnSetCenter::before,
+  #btnResetCenter::before,
   #btnNav::before,
   #btnBrand::before,
   #btnSat::before{
@@ -958,11 +962,15 @@ body.view-imageonly .cell .spray{ filter:none; }
   }
 
   #btnCenter::before{content:"◎";}
+  #btnSetCenter::before{content:"📍";}
+  #btnResetCenter::before{content:"↺";}
   #btnNav::before{content:"⌖";}
   #btnBrand::before{content:"▦";}
   #btnSat::before{content:"◈";}
 
   #btnCenter:hover,
+  #btnSetCenter:hover,
+  #btnResetCenter:hover,
   #btnNav:hover,
   #btnBrand:hover,
   #btnSat:hover{
@@ -989,6 +997,8 @@ body.view-imageonly .cell .spray{ filter:none; }
     }
 
     #btnCenter,
+    #btnSetCenter,
+    #btnResetCenter,
     #btnNav,
     #btnBrand,
     #btnSat{
@@ -1000,6 +1010,8 @@ body.view-imageonly .cell .spray{ filter:none; }
     }
 
     #btnCenter::before,
+    #btnSetCenter::before,
+    #btnResetCenter::before,
     #btnNav::before,
     #btnBrand::before,
     #btnSat::before{
@@ -1076,6 +1088,8 @@ body.view-imageonly .cell .spray{ filter:none; }
         <button class="btn" id="btnNav" type="button" aria-label="navigation view"><span>Navigation View</span></button>
         <button class="btn" id="btnBrand" type="button" aria-label="brand view"><span>Brand View</span></button>
         <button class="btn" id="btnSat" type="button" aria-label="satellite view"><span>Satellite View</span></button>
+        <button class="btn" id="btnSetCenter" type="button" aria-label="set default center"><span>Set Center</span></button>
+        <button class="btn" id="btnResetCenter" type="button" aria-label="reset default center" style="display:none"><span>Reset Center</span></button>
       </div>
     </div>
   </header>
