@@ -1048,8 +1048,10 @@ main .row + .entranceV5Hero{
   letter-spacing:.10em!important;
 }
 
-/* Explore Wall remains the primary visual attraction */
+/* Explore Wall sits directly under Directory at matching size */
 .entranceV5Actions .wallExploreBtn{
+  grid-column:1 / -1!important;
+  min-height:58px!important;
   border-color:rgba(73,191,255,.98)!important;
   color:#ffffff!important;
   background:
@@ -1074,7 +1076,8 @@ main .row + .entranceV5Hero{
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 
-  .entranceV5Actions .entranceDirectoryBtn{
+  .entranceV5Actions .entranceDirectoryBtn,
+  .entranceV5Actions .wallExploreBtn{
     grid-column:1 / -1!important;
     min-height:54px!important;
   }
@@ -1295,11 +1298,12 @@ main .row + .entranceV5Hero{
 
       <div class="ctaRow entranceV5Actions" aria-label="Actions">
         <a class="btn entranceDirectoryBtn" href="/directory/">DIRECTORY</a>
-
-        <a class="btn primary" href="/claim/">CLAIM A COORDINATE</a>
         <a class="btn wallExploreBtn" href="/monolith.html">EXPLORE WALL</a>
 
+        <a class="btn primary" href="/claim/">CLAIM A COORDINATE</a>
+
         <a class="btn merchStoreLaunchBtn" href="/merch/">Merch Store</a>
+        <a class="btn" href="/nft-market/">NFT Market</a>
         <a class="btn warn marketGoldBtn" href="/market/">Tile Market</a>
 
         <a class="btn" href="/claim/#trial">Free Trial</a>
