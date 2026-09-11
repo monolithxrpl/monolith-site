@@ -819,6 +819,101 @@ body.view-imageonly .cell .spray{ filter:none; }
   filter:none!important;
 }
 </style>
+
+<style id="monolith-wall-nav-minimal-20260911">
+  .top .kpi{
+    width:100%;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .wallCountHud{
+    flex:0 0 100%;
+    display:flex;
+    align-items:center;
+    margin-bottom:2px;
+  }
+
+  .wallTileCount{
+    padding:7px 10px!important;
+    border-radius:12px!important;
+    background:linear-gradient(180deg,rgba(9,31,51,.96),rgba(4,15,26,.96))!important;
+    border:1px solid rgba(73,191,255,.42)!important;
+    box-shadow:0 8px 20px rgba(0,0,0,.24)!important;
+    text-transform:uppercase;
+  }
+
+  .wallHudLabel{
+    color:rgba(159,197,221,.72);
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.14em;
+  }
+
+  .wallNavGroup{
+    align-items:flex-start;
+    gap:8px;
+  }
+
+  .wallNavGroup .wallAppButton{
+    width:72px;
+    min-width:72px;
+    height:68px;
+    padding:8px 6px!important;
+    border-radius:18px!important;
+    background:linear-gradient(145deg,rgba(15,49,79,.98),rgba(5,18,31,.98))!important;
+    border:1px solid rgba(122,211,255,.42)!important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.08),
+      0 10px 24px rgba(0,0,0,.26)!important;
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    font-size:9px!important;
+    line-height:1.05;
+    text-align:center;
+  }
+
+  .wallNavGroup .wallAppButton::before{
+    display:block;
+    font-size:23px;
+    line-height:1;
+  }
+
+  .wallNavGroup a[href="/"]::before{content:"⌂";}
+  .wallNavGroup a[href="/directory/"]::before{content:"▦";}
+  .wallNavGroup a[href="/claim/"]::before{content:"＋";}
+  #monolithWallSignIn::before{content:"◉";}
+
+  .wallNavGroup .wallAppButton:hover{
+    transform:translateY(-1px);
+    border-color:rgba(122,211,255,.78)!important;
+  }
+
+  @media(max-width:700px){
+    .wallNavGroup{
+      width:100%;
+    }
+
+    .wallNavGroup .wallAppButton{
+      width:60px;
+      min-width:60px;
+      height:60px;
+      border-radius:16px!important;
+      font-size:8px!important;
+    }
+
+    .wallControlGroup{
+      padding-left:0;
+      border-left:0;
+    }
+  }
+</style>
+
 </head>
 <style>
 @media (max-width: 900px){
@@ -866,18 +961,22 @@ body.view-imageonly .cell .spray{ filter:none; }
     </div>
 
     <div class="kpi">
+      <div class="wallCountHud" aria-label="Wall tile count HUD">
+        <div class="pill wallTileCount">
+          <span class="wallHudLabel">Tile Count</span>
+          <span class="dot"></span>
+          <span id="kTaken">0</span> claimed
+        </div>
+      </div>
+
       <div class="wallNavGroup" aria-label="MONOLITH navigation">
-        <a class="btn" href="/" aria-label="back to entrance"><span>Entrance</span></a>
-        <a class="btn" href="/directory/" aria-label="open directory"><span>Directory</span></a>
-        <a class="btn primary" href="/claim/" aria-label="claim a coordinate"><span>Claim Coordinate</span></a>
-        <a class="btn" href="/market/" aria-label="open tile market"><span>Tile Market</span></a>
-        <a class="btn" href="/merch/" aria-label="open merch store"><span>Merch Store</span></a>
-        <a class="btn" href="/edit/" aria-label="edit a tile"><span>Edit Tile</span></a>
-        <button class="btn" id="monolithWallSignIn" type="button"><span>Sign In</span></button>
+        <a class="btn wallAppButton" href="/" aria-label="back to entrance"><span>Entrance</span></a>
+        <a class="btn wallAppButton" href="/directory/" aria-label="open directory"><span>Directory</span></a>
+        <a class="btn wallAppButton" href="/claim/" aria-label="claim a coordinate"><span>Claim</span></a>
+        <button class="btn wallAppButton" id="monolithWallSignIn" type="button"><span>Sign In</span></button>
       </div>
 
       <div class="wallControlGroup" aria-label="Wall controls">
-        <div class="pill"><span class="dot"></span><span id="kTaken">0</span> active</div>
         <button class="btn" id="btnCenter" type="button" aria-label="return to center"><span>Return to Center</span></button>
         <button class="btn" id="btnResetWallStart" type="button" aria-label="reset wall start" style="display:none"><span>Reset Wall Start</span></button>
         <button class="btn" id="btnNav" type="button" aria-label="navigation view"><span>Navigation View</span></button>
