@@ -42,23 +42,15 @@
     b.insertAdjacentElement("afterend", r);
   }
 
-  function showSignLink(signUrl){
+  function openXaman(signUrl){
     removeSignLink();
 
-    const b = btn();
-    if (!b || !signUrl) return;
+    if (!signUrl) {
+      throw new Error("xaman_sign_url_missing");
+    }
 
-    const a = document.createElement("a");
-    a.id = "monolithWallSignLink";
-    a.className = "btn";
-    a.href = signUrl;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.textContent = "Open Xaman";
-    a.style.marginLeft = "6px";
-
-    b.insertAdjacentElement("afterend", a);
     showResetLink();
+    window.location.href = signUrl;
   }
 
   async function signInFlow(){
@@ -94,9 +86,8 @@
         return;
       }
 
-      showSignLink(current.signUrl);
       b.textContent = "Check Sign-In";
-      showResetLink();
+      openXaman(current.signUrl);
       return;
     }
 
@@ -108,10 +99,9 @@
 
     try {
       const session = await window.MonolithSession.start(source);
-      showSignLink(session.signUrl);
-      showResetLink();
       b.textContent = "Check Sign-In";
       b.disabled = false;
+      openXaman(session.signUrl);
     } catch (e) {
       resetSignInUI();
       alert(e.message || "Sign-in failed.");
@@ -133,7 +123,6 @@
       removeResetLink();
     } else if (session) {
       b.textContent = "Check Sign-In";
-      showSignLink(session.signUrl);
       showResetLink();
     } else {
       b.textContent = "Sign In";
