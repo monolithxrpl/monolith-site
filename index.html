@@ -1458,6 +1458,244 @@ main .row + .entranceV5Hero{
 
 </style>
 
+
+<style id="MONOLITH_ENTRANCE_DIRECTORY_WALL_FINAL_20260911">
+
+/* Directory + Explore Wall return to normal two-column launcher sizing */
+.entranceV5Actions .entranceDirectoryBtn,
+.entranceV5Actions .wallExploreBtn{
+  grid-column:auto!important;
+  min-height:76px!important;
+
+  border:1px solid rgba(130,220,255,.28)!important;
+  border-radius:22px!important;
+
+  color:#eaf7ff!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,30,53,.82),
+      rgba(3,12,23,.96)
+    )!important;
+
+  box-shadow:none!important;
+  filter:none!important;
+  text-shadow:none!important;
+}
+
+/* EXPLORE WALL major-malfunction flicker */
+@keyframes monolithWallMajorMalfunction{
+  0%,7%,11%,20%,24%,39%,43%,57%,62%,76%,81%,94%,100%{
+    opacity:1;
+    filter:brightness(1);
+    transform:translate(0,0);
+  }
+
+  8%{
+    opacity:.18;
+    filter:brightness(.35);
+  }
+
+  9%{
+    opacity:1;
+    filter:brightness(1.7);
+    transform:translateX(1px);
+  }
+
+  10%{
+    opacity:.42;
+    filter:brightness(.55);
+    transform:translateX(-1px);
+  }
+
+  21%{
+    opacity:.08;
+    filter:brightness(.25);
+  }
+
+  22%{
+    opacity:1;
+    filter:brightness(1.85);
+  }
+
+  23%{
+    opacity:.32;
+  }
+
+  40%{
+    opacity:.2;
+    filter:brightness(.4);
+    transform:translateY(1px);
+  }
+
+  41%{
+    opacity:1;
+    filter:brightness(1.9);
+  }
+
+  42%{
+    opacity:.5;
+    transform:translateY(-1px);
+  }
+
+  58%{
+    opacity:.06;
+    filter:brightness(.2);
+  }
+
+  59%{
+    opacity:1;
+    filter:brightness(1.75);
+    transform:translateX(-1px);
+  }
+
+  60%{
+    opacity:.24;
+  }
+
+  61%{
+    opacity:1;
+    transform:translateX(1px);
+  }
+
+  77%{
+    opacity:.12;
+    filter:brightness(.3);
+  }
+
+  78%{
+    opacity:1;
+    filter:brightness(2);
+  }
+
+  79%{
+    opacity:.34;
+  }
+
+  80%{
+    opacity:1;
+  }
+
+  95%{
+    opacity:.16;
+    filter:brightness(.35);
+  }
+
+  96%{
+    opacity:1;
+    filter:brightness(1.8);
+  }
+}
+
+.entranceV5Actions .wallExploreBtn,
+.entranceV5Actions .wallExploreBtn:hover,
+.entranceV5Actions .wallExploreBtn:focus{
+  border:1px solid rgba(130,220,255,.28)!important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10,30,53,.82),
+      rgba(3,12,23,.96)
+    )!important;
+
+  box-shadow:none!important;
+  text-shadow:none!important;
+
+  animation:
+    monolithWallMajorMalfunction
+    2.8s
+    steps(1,end)
+    infinite!important;
+}
+
+@media(max-width:520px){
+  .entranceV5Actions .entranceDirectoryBtn,
+  .entranceV5Actions .wallExploreBtn{
+    grid-column:auto!important;
+    min-height:72px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .entranceV5Actions .wallExploreBtn{
+    animation:none!important;
+  }
+}
+
+</style>
+
+
+<style id="MONOLITH_ENTRANCE_LEDGER_BORDER_FINAL_20260911">
+
+/* Stronger ledger-blue outline across all entrance buttons */
+.entranceV5Actions .btn,
+.entranceV5Actions .btn:hover,
+.entranceV5Actions .btn:focus,
+.entranceV5Actions .btn:focus-visible,
+.entranceV5Actions .btn:active{
+  border:2px solid rgba(73,191,255,.72)!important;
+  box-shadow:none!important;
+  outline:none!important;
+}
+
+/* Slightly brighter edge on hover without glow */
+.entranceV5Actions .btn:hover{
+  border-color:#82dcff!important;
+}
+
+/* Preserve status-specific button fills */
+.entranceV5Actions .entranceDirectoryBtn,
+.entranceV5Actions .wallExploreBtn,
+.entranceV5Actions .merchStoreLaunchBtn,
+.entranceV5Actions .nftMarketComingSoonBtn,
+.entranceV5Actions .tileMarketLiveBtn,
+.entranceV5Actions .btn.primary{
+  border-width:2px!important;
+}
+
+</style>
+
+
+<style id="MONOLITH_EXPLORE_WALL_GRADIENT_FINAL_20260911">
+
+.entranceV5Actions .wallExploreBtn,
+.entranceV5Actions .wallExploreBtn:hover,
+.entranceV5Actions .wallExploreBtn:focus,
+.entranceV5Actions .wallExploreBtn:focus-visible,
+.entranceV5Actions .wallExploreBtn:active{
+  animation:none!important;
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+
+  border:2px solid rgba(73,191,255,.78)!important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(8,34,58,.98) 0%,
+      rgba(13,79,121,.96) 48%,
+      rgba(5,28,48,.98) 100%
+    )!important;
+
+  color:#f4fbff!important;
+}
+
+.entranceV5Actions .wallExploreBtn:hover{
+  border-color:#82dcff!important;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(10,42,70,.98) 0%,
+      rgba(17,91,137,.98) 48%,
+      rgba(6,34,56,.98) 100%
+    )!important;
+}
+
+</style>
+
 </head>
 
 <body>
