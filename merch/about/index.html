@@ -342,7 +342,7 @@
       aspect-ratio:1/1;
       transform:translateY(-50%);
       background:
-        url("/assets/monolith_icon.webp")
+        url("/assets/monolith_logo.webp")
         center / contain
         no-repeat;
       opacity:.055;
@@ -2115,7 +2115,7 @@
       height:300px;
       opacity:.055;
       background:
-        url("/assets/monolith_icon.webp")
+        url("/assets/monolith_logo.webp")
         center/contain no-repeat;
       pointer-events:none;
     }
@@ -4633,7 +4633,14 @@
         width:100%;
       }
     }
-  </style>
+
+.previewMark img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+</style>
 
 <style id="monolith-merch-launch-soon-gate-20260822">
 .previewBanner{
@@ -7377,7 +7384,7 @@ body.merchCollectionsPage .marketHero,body.merchCollectionsPage .marketplaceShel
   <main class="shell">
 
     <section class="previewBanner">
-      <div class="previewMark">M</div>
+      <div class="previewMark"><img src="/assets/monolith_logo.webp" alt="MONOLITH"></div>
 
       <div class="previewCopy">
         <strong>MONOLITH MERCH STORE — LIVE</strong>
@@ -7394,7 +7401,7 @@ body.merchCollectionsPage .marketHero,body.merchCollectionsPage .marketplaceShel
     <header class="header">
       <a class="brand" href="/merch/">
         <img
-          src="/assets/monolith_icon.webp"
+          src="/assets/monolith_logo.webp"
           alt="MONOLITH"
         >
 
@@ -7605,7 +7612,7 @@ body.merchCollectionsPage .marketHero,body.merchCollectionsPage .marketplaceShel
 
       <div class="marketHeroMark">
         <img
-          src="/assets/monolith_icon.webp"
+          src="/assets/monolith_logo.webp"
           alt="MONOLITH"
         >
       </div>
@@ -7839,7 +7846,7 @@ body.merchCollectionsPage .marketHero,body.merchCollectionsPage .marketplaceShel
     <footer class="footer">
       <div class="footerBrand">
         <img
-          src="/assets/monolith_icon.webp"
+          src="/assets/monolith_logo.webp"
           alt="MONOLITH"
         >
 
@@ -9134,7 +9141,7 @@ body.merchCollectionsPage .marketHero,body.merchCollectionsPage .marketplaceShel
 
               const image =
                 firstImage(product) ||
-                "/assets/monolith_icon.webp";
+                "/assets/monolith_logo.webp";
 
               const price =
                 checkoutItemPrice(item);
@@ -11225,7 +11232,7 @@ body.merchCollectionsPage .marketHero,body.merchCollectionsPage .marketplaceShel
                         : `
                           <img
                             class="productPlaceholder"
-                            src="/assets/monolith_icon.webp"
+                            src="/assets/monolith_logo.webp"
                             alt=""
                           >
                         `
@@ -15600,7 +15607,7 @@ body.merchCollectionsPage .marketHero,body.merchCollectionsPage .marketplaceShel
                       src="${
                         escapeHtml(
                           image ||
-                          "/assets/monolith_icon.webp"
+                          "/assets/monolith_logo.webp"
                         )
                       }"
                       alt=""
