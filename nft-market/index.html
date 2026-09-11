@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MONOLITH NFT Market</title>
+<meta name="description" content="Trade XRPL NFTs through MONOLITH.">
+<style>
+:root{
+  --bg:#05070a;
+  --panel:#0b0f14;
+  --panel2:#10161d;
+  --line:#202a35;
+  --line2:#2b3948;
+  --text:#f4f7fa;
+  --muted:#8b98a7;
+  --cyan:#36d6ff;
+  --cyan2:#00a8d8;
+  --green:#47e6a4;
+  --amber:#ffcb66;
+  --danger:#ff6b78;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px),
+    radial-gradient(circle at 15% 0%,rgba(54,214,255,.14),transparent 30%),
+    radial-gradient(circle at 92% 18%,rgba(54,214,255,.07),transparent 25%),
+    var(--bg);
+  background-size:42px 42px,42px 42px,auto,auto,auto;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+button,input{font:inherit}
+a{color:inherit;text-decoration:none}
+
+.shell{
+  width:min(1500px,calc(100% - 36px));
+  margin:auto;
+}
+
+.topbar{
+  min-height:78px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(5,7,10,.78);
+  backdrop-filter:blur(18px);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.topbar-inner{
+  width:min(1500px,calc(100% - 36px));
+  min-height:78px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-width:0;
+}
+.mark{
+  width:44px;
+  height:44px;
+  border:1px solid rgba(54,214,255,.5);
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,rgba(54,214,255,.18),rgba(54,214,255,.02));
+  box-shadow:0 0 26px rgba(54,214,255,.08);
+  font-weight:900;
+  letter-spacing:-2px;
+}
+.brand-copy strong{
+  display:block;
+  font-size:15px;
+  letter-spacing:.15em;
+}
+.brand-copy span{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+  letter-spacing:.08em;
+}
+.nav{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.nav a{
+  color:#b7c2ce;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:700;
+}
+.nav a:hover{background:#10161d;color:#fff}
+.nav .active{color:var(--cyan);background:rgba(54,214,255,.08)}
+
+.hero{
+  padding:86px 0 50px;
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);
+  gap:42px;
+  align-items:center;
+}
+.eyebrow{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:17px;
+}
+h1{
+  margin:0;
+  font-size:clamp(64px,7.4vw,118px);
+  line-height:.88;
+  letter-spacing:-.065em;
+  max-width:1000px;
+}
+h1 span{
+  color:transparent;
+  -webkit-text-stroke:1px rgba(244,247,250,.42);
+}
+.lead{
+  color:#b8c4cf;
+  font-size:18px;
+  line-height:1.65;
+  max-width:760px;
+  margin:25px 0 0;
+}
+.hero-actions{
+  display:flex;
+  gap:10px;
+  margin-top:30px;
+  flex-wrap:wrap;
+}
+.btn{
+  min-height:48px;
+  border-radius:12px;
+  border:1px solid var(--line2);
+  background:#10161d;
+  color:#fff;
+  padding:0 17px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:750;
+  cursor:pointer;
+}
+.btn-primary{
+  color:#001218;
+  border-color:var(--cyan);
+  background:linear-gradient(180deg,#62e2ff,#24c7ed);
+  box-shadow:0 0 30px rgba(54,214,255,.16);
+}
+.btn:disabled{
+  cursor:not-allowed;
+  opacity:.42;
+}
+
+.market-health{
+  border:1px solid rgba(54,214,255,.2);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(54,214,255,.14),transparent 36%),
+    linear-gradient(145deg,rgba(54,214,255,.07),transparent 55%),
+    #0a1016;
+  padding:28px;
+  min-height:230px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.025);
+}
+.health-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  margin-bottom:22px;
+}
+.health-head strong{font-size:13px;letter-spacing:.08em}
+.live{
+  color:var(--green);
+  font-size:11px;
+  font-weight:800;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.stat{
+  padding:15px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:13px;
+  background:rgba(255,255,255,.025);
+}
+.stat small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+.stat strong{
+  display:block;
+  margin-top:7px;
+  font-size:24px;
+  letter-spacing:-.04em;
+}
+
+.toolbar{
+  margin-top:4px;
+  border:1px solid var(--line);
+  background:rgba(11,15,20,.8);
+  border-radius:16px;
+  padding:11px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.search{
+  flex:1;
+  min-height:44px;
+  border:0;
+  outline:0;
+  border-radius:11px;
+  color:white;
+  background:#080c11;
+  padding:0 14px;
+}
+.filter{
+  min-height:44px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:0 14px;
+  background:#0d131a;
+  color:#bac5d0;
+}
+
+.section-head{
+  margin:50px 0 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:16px;
+}
+.section-head h2{
+  font-size:26px;
+  margin:0;
+  letter-spacing:-.035em;
+}
+.section-head p{
+  color:var(--muted);
+  margin:5px 0 0;
+  font-size:13px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;
+}
+
+.empty{
+  grid-column:1/-1;
+  min-height:280px;
+  border:1px solid rgba(54,214,255,.14);
+  border-radius:20px;
+  background:
+    linear-gradient(rgba(54,214,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(54,214,255,.018) 1px,transparent 1px),
+    radial-gradient(circle at 50% 0%,rgba(54,214,255,.09),transparent 38%),
+    linear-gradient(180deg,rgba(54,214,255,.025),transparent),
+    rgba(11,15,20,.74);
+  background-size:28px 28px,28px 28px,auto,auto,auto;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025),
+    0 25px 70px rgba(0,0,0,.22);
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:40px;
+}
+.empty-orb{
+  width:74px;
+  height:74px;
+  margin:0 auto 22px;
+  border-radius:22px;
+  border:1px solid rgba(54,214,255,.35);
+  background:
+    radial-gradient(circle at 35% 30%,rgba(54,214,255,.35),transparent 25%),
+    linear-gradient(145deg,#111a23,#080c11);
+  display:grid;
+  place-items:center;
+  font-size:28px;
+  box-shadow:0 0 50px rgba(54,214,255,.08);
+}
+.empty h3{margin:0;font-size:22px}
+.empty p{
+  color:var(--muted);
+  max-width:500px;
+  line-height:1.6;
+  margin:10px auto 0;
+}
+
+.sell-panel{
+  margin:48px 0 80px;
+  border:0;
+  border-radius:22px;
+  background:transparent;
+}
+.sell-title{
+  padding:0 0 18px;
+  border-bottom:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+.sell-title h2{
+  margin:0;
+  font-size:25px;
+  letter-spacing:-.035em;
+}
+.preview-badge{
+  font-size:10px;
+  color:var(--amber);
+  border:1px solid rgba(255,203,102,.3);
+  background:rgba(255,203,102,.07);
+  border-radius:999px;
+  padding:6px 9px;
+  font-weight:800;
+  letter-spacing:.1em;
+}
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.step{
+  padding:28px;
+  min-height:245px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:
+    linear-gradient(145deg,rgba(54,214,255,.035),transparent 55%),
+    #0b1016;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+}
+.step:last-child{border-right:1px solid var(--line)}
+.step-num{
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+.step h3{
+  margin:14px 0 9px;
+  font-size:20px;
+  letter-spacing:-.025em;
+}
+.step p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.65;
+  margin:0 0 18px;
+}
+.fake-input{
+  height:43px;
+  border:1px solid #263342;
+  border-radius:10px;
+  background:#080c11;
+  color:#5f6b78;
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  font-size:12px;
+}
+.footer{
+  color:#5f6b78;
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:25px 0 40px;
+  font-size:11px;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.preview-nft-card{
+  overflow:hidden;
+  border:1px solid #202d39;
+  border-radius:18px;
+  background:#0a0f15;
+  transition:.2s ease;
+}
+.preview-nft-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(54,214,255,.35);
+}
+.preview-nft-media{
+  position:relative;
+  aspect-ratio:1/1;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(54,214,255,.18),transparent 32%),
+    linear-gradient(145deg,#101923,#070b10);
+  border-bottom:1px solid #1d2833;
+}
+.preview-grid{
+  position:absolute;
+  inset:0;
+  opacity:.45;
+  background:
+    linear-gradient(rgba(54,214,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(54,214,255,.035) 1px,transparent 1px);
+  background-size:22px 22px;
+}
+.preview-symbol{
+  font-size:58px;
+  color:#dffaff;
+  text-shadow:0 0 34px rgba(54,214,255,.35);
+  z-index:1;
+}
+.sample-tag{
+  position:absolute;
+  top:12px;
+  left:12px;
+  padding:5px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,203,102,.32);
+  color:var(--amber);
+  background:rgba(255,203,102,.07);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+.preview-nft-body{
+  padding:16px;
+}
+.preview-collection{
+  color:var(--cyan);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.preview-nft-body h3{
+  margin:7px 0 18px;
+  font-size:16px;
+  letter-spacing:-.02em;
+}
+.preview-row{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:12px;
+}
+.preview-row small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+.preview-row strong{
+  display:block;
+  margin-top:4px;
+  font-size:18px;
+}
+.preview-row button{
+  min-height:37px;
+  border-radius:9px;
+  border:1px solid #263644;
+  background:#101821;
+  color:#667481;
+  padding:0 12px;
+  font-weight:800;
+}
+
+
+.market-tabs{
+  display:flex;
+  gap:5px;
+  margin:0 0 12px;
+  padding:5px;
+  width:max-content;
+  max-width:100%;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#090d12;
+}
+.market-tab{
+  padding:10px 16px;
+  border-radius:9px;
+  color:#8997a5;
+  font-size:12px;
+  font-weight:800;
+}
+.market-tab.active{
+  color:#021218;
+  background:var(--cyan);
+}
+.market-tab:not(.active):hover{
+  color:#fff;
+  background:#111821;
+}
+
+.discovery-section{
+  margin-top:54px;
+}
+
+.independent-feature{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#0a0f15;
+}
+.independent-mark{
+  min-height:190px;
+  display:grid;
+  place-items:center;
+  border-right:1px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 45%,rgba(54,214,255,.17),transparent 32%),
+    linear-gradient(145deg,#111923,#080c11);
+  font-size:54px;
+  color:#dffaff;
+}
+.independent-copy{
+  padding:28px;
+  align-self:center;
+}
+.independent-copy h3{
+  margin:9px 0 8px;
+  font-size:23px;
+  letter-spacing:-.03em;
+}
+.independent-copy p{
+  max-width:760px;
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.65;
+}
+.independent-tags{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.independent-tags span{
+  border:1px solid #263441;
+  border-radius:999px;
+  padding:5px 8px;
+  color:#7f8c99;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.08em;
+}
+
+.section-kicker{
+  color:var(--cyan);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.16em;
+  margin-bottom:7px;
+}
+.text-action{
+  border:0;
+  background:transparent;
+  color:#657383;
+  font-size:11px;
+  font-weight:800;
+}
+
+.collection-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.collection-card{
+  min-height:190px;
+  display:grid;
+  grid-template-columns:190px 1fr;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#0a0f15;
+}
+.collection-art{
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(54,214,255,.24),transparent 34%),
+    linear-gradient(145deg,#14202b,#080c11);
+  border-right:1px solid var(--line);
+}
+.collection-art span{
+  font-size:34px;
+  font-weight:950;
+  letter-spacing:-.08em;
+  text-shadow:0 0 30px rgba(54,214,255,.28);
+}
+.abstract-art span{
+  font-size:48px;
+}
+.collection-copy{
+  padding:25px;
+  align-self:center;
+}
+.verified-line{
+  color:var(--cyan);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.collection-copy h3{
+  margin:10px 0 5px;
+  font-size:21px;
+}
+.collection-copy p{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+}
+.collection-meta{
+  display:flex;
+  gap:7px;
+  margin-top:19px;
+}
+.collection-meta span{
+  border:1px solid #24313d;
+  border-radius:999px;
+  padding:5px 8px;
+  color:#8794a1;
+  font-size:9px;
+  font-weight:800;
+}
+.muted-preview{
+  opacity:.6;
+}
+
+.brand-feature{
+  min-height:330px;
+  display:grid;
+  grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr);
+  overflow:hidden;
+  border:1px solid rgba(54,214,255,.2);
+  border-radius:22px;
+  background:#0a0f15;
+  box-shadow:0 25px 70px rgba(0,0,0,.22);
+}
+.brand-visual{
+  position:relative;
+  display:grid;
+  place-items:center;
+  min-height:330px;
+  background:
+    linear-gradient(rgba(54,214,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(54,214,255,.025) 1px,transparent 1px),
+    radial-gradient(circle at 50% 50%,rgba(54,214,255,.22),transparent 30%),
+    #081018;
+  background-size:28px 28px,28px 28px,auto,auto;
+  border-right:1px solid var(--line);
+}
+.brand-monogram{
+  font-size:72px;
+  font-weight:950;
+  letter-spacing:-.1em;
+  text-shadow:0 0 45px rgba(54,214,255,.3);
+}
+.verified-brand{
+  position:absolute;
+  left:18px;
+  bottom:18px;
+  color:var(--cyan);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+.brand-content{
+  padding:38px;
+  align-self:center;
+}
+.brand-label{
+  color:var(--cyan);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+.brand-content h3{
+  margin:10px 0 12px;
+  font-size:36px;
+  letter-spacing:-.045em;
+}
+.brand-content > p{
+  max-width:600px;
+  color:#9ba8b5;
+  line-height:1.6;
+  font-size:13px;
+}
+.brand-stats{
+  display:flex;
+  gap:34px;
+  margin:26px 0;
+}
+.brand-stats small{
+  display:block;
+  color:#687685;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+.brand-stats strong{
+  display:block;
+  margin-top:5px;
+  font-size:14px;
+}
+.brand-button{
+  opacity:.65;
+}
+
+@media(max-width:1050px){
+  .hero{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:760px){
+  .shell,.topbar-inner{width:min(100% - 22px,1500px)}
+  .nav a:not(.active){display:none}
+  .hero{padding-top:40px}
+  h1{font-size:clamp(45px,16vw,70px)}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .collection-grid{grid-template-columns:1fr}
+  .independent-feature{grid-template-columns:1fr}
+  .independent-mark{min-height:140px;border-right:0;border-bottom:1px solid var(--line)}
+
+  .collection-card{grid-template-columns:120px 1fr}
+  .brand-feature{grid-template-columns:1fr}
+  .brand-visual{min-height:230px;border-right:0;border-bottom:1px solid var(--line)}
+  .brand-content{padding:26px}
+  .brand-stats{gap:20px;flex-wrap:wrap}
+
+  .steps{grid-template-columns:1fr}
+  .step{border:1px solid var(--line)}
+  .step:last-child{border:1px solid var(--line)}
+  .toolbar{flex-wrap:wrap}
+  .search{width:100%;flex-basis:100%}
+  .footer{display:block}
+}
+</style>
+
+<style id="nft-coming-soon-style">
+.nft-coming-soon{
+  width:100%;
+  padding:10px 16px;
+  text-align:center;
+  background:linear-gradient(
+    90deg,
+    rgba(53,215,255,.16),
+    rgba(53,215,255,.06),
+    rgba(53,215,255,.16)
+  );
+  border-bottom:1px solid rgba(53,215,255,.28);
+  color:#78e7ff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="nft-coming-soon">
+  NFT MARKET COMING SOON
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/">
+      <div class="mark">M</div>
+      <div class="brand-copy">
+        <strong>MONOLITH</strong>
+        <span>NFT MARKET // XRPL</span>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="/market/">Tile Market</a>
+      <a class="active" href="/nft-market/">NFT Market</a>
+      <a href="/">MONOLITH</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">MONOLITH // XRPL NFT MARKET</div>
+
+    <h1>
+      OWN IT.<br>
+      <span>TRADE IT.</span>
+    </h1>
+
+    <p class="lead">
+      Buy and sell real XRPL collectibles inside MONOLITH.
+      Verified ownership. Ledger-native offers. Xaman signing.
+      Atomic settlement without MONOLITH taking custody.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/nft-market/sell/">List an NFT</a>
+      <a class="btn" href="/market/">Coordinate Deeds</a>
+    </div>
+  </div>
+
+  <aside class="market-health">
+    <div class="health-head">
+      <strong>MARKET STATUS</strong>
+      <span class="live">● XRPL LIVE</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <small>Live Listings</small>
+        <strong id="listingCount">0</strong>
+      </div>
+
+      <div class="stat">
+        <small>Network</small>
+        <strong style="font-size:18px">XRPL</strong>
+      </div>
+
+      <div class="stat">
+        <small>Settlement</small>
+        <strong style="font-size:18px">XRP</strong>
+      </div>
+
+      <div class="stat">
+        <small>Custody</small>
+        <strong style="font-size:18px">NONE</strong>
+      </div>
+    </div>
+  </aside>
+</section>
+
+
+<nav class="market-tabs">
+  <a class="market-tab active" href="#market">All NFTs</a>
+  <a class="market-tab" href="#collections">Collections</a>
+  <a class="market-tab" href="#brands">Brands</a>
+  <a class="market-tab" href="#independent">Independent</a>
+</nav>
+
+<div class="toolbar">
+  <input class="search" placeholder="Search NFT, issuer, collection or seller" disabled>
+  <button class="filter" disabled>Newest</button>
+  <button class="filter" disabled>Price</button>
+  <button class="filter" disabled>Collection</button>
+</div>
+
+<section>
+  <div class="section-head">
+    <div>
+      <h2>Live Market</h2>
+      <p>Verified XRPL NFT listings available through MONOLITH.</p>
+    </div>
+  </div>
+
+  <div class="grid" id="marketGrid">
+    <div class="empty">
+      <div>
+        <div class="empty-orb">◈</div>
+        <h3>The floor is empty.</h3>
+        <p>
+          No verified NFTs are listed yet.
+          The first live XRPL listing will populate this market automatically.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="collections" class="discovery-section">
+  <div class="section-head">
+    <div>
+      <div class="section-kicker">DISCOVER</div>
+      <h2>Collections</h2>
+      <p>Browse verified NFT sets across the MONOLITH marketplace.</p>
+    </div>
+    <button class="text-action" disabled>View All Collections →</button>
+  </div>
+
+  <div class="collection-grid">
+    <article class="collection-card">
+      <div class="collection-art">
+        <span>WCK</span>
+      </div>
+      <div class="collection-copy">
+        <div class="verified-line">✓ VERIFIED COLLECTION</div>
+        <h3>Pixel Protocol Genesis</h3>
+        <p>Continental WCK</p>
+        <div class="collection-meta">
+          <span>XRPL</span>
+          <span>Genesis</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="collection-card muted-preview">
+      <div class="collection-art abstract-art">
+        <span>◈</span>
+      </div>
+      <div class="collection-copy">
+        <div class="verified-line">COLLECTION</div>
+        <h3>More collections</h3>
+        <p>Verified XRPL collections will populate here.</p>
+        <div class="collection-meta">
+          <span>MONOLITH</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="brands" class="discovery-section brands-section">
+  <div class="section-head">
+    <div>
+      <div class="section-kicker">PROJECTS // CREATORS</div>
+      <h2>Brands</h2>
+      <p>Find NFTs by verified project, creator or ecosystem.</p>
+    </div>
+    <button class="text-action" disabled>View All Brands →</button>
+  </div>
+
+  <article class="brand-feature">
+    <div class="brand-visual">
+      <div class="brand-monogram">WCK</div>
+      <div class="verified-brand">✓ VERIFIED BRAND</div>
+    </div>
+
+    <div class="brand-content">
+      <div class="brand-label">FEATURED XRPL BRAND</div>
+      <h3>Continental WCK</h3>
+
+      <p>
+        Explore verified Continental WCK collectibles, collections and
+        live marketplace listings from one brand destination.
+      </p>
+
+      <div class="brand-stats">
+        <div>
+          <small>COLLECTIONS</small>
+          <strong>Multiple</strong>
+        </div>
+        <div>
+          <small>NETWORK</small>
+          <strong>XRPL</strong>
+        </div>
+        <div>
+          <small>STATUS</small>
+          <strong>Verified</strong>
+        </div>
+      </div>
+
+      <a class="btn brand-button" href="/nft-market/brand/continental-wck/">Explore Continental WCK</a>
+    </div>
+  </article>
+</section>
+
+<section id="independent" class="discovery-section">
+  <div class="section-head">
+    <div>
+      <div class="section-kicker">OPEN MARKET</div>
+      <h2>Independent NFTs</h2>
+      <p>Standalone XRPL NFTs that are not mapped to a verified brand or collection.</p>
+    </div>
+  </div>
+
+  <article class="independent-feature">
+    <div class="independent-mark">◈</div>
+
+    <div class="independent-copy">
+      <div class="verified-line">INDEPENDENT NFT</div>
+      <h3>No brand required.</h3>
+      <p>
+        Sellers can list valid XRPL NFTs even when they are not part of a
+        MONOLITH-verified brand or collection. Ownership is still verified
+        on-ledger before the asset reaches the market.
+      </p>
+
+      <div class="independent-tags">
+        <span>XRPL VERIFIED OWNERSHIP</span>
+        <span>STANDALONE ASSET</span>
+        <span>NO BRAND REQUIRED</span>
+      </div>
+    </div>
+  </article>
+</section>
+
+
+<section class="sell-panel">
+  <div class="sell-title">
+    <div>
+      <h2>Sell Through MONOLITH</h2>
+    </div>
+    <span class="preview-badge">PREVIEW MODE</span>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01 // NFT</div>
+      <h3>Choose Your Asset</h3>
+      <p>
+        Enter an XRPL NFT ID. MONOLITH verifies ownership directly against the ledger.
+      </p>
+      <div class="fake-input">NFTokenID</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02 // PRICE</div>
+      <h3>Set Your Ask</h3>
+      <p>
+        Choose the XRP price. Native issuer transfer fees remain visible and enforced by XRPL.
+      </p>
+      <div class="fake-input">Ask price in XRP</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03 // XAMAN</div>
+      <h3>Verify & List</h3>
+      <p>
+        Sign the real XRPL sell offer in Xaman. MONOLITH never takes custody of your NFT.
+      </p>
+      <button class="btn" disabled>Connect Xaman</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="shell footer">
+    <span>MONOLITH NFT MARKET // BUILT ON XRPL</span>
+    <span>NON-CUSTODIAL DIGITAL ASSET MARKETPLACE</span>
+  </div>
+</footer>
+
+<script>
+(async()=>{
+  try{
+    const response=await fetch('/api/nft-market/listings',{headers:{Accept:'application/json'}});
+    const data=await response.json();
+    if(!response.ok||!data||!Array.isArray(data.listings)) return;
+
+    document.getElementById('listingCount').textContent=String(data.listings.length);
+
+    const grid=document.getElementById('marketGrid');
+
+    if(!data.listings.length){
+      grid.innerHTML='';
+
+      const previews=[
+        {name:'XRPL COLLECTIBLE #001',collection:'MONOLITH GENESIS',price:'125'},
+        {name:'DIGITAL ARTIFACT #042',collection:'XRPL COLLECTION',price:'85'},
+        {name:'GENESIS TOKEN #007',collection:'CREATOR SERIES',price:'250'},
+        {name:'XRPL ASSET #119',collection:'INDEPENDENT NFT',price:'60'}
+      ];
+
+      for(const item of previews){
+        const card=document.createElement('article');
+        card.className='preview-nft-card';
+
+        card.innerHTML=`
+          <div class="preview-nft-media">
+            <div class="preview-grid"></div>
+            <div class="preview-symbol">◈</div>
+            <span class="sample-tag">VISUAL PREVIEW</span>
+          </div>
+
+          <div class="preview-nft-body">
+            <div class="preview-collection">${item.collection}</div>
+            <h3>${item.name}</h3>
+
+            <div class="preview-row">
+              <div>
+                <small>ASK</small>
+                <strong>${item.price} XRP</strong>
+              </div>
+
+              <button disabled>Buy NFT</button>
+            </div>
+          </div>
+        `;
+
+        grid.append(card);
+      }
+
+      return;
+    }
+
+    grid.innerHTML='';
+
+    for(const item of data.listings){
+      const card=document.createElement('article');
+      card.style.cssText=
+        'border:1px solid #202a35;border-radius:18px;overflow:hidden;background:#0b0f14';
+
+      const media=document.createElement('div');
+      media.style.cssText=
+        'aspect-ratio:1/1;background:linear-gradient(145deg,#121a23,#080b0f);display:grid;place-items:center;color:#526171;font-size:12px';
+      media.textContent='NFT';
+
+      const body=document.createElement('div');
+      body.style.padding='15px';
+
+      const title=document.createElement('strong');
+      title.style.cssText='display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      title.textContent='NFT '+String(item.serial ?? '');
+
+      const meta=document.createElement('div');
+      meta.style.cssText='color:#8b98a7;font-size:11px;margin-top:6px';
+      meta.textContent=String(item.issuerWallet||'XRPL');
+
+      const price=document.createElement('div');
+      price.style.cssText='font-size:20px;font-weight:850;margin-top:15px';
+      price.textContent=String(item.askXrp||'0')+' XRP';
+
+      body.append(title,meta,price);
+      card.append(media,body);
+      grid.append(card);
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

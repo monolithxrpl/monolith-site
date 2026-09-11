@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Continental WCK // MONOLITH NFT Market</title>
+<style>
+:root{
+  --bg:#05070a;
+  --panel:#0a0f15;
+  --panel2:#0e151d;
+  --line:#202c38;
+  --text:#f5f8fa;
+  --muted:#8b98a7;
+  --cyan:#35d7ff;
+  --gold:#d8b25a;
+  --green:#47e6a4;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px),
+    radial-gradient(circle at 15% 0%,rgba(54,214,255,.12),transparent 30%),
+    #05070a;
+  background-size:42px 42px,42px 42px,auto,auto;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+a{color:inherit;text-decoration:none}
+.shell{width:min(1500px,calc(100% - 36px));margin:auto}
+
+.topbar{
+  min-height:78px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(5,7,10,.82);
+  backdrop-filter:blur(18px);
+}
+.topbar-inner{
+  min-height:78px;
+  width:min(1500px,calc(100% - 36px));
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+.mark{
+  width:44px;
+  height:44px;
+  border:1px solid rgba(54,214,255,.5);
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,rgba(54,214,255,.18),rgba(54,214,255,.02));
+  font-weight:900;
+}
+.brand-copy strong{
+  display:block;
+  font-size:15px;
+  letter-spacing:.15em;
+}
+.brand-copy span{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+  letter-spacing:.08em;
+}
+.nav{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.nav a{
+  color:#aeb9c4;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:750;
+}
+.nav .active{
+  color:var(--cyan);
+  background:rgba(54,214,255,.08);
+}
+
+.back{
+  display:inline-flex;
+  margin-top:28px;
+  color:#8996a4;
+  font-size:12px;
+  font-weight:800;
+}
+
+.hero{
+  margin-top:26px;
+  min-height:500px;
+  display:grid;
+  grid-template-columns:minmax(340px,.78fr) minmax(0,1.22fr);
+  overflow:hidden;
+  border:1px solid rgba(54,214,255,.2);
+  border-radius:24px;
+  background:#090e14;
+  box-shadow:0 35px 100px rgba(0,0,0,.34);
+}
+.hero-art{
+  position:relative;
+  display:grid;
+  place-items:center;
+  border-right:1px solid var(--line);
+  background:
+    linear-gradient(rgba(54,214,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(54,214,255,.025) 1px,transparent 1px),
+    radial-gradient(circle at 50% 45%,rgba(54,214,255,.22),transparent 30%),
+    linear-gradient(145deg,#111b24,#070b10);
+  background-size:28px 28px,28px 28px,auto,auto;
+}
+.wck{
+  font-size:100px;
+  font-weight:950;
+  letter-spacing:-.1em;
+  text-shadow:0 0 55px rgba(54,214,255,.26);
+}
+.verified{
+  position:absolute;
+  left:24px;
+  bottom:24px;
+  color:var(--cyan);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+.hero-copy{
+  align-self:center;
+  padding:54px;
+}
+.kicker{
+  color:var(--cyan);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.16em;
+}
+h1{
+  margin:12px 0 14px;
+  font-size:clamp(52px,6vw,88px);
+  line-height:.92;
+  letter-spacing:-.06em;
+}
+.description{
+  max-width:760px;
+  color:#a4b0bc;
+  font-size:16px;
+  line-height:1.7;
+}
+.tags{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:24px;
+}
+.tag{
+  padding:7px 10px;
+  border:1px solid #283746;
+  border-radius:999px;
+  color:#9aa7b4;
+  font-size:10px;
+  font-weight:800;
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:32px;
+}
+.stat{
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:rgba(255,255,255,.022);
+}
+.stat small{
+  display:block;
+  color:#6e7b88;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+.stat strong{
+  display:block;
+  margin-top:7px;
+  font-size:17px;
+}
+
+.section{
+  margin-top:54px;
+}
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:end;
+  margin-bottom:18px;
+}
+.section-head h2{
+  margin:0;
+  font-size:28px;
+  letter-spacing:-.04em;
+}
+.section-head p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+.collection-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.card{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#0a0f15;
+}
+.card-art{
+  aspect-ratio:16/10;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(54,214,255,.18),transparent 30%),
+    linear-gradient(145deg,#111b24,#070b10);
+  border-bottom:1px solid var(--line);
+}
+.card-art span{
+  font-size:38px;
+  font-weight:950;
+  letter-spacing:-.07em;
+}
+.card-copy{padding:18px}
+.card-label{
+  color:var(--cyan);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+.card h3{
+  margin:7px 0 4px;
+  font-size:19px;
+}
+.card p{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+.meta{
+  display:flex;
+  gap:7px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+.meta span{
+  padding:5px 8px;
+  border:1px solid #263441;
+  border-radius:999px;
+  color:#7f8c99;
+  font-size:9px;
+  font-weight:800;
+}
+
+.listing-preview{
+  min-height:220px;
+  border:1px solid rgba(54,214,255,.14);
+  border-radius:19px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(54,214,255,.07),transparent 38%),
+    #090e14;
+  color:var(--muted);
+}
+.listing-preview strong{
+  display:block;
+  color:white;
+  font-size:18px;
+  margin-bottom:7px;
+}
+
+footer{
+  margin-top:70px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.footer{
+  min-height:80px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#5f6c79;
+  font-size:10px;
+}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .hero-art{min-height:300px;border-right:0;border-bottom:1px solid var(--line)}
+  .hero-copy{padding:32px}
+  .collection-grid{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .shell,.topbar-inner{width:min(100% - 22px,1500px)}
+  .nav a:not(.active){display:none}
+  .stats{grid-template-columns:1fr}
+  .footer{display:block;padding:25px 0}
+}
+</style>
+
+<style id="nft-coming-soon-style">
+.nft-coming-soon{
+  width:100%;
+  padding:10px 16px;
+  text-align:center;
+  background:linear-gradient(
+    90deg,
+    rgba(53,215,255,.16),
+    rgba(53,215,255,.06),
+    rgba(53,215,255,.16)
+  );
+  border-bottom:1px solid rgba(53,215,255,.28);
+  color:#78e7ff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="nft-coming-soon">
+  NFT MARKET COMING SOON
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/">
+      <div class="mark">M</div>
+      <div class="brand-copy">
+        <strong>MONOLITH</strong>
+        <span>NFT MARKET // XRPL</span>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="/nft-market/">Market</a>
+      <a class="active" href="/nft-market/#brands">Brands</a>
+      <a href="/">MONOLITH</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+
+<a class="back" href="/nft-market/">← Back to NFT Market</a>
+
+<section class="hero">
+  <div class="hero-art">
+    <div class="wck">WCK</div>
+    <div class="verified">✓ VERIFIED MONOLITH BRAND</div>
+  </div>
+
+  <div class="hero-copy">
+    <div class="kicker">XRPL BRAND // CONTINENTAL WCK</div>
+    <h1>CONTINENTAL<br>WCK</h1>
+
+    <p class="description">
+      A collectible universe built on XRPL. Browse verified Continental WCK
+      collections, discover individual assets and find every live marketplace
+      listing tied to the brand from one destination inside MONOLITH.
+    </p>
+
+    <div class="tags">
+      <span class="tag">XRPL</span>
+      <span class="tag">Verified Brand</span>
+      <span class="tag">Collectibles</span>
+      <span class="tag">House of Cauliman</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <small>NETWORK</small>
+        <strong>XRPL</strong>
+      </div>
+      <div class="stat">
+        <small>COLLECTIONS</small>
+        <strong>Multiple</strong>
+      </div>
+      <div class="stat">
+        <small>LIVE LISTINGS</small>
+        <strong>0</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <div>
+      <h2>Collections</h2>
+      <p>Verified Continental WCK NFT sets.</p>
+    </div>
+  </div>
+
+  <div class="collection-grid">
+
+    <a class="card" href="/nft-market/collection/pixel-protocol-genesis/">
+      <div class="card-art"><span>PIXEL</span></div>
+      <div class="card-copy">
+        <div class="card-label">VERIFIED COLLECTION</div>
+        <h3>Pixel Protocol Genesis</h3>
+        <p>The original 8-bit Continental WCK character collection.</p>
+        <div class="meta">
+          <span>XRPL</span>
+          <span>Genesis</span>
+        </div>
+      </div>
+    </a>
+
+    <article class="card">
+      <div class="card-art"><span>S1</span></div>
+      <div class="card-copy">
+        <div class="card-label">VERIFIED COLLECTION</div>
+        <h3>Series 1 // Core Cast</h3>
+        <p>The core Continental WCK character universe.</p>
+        <div class="meta">
+          <span>XRPL</span>
+          <span>Core Cast</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-art"><span>LOADOUT</span></div>
+      <div class="card-copy">
+        <div class="card-label">COLLECTION LINE</div>
+        <h3>Continental Loadout</h3>
+        <p>ARMORIE Edition and future equipment-focused releases.</p>
+        <div class="meta">
+          <span>XRPL</span>
+          <span>ARMORIE</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <div>
+      <h2>Live Listings</h2>
+      <p>Every active Continental WCK listing across MONOLITH.</p>
+    </div>
+  </div>
+
+  <div class="listing-preview">
+    <div>
+      <strong>No Continental WCK listings yet.</strong>
+      Verified listings will populate here automatically.
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="shell footer">
+    <span>MONOLITH NFT MARKET // CONTINENTAL WCK</span>
+    <span>VERIFIED XRPL BRAND</span>
+  </div>
+</footer>
+
+</body>
+</html>
