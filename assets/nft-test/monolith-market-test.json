@@ -1,0 +1,15 @@
+{
+  "name": "MONOLITH MARKET TEST",
+  "description": "Test NFT created for MONOLITH NFT Market transaction testing.",
+  "external_url": "https://monolithxrpl.com/nft-market/",
+  "attributes": [
+    {
+      "trait_type": "Purpose",
+      "value": "MONOLITH NFT Market Test"
+    },
+    {
+      "trait_type": "Environment",
+      "value": "Staging"
+    }
+  ]
+}
