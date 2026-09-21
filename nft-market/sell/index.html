@@ -501,7 +501,7 @@ footer{border-top:1px solid rgba(255,255,255,.06)}
     <div class="classification">
       <div class="class-card selected">
         <small>CURRENT MARKET CLASSIFICATION</small>
-        <strong>Independent NFT</strong>
+        <strong id="sellerClassification">Independent NFT</strong>
         <p>Verified Brand and Collection matching will only be applied when MONOLITH has a trusted registry match.</p>
       </div>
     </div>
@@ -530,7 +530,7 @@ footer{border-top:1px solid rgba(255,255,255,.06)}
 
   <div class="preview">
     <div class="nft-art">◈</div>
-    <div class="preview-label">INDEPENDENT NFT</div>
+    <div class="preview-label" id="sellerPreviewClassification">INDEPENDENT NFT</div>
     <h3 id="sellerPreviewTitle">Awaiting Verification</h3>
     <p id="sellerPreviewDescription">Enter your NFTokenID and verify ownership.</p>
 
@@ -1061,8 +1061,50 @@ function shortWallet(value){
   return s.slice(0,7)+'…'+s.slice(-5);
 }
 
+function updateSellerClassification(listing){
+  const card=
+    document.getElementById('sellerClassification');
+
+  const preview=
+    document.getElementById('sellerPreviewClassification');
+
+  const collection=
+    listing &&
+    listing.verifiedCollection &&
+    listing.verifiedCollection.name
+      ? String(listing.verifiedCollection.name)
+      : '';
+
+  const brand=
+    listing &&
+    listing.verifiedBrand &&
+    listing.verifiedBrand.name
+      ? String(listing.verifiedBrand.name)
+      : '';
+
+  const label=
+    collection ||
+    brand ||
+    'Independent NFT';
+
+  if(card){
+    card.textContent=label;
+  }
+
+  if(preview){
+    preview.textContent=
+      collection
+        ? 'VERIFIED COLLECTION // '+collection.toUpperCase()
+        : brand
+          ? 'VERIFIED BRAND // '+brand.toUpperCase()
+          : 'INDEPENDENT NFT';
+  }
+}
+
 function updateSellerPreview(listing){
   if(!listing) return;
+
+  updateSellerClassification(listing);
 
   const owner=
     listing.sellerWallet ||
