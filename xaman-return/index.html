@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MONOLITH // Xaman Complete</title>
+
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background:#05090d;
+      color:#fff;
+      font-family:Arial,sans-serif;
+      text-align:center;
+    }
+
+    .wrap{
+      max-width:520px;
+      padding:32px;
+    }
+
+    h1{
+      margin:0 0 12px;
+      font-size:28px;
+    }
+
+    p{
+      margin:0;
+      color:#9fb0bf;
+      line-height:1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Returning to MONOLITH</h1>
+    <p>Your Xaman request is complete. MONOLITH is resuming your session.</p>
+  </div>
+
+  <script>
+    (()=>{
+      const params=
+        new URLSearchParams(location.search);
+
+      const payload=
+        params.get("payload") || "";
+
+      let pendingCancel=null;
+      let sellerState=null;
+
+      try{
+        pendingCancel=JSON.parse(
+          localStorage.getItem(
+            "monolithNftSellerCancelV1"
+          ) || "null"
+        );
+      }catch(_e){}
+
+      try{
+        sellerState=JSON.parse(
+          localStorage.getItem(
+            "monolith_nft_seller_state_v1"
+          ) || "null"
+        );
+      }catch(_e){}
+
+      let destination="/nft-market/";
+
+      if(
+        pendingCancel &&
+        pendingCancel.payloadUuid
+      ){
+        destination="/nft-market/seller/";
+      }else if(
+        sellerState &&
+        (
+          sellerState.authPayloadUuid ||
+          sellerState.sellPayloadUuid ||
+          sellerState.listingId
+        )
+      ){
+        destination="/nft-market/sell/";
+      }
+
+      if(payload){
+        destination +=
+          (destination.includes("?") ? "&" : "?") +
+          "payload=" +
+          encodeURIComponent(payload);
+      }
+
+      location.replace(destination);
+    })();
+  </script>
+</body>
+</html>

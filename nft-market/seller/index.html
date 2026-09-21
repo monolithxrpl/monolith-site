@@ -1,0 +1,1053 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MONOLITH // NFT Market Seller</title>
+  <meta name="description" content="Manage your MONOLITH NFT Market listings with your verified Xaman wallet.">
+
+  <style>
+    :root{
+      --bg:#05090d;
+      --panel:#0b1218;
+      --panel-2:#0f1820;
+      --line:#1e3442;
+      --text:#f4f8fb;
+      --muted:#93a6b4;
+      --cyan:#39d9ff;
+      --cyan-2:#149fc3;
+      --good:#66e39a;
+      --warn:#ffcc66;
+      --bad:#ff7272;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at top right,rgba(57,217,255,.11),transparent 28rem),
+        linear-gradient(180deg,#05090d,#071018 55%,#05090d);
+      color:var(--text);
+      font-family:Arial,sans-serif;
+    }
+
+    a{color:inherit}
+
+    .wrap{
+      width:min(1180px,calc(100% - 32px));
+      margin:0 auto;
+      padding:34px 0 70px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      margin-bottom:28px;
+    }
+
+    .brand{
+      font-size:14px;
+      letter-spacing:.18em;
+      font-weight:800;
+    }
+
+    .brand span{color:var(--cyan)}
+
+    .nav{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .nav a{
+      text-decoration:none;
+      padding:10px 14px;
+      border:1px solid var(--line);
+      border-radius:9px;
+      background:#091119;
+      font-size:13px;
+    }
+
+    .hero{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:30px;
+      background:
+        linear-gradient(135deg,rgba(57,217,255,.09),transparent 40%),
+        rgba(9,17,25,.92);
+      margin-bottom:22px;
+    }
+
+    .eyebrow{
+      color:var(--cyan);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.18em;
+      margin-bottom:10px;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size:clamp(30px,5vw,48px);
+    }
+
+    .hero p{
+      margin:0;
+      max-width:760px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .auth-card{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:22px;
+      background:var(--panel);
+      margin-bottom:22px;
+    }
+
+    .auth-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    button{
+      appearance:none;
+      border:0;
+      cursor:pointer;
+      border-radius:10px;
+      padding:13px 18px;
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .primary{
+      background:linear-gradient(180deg,var(--cyan),var(--cyan-2));
+      color:#001018;
+    }
+
+    .secondary{
+      background:#111c25;
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .status{
+      margin-top:14px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .wallet{
+      margin-top:12px;
+      font-family:monospace;
+      font-size:13px;
+      word-break:break-all;
+      color:#cbefff;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:16px;
+      margin:30px 0 14px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:22px;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .listings{
+      display:grid;
+      gap:14px;
+    }
+
+    .listing{
+      display:grid;
+      grid-template-columns:110px 1fr auto;
+      gap:18px;
+      align-items:center;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      background:var(--panel-2);
+    }
+
+    .thumb{
+      width:110px;
+      height:110px;
+      border-radius:11px;
+      object-fit:cover;
+      background:#071018;
+      border:1px solid var(--line);
+    }
+
+    .thumb.placeholder{
+      display:grid;
+      place-items:center;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+      padding:8px;
+    }
+
+    .listing h3{
+      margin:0 0 7px;
+      font-size:17px;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 14px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .price{
+      margin-top:9px;
+      font-weight:800;
+      font-size:16px;
+    }
+
+    .listing-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .listing-actions a,
+    .listing-actions button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:36px;
+      padding:8px 12px;
+      border-radius:8px;
+      font-size:12px;
+      font-weight:800;
+      text-decoration:none;
+    }
+
+    .view-listing{
+      background:#111c25;
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .cancel-listing{
+      background:rgba(255,114,114,.08);
+      color:#ff9c9c;
+      border:1px solid rgba(255,114,114,.32);
+    }
+
+    .cancel-listing:hover{
+      background:rgba(255,114,114,.14);
+    }
+
+    .cancel-listing:disabled{
+      opacity:.5;
+      cursor:not-allowed;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      border:1px solid var(--line);
+      min-width:88px;
+    }
+
+    .badge.active{color:var(--good)}
+    .badge.canceled{color:var(--warn)}
+    .badge.sold{color:var(--cyan)}
+
+    .empty{
+      border:1px dashed var(--line);
+      border-radius:14px;
+      padding:28px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    .hidden{display:none!important}
+
+    @media(max-width:760px){
+      .topbar{align-items:flex-start;flex-direction:column}
+      .listing{
+        grid-template-columns:82px 1fr;
+      }
+      .thumb{
+        width:82px;
+        height:82px;
+      }
+      .listing > .badge{
+        grid-column:1 / -1;
+        justify-self:start;
+      }
+    }
+  </style>
+
+<style id="monolith-nft-canonical-header-20260921">
+.nftCanonicalTopbar{
+  min-height:78px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(5,7,10,.86);
+  backdrop-filter:blur(18px);
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+.nftCanonicalTopbarInner{
+  width:min(1500px,calc(100% - 36px));
+  min-height:78px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.nftCanonicalBrand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-width:0;
+  color:#f4f7fa;
+  text-decoration:none;
+}
+.nftCanonicalMark{
+  width:44px;
+  height:44px;
+  object-fit:contain;
+  border:1px solid rgba(54,214,255,.5);
+  border-radius:12px;
+  background:linear-gradient(145deg,rgba(54,214,255,.18),rgba(54,214,255,.02));
+  box-shadow:0 0 26px rgba(54,214,255,.08);
+}
+.nftCanonicalBrandCopy strong{
+  display:block;
+  font-size:15px;
+  letter-spacing:.15em;
+  color:#f4f7fa;
+}
+.nftCanonicalBrandCopy span{
+  display:block;
+  color:#7f8b97;
+  font-size:10px;
+  margin-top:3px;
+  letter-spacing:.08em;
+}
+.nftCanonicalNav{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  min-width:0;
+}
+.nftCanonicalNav a{
+  color:#b7c2ce;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:700;
+  line-height:1;
+  white-space:nowrap;
+  text-decoration:none;
+}
+.nftCanonicalNav a:hover{
+  background:#10161d;
+  color:#fff;
+}
+.nftCanonicalNav a.active{
+  color:#36d6ff;
+  background:rgba(54,214,255,.08);
+}
+@media(max-width:900px){
+  .nftCanonicalTopbarInner{
+    width:min(100% - 20px,1500px);
+    min-height:auto;
+    padding:10px 0;
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .nftCanonicalBrand{
+    width:100%;
+  }
+  .nftCanonicalNav{
+    width:100%;
+    justify-content:flex-start;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    scrollbar-width:none;
+    padding-bottom:2px;
+  }
+  .nftCanonicalNav::-webkit-scrollbar{
+    display:none;
+  }
+  .nftCanonicalNav a{
+    flex:0 0 auto;
+    padding:9px 11px;
+    font-size:11px;
+  }
+}
+</style>
+
+</head>
+
+<body>
+<header class="nftCanonicalTopbar">
+  <div class="nftCanonicalTopbarInner">
+    <a class="nftCanonicalBrand" href="/nft-market/">
+      <img class="nftCanonicalMark" src="/assets/monolith_logo.webp" alt="MONOLITH logo">
+      <div class="nftCanonicalBrandCopy">
+        <strong>MONOLITH</strong>
+        <span>NFT MARKET // XRPL</span>
+      </div>
+    </a>
+
+    <nav class="nftCanonicalNav" aria-label="NFT Marketplace navigation">
+      <a href="/nft-market/">NFT Market</a>
+      <a href="/nft-market/sell/">Sell NFT</a>
+      <a class="active" href="/nft-market/seller/">My Listings</a>
+      <a href="/directory/">Directory</a>
+      <a href="/">Entrance</a>
+      <a href="/monolith.html">Wall</a>
+    </nav>
+  </div>
+</header>
+  <main class="wrap">
+
+    <section class="hero">
+      <div class="eyebrow">SELLER CONTROL CENTER</div>
+      <h1>My Listings</h1>
+      <p>
+        Sign in with Xaman using the wallet that owns your listed NFTs.
+        MONOLITH uses your verified XRPL wallet as your seller identity.
+        No username or password is required.
+      </p>
+    </section>
+
+    <section class="auth-card">
+      <div class="auth-row">
+        <button id="connectBtn" class="primary" type="button">
+          Connect Seller Wallet
+        </button>
+
+        <button id="signOutBtn" class="secondary hidden" type="button">
+          Sign Out
+        </button>
+      </div>
+
+      <div id="status" class="status">
+        Connect your Xaman wallet to load your NFT Market listings.
+      </div>
+
+      <div id="walletDisplay" class="wallet hidden"></div>
+    </section>
+
+    <div class="section-head">
+      <div>
+        <h2>Listings</h2>
+        <p>Active, sold, canceled, and previous listings tied to this wallet.</p>
+      </div>
+    </div>
+
+    <section id="listings" class="listings">
+      <div class="empty">
+        Sign in to view your listings.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const AUTH_KEY = "monolithNftSellerAuthV1";
+    const CANCEL_KEY = "monolithNftSellerCancelV1";
+
+    const connectBtn = document.getElementById("connectBtn");
+    const signOutBtn = document.getElementById("signOutBtn");
+    const statusEl = document.getElementById("status");
+    const walletDisplay = document.getElementById("walletDisplay");
+    const listingsEl = document.getElementById("listings");
+
+    function esc(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function shortWallet(wallet){
+      const w = String(wallet || "");
+      if(w.length < 18) return w;
+      return w.slice(0,8) + "..." + w.slice(-7);
+    }
+
+    function setStatus(message){
+      statusEl.textContent = message;
+    }
+
+    function saveAuth(auth){
+      localStorage.setItem(
+        AUTH_KEY,
+        JSON.stringify(auth)
+      );
+    }
+
+    function loadAuth(){
+      try{
+        return JSON.parse(
+          localStorage.getItem(AUTH_KEY) || "null"
+        );
+      }catch(_e){
+        return null;
+      }
+    }
+
+    function clearAuth(){
+      localStorage.removeItem(AUTH_KEY);
+    }
+
+    async function postJson(url, body){
+      const response = await fetch(url,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(body)
+      });
+
+      const data = await response
+        .json()
+        .catch(()=>({}));
+
+      if(!response.ok || !data.ok){
+        throw new Error(
+          data.error ||
+          data.code ||
+          "request_failed"
+        );
+      }
+
+      return data;
+    }
+
+    function savePendingCancel(value){
+      localStorage.setItem(
+        CANCEL_KEY,
+        JSON.stringify(value)
+      );
+    }
+
+    function loadPendingCancel(){
+      try{
+        return JSON.parse(
+          localStorage.getItem(CANCEL_KEY) || "null"
+        );
+      }catch(_e){
+        return null;
+      }
+    }
+
+    function clearPendingCancel(){
+      localStorage.removeItem(CANCEL_KEY);
+    }
+
+    function sleep(ms){
+      return new Promise(resolve=>setTimeout(resolve,ms));
+    }
+
+    async function verifyCancelOnce(listingId,payloadUuid){
+      const response = await fetch(
+        "/api/nft-market/cancel/verify",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            listingId,
+            payloadUuid
+          })
+        }
+      );
+
+      const data = await response
+        .json()
+        .catch(()=>({}));
+
+      return {
+        response,
+        data
+      };
+    }
+
+    async function autoVerifyCancel(
+      listingId,
+      payloadUuid
+    ){
+      setStatus(
+        "Waiting for Xaman cancellation approval..."
+      );
+
+      for(let attempt=0;attempt<30;attempt++){
+        const {response,data} =
+          await verifyCancelOnce(
+            listingId,
+            payloadUuid
+          );
+
+        if(response.ok && data.ok){
+          clearPendingCancel();
+
+          const auth = loadAuth();
+
+          if(auth && auth.payloadUuid){
+            await loadListings(auth);
+          }
+
+          setStatus(
+            "Listing canceled successfully."
+          );
+
+          return true;
+        }
+
+        const error =
+          String(
+            data.error ||
+            data.code ||
+            ""
+          );
+
+        if(
+          error === "nft_cancel_not_signed" ||
+          response.status === 409 ||
+          response.status === 429 ||
+          response.status >= 500
+        ){
+          await sleep(4000);
+          continue;
+        }
+
+        clearPendingCancel();
+
+        setStatus(
+          "MONOLITH could not verify the listing cancellation."
+        );
+
+        return false;
+      }
+
+      setStatus(
+        "The cancellation has not completed yet. If you signed it in Xaman, reload My Listings and MONOLITH will check it again."
+      );
+
+      return false;
+    }
+
+    async function cancelListing(listingId,button){
+      if(!listingId){
+        return;
+      }
+
+      const confirmed = window.confirm(
+        "Cancel this NFT listing? The NFT will remain in your wallet and the marketplace sell offer will be removed."
+      );
+
+      if(!confirmed){
+        return;
+      }
+
+      button.disabled = true;
+
+      const xamanWindow =
+        window.open(
+          "about:blank",
+          "_blank"
+        );
+
+      if(xamanWindow){
+        try{
+          xamanWindow.opener = null;
+        }catch(_e){}
+      }
+
+      try{
+        setStatus(
+          "Creating Xaman cancellation request..."
+        );
+
+        const data = await postJson(
+          "/api/nft-market/cancel/start",
+          {
+            listingId,
+            returnUrl:
+              location.origin +
+              "/nft-market/seller/"
+          }
+        );
+
+        const cancelOffer =
+          data.cancelOffer || {};
+
+        if(
+          !cancelOffer.payloadUuid ||
+          !cancelOffer.signUrl
+        ){
+          throw new Error(
+            "cancel_payload_invalid"
+          );
+        }
+
+        savePendingCancel({
+          listingId,
+          payloadUuid:
+            cancelOffer.payloadUuid,
+          createdAt:Date.now()
+        });
+
+        if(
+          xamanWindow &&
+          !xamanWindow.closed
+        ){
+          try{
+            xamanWindow.close();
+          }catch(_e){}
+        }
+
+        window.location.href =
+          cancelOffer.signUrl;
+
+        return;
+
+      }catch(error){
+        if(
+          xamanWindow &&
+          !xamanWindow.closed
+        ){
+          try{
+            xamanWindow.close();
+          }catch(_e){}
+        }
+
+        button.disabled = false;
+
+        setStatus(
+          "MONOLITH could not start the listing cancellation. Please try again."
+        );
+      }
+    }
+
+    function renderListings(listings){
+      if(!Array.isArray(listings) || !listings.length){
+        listingsEl.innerHTML = `
+          <div class="empty">
+            No NFT Market listings were found for this wallet.
+          </div>
+        `;
+        return;
+      }
+
+      listingsEl.innerHTML = listings.map(item=>{
+        const title =
+          item.title ||
+          `NFT #${item.serial || ""}`;
+
+        const image = item.imageUrl
+          ? `<img class="thumb" src="${esc(item.imageUrl)}" alt="">`
+          : `<div class="thumb placeholder">No preview</div>`;
+
+        const status =
+          String(item.status || "unknown").toLowerCase();
+
+        return `
+          <article class="listing">
+            ${image}
+
+            <div>
+              <h3>${esc(title)}</h3>
+
+              <div class="meta">
+                <span>Listing ${esc(item.listingId || "")}</span>
+                <span>NFT ${esc(item.nftId || "")}</span>
+              </div>
+
+              <div class="price">
+                $${esc(item.askUsd || "0.00")} USD
+                ${item.askXrp ? ` · ${esc(item.askXrp)} XRP` : ""}
+              </div>
+
+              <div class="listing-actions">
+                <a
+                  class="view-listing"
+                  href="/nft-market/?listing=${encodeURIComponent(item.listingId || "")}"
+                >
+                  View Listing
+                </a>
+
+                ${
+                  status === "active"
+                    ? `
+                      <button
+                        class="cancel-listing"
+                        type="button"
+                        data-cancel-listing="${esc(item.listingId || "")}"
+                      >
+                        Cancel Listing
+                      </button>
+                    `
+                    : ""
+                }
+              </div>
+            </div>
+
+            <div class="badge ${esc(status)}">
+              ${
+                item.isTest
+                  ? `TEST · ${esc(status)}`
+                  : esc(status)
+              }
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      listingsEl
+        .querySelectorAll(
+          "[data-cancel-listing]"
+        )
+        .forEach(button=>{
+          button.addEventListener(
+            "click",
+            ()=>{
+              cancelListing(
+                button.dataset.cancelListing,
+                button
+              );
+            }
+          );
+        });
+    }
+
+    async function loadListings(auth){
+      setStatus("Loading your MONOLITH NFT Market listings...");
+
+      const data = await postJson(
+        "/api/nft-market/seller/listings",
+        {
+          payloadUuid:auth.payloadUuid
+        }
+      );
+
+      auth.wallet = data.wallet || auth.wallet || "";
+      saveAuth(auth);
+
+      walletDisplay.textContent = "";
+      walletDisplay.classList.add("hidden");
+
+      signOutBtn.classList.remove("hidden");
+      connectBtn.classList.add("hidden");
+
+      setStatus(
+        `Seller wallet verified: ${shortWallet(auth.wallet)}`
+      );
+
+      renderListings(data.listings);
+
+      const pendingCancel =
+        loadPendingCancel();
+
+      if(
+        pendingCancel &&
+        pendingCancel.listingId
+      ){
+        const pendingListing =
+          Array.isArray(data.listings)
+            ? data.listings.find(
+                item =>
+                  String(item.listingId || "") ===
+                  String(pendingCancel.listingId)
+              )
+            : null;
+
+        if(
+          pendingListing &&
+          String(pendingListing.status || "").toLowerCase() !== "active"
+        ){
+          clearPendingCancel();
+        }
+      }
+    }
+
+    async function verifyAuth(payloadUuid){
+      setStatus("Verifying your Xaman seller sign-in...");
+
+      const data = await postJson(
+        "/api/nft-market/seller/auth/verify",
+        {
+          payloadUuid
+        }
+      );
+
+      const auth = {
+        payloadUuid,
+        wallet:data.wallet || "",
+        verified:true,
+        verifiedAt:Date.now()
+      };
+
+      saveAuth(auth);
+
+      await loadListings(auth);
+    }
+
+    async function startAuth(){
+      connectBtn.disabled = true;
+
+      try{
+        setStatus("Creating Xaman seller sign-in...");
+
+        const data = await postJson(
+          "/api/nft-market/seller/auth/start",
+          {
+            returnUrl:
+              location.origin +
+              "/nft-market/seller/"
+          }
+        );
+
+        const auth = data.auth || {};
+
+        if(!auth.signUrl || !auth.payloadUuid){
+          throw new Error("seller_auth_payload_invalid");
+        }
+
+        saveAuth({
+          payloadUuid:auth.payloadUuid,
+          signUrl:auth.signUrl,
+          verified:false,
+          createdAt:Date.now()
+        });
+
+        setStatus(
+          "Xaman sign-in created. Complete the request, then return to this page."
+        );
+
+        window.location.href = auth.signUrl;
+
+      }catch(error){
+        setStatus(
+          "MONOLITH could not start seller sign-in. Please try again."
+        );
+        connectBtn.disabled = false;
+      }
+    }
+
+    connectBtn.addEventListener("click",startAuth);
+
+    signOutBtn.addEventListener("click",()=>{
+      clearAuth();
+      location.reload();
+    });
+
+    document.addEventListener("DOMContentLoaded",async()=>{
+      const url = new URL(location.href);
+      const returnedPayload =
+        url.searchParams.get("payload");
+
+      let auth = loadAuth();
+
+      if(returnedPayload){
+        /*
+         * Only treat the returned payload as seller authentication
+         * when it matches the seller auth request we already started.
+         *
+         * Xaman cancellation/listing payloads also return through this
+         * page and must never overwrite or invalidate seller identity.
+         */
+        if(
+          auth &&
+          !auth.verified &&
+          auth.payloadUuid &&
+          String(auth.payloadUuid) ===
+          String(returnedPayload)
+        ){
+          auth.payloadUuid = returnedPayload;
+        }
+
+        history.replaceState(
+          {},
+          "",
+          location.pathname
+        );
+      }
+
+      if(!auth || !auth.payloadUuid){
+        return;
+      }
+
+      try{
+        if(auth.verified){
+          await loadListings(auth);
+        }else{
+          await verifyAuth(auth.payloadUuid);
+        }
+
+        const pendingCancel =
+          loadPendingCancel();
+
+        if(
+          pendingCancel &&
+          pendingCancel.listingId &&
+          pendingCancel.payloadUuid
+        ){
+          await autoVerifyCancel(
+            pendingCancel.listingId,
+            pendingCancel.payloadUuid
+          );
+        }
+
+      }catch(error){
+        clearAuth();
+        connectBtn.classList.remove("hidden");
+        connectBtn.disabled = false;
+        signOutBtn.classList.add("hidden");
+        walletDisplay.classList.add("hidden");
+
+        setStatus(
+          "Seller sign-in could not be verified. Connect your wallet again."
+        );
+      }
+    });
+  </script>
+</body>
+</html>

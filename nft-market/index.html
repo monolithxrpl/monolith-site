@@ -766,25 +766,301 @@ h1 span{
   .search{width:100%;flex-basis:100%}
   .footer{display:block}
 }
+
+.nft-detail-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(10px);
+}
+.nft-detail-modal.open{display:flex}
+.nft-detail-panel{
+  width:min(980px,100%);
+  max-height:92vh;
+  overflow:auto;
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(280px,1fr) minmax(280px,.9fr);
+  gap:28px;
+  padding:24px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:22px;
+  background:#0c0d10;
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+}
+.nft-detail-art{
+  min-height:420px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:16px;
+  overflow:hidden;
+  background:#050506;
+}
+.nft-detail-art img{
+  width:100%;
+  height:100%;
+  max-height:70vh;
+  object-fit:contain;
+  display:block;
+}
+.nft-detail-info{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.nft-detail-info h2{
+  margin:0;
+  font-size:28px;
+}
+.nft-detail-description{
+  line-height:1.55;
+  opacity:.82;
+}
+.nft-detail-price{
+  font-size:28px;
+  font-weight:800;
+}
+.nft-detail-xrp{
+  opacity:.72;
+}
+.nft-detail-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:8px;
+}
+.nft-detail-actions button{
+  cursor:pointer;
+}
+.nft-detail-status{
+  min-height:24px;
+  font-size:14px;
+  opacity:.8;
+}
+.nft-detail-close{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  background:#16171b;
+  color:#fff;
+  cursor:pointer;
+  z-index:2;
+}
+.live-nft-card{
+  cursor:pointer;
+}
+@media(max-width:760px){
+  .nft-detail-panel{
+    grid-template-columns:1fr;
+    padding:18px;
+  }
+  .nft-detail-art{
+    min-height:300px;
+  }
+}
+
 </style>
 
 <style id="nft-coming-soon-style">
 .nft-coming-soon{
-  width:100%;
-  padding:10px 16px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid rgba(53,215,255,.3);
+  background:
+    radial-gradient(circle at 50% 120%,rgba(53,215,255,.18),transparent 46%),
+    linear-gradient(135deg,#05090e 0%,#08131d 48%,#05090e 100%);
+}
+.nft-coming-soon::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent,rgba(53,215,255,.06),transparent),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 79px,
+      rgba(53,215,255,.035) 80px
+    );
+}
+.nft-coming-soon-inner{
+  position:relative;
+  width:min(1280px,calc(100% - 36px));
+  min-height:250px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
   text-align:center;
-  background:linear-gradient(
-    90deg,
-    rgba(53,215,255,.16),
-    rgba(53,215,255,.06),
-    rgba(53,215,255,.16)
-  );
-  border-bottom:1px solid rgba(53,215,255,.28);
-  color:#78e7ff;
-  font-size:11px;
+  padding:44px 20px;
+}
+.nft-coming-soon-kicker{
+  color:#35d7ff;
+  font-size:10px;
   font-weight:900;
-  letter-spacing:.16em;
+  letter-spacing:.3em;
   text-transform:uppercase;
+}
+.nft-coming-soon h2{
+  margin:12px 0 4px;
+  color:#f5f8fa;
+  font-size:clamp(34px,6vw,76px);
+  line-height:.95;
+  letter-spacing:-.045em;
+  text-transform:uppercase;
+}
+.nft-coming-soon h2 span{
+  color:#35d7ff;
+  text-shadow:0 0 28px rgba(53,215,255,.24);
+}
+.nft-coming-soon-status{
+  margin-top:14px;
+  color:#8feaff;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+}
+.nft-coming-soon-copy{
+  max-width:680px;
+  margin:18px auto 0;
+  color:#8b98a7;
+  font-size:12px;
+  line-height:1.7;
+}
+.nft-coming-soon-line{
+  width:180px;
+  height:1px;
+  margin-top:24px;
+  background:linear-gradient(90deg,transparent,#35d7ff,transparent);
+  box-shadow:0 0 18px rgba(53,215,255,.5);
+}
+@media(max-width:700px){
+  .nft-coming-soon-inner{
+    min-height:220px;
+    padding:36px 18px;
+  }
+  .nft-coming-soon-status{
+    font-size:10px;
+    letter-spacing:.22em;
+  }
+}
+</style>
+
+
+<style id="monolith-nft-canonical-header-20260921">
+.nftCanonicalTopbar{
+  min-height:78px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(5,7,10,.86);
+  backdrop-filter:blur(18px);
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+.nftCanonicalTopbarInner{
+  width:min(1500px,calc(100% - 36px));
+  min-height:78px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.nftCanonicalBrand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-width:0;
+  color:#f4f7fa;
+  text-decoration:none;
+}
+.nftCanonicalMark{
+  width:44px;
+  height:44px;
+  object-fit:contain;
+  border:1px solid rgba(54,214,255,.5);
+  border-radius:12px;
+  background:linear-gradient(145deg,rgba(54,214,255,.18),rgba(54,214,255,.02));
+  box-shadow:0 0 26px rgba(54,214,255,.08);
+}
+.nftCanonicalBrandCopy strong{
+  display:block;
+  font-size:15px;
+  letter-spacing:.15em;
+  color:#f4f7fa;
+}
+.nftCanonicalBrandCopy span{
+  display:block;
+  color:#7f8b97;
+  font-size:10px;
+  margin-top:3px;
+  letter-spacing:.08em;
+}
+.nftCanonicalNav{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  min-width:0;
+}
+.nftCanonicalNav a{
+  color:#b7c2ce;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:700;
+  line-height:1;
+  white-space:nowrap;
+  text-decoration:none;
+}
+.nftCanonicalNav a:hover{
+  background:#10161d;
+  color:#fff;
+}
+.nftCanonicalNav a.active{
+  color:#36d6ff;
+  background:rgba(54,214,255,.08);
+}
+@media(max-width:900px){
+  .nftCanonicalTopbarInner{
+    width:min(100% - 20px,1500px);
+    min-height:auto;
+    padding:10px 0;
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .nftCanonicalBrand{
+    width:100%;
+  }
+  .nftCanonicalNav{
+    width:100%;
+    justify-content:flex-start;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    scrollbar-width:none;
+    padding-bottom:2px;
+  }
+  .nftCanonicalNav::-webkit-scrollbar{
+    display:none;
+  }
+  .nftCanonicalNav a{
+    flex:0 0 auto;
+    padding:9px 11px;
+    font-size:11px;
+  }
 }
 </style>
 
@@ -792,24 +1068,35 @@ h1 span{
 
 <body>
 
-<div class="nft-coming-soon">
-  NFT MARKET COMING SOON
-</div>
+<section class="nft-coming-soon" aria-label="MONOLITH NFT Marketplace opening soon">
+  <div class="nft-coming-soon-inner">
+    <div class="nft-coming-soon-kicker">MONOLITH // XRPL</div>
+    <h2>NFT <span>MARKETPLACE</span></h2>
+    <div class="nft-coming-soon-status">OPENING SOON</div>
+    <p class="nft-coming-soon-copy">
+      Buy, sell, discover, and collect XRPL NFTs through MONOLITH.
+    </p>
+    <div class="nft-coming-soon-line"></div>
+  </div>
+</section>
 
-<header class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="/">
-      <img class="mark" src="/assets/monolith_logo.webp" alt="MONOLITH logo">
-      <div class="brand-copy">
+<header class="nftCanonicalTopbar">
+  <div class="nftCanonicalTopbarInner">
+    <a class="nftCanonicalBrand" href="/nft-market/">
+      <img class="nftCanonicalMark" src="/assets/monolith_logo.webp" alt="MONOLITH logo">
+      <div class="nftCanonicalBrandCopy">
         <strong>MONOLITH</strong>
         <span>NFT MARKET // XRPL</span>
       </div>
     </a>
 
-    <nav class="nav">
-      <a href="/market/">Tile Market</a>
+    <nav class="nftCanonicalNav" aria-label="NFT Marketplace navigation">
       <a class="active" href="/nft-market/">NFT Market</a>
-      <a href="/">MONOLITH</a>
+      <a href="/nft-market/sell/">Sell NFT</a>
+      <a href="/nft-market/seller/">My Listings</a>
+      <a href="/directory/">Directory</a>
+      <a href="/">Entrance</a>
+      <a href="/monolith.html">Wall</a>
     </nav>
   </div>
 </header>
@@ -845,7 +1132,7 @@ h1 span{
 
     <div class="stats">
       <div class="stat">
-        <small>Live Listings</small>
+        <small>Active Listings</small>
         <strong id="listingCount">0</strong>
       </div>
 
@@ -868,26 +1155,28 @@ h1 span{
 </section>
 
 
-<nav class="market-tabs">
-  <a class="market-tab active" href="#market">All NFTs</a>
-  <a class="market-tab" href="#collections">Collections</a>
-  <a class="market-tab" href="#brands">Brands</a>
-  <a class="market-tab" href="#independent">Independent</a>
-</nav>
 
-<div class="toolbar">
-  <input class="search" placeholder="Search NFT, issuer, collection or seller" disabled>
-  <button class="filter" disabled>Newest</button>
-  <button class="filter" disabled>Price</button>
-  <button class="filter" disabled>Collection</button>
-</div>
-
-<section>
+<section id="market">
   <div class="section-head">
     <div>
-      <h2>Live Market</h2>
+      <h2>Marketplace Preview</h2>
       <p>Verified XRPL NFT listings available through MONOLITH.</p>
     </div>
+  </div>
+
+  <div class="market-tabs" id="marketTabs">
+    <button class="market-tab active" type="button" data-market-view="all">All NFTs</button>
+    <button class="market-tab" type="button" data-market-view="collections">Collections</button>
+    <button class="market-tab" type="button" data-market-view="brands">Creators / Brands</button>
+  </div>
+
+  <div class="toolbar" id="marketToolbar">
+    <input class="search" id="marketSearch" type="search" placeholder="Search NFTs">
+    <select class="filter" id="marketSort" aria-label="Sort NFT listings">
+      <option value="newest">Newest</option>
+      <option value="price-low">Price Low</option>
+      <option value="price-high">Price High</option>
+    </select>
   </div>
 
   <div class="grid" id="marketGrid">
@@ -906,130 +1195,12 @@ h1 span{
 
 
 
-<section id="collections" class="discovery-section">
-  <div class="section-head">
-    <div>
-      <div class="section-kicker">DISCOVER</div>
-      <h2>Collections</h2>
-      <p>Browse verified NFT sets across the MONOLITH marketplace.</p>
-    </div>
-    <button class="text-action" disabled>View All Collections →</button>
-  </div>
-
-  <div class="collection-grid">
-    <article class="collection-card">
-      <div class="collection-art">
-        <span>WCK</span>
-      </div>
-      <div class="collection-copy">
-        <div class="verified-line">✓ VERIFIED COLLECTION</div>
-        <h3>Pixel Protocol Genesis</h3>
-        <p>Continental WCK</p>
-        <div class="collection-meta">
-          <span>XRPL</span>
-          <span>Genesis</span>
-        </div>
-      </div>
-    </article>
-
-    <article class="collection-card muted-preview">
-      <div class="collection-art abstract-art">
-        <span>◈</span>
-      </div>
-      <div class="collection-copy">
-        <div class="verified-line">COLLECTION</div>
-        <h3>More collections</h3>
-        <p>Verified XRPL collections will populate here.</p>
-        <div class="collection-meta">
-          <span>MONOLITH</span>
-        </div>
-      </div>
-    </article>
-  </div>
-</section>
-
-<section id="brands" class="discovery-section brands-section">
-  <div class="section-head">
-    <div>
-      <div class="section-kicker">PROJECTS // CREATORS</div>
-      <h2>Brands</h2>
-      <p>Find NFTs by verified project, creator or ecosystem.</p>
-    </div>
-    <button class="text-action" disabled>View All Brands →</button>
-  </div>
-
-  <article class="brand-feature">
-    <div class="brand-visual">
-      <div class="brand-monogram">WCK</div>
-      <div class="verified-brand">✓ VERIFIED BRAND</div>
-    </div>
-
-    <div class="brand-content">
-      <div class="brand-label">FEATURED XRPL BRAND</div>
-      <h3>Continental WCK</h3>
-
-      <p>
-        Explore verified Continental WCK collectibles, collections and
-        live marketplace listings from one brand destination.
-      </p>
-
-      <div class="brand-stats">
-        <div>
-          <small>COLLECTIONS</small>
-          <strong>Multiple</strong>
-        </div>
-        <div>
-          <small>NETWORK</small>
-          <strong>XRPL</strong>
-        </div>
-        <div>
-          <small>STATUS</small>
-          <strong>Verified</strong>
-        </div>
-      </div>
-
-      <a class="btn brand-button" href="/nft-market/brand/continental-wck/">Explore Continental WCK</a>
-    </div>
-  </article>
-</section>
-
-<section id="independent" class="discovery-section">
-  <div class="section-head">
-    <div>
-      <div class="section-kicker">OPEN MARKET</div>
-      <h2>Independent NFTs</h2>
-      <p>Standalone XRPL NFTs that are not mapped to a verified brand or collection.</p>
-    </div>
-  </div>
-
-  <article class="independent-feature">
-    <div class="independent-mark">◈</div>
-
-    <div class="independent-copy">
-      <div class="verified-line">INDEPENDENT NFT</div>
-      <h3>No brand required.</h3>
-      <p>
-        Sellers can list valid XRPL NFTs even when they are not part of a
-        MONOLITH-verified brand or collection. Ownership is still verified
-        on-ledger before the asset reaches the market.
-      </p>
-
-      <div class="independent-tags">
-        <span>XRPL VERIFIED OWNERSHIP</span>
-        <span>STANDALONE ASSET</span>
-        <span>NO BRAND REQUIRED</span>
-      </div>
-    </div>
-  </article>
-</section>
-
-
 <section class="sell-panel">
   <div class="sell-title">
     <div>
       <h2>Sell Through MONOLITH</h2>
     </div>
-    <span class="preview-badge">PREVIEW MODE</span>
+    <span class="preview-badge">OPENING SOON</span>
   </div>
 
   <div class="steps">
@@ -1046,9 +1217,9 @@ h1 span{
       <div class="step-num">02 // PRICE</div>
       <h3>Set Your Ask</h3>
       <p>
-        Choose the XRP price. Native issuer transfer fees remain visible and enforced by XRPL.
+        Set the NFT price in USD. MONOLITH calculates the current $XRP equivalent for settlement.
       </p>
-      <div class="fake-input">Ask price in XRP</div>
+      <div class="fake-input">Canonical price in USD</div>
     </div>
 
     <div class="step">
@@ -1057,7 +1228,7 @@ h1 span{
       <p>
         Sign the real XRPL sell offer in Xaman. MONOLITH never takes custody of your NFT.
       </p>
-      <button class="btn" disabled>Connect Xaman</button>
+      <a class="btn" href="/nft-market/sell/">List NFT with Xaman</a>
     </div>
   </div>
 </section>
@@ -1073,90 +1244,912 @@ h1 span{
 
 <script>
 (async()=>{
-  try{
-    const response=await fetch('/api/nft-market/listings',{headers:{Accept:'application/json'}});
-    const data=await response.json();
-    if(!response.ok||!data||!Array.isArray(data.listings)) return;
+  const grid=document.getElementById('marketGrid');
+  const search=document.getElementById('marketSearch');
+  const sort=document.getElementById('marketSort');
+  const tabs=[...document.querySelectorAll('[data-market-view]')];
 
-    document.getElementById('listingCount').textContent=String(data.listings.length);
+  let listings=[];
+  let view='all';
 
-    const grid=document.getElementById('marketGrid');
+  function emptyState(title,copy){
+    grid.innerHTML=`
+      <div class="empty">
+        <div>
+          <div class="empty-orb">◈</div>
+          <h3>${title}</h3>
+          <p>${copy}</p>
+        </div>
+      </div>
+    `;
+  }
 
-    if(!data.listings.length){
-      grid.innerHTML='';
+  function renderCard(item){
+    const card=document.createElement('article');
+    card.className='preview-nft-card live-nft-card';
 
-      const previews=[
-        {name:'XRPL COLLECTIBLE #001',collection:'MONOLITH GENESIS',price:'125'},
-        {name:'DIGITAL ARTIFACT #042',collection:'XRPL COLLECTION',price:'85'},
-        {name:'GENESIS TOKEN #007',collection:'CREATOR SERIES',price:'250'},
-        {name:'XRPL ASSET #119',collection:'INDEPENDENT NFT',price:'60'}
-      ];
+    const fallbackTitle=
+      item.serial===null || item.serial===undefined
+        ? 'XRPL NFT'
+        : 'NFT #'+String(item.serial);
 
-      for(const item of previews){
-        const card=document.createElement('article');
-        card.className='preview-nft-card';
+    const displayTitle=
+      String(item.title||fallbackTitle).trim() ||
+      fallbackTitle;
 
-        card.innerHTML=`
-          <div class="preview-nft-media">
-            <div class="preview-grid"></div>
-            <div class="preview-symbol">◈</div>
-            <span class="sample-tag">VISUAL PREVIEW</span>
-          </div>
+    const mediaType=
+      String(item.mediaType||'other')
+        .trim()
+        .toLowerCase();
 
-          <div class="preview-nft-body">
-            <div class="preview-collection">${item.collection}</div>
-            <h3>${item.name}</h3>
+    const mediaLabelMap={
+      image:'NFT',
+      video:'VIDEO',
+      audio:'AUDIO',
+      document:'DOC',
+      '3d':'3D',
+      collectible:'NFT',
+      certificate:'CERT',
+      ticket:'TICKET',
+      access:'ACCESS',
+      other:'NFT'
+    };
 
-            <div class="preview-row">
-              <div>
-                <small>ASK</small>
-                <strong>${item.price} XRP</strong>
-              </div>
+    const media=document.createElement('div');
+    media.className='preview-nft-media';
 
-              <button disabled>Buy NFT</button>
-            </div>
-          </div>
-        `;
+    const addFallback=()=>{
+      media.innerHTML='';
 
-        grid.append(card);
+      const gridMark=document.createElement('div');
+      gridMark.className='preview-grid';
+
+      const symbol=document.createElement('div');
+      symbol.className='preview-symbol';
+      symbol.textContent='◈';
+
+      const label=document.createElement('span');
+      label.className='sample-tag';
+      label.textContent=mediaLabelMap[mediaType]||'NFT';
+
+      media.append(gridMark,symbol,label);
+    };
+
+    const imageUrl=String(item.imageUrl||'').trim();
+
+    if(imageUrl){
+      const image=document.createElement('img');
+      image.src=imageUrl;
+      image.alt=displayTitle;
+      image.loading='lazy';
+      image.decoding='async';
+      image.style.cssText=
+        'width:100%;height:100%;object-fit:contain;display:block';
+      image.addEventListener('error',addFallback);
+      media.appendChild(image);
+    }else{
+      addFallback();
+    }
+
+    const body=document.createElement('div');
+    body.className='preview-nft-body';
+
+    const identity=document.createElement('div');
+    identity.className='preview-collection';
+
+    const issuer=String(item.issuerWallet||'XRPL');
+
+    if(item.verifiedCollection && item.verifiedCollection.name){
+      identity.textContent=item.verifiedCollection.name;
+    }else if(item.verifiedBrand && item.verifiedBrand.name){
+      identity.textContent=item.verifiedBrand.name;
+    }else{
+      identity.textContent=
+        issuer.length>16
+          ? issuer.slice(0,8)+'…'+issuer.slice(-6)
+          : issuer;
+    }
+
+    const title=document.createElement('h3');
+    title.textContent=displayTitle;
+    title.title=displayTitle;
+
+    const row=document.createElement('div');
+    row.className='preview-row';
+
+    const ask=document.createElement('div');
+    const askLabel=document.createElement('small');
+    askLabel.textContent='ASK';
+
+    const price=document.createElement('strong');
+
+    if(item.askUsd){
+      price.textContent='$'+String(item.askUsd);
+    }else{
+      price.textContent=String(item.askXrp||'0')+' XRP';
+    }
+
+    ask.append(askLabel,price);
+
+    const status=document.createElement('span');
+    status.className='sample-tag';
+    status.textContent='XRPL LIVE';
+
+    row.append(ask,status);
+    body.append(identity,title,row);
+    card.append(media,body);
+
+    card.tabIndex=0;
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label','View '+displayTitle);
+
+    const openCard=()=>openNftDetail(item);
+
+    card.addEventListener('click',openCard);
+    card.addEventListener('keydown',(event)=>{
+      if(event.key==='Enter' || event.key===' '){
+        event.preventDefault();
+        openCard();
+      }
+    });
+
+    return card;
+  }
+
+  function renderCollections(){
+    const groups=new Map();
+
+    for(const item of listings){
+      const c=item.verifiedCollection;
+      if(!c || !c.slug) continue;
+
+      if(!groups.has(c.slug)){
+        groups.set(c.slug,{
+          identity:c,
+          items:[]
+        });
       }
 
+      groups.get(c.slug).items.push(item);
+    }
+
+    if(!groups.size){
+      emptyState(
+        'No verified collections available yet.',
+        'Verified collections will appear here when they have active marketplace listings.'
+      );
       return;
     }
 
+    const wrap=document.createElement('div');
+    wrap.className='collection-grid';
+
+    for(const group of groups.values()){
+      const card=document.createElement('article');
+      card.className='collection-card';
+
+      const art=document.createElement('div');
+      art.className='collection-art';
+
+      const mark=document.createElement('span');
+      mark.textContent='◈';
+      art.appendChild(mark);
+
+      const copy=document.createElement('div');
+      copy.className='collection-copy';
+
+      const verified=document.createElement('div');
+      verified.className='verified-line';
+      verified.textContent='VERIFIED COLLECTION';
+
+      const title=document.createElement('h3');
+      title.textContent=group.identity.name;
+
+      const meta=document.createElement('p');
+      meta.textContent=
+        group.items.length+
+        (group.items.length===1
+          ? ' active listing'
+          : ' active listings');
+
+      copy.append(verified,title,meta);
+      card.append(art,copy);
+      wrap.appendChild(card);
+    }
+
+    grid.appendChild(wrap);
+  }
+
+  function renderBrands(){
+    const groups=new Map();
+
+    for(const item of listings){
+      const b=item.verifiedBrand;
+      if(!b || !b.slug) continue;
+
+      if(!groups.has(b.slug)){
+        groups.set(b.slug,{
+          identity:b,
+          items:[]
+        });
+      }
+
+      groups.get(b.slug).items.push(item);
+    }
+
+    if(!groups.size){
+      emptyState(
+        'No verified creators or brands available yet.',
+        'Verified creators and brands will appear here when they have active marketplace listings.'
+      );
+      return;
+    }
+
+    for(const group of groups.values()){
+      const feature=document.createElement('article');
+      feature.className='brand-feature';
+
+      const visual=document.createElement('div');
+      visual.className='brand-visual';
+
+      const monogram=document.createElement('div');
+      monogram.className='brand-monogram';
+      monogram.textContent='◈';
+
+      const verified=document.createElement('div');
+      verified.className='verified-brand';
+      verified.textContent='VERIFIED CREATOR / BRAND';
+
+      visual.append(monogram,verified);
+
+      const content=document.createElement('div');
+      content.className='brand-content';
+
+      const label=document.createElement('div');
+      label.className='brand-label';
+      label.textContent='XRPL CREATOR / BRAND';
+
+      const title=document.createElement('h3');
+      title.textContent=group.identity.name;
+
+      const count=document.createElement('p');
+      count.textContent=
+        group.items.length+
+        (group.items.length===1
+          ? ' active marketplace listing'
+          : ' active marketplace listings');
+
+      content.append(label,title,count);
+      feature.append(visual,content);
+      grid.appendChild(feature);
+    }
+  }
+
+  function render(){
     grid.innerHTML='';
 
-    for(const item of data.listings){
-      const card=document.createElement('article');
-      card.style.cssText=
-        'border:1px solid #202a35;border-radius:18px;overflow:hidden;background:#0b0f14';
-
-      const media=document.createElement('div');
-      media.style.cssText=
-        'aspect-ratio:1/1;background:linear-gradient(145deg,#121a23,#080b0f);display:grid;place-items:center;color:#526171;font-size:12px';
-      media.textContent='NFT';
-
-      const body=document.createElement('div');
-      body.style.padding='15px';
-
-      const title=document.createElement('strong');
-      title.style.cssText='display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
-      title.textContent='NFT '+String(item.serial ?? '');
-
-      const meta=document.createElement('div');
-      meta.style.cssText='color:#8b98a7;font-size:11px;margin-top:6px';
-      meta.textContent=String(item.issuerWallet||'XRPL');
-
-      const price=document.createElement('div');
-      price.style.cssText='font-size:20px;font-weight:850;margin-top:15px';
-      price.textContent=String(item.askXrp||'0')+' XRP';
-
-      body.append(title,meta,price);
-      card.append(media,body);
-      grid.append(card);
+    if(view==='collections'){
+      renderCollections();
+      return;
     }
-  }catch(e){}
+
+    if(view==='brands'){
+      renderBrands();
+      return;
+    }
+
+    let rows=listings.slice();
+
+    const q=String(search.value||'')
+      .trim()
+      .toLowerCase();
+
+    if(q){
+      rows=rows.filter(item=>{
+        const values=[
+          item.title,
+          item.description,
+          item.nftId,
+          item.issuerWallet,
+          item.sellerWallet,
+          item.taxon,
+          item.serial,
+          item.verifiedBrand?.name,
+          item.verifiedBrand?.slug,
+          item.verifiedCollection?.name,
+          item.verifiedCollection?.slug
+        ];
+
+        return values.some(value=>
+          String(value??'')
+            .toLowerCase()
+            .includes(q)
+        );
+      });
+    }
+
+    const mode=sort.value;
+
+    if(mode==='price-low'){
+      rows.sort((a,b)=>
+        Number(a.askUsdCents??Number.MAX_SAFE_INTEGER)-
+        Number(b.askUsdCents??Number.MAX_SAFE_INTEGER)
+      );
+    }else if(mode==='price-high'){
+      rows.sort((a,b)=>
+        Number(b.askUsdCents??-1)-
+        Number(a.askUsdCents??-1)
+      );
+    }else{
+      rows.sort((a,b)=>
+        String(b.listedAt||b.createdAt||'')
+          .localeCompare(
+            String(a.listedAt||a.createdAt||'')
+          )
+      );
+    }
+
+    if(!rows.length){
+      if(listings.length && q){
+        emptyState(
+          'No NFTs match your search.',
+          'Try another NFT name, NFTokenID, issuer wallet, seller wallet, taxon, or serial.'
+        );
+      }else{
+        emptyState(
+          'No active NFT listings yet.',
+          'MONOLITH will populate this market automatically when real, non-test XRPL NFT listings become active.'
+        );
+      }
+      return;
+    }
+
+    for(const item of rows){
+      grid.append(renderCard(item));
+    }
+  }
+
+  for(const tab of tabs){
+    tab.addEventListener('click',()=>{
+      view=String(tab.dataset.marketView||'all');
+
+      for(const item of tabs){
+        item.classList.toggle(
+          'active',
+          item===tab
+        );
+      }
+
+      const allView=view==='all';
+
+      search.disabled=!allView;
+      sort.disabled=!allView;
+
+      render();
+    });
+  }
+
+  search.addEventListener('input',render);
+  sort.addEventListener('change',render);
+
+  try{
+    const response=await fetch(
+      '/api/nft-market/listings',
+      {headers:{Accept:'application/json'}}
+    );
+
+    const data=await response.json();
+
+    if(
+      !response.ok ||
+      !data ||
+      !Array.isArray(data.listings)
+    ){
+      emptyState(
+        'Marketplace unavailable.',
+        'MONOLITH could not load active NFT listings.'
+      );
+      return;
+    }
+
+    listings=data.listings;
+
+    document.getElementById('listingCount')
+      .textContent=String(listings.length);
+
+    render();
+
+    const requestedListing=
+      new URLSearchParams(location.search)
+        .get('listing');
+
+    if(requestedListing){
+      const requestedItem=listings.find(item=>
+        String(item.listingId||'')===
+        String(requestedListing)
+      );
+
+      if(requestedItem){
+        setTimeout(()=>{
+          openNftDetail(requestedItem);
+        },0);
+      }
+    }
+
+  }catch(e){
+    emptyState(
+      'Marketplace unavailable.',
+      'MONOLITH could not load active NFT listings.'
+    );
+  }
 })();
+
+let ACTIVE_NFT_DETAIL=null;
+
+function nftBuyStoreKey(listingId){
+  return 'monolith_nft_market_buy_' + String(listingId || '').trim();
+}
+
+function setNftDetailStatus(message){
+  const el=document.getElementById('nftDetailStatus');
+  if(el) el.textContent=message || '';
+}
+
+function openNftDetail(item){
+  ACTIVE_NFT_DETAIL=item;
+
+  const modal=document.getElementById('nftDetailModal');
+  const art=document.getElementById('nftDetailArt');
+  const title=document.getElementById('nftDetailTitle');
+  const description=document.getElementById('nftDetailDescription');
+  const issuer=document.getElementById('nftDetailIssuer');
+  const usd=document.getElementById('nftDetailUsd');
+  const xrp=document.getElementById('nftDetailXrp');
+  const buy=document.getElementById('nftDetailBuy');
+  const verify=document.getElementById('nftDetailVerify');
+
+  art.innerHTML='';
+
+  if(item.imageUrl){
+    const img=document.createElement('img');
+    img.src=item.imageUrl;
+    img.alt=item.title || 'NFT';
+    art.appendChild(img);
+  }
+
+  title.textContent=item.title || 'XRPL NFT';
+  description.textContent=item.description || '';
+
+  const wallet=String(item.issuerWallet || '');
+  issuer.textContent=
+    wallet.length>18
+      ? wallet.slice(0,9)+'…'+wallet.slice(-7)
+      : wallet;
+
+  usd.textContent=
+    item.askUsd
+      ? '$'+String(item.askUsd)
+      : '';
+
+  xrp.textContent=
+    item.askXrp
+      ? 'Currently about '+String(item.askXrp)+' $XRP'
+      : '';
+
+  buy.disabled=!item.buyFlowEnabled;
+  buy.style.display=item.buyFlowEnabled ? '' : 'none';
+
+  const saved=localStorage.getItem(
+    nftBuyStoreKey(item.listingId)
+  );
+
+  verify.style.display=saved ? '' : 'none';
+
+  const clear=document.getElementById('nftDetailClear');
+  if(clear){
+    clear.style.display=saved ? '' : 'none';
+  }
+
+  setNftDetailStatus('');
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+
+function closeNftDetail(){
+  const modal=document.getElementById('nftDetailModal');
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  ACTIVE_NFT_DETAIL=null;
+}
+
+async function startNftDetailBuy(){
+  const item=ACTIVE_NFT_DETAIL;
+
+  if(!item || !item.listingId){
+    setNftDetailStatus('Listing unavailable.');
+    return;
+  }
+
+  const existing=localStorage.getItem(
+    nftBuyStoreKey(item.listingId)
+  );
+
+  if(existing){
+    setNftDetailStatus(
+      'A purchase request is already pending for this NFT. Verify it or clear it before starting another.'
+    );
+
+    document.getElementById(
+      'nftDetailVerify'
+    ).style.display='none';
+
+    document.getElementById(
+      'nftDetailClear'
+    ).style.display='';
+
+    return;
+  }
+
+  const confirmed=window.confirm(
+    'Continue to Xaman to create this NFT purchase request? No purchase happens until you sign.'
+  );
+
+  if(!confirmed){
+    setNftDetailStatus('Purchase request canceled.');
+    return;
+  }
+
+  const xamanWindow=window.open('about:blank','_blank');
+
+  if(xamanWindow){
+    try{xamanWindow.opener=null;}catch(_e){}
+  }
+
+  setNftDetailStatus('Creating Xaman buy offer...');
+
+  try{
+    const res=await fetch('/api/nft-market/buy/start',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        listingId:item.listingId,
+        returnUrl:location.href
+      })
+    });
+
+    const data=await res.json();
+
+    if(!data.ok){
+      setNftDetailStatus(
+        data.error || 'Could not start NFT purchase.'
+      );
+      return;
+    }
+
+    const buyOffer=data.buyOffer || data.buy || {};
+    const payloadUuid=
+      buyOffer.payloadUuid ||
+      data.payloadUuid ||
+      null;
+
+    const signUrl=
+      buyOffer.signUrl ||
+      data.signUrl ||
+      null;
+
+    if(!payloadUuid){
+      setNftDetailStatus(
+        'Buy request was created without a payload ID.'
+      );
+      return;
+    }
+
+    localStorage.setItem(
+      nftBuyStoreKey(item.listingId),
+      JSON.stringify({
+        listingId:item.listingId,
+        payloadUuid,
+        createdAt:Date.now()
+      })
+    );
+
+    document.getElementById(
+      'nftDetailVerify'
+    ).style.display='none';
+
+    document.getElementById(
+      'nftDetailClear'
+    ).style.display='';
+
+    if(signUrl){
+      if(xamanWindow && !xamanWindow.closed){
+        xamanWindow.location.replace(signUrl);
+      }else{
+        window.location.href=signUrl;
+      }
+    }else if(xamanWindow && !xamanWindow.closed){
+      xamanWindow.close();
+    }
+
+    setNftDetailStatus(
+      'Waiting for your Xaman signature...'
+    );
+
+    autoVerifyNftDetailBuy(
+      item.listingId,
+      payloadUuid
+    );
+
+  }catch(e){
+    setNftDetailStatus(
+      'Could not start NFT purchase.'
+    );
+  }
+}
+
+function clearNftDetailBuy(){
+  const item=ACTIVE_NFT_DETAIL;
+
+  if(!item || !item.listingId){
+    return;
+  }
+
+  localStorage.removeItem(
+    nftBuyStoreKey(item.listingId)
+  );
+
+  const verify=document.getElementById('nftDetailVerify');
+  const clear=document.getElementById('nftDetailClear');
+
+  if(verify) verify.style.display='none';
+  if(clear) clear.style.display='none';
+
+  setNftDetailStatus(
+    'Purchase request cleared. No NFT or $XRP was moved.'
+  );
+}
+
+async function autoVerifyNftDetailBuy(
+  listingId,
+  payloadUuid
+){
+  const maxAttempts=30;
+  const waitMs=4000;
+
+  for(let attempt=1;attempt<=maxAttempts;attempt++){
+    await new Promise(resolve=>setTimeout(resolve,waitMs));
+
+    try{
+      const res=await fetch('/api/nft-market/buy/verify',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          listingId,
+          payloadUuid
+        })
+      });
+
+      const data=await res.json();
+
+      if(data.ok){
+        localStorage.removeItem(
+          nftBuyStoreKey(listingId)
+        );
+
+        const verify=document.getElementById(
+          'nftDetailVerify'
+        );
+
+        const clear=document.getElementById(
+          'nftDetailClear'
+        );
+
+        if(verify) verify.style.display='none';
+        if(clear) clear.style.display='none';
+
+        setNftDetailStatus(
+          'Purchase complete. The NFT has been transferred to your wallet.'
+        );
+
+        setTimeout(()=>{
+          location.reload();
+        },1500);
+
+        return;
+      }
+
+      const code=String(data.error || '');
+
+      if(
+        code.includes('not_signed') ||
+        code.includes('payment_not_signed')
+      ){
+        setNftDetailStatus(
+          'Waiting for your Xaman signature...'
+        );
+        continue;
+      }
+
+      if(
+        code.includes('busy') ||
+        code.includes('temporarily') ||
+        res.status===429 ||
+        res.status>=500
+      ){
+        setNftDetailStatus(
+          'Your purchase is being finalized...'
+        );
+        continue;
+      }
+
+      setNftDetailStatus(
+        'Automatic completion needs attention. Use Verify Buy to resume this purchase.'
+      );
+
+      const verify=document.getElementById(
+        'nftDetailVerify'
+      );
+
+      if(verify) verify.style.display='';
+
+      return;
+
+    }catch(e){
+      setNftDetailStatus(
+        'Your purchase is being finalized...'
+      );
+    }
+  }
+
+  setNftDetailStatus(
+    'Automatic completion is taking longer than expected. Use Verify Buy to resume this purchase.'
+  );
+
+  const verify=document.getElementById(
+    'nftDetailVerify'
+  );
+
+  if(verify) verify.style.display='';
+}
+
+
+async function verifyNftDetailBuy(){
+  const item=ACTIVE_NFT_DETAIL;
+
+  if(!item || !item.listingId){
+    setNftDetailStatus('Listing unavailable.');
+    return;
+  }
+
+  let saved={};
+
+  try{
+    saved=JSON.parse(
+      localStorage.getItem(
+        nftBuyStoreKey(item.listingId)
+      ) || '{}'
+    );
+  }catch(e){}
+
+  if(!saved.payloadUuid){
+    setNftDetailStatus(
+      'No saved Xaman buy request found.'
+    );
+    return;
+  }
+
+  setNftDetailStatus(
+    'Verifying XRPL NFT purchase...'
+  );
+
+  try{
+    const res=await fetch('/api/nft-market/buy/verify',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        listingId:item.listingId,
+        payloadUuid:saved.payloadUuid
+      })
+    });
+
+    const data=await res.json();
+
+    if(!data.ok){
+      const code=String(data.error || '');
+
+      if(
+        code.includes('not_signed') ||
+        code.includes('payment_not_signed')
+      ){
+        setNftDetailStatus(
+          'The Xaman transaction is still waiting for your signature.'
+        );
+        return;
+      }
+
+      setNftDetailStatus(
+        data.error || 'NFT purchase verification failed.'
+      );
+      return;
+    }
+
+    localStorage.removeItem(
+      nftBuyStoreKey(item.listingId)
+    );
+
+    setNftDetailStatus(
+      'Purchase complete. The NFT transfer was verified on XRPL.'
+    );
+
+    setTimeout(()=>{
+      location.reload();
+    },1200);
+
+  }catch(e){
+    setNftDetailStatus(
+      'NFT purchase verification failed.'
+    );
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('nftDetailClose')
+    ?.addEventListener('click',closeNftDetail);
+
+  document.getElementById('nftDetailBuy')
+    ?.addEventListener('click',startNftDetailBuy);
+
+  document.getElementById('nftDetailVerify')
+    ?.addEventListener('click',verifyNftDetailBuy);
+
+  document.getElementById('nftDetailClear')
+    ?.addEventListener('click',clearNftDetailBuy);
+
+  document.getElementById('nftDetailModal')
+    ?.addEventListener('click',(event)=>{
+      if(event.target.id==='nftDetailModal'){
+        closeNftDetail();
+      }
+    });
+
+  document.addEventListener('keydown',(event)=>{
+    if(event.key==='Escape'){
+      closeNftDetail();
+    }
+  });
+});
+
 </script>
+
+<div id="nftDetailModal" class="nft-detail-modal" aria-hidden="true">
+  <div class="nft-detail-panel">
+    <button id="nftDetailClose" class="nft-detail-close" type="button">×</button>
+
+    <div id="nftDetailArt" class="nft-detail-art"></div>
+
+    <div class="nft-detail-info">
+      <div id="nftDetailIssuer" class="preview-collection"></div>
+      <h2 id="nftDetailTitle">NFT</h2>
+      <div id="nftDetailDescription" class="nft-detail-description"></div>
+
+      <div>
+        <div id="nftDetailUsd" class="nft-detail-price"></div>
+        <div id="nftDetailXrp" class="nft-detail-xrp"></div>
+      </div>
+
+      <div class="nft-detail-actions">
+        <button id="nftDetailBuy" type="button">Buy NFT with Xaman</button>
+        <button id="nftDetailVerify" type="button" style="display:none">Verify Buy</button>
+        <button id="nftDetailClear" type="button" style="display:none">Clear Request</button>
+      </div>
+
+      <div id="nftDetailStatus" class="nft-detail-status"></div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

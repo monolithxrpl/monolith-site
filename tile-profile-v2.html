@@ -1349,6 +1349,7 @@ a{
   overflow:hidden;
 }
 
+
 .galleryCard #galleryGrid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1735,9 +1736,340 @@ a{
 </style>
 
 
+<style id="MONOLITH_NFT_MARKET_TILE_PREVIEW_V1">
+#nftsForSaleProducts{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+#nftsForSaleProducts .nftMarketTileCard{
+  display:block;
+  min-width:0;
+  overflow:hidden;
+  text-decoration:none;
+  color:inherit;
+  border:1px solid rgba(53,215,255,.24);
+  background:rgba(2,10,17,.78);
+  transition:
+    border-color .18s ease,
+    transform .18s ease,
+    background .18s ease;
+}
+
+#nftsForSaleProducts .nftMarketTileCard:hover{
+  transform:translateY(-2px);
+  border-color:rgba(53,215,255,.58);
+  background:rgba(4,18,29,.94);
+}
+
+#nftsForSaleProducts .merchProductImage{
+  width:100%;
+  height:auto;
+  aspect-ratio:1 / 1;
+  object-fit:cover;
+  display:block;
+  background:#03101b;
+}
+
+#nftsForSaleProducts .nftMarketTileFallback{
+  display:grid;
+  place-items:center;
+  color:#67d5ff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(53,215,255,.16),transparent 48%),
+    linear-gradient(145deg,#081823,#03101b);
+}
+
+#nftsForSaleProducts .merchProductCopy{
+  min-width:0;
+}
+
+#nftsForSaleProducts .merchProductCopy strong{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+#nftsForSaleProducts .merchProductCopy span{
+  color:#67d5ff;
+}
+
+#nftsForSaleProducts .merchEmptyState{
+  grid-column:1 / -1;
+}
+
+@media(max-width:620px){
+  #nftsForSaleProducts{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+  }
+}
+</style>
+
+
 <style id="MONOLITH_V2_OWNER_UTILITY_VISIBILITY_V1">
 #utilityOwnerControls[hidden]{
   display:none!important;
+}
+</style>
+
+<style id="MONOLITH_NFT_SHOWCASE_OWNER_PANEL_V1">
+.v2NftShowcaseOwner{
+  grid-column:span 8;
+  width:100%;
+  box-sizing:border-box;
+}
+@media(max-width:620px){
+  .v2NftShowcaseOwner{grid-column:1 / -1;}
+}
+</style>
+
+<style id="MONOLITH_NFT_SHOWCASE_GRID_V1">
+.nftShowcaseGrid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:14px;
+}
+
+.nftShowcaseGrid .merchProduct{
+  width:100%;
+  min-width:0;
+  overflow:hidden;
+  border-radius:12px;
+}
+
+.nftShowcaseGrid .merchProductImage{
+  width:100%;
+  aspect-ratio:1 / 1;
+  object-fit:contain;
+  display:block;
+  border-radius:12px 12px 0 0;
+  background:#03101b;
+}
+
+.nftShowcaseEmpty{
+  grid-column:1 / -1;
+  color:#9eb6c7;
+  font-size:12px;
+}
+
+@media(max-width:620px){
+  .nftShowcaseGrid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+}
+</style>
+
+<style id="MONOLITH_NFT_SHOWCASE_LIGHTBOX_V2">
+.nftShowcaseLightbox{
+  width:min(94vw,1100px);
+  max-width:1100px;
+  max-height:92vh;
+  margin:auto;
+  padding:18px;
+  border:1px solid rgba(103,213,255,.45);
+  border-radius:16px;
+  background:#03101b;
+  color:#fff;
+  box-shadow:0 28px 90px rgba(0,0,0,.65);
+  overflow:auto;
+}
+
+.nftShowcaseLightbox::backdrop{
+  background:rgba(0,0,0,.84);
+  backdrop-filter:blur(5px);
+}
+
+.nftShowcaseLightbox img{
+  display:block;
+  max-width:100%;
+  max-height:76vh;
+  margin:0 auto;
+  object-fit:contain;
+  border-radius:10px;
+}
+
+#nftShowcaseLightboxMedia{
+  width:100%;
+}
+
+#nftShowcaseLightboxVideo{
+  display:block;
+  width:100%;
+  max-height:76vh;
+  margin:0 auto;
+  border-radius:10px;
+  background:#000;
+}
+
+#nftShowcaseLightboxAudio{
+  display:block;
+  width:min(100%,720px);
+  margin:14px auto 0;
+}
+
+#nftShowcaseLightboxDocument{
+  display:block;
+  width:100%;
+  height:min(76vh,820px);
+  border:0;
+  border-radius:10px;
+  background:#fff;
+}
+
+#nftShowcaseLightboxFallback{
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  border:1px solid rgba(103,213,255,.22);
+  border-radius:12px;
+  background:rgba(4,19,33,.9);
+}
+
+#nftShowcaseLightboxType{
+  color:#dff6ff;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+#nftShowcaseLightboxOpen{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  padding:10px 16px;
+  border:1px solid rgba(103,213,255,.45);
+  border-radius:10px;
+  color:#eaf8ff;
+  text-decoration:none;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+#nftShowcaseLightboxImage[hidden],
+#nftShowcaseLightboxVideo[hidden],
+#nftShowcaseLightboxAudio[hidden],
+#nftShowcaseLightboxDocument[hidden],
+#nftShowcaseLightboxFallback[hidden]{
+  display:none!important;
+}
+
+.nftShowcaseLightboxClose{
+  position:absolute;
+  top:10px;
+  right:12px;
+  z-index:2;
+  width:38px;
+  height:38px;
+  border:1px solid rgba(255,255,255,.26);
+  border-radius:50%;
+  background:rgba(0,0,0,.72);
+  color:#fff;
+  font-size:26px;
+  line-height:1;
+  cursor:pointer;
+}
+
+#nftShowcaseLightboxTitle{
+  margin-top:10px;
+  color:#f4fbff;
+  font-size:15px;
+  font-weight:900;
+  text-align:center;
+}
+
+#nftShowcaseLightboxVerified{
+  margin-top:6px;
+  color:#f5b942;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-align:center;
+}
+
+.nftShowcaseThumbButton{
+  appearance:none;
+  display:block;
+  width:100%;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+
+@media(max-width:620px){
+  .nftShowcaseLightbox{
+    width:calc(100vw - 20px);
+    padding:12px;
+  }
+
+  .nftShowcaseLightbox img{
+    max-height:72vh;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_NFT_SHOWCASE_OWNER_CARD_SPACING_V1">
+.v2NftShowcaseManage{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.v2NftShowcaseManage > .merchProduct{
+  margin:0;
+}
+
+@media(max-width:620px){
+  .v2NftShowcaseManage{
+    gap:14px;
+  }
+}
+</style>
+
+
+<style id="MONOLITH_NFT_SHOWCASE_EDITOR_PANEL_V1">
+.v2NftShowcaseAssetEditor{
+  margin-top:18px!important;
+  padding:16px;
+  border:1px solid rgba(103,213,255,.38);
+  border-top:3px solid rgba(103,213,255,.72);
+  border-radius:12px;
+  background:rgba(3,16,27,.92);
+  box-shadow:0 8px 24px rgba(0,0,0,.22);
+}
+
+.v2NftShowcaseAssetEditor::before{
+  content:"EDIT NFT";
+  display:block;
+  margin-bottom:12px;
+  color:#67d5ff;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.v2NftShowcaseAssetEditor > * + *{
+  margin-top:8px;
+}
+
+@media(max-width:620px){
+  .v2NftShowcaseAssetEditor{
+    margin-top:14px!important;
+    padding:12px;
+  }
 }
 </style>
 
@@ -1923,6 +2255,17 @@ a{
         </div>
       </article>
 
+      <article class="personalCard galleryCard nftShowcaseCard">
+        <h3>NFT Showcase</h3>
+        <p class="utilitySub">
+          NFTs owned and displayed by this coordinate.
+        </p>
+
+        <div class="nftShowcaseGrid" id="nftShowcaseProducts">
+          <div class="nftShowcaseEmpty">Loading Showcase...</div>
+        </div>
+      </article>
+
 
 
     </div>
@@ -1989,7 +2332,7 @@ a{
         </div>
       </article>
 
-      <article class="utilityCard nft" data-module="nft" draggable="false">
+<article class="utilityCard nft" data-module="nft" draggable="false">
         <div class="utilityTop">
           <div class="utilityIcon">N</div>
           <div class="dragHandle">•••</div>
@@ -1998,6 +2341,10 @@ a{
         <h3>NFT Market</h3>
         <div class="utilitySub">
           Discover and trade NFTs connected to this coordinate.
+        </div>
+
+        <div class="merchProducts" id="nftsForSaleProducts">
+          <div class="merchEmptyState">Loading NFT listings...</div>
         </div>
 
         <div class="utilityFooter">
@@ -2407,8 +2754,8 @@ a{
       const status=nft.querySelector(".moduleStatus");
       const open=nft.querySelector(".moduleOpen");
 
-      if(status) status.textContent="In Development";
-      if(open) open.textContent="Coming Soon";
+      if(status) status.textContent="LIVE";
+      if(open) open.textContent="Open NFT Market";
     }
 
     if(otc){
@@ -3488,7 +3835,7 @@ a{
 })();
 </script>
 
-<script src="/tile-profile-v2-owner.js?v=MONOLITH_V2_OWNER_SECTION_EDITING_V1"></script>
+<script src="/tile-profile-v2-owner.js?v=MONOLITH_V2_NFT_MARKET_TILE_PREVIEW_V1"></script>
 
 <style id="MONOLITH_V2_MOBILE_ZOOM_LOCK_V1">
 html,
@@ -3530,6 +3877,25 @@ body{
   },{passive:false});
 })();
 </script>
+
+  <dialog id="nftShowcaseLightbox" class="nftShowcaseLightbox">
+  <button class="nftShowcaseLightboxClose" type="button" data-showcase-lightbox-close aria-label="Close">×</button>
+
+  <div id="nftShowcaseLightboxMedia">
+    <img id="nftShowcaseLightboxImage" alt="" hidden>
+    <video id="nftShowcaseLightboxVideo" controls playsinline hidden></video>
+    <audio id="nftShowcaseLightboxAudio" controls hidden></audio>
+    <iframe id="nftShowcaseLightboxDocument" title="NFT document preview" hidden></iframe>
+
+    <div id="nftShowcaseLightboxFallback" hidden>
+      <div id="nftShowcaseLightboxType"></div>
+      <a id="nftShowcaseLightboxOpen" target="_blank" rel="noopener noreferrer">OPEN ASSET</a>
+    </div>
+  </div>
+
+  <div id="nftShowcaseLightboxTitle"></div>
+  <div id="nftShowcaseLightboxVerified">OWNER VERIFIED</div>
+</dialog>
 
 </body>
 </html>

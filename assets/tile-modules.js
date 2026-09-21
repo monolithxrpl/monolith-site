@@ -5,7 +5,7 @@
     merch_store: "Merch Store",
     otc_desk: "OTC Desk",
     marketplace: "Tile Market",
-    nft_store: "NFT Store",
+    nft_store: "NFTs For Sale",
     token_info: "Token Info",
     dex_widget: "DEX Tools"
   };
@@ -46,7 +46,8 @@
     "marketplace",
     "p2p_payments",
     "otc_desk",
-    "merch_store"
+    "merch_store",
+    "nft_store"
   ]);
 
   function coordinate() {
@@ -135,6 +136,12 @@
         </a>
       `;
     }
+    if (module.key === "nft_store") {
+      return `
+        <div data-nft-for-sale></div>
+        <a class="btn commerceModuleAction" href="/nft-market/">Open NFT Market</a>
+      `;
+    }
     if (config.url) {
       return `
         <a class="btn commerceModuleAction"
@@ -212,11 +219,17 @@
           </div>
 
           <div class="commerceModuleDescription">
-            ${module.config?.description || (
-              LIVE_MODULES.has(module.key)
-                ? ""
-                : "COMING SOON"
-            )}
+            ${
+              module.key === "nft_store"
+                ? "Live XRPL NFTs listed for sale by this coordinate."
+                : (
+                    module.config?.description || (
+                      LIVE_MODULES.has(module.key)
+                        ? ""
+                        : "COMING SOON"
+                    )
+                  )
+            }
           </div>
 
           ${LIVE_MODULES.has(module.key)
@@ -243,6 +256,8 @@
     }
 
     loadMerchStorefront(publicRoot);
+    loadNftsForSale(publicRoot);
+    loadNftShowcase(publicRoot);
 
     publicRoot.querySelectorAll(
       '[data-commerce-action="payment"]'
@@ -364,6 +379,324 @@
     }
   }
 
+  async function loadNftsForSale(publicRoot) {
+    const slot=publicRoot.querySelector("[data-nft-for-sale]");
+    if(!slot) return;
+
+    try {
+      const response=await fetch(`/api/tile/${encodeURIComponent(coordinate())}/nfts-for-sale`);
+      const data=await response.json();
+      const listings=Array.isArray(data.listings)?data.listings.slice(0,6):[];
+
+      if(!data.ok||!listings.length){
+        slot.innerHTML='<div class="commerceModuleDescription">No NFTs listed for sale yet.</div>';
+        return;
+      }
+
+      slot.innerHTML=`<div class="commerceMerchGrid">${listings.map(item=>{
+        const title=escapeHtml(
+          item.title ||
+          (item.serial !== null && item.serial !== undefined
+            ? "NFT #"+item.serial
+            : "XRPL NFT")
+        );
+
+        const href=
+          "/nft-market/?listing="+
+          encodeURIComponent(item.listingId || "");
+
+        const image=item.imageUrl
+          ? `<img
+               src="${escapeHtml(item.imageUrl)}"
+               alt="${title}"
+               loading="lazy"
+               style="width:100%;height:100%;object-fit:contain;display:block;"
+             >`
+          : `<span class="commerceMerchImageFallback">
+               ${title}
+             </span>`;
+
+        const usd=item.askUsd
+          ? "$"+escapeHtml(item.askUsd)
+          : "";
+
+        const xrp=item.askXrp
+          ? escapeHtml(item.askXrp)+" $XRP"
+          : "";
+
+        return `
+          <a
+            class="commerceMerchProduct"
+            href="${href}"
+            aria-label="Open ${title}"
+            style="text-decoration:none;"
+          >
+            ${image}
+            <div style="padding:8px 6px 4px;">
+              <div style="font-weight:700;line-height:1.25;">
+                ${title}
+              </div>
+              ${usd ? `
+                <div style="margin-top:5px;font-weight:800;">
+                  ${usd}
+                </div>
+              ` : ""}
+              ${xrp ? `
+                <div style="font-size:12px;opacity:.72;margin-top:2px;">
+                  ${xrp}
+                </div>
+              ` : ""}
+            </div>
+          </a>
+        `;
+      }).join("")}</div>`;
+    } catch(error) {
+      console.error("[tile-nfts-for-sale]",error);
+      slot.innerHTML='<div class="commerceModuleDescription">NFT listings temporarily unavailable.</div>';
+    }
+  }
+
+  async function loadNftShowcase(publicRoot) {
+    try {
+      const response=await fetch(`/api/tile/${encodeURIComponent(coordinate())}/nft-showcase`);
+      const data=await response.json();
+      const assets=Array.isArray(data.assets)
+        ? data.assets.filter(item=>item.ownershipStatus==="verified")
+        : [];
+
+      if(!data.ok||!assets.length) return;
+
+      const section=document.createElement("section");
+      section.className="box commerceModuleCard";
+      section.innerHTML=`
+        <div class="commerceModuleTitle">NFT Showcase</div>
+        <div class="commerceModuleDescription">
+          Owned NFTs displayed by this coordinate.
+        </div>
+        <div class="commerceMerchGrid">
+          ${assets.slice(0,6).map(item=>`
+            <div class="commerceMerchProduct">
+              <span class="commerceMerchImageFallback">
+                ${escapeHtml(item.title||`NFT ${item.nftId.slice(0,8)}…`)}
+                <br>
+                ${escapeHtml(item.assetType||"other")}
+                ${item.ownershipStatus==="verified" ? "<br>OWNER VERIFIED" : ""}
+              </span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      publicRoot.appendChild(section);
+    } catch(error) {
+      console.error("[tile-nft-showcase]",error);
+    }
+  }
+
+
+  async function renderNftShowcaseOwnerControls() {
+    const root=document.getElementById("nftShowcaseOwnerControls");
+    if(!root||!ownerModeActive()||!ownerPayload()) return;
+
+    let assets=[];
+
+    try{
+      const response=await fetch(
+        `/api/tile/${encodeURIComponent(coordinate())}/nft-showcase`
+      );
+      const data=await response.json();
+      assets=Array.isArray(data.assets)?data.assets:[];
+    }catch(error){
+      console.error("[nft-showcase-owner-load]",error);
+    }
+
+    root.innerHTML=`
+      <div class="commerceOwnerTitle">NFT Showcase</div>
+
+      <div class="write">
+        Display NFTs you own on this coordinate. Showcase does not list them for sale.
+      </div>
+
+      <input
+        id="nftShowcaseIdInput"
+        type="text"
+        placeholder="XRPL NFTokenID"
+        autocomplete="off"
+      />
+
+      <select id="nftShowcaseTypeInput">
+        <option value="image">Image</option>
+        <option value="video">Video</option>
+        <option value="audio">Audio</option>
+        <option value="document">Document</option>
+        <option value="3d">3D</option>
+        <option value="collectible">Collectible</option>
+        <option value="certificate">Certificate</option>
+        <option value="ticket">Ticket</option>
+        <option value="access">Access</option>
+        <option value="other">Other</option>
+      </select>
+
+      <button class="btn" id="nftShowcaseAddButton" type="button">
+        Add to Showcase
+      </button>
+
+      <div class="write" id="nftShowcaseOwnerStatus"></div>
+
+      <div>
+        ${assets.length ? assets.map(item=>`
+          <div class="commerceSwitchRow" data-showcase-row="${escapeHtml(item.showcaseId)}">
+            <div style="width:100%">
+              <div class="write">
+                ${escapeHtml(item.nftId.slice(0,16))}…
+                ${item.ownershipStatus==="verified" ? " · OWNER VERIFIED" : " · OWNERSHIP STALE"}
+              </div>
+
+              <input data-showcase-title value="${escapeHtml(item.title||"")}" placeholder="Display title" />
+              <textarea data-showcase-description placeholder="Description">${escapeHtml(item.description||"")}</textarea>
+              <input data-showcase-category value="${escapeHtml(item.category||"")}" placeholder="Category" />
+              <input data-showcase-group value="${escapeHtml(item.groupName||"")}" placeholder="Display group" />
+
+              <select data-showcase-type>
+                ${["image","video","audio","document","3d","collectible","certificate","ticket","access","other"]
+                  .map(type=>`<option value="${type}" ${item.assetType===type?"selected":""}>${type}</option>`)
+                  .join("")}
+              </select>
+
+              <input data-showcase-order type="number" value="${Number(item.sortOrder)||0}" />
+
+              <label>
+                <input data-showcase-featured type="checkbox" ${item.featured?"checked":""} />
+                Featured
+              </label>
+
+              <button class="btn" type="button" data-showcase-save="${escapeHtml(item.showcaseId)}">
+                Save
+              </button>
+
+              <button class="btn" type="button" data-showcase-remove="${escapeHtml(item.showcaseId)}">
+                Remove
+              </button>
+            </div>
+          </div>
+        `).join("") : '<div class="write">No Showcase NFTs yet.</div>'}
+      </div>
+    `;
+
+    const status=document.getElementById("nftShowcaseOwnerStatus");
+    const addButton=document.getElementById("nftShowcaseAddButton");
+
+    addButton?.addEventListener("click",async()=>{
+      const nftId=document.getElementById("nftShowcaseIdInput")?.value?.trim();
+      const assetType=document.getElementById("nftShowcaseTypeInput")?.value||"other";
+
+      if(!nftId){
+        if(status) status.textContent="Enter an NFTokenID.";
+        return;
+      }
+
+      addButton.disabled=true;
+      if(status) status.textContent="Verifying ownership...";
+
+      try{
+        const response=await fetch(
+          `/api/tile/${encodeURIComponent(coordinate())}/nft-showcase`,
+          {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+              payloadUuid:ownerPayload(),
+              nftId,
+              assetType
+            })
+          }
+        );
+
+        const data=await response.json();
+
+        if(!response.ok||!data.ok)
+          throw new Error(data.error||"nft_showcase_add_failed");
+
+        if(status) status.textContent="NFT added to Showcase.";
+        await renderNftShowcaseOwnerControls();
+      }catch(error){
+        if(status) status.textContent=error.message||"Unable to add NFT.";
+      }finally{
+        addButton.disabled=false;
+      }
+    });
+
+    root.querySelectorAll("[data-showcase-save]").forEach(button=>{
+      button.addEventListener("click",async()=>{
+        const row=button.closest("[data-showcase-row]");
+        if(!row) return;
+
+        button.disabled=true;
+        if(status) status.textContent="Saving Showcase item...";
+
+        try{
+          const response=await fetch(
+            `/api/tile/${encodeURIComponent(coordinate())}/nft-showcase/${encodeURIComponent(button.dataset.showcaseSave)}`,
+            {
+              method:"PATCH",
+              headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({
+                payloadUuid:ownerPayload(),
+                title:row.querySelector("[data-showcase-title]")?.value||"",
+                description:row.querySelector("[data-showcase-description]")?.value||"",
+                category:row.querySelector("[data-showcase-category]")?.value||"",
+                groupName:row.querySelector("[data-showcase-group]")?.value||"",
+                assetType:row.querySelector("[data-showcase-type]")?.value||"other",
+                sortOrder:row.querySelector("[data-showcase-order]")?.value||0,
+                featured:!!row.querySelector("[data-showcase-featured]")?.checked
+              })
+            }
+          );
+
+          const data=await response.json();
+
+          if(!response.ok||!data.ok)
+            throw new Error(data.error||"nft_showcase_update_failed");
+
+          if(status) status.textContent="Showcase item updated.";
+          await renderNftShowcaseOwnerControls();
+        }catch(error){
+          button.disabled=false;
+          if(status) status.textContent=error.message||"Unable to update Showcase item.";
+        }
+      });
+    });
+
+    root.querySelectorAll("[data-showcase-remove]").forEach(button=>{
+      button.addEventListener("click",async()=>{
+        button.disabled=true;
+        if(status) status.textContent="Removing NFT...";
+
+        try{
+          const response=await fetch(
+            `/api/tile/${encodeURIComponent(coordinate())}/nft-showcase/${encodeURIComponent(button.dataset.showcaseRemove)}`,
+            {
+              method:"DELETE",
+              headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({payloadUuid:ownerPayload()})
+            }
+          );
+
+          const data=await response.json();
+
+          if(!response.ok||!data.ok)
+            throw new Error(data.error||"nft_showcase_remove_failed");
+
+          if(status) status.textContent="NFT removed from Showcase.";
+          await renderNftShowcaseOwnerControls();
+        }catch(error){
+          button.disabled=false;
+          if(status) status.textContent=error.message||"Unable to remove NFT.";
+        }
+      });
+    });
+  }
+
   function renderOwnerControls(modules) {
     const panel = document.getElementById("tileModulesPanel");
     const hub = document.getElementById("commerceHubBox");
@@ -414,6 +747,8 @@
       <div class="write" id="commerceOwnerStatus">
         Switches save immediately.
       </div>
+
+      <div id="nftShowcaseOwnerControls"></div>
     `;
 
     controls
@@ -474,6 +809,8 @@
           }
         });
       });
+
+    renderNftShowcaseOwnerControls();
   }
 
   function setupP2PShareBanner() {

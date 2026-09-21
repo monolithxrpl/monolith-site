@@ -1217,6 +1217,682 @@
 
 
 
+  function wireNftShowcase(){
+    const card=document.querySelector(".nftShowcaseCard");
+    const publicGrid=$("nftShowcaseProducts");
+
+    if(!card || !publicGrid || card.querySelector(".v2NftShowcaseOwner")) return;
+
+    const panel=document.createElement("div");
+    panel.className="personalCard v2OwnerEditor v2NftShowcaseOwner";
+
+    const nftId=document.createElement("select");
+    nftId.className="v2OwnerInput";
+
+    const nftPlaceholder=document.createElement("option");
+    nftPlaceholder.value="";
+    nftPlaceholder.textContent="Choose NFT from wallet...";
+    nftId.appendChild(nftPlaceholder);
+
+    const type=document.createElement("select");
+    type.className="v2OwnerInput";
+
+    [
+      "image","video","audio","document","3d",
+      "collectible","certificate","ticket","access","other"
+    ].forEach(value=>{
+      const option=document.createElement("option");
+      option.value=value;
+      option.textContent=value;
+      type.appendChild(option);
+    });
+
+    const add=makeButton("Add NFT");
+
+    const sortMode=document.createElement("select");
+    sortMode.className="v2OwnerInput";
+
+    [
+      ["newest","Newest to Oldest"],
+      ["oldest","Oldest to Newest"],
+      ["custom","Custom Order"]
+    ].forEach(([value,label])=>{
+      const option=document.createElement("option");
+      option.value=value;
+      option.textContent=label;
+      sortMode.appendChild(option);
+    });
+
+    const msg=document.createElement("div");
+    msg.className="v2OwnerStatus";
+
+    const ownerList=document.createElement("div");
+    ownerList.className="v2NftShowcaseManage";
+
+    panel.append(nftId,type,add,sortMode,msg,ownerList);
+    card.insertAdjacentElement("afterend",panel);
+
+    async function loadWallet(){
+      const current=nftId.value;
+
+      nftId.innerHTML="";
+
+      const placeholder=document.createElement("option");
+      placeholder.value="";
+      placeholder.textContent="Choose NFT from wallet...";
+      nftId.appendChild(placeholder);
+
+      try{
+        const r=await fetch(
+          "/api/tile/"+
+          encodeURIComponent(coord)+
+          "/nft-showcase-wallet?cb="+Date.now(),
+          {cache:"no-store"}
+        );
+
+        const data=await r.json().catch(()=>({}));
+        const assets=
+          r.ok && data.ok && Array.isArray(data.assets)
+            ? data.assets
+            : [];
+
+        if(!assets.length){
+          placeholder.textContent="No eligible NFTs in wallet";
+          return;
+        }
+
+        assets.forEach(item=>{
+          const option=document.createElement("option");
+          option.value=item.nftId;
+
+          const serial=
+            item.serial===null || item.serial===undefined
+              ? ""
+              : " #"+item.serial;
+
+          let uriLabel="";
+          try{
+            const uri=String(item.uri||"");
+            const last=uri.split("/").pop()||"";
+            if(last) uriLabel=" · "+last.replace(/\.json$/i,"");
+          }catch(_){}
+
+          option.textContent=
+            "NFT"+serial+
+            uriLabel+
+            (item.inShowcase ? " · IN SHOWCASE" : "");
+
+          option.disabled=!!item.inShowcase;
+
+          if(current && current===item.nftId && !item.inShowcase){
+            option.selected=true;
+          }
+
+          nftId.appendChild(option);
+        });
+      }catch(e){
+        console.error("[v2-nft-showcase-wallet]",e);
+        placeholder.textContent="Wallet NFTs unavailable";
+      }
+    }
+
+    async function load(){
+      const r=await fetch(
+        "/api/tile/"+encodeURIComponent(coord)+"/nft-showcase",
+        {cache:"no-store"}
+      );
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        status(msg,data.error||"NFT Showcase could not be loaded.");
+        return;
+      }
+
+      const assets=Array.isArray(data.assets)?data.assets:[];
+
+      sortMode.value=
+        ["newest","oldest","custom"].includes(data.sortMode)
+          ? data.sortMode
+          : "newest";
+
+      await loadWallet();
+
+      if(!assets.length){
+        ownerList.innerHTML='<div class="nftShowcaseEmpty">No Showcase NFTs yet.</div>';
+        status(msg,"NFT Showcase controls ready.",true);
+        return;
+      }
+
+      ownerList.innerHTML="";
+
+      assets.forEach((item,index)=>{
+        const row=document.createElement("div");
+        row.className="merchProduct";
+
+        const copy=document.createElement("div");
+        copy.className="merchProductCopy";
+
+        const title=document.createElement("strong");
+        title.textContent=
+          item.title ||
+          "NFT "+String(item.nftId||"").slice(0,10)+"…";
+
+        const badge=document.createElement("span");
+        badge.textContent=
+          item.ownershipStatus==="verified"
+            ? "OWNER VERIFIED"
+            : "OWNERSHIP STALE";
+
+        const meta=document.createElement("div");
+        meta.className="v2OwnerStatus";
+        meta.textContent=[
+          item.assetType || "other",
+          item.category || null,
+          item.groupName || null,
+          item.featured ? "FEATURED" : null
+        ].filter(Boolean).join(" · ");
+
+        const actions=document.createElement("div");
+        actions.className="v2RowActions";
+
+        if(sortMode.value==="custom"){
+          const up=makeButton("↑");
+          const down=makeButton("↓");
+
+          up.disabled=index===0;
+          down.disabled=index===assets.length-1;
+
+          const moveCustom=async delta=>{
+            const target=index+delta;
+
+            if(target<0||target>=assets.length) return;
+
+            const ordered=assets.slice();
+
+            [ordered[index],ordered[target]]=[
+              ordered[target],
+              ordered[index]
+            ];
+
+            status(msg,"Saving custom Showcase order...");
+
+            for(let i=0;i<ordered.length;i++){
+              const asset=ordered[i];
+
+              const rr=await fetch(
+                "/api/tile/"+
+                encodeURIComponent(coord)+
+                "/nft-showcase/"+
+                encodeURIComponent(asset.showcaseId),
+                {
+                  method:"PATCH",
+                  headers:{"Content-Type":"application/json"},
+                  body:JSON.stringify({
+                    payloadUuid:payloadUuid(),
+                    sortOrder:i
+                  })
+                }
+              );
+
+              const result=await rr.json().catch(()=>({}));
+
+              if(!rr.ok||!result.ok){
+                status(
+                  msg,
+                  result.error||
+                  "Custom Showcase order could not be saved."
+                );
+                return;
+              }
+            }
+
+            status(msg,"Custom Showcase order saved.",true);
+            await load();
+            await loadLiveNftShowcase();
+          };
+
+          up.onclick=()=>moveCustom(-1);
+          down.onclick=()=>moveCustom(1);
+
+          actions.append(up,down);
+        }
+
+        const edit=makeButton("Edit");
+        const remove=makeButton("Remove");
+
+        const editor=document.createElement("div");
+        editor.className="v2NftShowcaseAssetEditor";
+        editor.hidden=true;
+        editor.style.marginTop="12px";
+
+        const titleInput=document.createElement("input");
+        titleInput.className="v2OwnerInput";
+        titleInput.type="text";
+        titleInput.maxLength=160;
+        titleInput.placeholder="Showcase title";
+        titleInput.value=item.title||"";
+
+        const descriptionInput=document.createElement("textarea");
+        descriptionInput.className="v2OwnerInput";
+        descriptionInput.rows=4;
+        descriptionInput.maxLength=1200;
+        descriptionInput.placeholder="Description";
+        descriptionInput.value=item.description||"";
+
+        const categoryInput=document.createElement("input");
+        categoryInput.className="v2OwnerInput";
+        categoryInput.type="text";
+        categoryInput.maxLength=80;
+        categoryInput.placeholder="Category";
+        categoryInput.value=item.category||"";
+
+        const groupInput=document.createElement("input");
+        groupInput.className="v2OwnerInput";
+        groupInput.type="text";
+        groupInput.maxLength=100;
+        groupInput.placeholder="Display group";
+        groupInput.value=item.groupName||"";
+
+        const assetTypeInput=document.createElement("select");
+        assetTypeInput.className="v2OwnerInput";
+
+        [
+          "image","video","audio","document","3d",
+          "collectible","certificate","ticket","access","other"
+        ].forEach(value=>{
+          const option=document.createElement("option");
+          option.value=value;
+          option.textContent=value;
+          assetTypeInput.appendChild(option);
+        });
+
+        assetTypeInput.value=item.assetType||"other";
+
+        const featuredLabel=document.createElement("label");
+        featuredLabel.style.display="flex";
+        featuredLabel.style.alignItems="center";
+        featuredLabel.style.gap="8px";
+
+        const featuredInput=document.createElement("input");
+        featuredInput.type="checkbox";
+        featuredInput.checked=!!item.featured;
+
+        const featuredText=document.createElement("span");
+        featuredText.textContent="Featured / Pinned";
+
+        featuredLabel.append(featuredInput,featuredText);
+
+        const coverWrap=document.createElement("div");
+        coverWrap.className="v2NftShowcaseCoverControls";
+        coverWrap.style.marginTop="10px";
+
+        const coverInfo=document.createElement("div");
+        coverInfo.className="v2OwnerStatus";
+        coverInfo.textContent=item.customCoverUrl
+          ? "Custom Showcase cover active."
+          : "Using NFT metadata preview.";
+
+        const coverHint=document.createElement("div");
+        coverHint.className="v2OwnerStatus";
+        coverHint.textContent="PNG, JPG or WebP up to 5 MB. GIF up to 25 MB.";
+
+        const coverFile=document.createElement("input");
+        coverFile.className="v2OwnerInput";
+        coverFile.type="file";
+        coverFile.accept="image/png,image/jpeg,image/webp,image/gif";
+
+        const coverActions=document.createElement("div");
+        coverActions.className="v2RowActions";
+
+        const uploadCover=makeButton(
+          item.customCoverUrl
+            ? "Replace Cover"
+            : "Upload Cover"
+        );
+
+        const removeCover=makeButton("Remove Cover");
+        removeCover.hidden=!item.customCoverUrl;
+
+        coverActions.append(uploadCover,removeCover);
+        coverWrap.append(
+          coverInfo,
+          coverHint,
+          coverFile,
+          coverActions
+        );
+
+        uploadCover.onclick=async()=>{
+          const file=
+            coverFile.files &&
+            coverFile.files[0];
+
+          if(!file){
+            status(msg,"Choose a Showcase cover image.");
+            return;
+          }
+
+          uploadCover.disabled=true;
+          status(msg,"Uploading Custom Showcase cover...");
+
+          try{
+            const fd=new FormData();
+            fd.append("payloadUuid",payloadUuid());
+            fd.append("cover",file);
+
+            const rr=await fetch(
+              "/api/tile/"+
+              encodeURIComponent(coord)+
+              "/nft-showcase/"+
+              encodeURIComponent(item.showcaseId)+
+              "/cover",
+              {
+                method:"POST",
+                body:fd
+              }
+            );
+
+            const result=
+              await rr.json().catch(()=>({}));
+
+            if(!rr.ok||!result.ok){
+              status(
+                msg,
+                result.error||
+                "Custom Showcase cover could not be saved."
+              );
+              return;
+            }
+
+            status(
+              msg,
+              "Custom Showcase cover saved.",
+              true
+            );
+
+            await load();
+            await loadLiveNftShowcase();
+
+          }catch(e){
+            console.error(
+              "[v2-nft-showcase-cover-upload]",
+              e
+            );
+
+            status(
+              msg,
+              "Custom Showcase cover could not be saved."
+            );
+
+          }finally{
+            uploadCover.disabled=false;
+          }
+        };
+
+        removeCover.onclick=async()=>{
+          if(
+            !confirm(
+              "Remove the custom Showcase cover?"
+            )
+          ) return;
+
+          removeCover.disabled=true;
+          status(msg,"Removing Custom Showcase cover...");
+
+          try{
+            const rr=await fetch(
+              "/api/tile/"+
+              encodeURIComponent(coord)+
+              "/nft-showcase/"+
+              encodeURIComponent(item.showcaseId)+
+              "/cover",
+              {
+                method:"DELETE",
+                headers:{
+                  "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                  payloadUuid:payloadUuid()
+                })
+              }
+            );
+
+            const result=
+              await rr.json().catch(()=>({}));
+
+            if(!rr.ok||!result.ok){
+              status(
+                msg,
+                result.error||
+                "Custom Showcase cover could not be removed."
+              );
+              return;
+            }
+
+            status(
+              msg,
+              "Custom Showcase cover removed.",
+              true
+            );
+
+            await load();
+            await loadLiveNftShowcase();
+
+          }catch(e){
+            console.error(
+              "[v2-nft-showcase-cover-remove]",
+              e
+            );
+
+            status(
+              msg,
+              "Custom Showcase cover could not be removed."
+            );
+
+          }finally{
+            removeCover.disabled=false;
+          }
+        };
+
+        const editorActions=document.createElement("div");
+        editorActions.className="v2RowActions";
+
+        const save=makeButton("Save");
+        const cancel=makeButton("Cancel");
+
+        editorActions.append(save,cancel);
+
+        editor.append(
+          titleInput,
+          descriptionInput,
+          categoryInput,
+          groupInput,
+          assetTypeInput,
+          featuredLabel,
+          coverWrap,
+          editorActions
+        );
+
+        edit.onclick=()=>{
+          editor.hidden=!editor.hidden;
+          edit.textContent=editor.hidden ? "Edit" : "Close Editor";
+        };
+
+        cancel.onclick=()=>{
+          titleInput.value=item.title||"";
+          descriptionInput.value=item.description||"";
+          categoryInput.value=item.category||"";
+          groupInput.value=item.groupName||"";
+          assetTypeInput.value=item.assetType||"other";
+          featuredInput.checked=!!item.featured;
+          editor.hidden=true;
+          edit.textContent="Edit";
+        };
+
+        save.onclick=async()=>{
+          save.disabled=true;
+          status(msg,"Saving NFT Showcase asset...");
+
+          try{
+            const rr=await fetch(
+              "/api/tile/"+
+              encodeURIComponent(coord)+
+              "/nft-showcase/"+
+              encodeURIComponent(item.showcaseId),
+              {
+                method:"PATCH",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                  payloadUuid:payloadUuid(),
+                  title:titleInput.value,
+                  description:descriptionInput.value,
+                  category:categoryInput.value,
+                  groupName:groupInput.value,
+                  assetType:assetTypeInput.value,
+                  featured:featuredInput.checked
+                })
+              }
+            );
+
+            const result=await rr.json().catch(()=>({}));
+
+            if(!rr.ok||!result.ok){
+              status(
+                msg,
+                result.error||
+                "NFT Showcase asset could not be saved."
+              );
+              return;
+            }
+
+            status(msg,"NFT Showcase asset saved.",true);
+            await load();
+            await loadLiveNftShowcase();
+
+          }catch(e){
+            console.error("[v2-nft-showcase-edit]",e);
+            status(msg,"NFT Showcase asset could not be saved.");
+
+          }finally{
+            save.disabled=false;
+          }
+        };
+
+        remove.onclick=async()=>{
+          if(!confirm("Remove this NFT from Showcase?")) return;
+
+          const rr=await fetch(
+            "/api/tile/"+
+            encodeURIComponent(coord)+
+            "/nft-showcase/"+
+            encodeURIComponent(item.showcaseId),
+            {
+              method:"DELETE",
+              headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({
+                payloadUuid:payloadUuid()
+              })
+            }
+          );
+
+          const result=await rr.json().catch(()=>({}));
+
+          if(!rr.ok||!result.ok){
+            status(msg,result.error||"NFT could not be removed.");
+            return;
+          }
+
+          status(msg,"NFT removed from Showcase.",true);
+          await load();
+          await loadLiveNftShowcase();
+        };
+
+        actions.append(edit,remove);
+
+        copy.append(title,badge);
+
+        if(meta.textContent){
+          copy.appendChild(meta);
+        }
+
+        copy.append(actions,editor);
+        row.appendChild(copy);
+        ownerList.appendChild(row);
+      });
+
+      status(msg,"NFT Showcase controls ready.",true);
+    }
+
+    sortMode.onchange=async()=>{
+      status(msg,"Saving Showcase sort...");
+
+      const r=await fetch(
+        "/api/tile/"+
+        encodeURIComponent(coord)+
+        "/nft-showcase-settings",
+        {
+          method:"PATCH",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({
+            payloadUuid:payloadUuid(),
+            sortMode:sortMode.value
+          })
+        }
+      );
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        status(msg,data.error||"Showcase sort could not be saved.");
+        return;
+      }
+
+      status(msg,"Showcase sort updated.",true);
+      await load();
+      await loadLiveNftShowcase();
+    };
+
+
+    add.onclick=async()=>{
+      const value=String(nftId.value||"").trim();
+
+      if(!value){
+        status(msg,"Choose an NFT from your wallet.");
+        return;
+      }
+
+      status(msg,"Verifying NFT ownership...");
+
+      const r=await fetch(
+        "/api/tile/"+encodeURIComponent(coord)+"/nft-showcase",
+        {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({
+            payloadUuid:payloadUuid(),
+            nftId:value,
+            assetType:type.value
+          })
+        }
+      );
+
+      const data=await r.json().catch(()=>({}));
+
+      if(!r.ok||!data.ok){
+        status(msg,data.error||"NFT could not be added.");
+        return;
+      }
+
+      nftId.value="";
+      status(msg,"NFT added to Showcase.",true);
+      await load();
+      await loadLiveNftShowcase();
+    };
+
+    load();
+  }
+
+
   /* MONOLITH_V2_LIVE_MERCH_STOREFRONT_V1 */
   async function loadLiveMerch(){
     const slot=$("merchProducts");
@@ -1300,6 +1976,378 @@
       slot.appendChild(error);
     }
   }
+
+  /* MONOLITH_V2_NFT_MARKET_TILE_PREVIEW_V1 */
+  async function loadLiveNftsForSale(){
+    const slot=$("nftsForSaleProducts");
+    if(!slot) return;
+
+    slot.innerHTML="";
+
+    try{
+      const r=await fetch(
+        "/api/tile/"+
+        encodeURIComponent(String(coord||"ORIGIN").toUpperCase())+
+        "/nfts-for-sale?cb="+Date.now(),
+        {cache:"no-store"}
+      );
+
+      const data=await r.json();
+      const listings=
+        data && Array.isArray(data.listings)
+          ? data.listings
+          : [];
+
+      if(!r.ok || !data.ok || !listings.length){
+        const empty=document.createElement("div");
+        empty.className="merchEmptyState";
+        empty.textContent="No NFTs listed for sale yet.";
+        slot.appendChild(empty);
+        return;
+      }
+
+      listings.slice(0,6).forEach(item=>{
+        const card=document.createElement("a");
+        card.className="merchProduct nftMarketTileCard";
+        card.href="/nft-market/#market";
+
+        const fallbackTitle=
+          item.serial===null ||
+          item.serial===undefined
+            ? "XRPL NFT"
+            : "NFT #"+String(item.serial);
+
+        const displayTitle=
+          String(item.title||fallbackTitle).trim() ||
+          fallbackTitle;
+
+        const mediaType=
+          String(item.mediaType||"other")
+            .trim()
+            .toLowerCase();
+
+        const mediaLabelMap={
+          image:"NFT",
+          video:"VIDEO",
+          audio:"AUDIO",
+          document:"DOC",
+          "3d":"3D",
+          collectible:"NFT",
+          certificate:"CERT",
+          ticket:"TICKET",
+          access:"ACCESS",
+          other:"NFT"
+        };
+
+        const makeFallback=()=>{
+          const fallback=document.createElement("div");
+          fallback.className=
+            "merchProductImage merchProductFallback nftMarketTileFallback";
+          fallback.textContent=
+            mediaLabelMap[mediaType]||"NFT";
+          return fallback;
+        };
+
+        const imageUrl=
+          String(item.imageUrl||"").trim();
+
+        if(imageUrl){
+          const image=document.createElement("img");
+          image.className="merchProductImage";
+          image.src=imageUrl;
+          image.alt=displayTitle;
+          image.loading="lazy";
+          image.decoding="async";
+
+          image.addEventListener("error",()=>{
+            image.replaceWith(makeFallback());
+          });
+
+          card.appendChild(image);
+        }else{
+          card.appendChild(makeFallback());
+        }
+
+        const copy=document.createElement("div");
+        copy.className="merchProductCopy";
+
+        const title=document.createElement("strong");
+        title.textContent=displayTitle;
+        title.title=displayTitle;
+
+        const price=document.createElement("span");
+        price.textContent=
+          String(item.askXrp||"0")+" XRP";
+
+        copy.appendChild(title);
+        copy.appendChild(price);
+        card.appendChild(copy);
+
+        card.addEventListener("click",e=>{
+          e.stopPropagation();
+        });
+
+        slot.appendChild(card);
+      });
+
+    }catch(e){
+      console.error("[v2-nfts-for-sale]",e);
+
+      const error=document.createElement("div");
+      error.className="merchEmptyState";
+      error.textContent="NFT listings temporarily unavailable.";
+      slot.appendChild(error);
+    }
+  }
+
+  function openNftShowcaseAsset(item){
+    const lightbox=document.getElementById("nftShowcaseLightbox");
+    const image=document.getElementById("nftShowcaseLightboxImage");
+    const video=document.getElementById("nftShowcaseLightboxVideo");
+    const audio=document.getElementById("nftShowcaseLightboxAudio");
+    const documentView=document.getElementById("nftShowcaseLightboxDocument");
+    const fallback=document.getElementById("nftShowcaseLightboxFallback");
+    const fallbackType=document.getElementById("nftShowcaseLightboxType");
+    const openLink=document.getElementById("nftShowcaseLightboxOpen");
+    const title=document.getElementById("nftShowcaseLightboxTitle");
+
+    if(!lightbox||!image||!video||!audio||!documentView||!fallback||!fallbackType||!openLink||!title){
+      return;
+    }
+
+    [image,video,audio,documentView,fallback].forEach(el=>{
+      el.hidden=true;
+    });
+
+    image.removeAttribute("src");
+    video.pause();
+    video.removeAttribute("src");
+    audio.pause();
+    audio.removeAttribute("src");
+    documentView.removeAttribute("src");
+    openLink.removeAttribute("href");
+
+    const type=String(item.assetType||"other").toLowerCase();
+    const mime=String(item.mediaMime||"").toLowerCase();
+    const media=item.primaryMediaUrl||item.mediaUrl||item.thumbnailUrl||"";
+    const artwork=item.thumbnailUrl||item.mediaUrl||"";
+
+    title.textContent=item.title||"NFT Showcase";
+
+    const showImage=src=>{
+      if(!src) return false;
+      image.src=src;
+      image.alt=item.title||"NFT Showcase asset";
+      image.hidden=false;
+      return true;
+    };
+
+    if(type==="video" || mime.startsWith("video/")){
+      if(media){
+        video.src=media;
+        video.hidden=false;
+      }
+    }else if(type==="audio" || mime.startsWith("audio/")){
+      if(artwork) showImage(artwork);
+      if(media){
+        audio.src=media;
+        audio.hidden=false;
+      }
+    }else if(
+      type==="document" ||
+      mime==="application/pdf" ||
+      mime.startsWith("text/")
+    ){
+      if(media){
+        documentView.src=media;
+        documentView.hidden=false;
+      }
+    }else if(type==="3d"){
+      if(artwork) showImage(artwork);
+      fallbackType.textContent="3D NFT";
+      if(media) openLink.href=media;
+      openLink.hidden=!media;
+      fallback.hidden=false;
+    }else if(
+      type==="image" ||
+      type==="collectible" ||
+      mime.startsWith("image/")
+    ){
+      if(!showImage(media)){
+        fallbackType.textContent=type.toUpperCase();
+        fallback.hidden=false;
+      }
+    }else if(
+      type==="certificate" ||
+      type==="ticket" ||
+      type==="access"
+    ){
+      if(!showImage(artwork||media)){
+        fallbackType.textContent=type.toUpperCase();
+        if(media) openLink.href=media;
+        openLink.hidden=!media;
+        fallback.hidden=false;
+      }
+    }else{
+      if(!showImage(artwork||media)){
+        fallbackType.textContent="NFT ASSET";
+        if(media) openLink.href=media;
+        openLink.hidden=!media;
+        fallback.hidden=false;
+      }
+    }
+
+    if(typeof lightbox.showModal==="function"){
+      lightbox.showModal();
+    }else{
+      lightbox.setAttribute("open","");
+    }
+  }
+
+
+  async function loadLiveNftShowcase(){
+    const slot=$("nftShowcaseProducts");
+    if(!slot) return;
+
+    slot.innerHTML="";
+
+    try{
+      const r=await fetch(
+        "/api/tile/"+
+        encodeURIComponent(String(coord||"ORIGIN").toUpperCase())+
+        "/nft-showcase?cb="+Date.now(),
+        {cache:"no-store"}
+      );
+
+      const data=await r.json();
+      const assets=
+        data && Array.isArray(data.assets)
+          ? data.assets.filter(
+              item=>item.ownershipStatus==="verified"
+            )
+          : [];
+
+      if(!r.ok || !data.ok || !assets.length){
+        const empty=document.createElement("div");
+        empty.className="nftShowcaseEmpty";
+        empty.textContent="No verified Showcase NFTs yet.";
+        slot.appendChild(empty);
+        return;
+      }
+
+      assets.slice(0,6).forEach(item=>{
+        const card=document.createElement("div");
+        card.className="merchProduct";
+
+        const button=document.createElement("button");
+        button.type="button";
+        button.className="nftShowcaseThumbButton";
+        button.setAttribute("aria-label","Open "+(item.title||"NFT Showcase asset"));
+
+        if(item.thumbnailUrl){
+          const image=document.createElement("img");
+          image.className="merchProductImage";
+          image.src=item.thumbnailUrl;
+          image.alt=item.title||"NFT Showcase asset";
+          image.loading="lazy";
+          button.appendChild(image);
+        }else{
+          const fallback=document.createElement("div");
+          fallback.className="merchProductImage merchProductFallback";
+          fallback.textContent=String(item.assetType||"NFT").toUpperCase();
+          button.appendChild(fallback);
+        }
+
+        button.addEventListener("click",()=>{
+          openNftShowcaseAsset(item);
+        });
+
+        card.appendChild(button);
+
+        const copy=document.createElement("div");
+        copy.className="merchProductCopy";
+
+        const title=document.createElement("strong");
+        title.textContent=
+          item.title ||
+          "NFT "+String(item.nftId||"").slice(0,8)+"…";
+
+        const verified=document.createElement("span");
+        verified.textContent="OWNER VERIFIED";
+
+        copy.appendChild(title);
+        copy.appendChild(verified);
+        card.appendChild(copy);
+
+        slot.appendChild(card);
+      });
+
+    }catch(e){
+      console.error("[v2-nft-showcase]",e);
+
+      const error=document.createElement("div");
+      error.className="nftShowcaseEmpty";
+      error.textContent="NFT Showcase temporarily unavailable.";
+      slot.appendChild(error);
+    }
+  }
+
+
+  function wireNftShowcaseLightbox(){
+    const lightbox=document.getElementById("nftShowcaseLightbox");
+    if(!lightbox || lightbox.dataset.wired==="1") return;
+
+    lightbox.dataset.wired="1";
+
+    function resetMedia(){
+      const image=document.getElementById("nftShowcaseLightboxImage");
+      const video=document.getElementById("nftShowcaseLightboxVideo");
+      const audio=document.getElementById("nftShowcaseLightboxAudio");
+      const documentView=document.getElementById("nftShowcaseLightboxDocument");
+
+      if(image) image.removeAttribute("src");
+
+      if(video){
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+      }
+
+      if(audio){
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+      }
+
+      if(documentView) documentView.removeAttribute("src");
+    }
+
+    function close(){
+      if(typeof lightbox.close==="function" && lightbox.open){
+        lightbox.close();
+      }else{
+        lightbox.removeAttribute("open");
+        resetMedia();
+      }
+    }
+
+    lightbox
+      .querySelectorAll("[data-showcase-lightbox-close]")
+      .forEach(element=>{
+        element.addEventListener("click",close);
+      });
+
+    lightbox.addEventListener("click",event=>{
+      if(event.target===lightbox){
+        close();
+      }
+    });
+
+    lightbox.addEventListener("close",()=>{
+      resetMedia();
+    });
+  }
+
 
   /* MONOLITH_V2_PUBLIC_ACTIONS_V1 */
   function wirePublicActions(){
@@ -1605,7 +2653,8 @@
         }
 
         if(module==="nft"){
-          alert("MONOLITH NFT Market is coming soon.");
+          location.href="/nft-market/";
+          return;
         }
       });
     }
@@ -1926,6 +2975,8 @@
 
       document.body.classList.add("v2OwnerUnlocked");
 
+      wireNftShowcase();
+
     }catch(e){
       console.error(
         "MONOLITH V2 owner editing failed:",
@@ -1937,6 +2988,18 @@
   wireGalleryLightbox();
   wirePublicActions();
   loadLiveMerch();
+  loadLiveNftsForSale();
+  loadLiveNftShowcase();
+
+  if(document.readyState==="loading"){
+    document.addEventListener(
+      "DOMContentLoaded",
+      wireNftShowcaseLightbox,
+      {once:true}
+    );
+  }else{
+    wireNftShowcaseLightbox();
+  }
 
   setInterval(unlock,500);
   setTimeout(unlock,100);
