@@ -169,6 +169,64 @@ h1{font-size:64px;letter-spacing:-.055em;margin:10px 0}
   color:#aa9667;
   font-size:10px;
 }
+
+#sellerStatus{
+  position:relative;
+  padding:17px 18px 17px 48px;
+  border-width:1px;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.55;
+  color:#dce8ef;
+  background:rgba(53,215,255,.055);
+  border-color:rgba(53,215,255,.32);
+}
+#sellerStatus::before{
+  content:'i';
+  position:absolute;
+  left:17px;
+  top:16px;
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #35d7ff;
+  border-radius:50%;
+  color:#35d7ff;
+  font-size:11px;
+  font-weight:900;
+}
+#sellerStatus[data-tone="warning"]{
+  color:#f3d991;
+  background:rgba(214,167,66,.09);
+  border-color:rgba(214,167,66,.58);
+  box-shadow:inset 3px 0 0 #d6a742;
+}
+#sellerStatus[data-tone="warning"]::before{
+  content:'!';
+  color:#f1c75b;
+  border-color:#f1c75b;
+}
+#sellerStatus[data-tone="success"]{
+  color:#bdebd7;
+  background:rgba(67,201,145,.08);
+  border-color:rgba(67,201,145,.48);
+  box-shadow:inset 3px 0 0 #43c991;
+}
+#sellerStatus[data-tone="success"]::before{
+  content:'✓';
+  color:#63d9a7;
+  border-color:#63d9a7;
+}
+#sellerStatus[data-tone="working"]{
+  color:#bdefff;
+  background:rgba(53,215,255,.07);
+  border-color:rgba(53,215,255,.45);
+}
+#sellerStatus[data-tone="working"]::before{
+  content:'…';
+}
 footer{border-top:1px solid rgba(255,255,255,.06)}
 .footer{
   min-height:78px;
@@ -588,7 +646,8 @@ async function createSellerIdentity(identityType){
         );
       }else if(code==='brand_collection_requires_issuer_wallet'){
         sellerSetStatus(
-          'Brand and Collection creation requires an NFT issued by your connected seller wallet.'
+          'BRAND / COLLECTION CREATION BLOCKED — This NFT was not issued by your connected seller wallet. You can only create a Brand or Collection from an NFT issued by that wallet.',
+          'warning'
         );
       }else{
         sellerSetStatus(
@@ -815,7 +874,8 @@ function showSellerCanceled(listing,xrpl){
   document.getElementById('sellerPreviewState').textContent='CANCELED';
 
   sellerSetStatus(
-    'Listing canceled. The NFT is no longer available for purchase.'
+    'Listing canceled. The NFT is no longer available for purchase.',
+    'success'
   );
 }
 
@@ -838,7 +898,7 @@ async function startSellerCancel(){
     try{xamanWindow.opener=null;}catch(_e){}
   }
 
-  sellerSetStatus('Creating Xaman cancellation request...');
+  sellerSetStatus('Creating Xaman cancellation request...','working');
 
   try{
     const res=await fetch('/api/nft-market/cancel/start',{
@@ -899,7 +959,8 @@ async function startSellerCancel(){
     }
 
     sellerSetStatus(
-      'Authorize the cancellation in Xaman.'
+      'Authorize the cancellation in Xaman.',
+      'working'
     );
 
     autoVerifySellerCancel(listingId,payloadUuid);
@@ -943,7 +1004,8 @@ async function autoVerifySellerCancel(listingId,payloadUuid){
 
       if(code.includes('not_signed')){
         sellerSetStatus(
-          'Waiting for your Xaman cancellation signature...'
+          'Waiting for your Xaman cancellation signature...',
+          'working'
         );
         continue;
       }
@@ -955,7 +1017,8 @@ async function autoVerifySellerCancel(listingId,payloadUuid){
         code.includes('temporarily')
       ){
         sellerSetStatus(
-          'MONOLITH is finalizing the cancellation...'
+          'MONOLITH is finalizing the cancellation...',
+          'working'
         );
         continue;
       }
@@ -1018,9 +1081,11 @@ function clearSellerSuccess(){
 }
 
 
-function sellerSetStatus(message){
+function sellerSetStatus(message,tone='info'){
   const el=document.getElementById('sellerStatus');
-  if(el) el.textContent=message;
+  if(!el) return;
+  el.textContent=message;
+  el.dataset.tone=tone;
 }
 
 function sellerState(){
@@ -1238,7 +1303,8 @@ async function createSellerListing(){
   }
 
   sellerSetStatus(
-    'Ownership approved. Preparing your marketplace authorization...'
+    'Ownership approved. Preparing your marketplace authorization...',
+    'working'
   );
 
   try{
@@ -1347,7 +1413,8 @@ async function createSellerListing(){
     }
 
     sellerSetStatus(
-      'Ownership verified. Approve the listing authorization in Xaman. Your NFT stays in your wallet until it sells.'
+      'Ownership verified. Approve the listing authorization in Xaman. Your NFT stays in your wallet until it sells.',
+      'working'
     );
 
     window.location.href=signUrl;
@@ -1387,7 +1454,8 @@ async function autoVerifySellerOffer(listingId,payloadUuid){
           'ACTIVE';
 
         sellerSetStatus(
-          'Listing active. Your NFT is now available in the MONOLITH NFT Market.'
+          'Listing active. Your NFT is now available in the MONOLITH NFT Market.',
+          'success'
         );
 
         showSellerSuccess(data.listing);
@@ -1399,7 +1467,8 @@ async function autoVerifySellerOffer(listingId,payloadUuid){
 
       if(code.includes('not_signed')){
         sellerSetStatus(
-          'Waiting for your Xaman listing authorization...'
+          'Waiting for your Xaman listing authorization...',
+          'working'
         );
         continue;
       }
@@ -1411,7 +1480,8 @@ async function autoVerifySellerOffer(listingId,payloadUuid){
         code.includes('temporarily')
       ){
         sellerSetStatus(
-          'MONOLITH is finalizing your listing...'
+          'MONOLITH is finalizing your listing...',
+          'working'
         );
         continue;
       }
