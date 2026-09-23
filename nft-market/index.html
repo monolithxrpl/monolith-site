@@ -1544,9 +1544,13 @@ function openNftDetail(item){
 
   const wallet=String(item.issuerWallet || '');
   issuer.textContent=
-    wallet.length>18
-      ? wallet.slice(0,9)+'…'+wallet.slice(-7)
-      : wallet;
+    item.verifiedCollection && item.verifiedCollection.name
+      ? 'COLLECTION // '+item.verifiedCollection.name
+      : item.verifiedBrand && item.verifiedBrand.name
+        ? 'BRAND // '+item.verifiedBrand.name
+        : wallet.length>18
+          ? wallet.slice(0,9)+'…'+wallet.slice(-7)
+          : wallet;
 
   utility.textContent=
     item.utility && item.utility.label
