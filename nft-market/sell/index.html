@@ -315,7 +315,31 @@ footer{border-top:1px solid rgba(255,255,255,.06)}
       <div class="class-card selected">
         <small>CURRENT MARKET CLASSIFICATION</small>
         <strong id="sellerClassification">Independent NFT</strong>
-        <p>Verified Brand and Collection matching will only be applied when MONOLITH has a trusted registry match.</p>
+        <p id="sellerClassificationHelp">MONOLITH classifies this listing automatically.</p>
+      </div>
+    </div>
+
+    <div id="sellerIdentityPanel" class="notice" style="display:none;margin-top:14px;padding:18px">
+      <div id="sellerIdentityNotice" style="font-weight:800;line-height:1.5"></div>
+
+      <div id="sellerIdentityControls" style="display:none;margin-top:16px">
+        <div class="field">
+          <label>BRAND NAME</label>
+          <input id="sellerBrandName" class="input" placeholder="Create a Brand">
+          <button id="sellerCreateBrand" class="verify" type="button" style="margin-top:8px">
+            Create Brand
+          </button>
+        </div>
+
+        <div class="field" style="margin-top:16px">
+          <label>COLLECTION NAME</label>
+          <input id="sellerCollectionName" class="input" placeholder="Create a Collection">
+          <button id="sellerCreateCollection" class="verify" type="button" style="margin-top:8px">
+            Create Collection
+          </button>
+        </div>
+
+        <div id="sellerExistingIdentities" class="helper" style="margin-top:14px"></div>
       </div>
     </div>
 
@@ -434,6 +458,161 @@ function setSellerAuthUi(auth){
   }
 }
 
+async function loadSellerIdentityAccess(auth){
+  const panel=document.getElementById('sellerIdentityPanel');
+  const notice=document.getElementById('sellerIdentityNotice');
+  const controls=document.getElementById('sellerIdentityControls');
+  const existing=document.getElementById('sellerExistingIdentities');
+  const help=document.getElementById('sellerClassificationHelp');
+
+  if(!auth || !auth.verified || !auth.payloadUuid){
+    if(panel) panel.style.display='none';
+    return;
+  }
+
+  try{
+    const res=await fetch('/api/nft-market/seller/identities',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({payloadUuid:auth.payloadUuid})
+    });
+
+    const data=await res.json();
+
+    if(!res.ok || !data.ok){
+      throw new Error(data.error||'identity_access_failed');
+    }
+
+    if(panel) panel.style.display='';
+
+    if(data.tileOwner){
+      const tiles=Array.isArray(data.tiles)?data.tiles:[];
+
+      if(notice){
+        notice.textContent=
+          'MONOLITH Tile Owner Benefit — You own '+
+          (tiles.length===1?'a MONOLITH tile':'MONOLITH tiles')+
+          '. You can create a Brand and Collections for your NFT listings.';
+      }
+
+      if(controls) controls.style.display='';
+
+      if(help){
+        help.textContent=
+          'Independent by default. Tile owners can create a Brand and Collections.';
+      }
+
+      const identities=Array.isArray(data.identities)?data.identities:[];
+
+      if(existing){
+        existing.textContent=identities.length
+          ? 'Your identities: '+identities.map(x=>
+              (x.identity_type==='collection'?'Collection: ':'Brand: ')+
+              x.display_name
+            ).join(' · ')
+          : 'No Brand or Collection created yet.';
+      }
+    }else{
+      if(notice){
+        notice.textContent=
+          'Independent NFT Listing — Want to create a Brand or Collections? Own a MONOLITH tile to unlock project-level identity.';
+      }
+
+      if(controls) controls.style.display='none';
+
+      if(help){
+        help.textContent=
+          'No MONOLITH tile detected. This NFT will list as an Independent NFT.';
+      }
+
+      if(existing) existing.textContent='';
+    }
+  }catch(_e){
+    if(panel) panel.style.display='none';
+  }
+}
+
+async function createSellerIdentity(identityType){
+  const auth=nftSellerAuth();
+  const nftId=String(
+    document.getElementById('sellerNftId')?.value||''
+  ).trim().toUpperCase();
+
+  const input=document.getElementById(
+    identityType==='brand'
+      ? 'sellerBrandName'
+      : 'sellerCollectionName'
+  );
+
+  const displayName=String(input?.value||'').trim();
+
+  if(!auth || !auth.verified || !auth.payloadUuid){
+    sellerSetStatus('Connect your seller wallet with Xaman first.');
+    return;
+  }
+
+  if(!/^[A-F0-9]{64}$/.test(nftId)){
+    sellerSetStatus(
+      'Enter the NFTokenID you want to classify before creating a Brand or Collection.'
+    );
+    return;
+  }
+
+  if(displayName.length<2){
+    sellerSetStatus(
+      'Enter a Brand or Collection name first.'
+    );
+    return;
+  }
+
+  try{
+    const res=await fetch('/api/nft-market/seller/identity/create',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        payloadUuid:auth.payloadUuid,
+        nftId,
+        identityType,
+        displayName
+      })
+    });
+
+    const data=await res.json();
+
+    if(!res.ok || !data.ok){
+      const code=String(data.error||'');
+
+      if(code==='monolith_tile_required_for_brand_collection'){
+        sellerSetStatus(
+          'A MONOLITH tile is required to create a Brand or Collection.'
+        );
+      }else if(code==='brand_collection_requires_issuer_wallet'){
+        sellerSetStatus(
+          'Brand and Collection creation requires an NFT issued by your connected seller wallet.'
+        );
+      }else{
+        sellerSetStatus(
+          data.error||'Brand or Collection could not be created.'
+        );
+      }
+      return;
+    }
+
+    if(input) input.value='';
+
+    sellerSetStatus(
+      (identityType==='brand'?'Brand':'Collection')+
+      ' created. MONOLITH will automatically classify matching listings.'
+    );
+
+    await loadSellerIdentityAccess(auth);
+  }catch(_e){
+    sellerSetStatus(
+      'MONOLITH could not create that Brand or Collection.'
+    );
+  }
+}
+
 async function verifyNftSellerAuth(payloadUuid){
   const res=await fetch(
     '/api/nft-market/seller/auth/verify',
@@ -466,6 +645,7 @@ async function verifyNftSellerAuth(payloadUuid){
 
   saveNftSellerAuth(auth);
   setSellerAuthUi(auth);
+  await loadSellerIdentityAccess(auth);
 
   return auth;
 }
@@ -1330,6 +1510,13 @@ document.addEventListener('DOMContentLoaded',async()=>{
   }
 
   setSellerAuthUi(auth);
+  await loadSellerIdentityAccess(auth);
+
+  document.getElementById('sellerCreateBrand')
+    ?.addEventListener('click',()=>createSellerIdentity('brand'));
+
+  document.getElementById('sellerCreateCollection')
+    ?.addEventListener('click',()=>createSellerIdentity('collection'));
 
   const state=sellerState();
 
