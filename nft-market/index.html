@@ -1188,8 +1188,16 @@ h1 span{
     status.className='sample-tag';
     status.textContent='XRPL LIVE';
 
+    const utility=document.createElement('div');
+    utility.className='preview-collection';
+    utility.style.marginTop='10px';
+    utility.textContent=
+      item.utility && item.utility.label
+        ? item.utility.label
+        : 'NO UTILITY DISCLOSED';
+
     row.append(ask,status);
-    body.append(identity,title,row);
+    body.append(identity,title,utility,row);
     card.append(media,body);
 
     card.tabIndex=0;
@@ -1516,6 +1524,7 @@ function openNftDetail(item){
   const title=document.getElementById('nftDetailTitle');
   const description=document.getElementById('nftDetailDescription');
   const issuer=document.getElementById('nftDetailIssuer');
+  const utility=document.getElementById('nftDetailUtility');
   const usd=document.getElementById('nftDetailUsd');
   const xrp=document.getElementById('nftDetailXrp');
   const buy=document.getElementById('nftDetailBuy');
@@ -1538,6 +1547,11 @@ function openNftDetail(item){
     wallet.length>18
       ? wallet.slice(0,9)+'…'+wallet.slice(-7)
       : wallet;
+
+  utility.textContent=
+    item.utility && item.utility.label
+      ? item.utility.label
+      : 'NO UTILITY DISCLOSED';
 
   usd.textContent=
     item.askUsd
@@ -1945,6 +1959,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     <div class="nft-detail-info">
       <div id="nftDetailIssuer" class="preview-collection"></div>
+      <div id="nftDetailUtility" class="preview-collection" style="margin-top:8px"></div>
       <h2 id="nftDetailTitle">NFT</h2>
       <div id="nftDetailDescription" class="nft-detail-description"></div>
 
